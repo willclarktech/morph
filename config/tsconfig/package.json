@@ -1,0 +1,13 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morph/tsconfig",
+	"version": "0.0.0",
+	"private": true,
+	"files": [
+		"*.json"
+	],
+	"scripts": {
+		"format": "prettier --check .",
+		"format:fix": "prettier --write ."
+	}
+}

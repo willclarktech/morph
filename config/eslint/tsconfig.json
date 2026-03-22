@@ -1,0 +1,7 @@
+{
+	"extends": "../tsconfig/bun.json",
+	"compilerOptions": {
+		"exactOptionalPropertyTypes": false
+	},
+	"include": ["src", "typings"]
+}
