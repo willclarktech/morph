@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install --frozen-lockfile
+
+      - name: Regenerate morph (pass 1)
+        run: bun run regenerate:morph
+
+      - name: Regenerate morph (pass 2 — idempotency)
+        run: bun run regenerate:morph
+
+      - name: Generate examples
+        run: bun run generate:examples
+
+      - name: Lint and format
+        run: bun run lint:fix && bun run format:fix
+
+      - name: Check clean git status
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Working tree is dirty after regeneration + lint + format"
+            git diff --stat
+            git diff
+            exit 1
+          fi
+
+      - name: Test
+        run: bun run test

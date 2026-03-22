@@ -1,0 +1,35 @@
+# Dependencies (installed in container)
+node_modules/
+**/node_modules/
+
+# Build artifacts
+dist/
+**/dist/
+*.tsbuildinfo
+
+# Test files
+**/*.test.ts
+**/*.spec.ts
+tests/
+**/test/
+
+# Development files
+.git/
+.gitignore
+.env
+.env.*
+!.env.example
+*.md
+!README.md
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Temporary files
+tmp/
+.tmp/
+*.log

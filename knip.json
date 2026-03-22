@@ -1,0 +1,18 @@
+{
+	"$schema": "https://unpkg.com/knip@5/schema.json",
+	"ignore": [
+		"examples/**",
+		"template/**",
+		"**/impl.template.ts",
+		"**/mocks/deps.ts",
+		"**/mocks/handlers.ts",
+		"**/viz/**",
+		"**/eslint.config.ts"
+	],
+	"ignoreDependencies": [
+		"@morph/tsconfig",
+		"@morph/eslint-config",
+		"@morph/generation-dsl"
+	],
+	"ignoreExportsUsedInFile": true
+}
