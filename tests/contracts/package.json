@@ -1,0 +1,26 @@
+{
+	"name": "@morph/contracts",
+	"version": "0.0.0",
+	"type": "module",
+	"private": true,
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"test": "bun test"
+	},
+	"dependencies": {
+		"@morph/property": "workspace:*",
+		"@morph/storage-memory-impls": "workspace:*",
+		"@morph/storage-jsonfile-impls": "workspace:*",
+		"@morph/storage-sqlite-impls": "workspace:*",
+		"@morph/eventstore-memory-impls": "workspace:*",
+		"@morph/eventstore-jsonfile-impls": "workspace:*",
+		"effect": "^3.12.7",
+		"fast-check": "^3.23.1"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
+	}
+}

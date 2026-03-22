@@ -1,0 +1,29 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"dependencies": {
+		"@morph/generation-dsl": "workspace:*",
+		"@morph/scenario": "workspace:*",
+		"@morph/schema-dsl-dsl": "workspace:*"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "workspace:*",
+		"@morph/tsconfig": "workspace:*",
+		"eslint": "^9.39.0",
+		"prettier": "^3.4.2",
+		"typescript": "^5.7.2"
+	},
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"name": "@morph/scenarios",
+	"private": true,
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
+	"type": "module",
+	"version": "0.0.0"
+}

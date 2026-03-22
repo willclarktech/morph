@@ -1,0 +1,8 @@
+node_modules/
+src/
+*.ts
+!dist/**
+tsconfig.json
+eslint.config.ts
+esbuild.config.ts
+.env*

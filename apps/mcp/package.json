@@ -1,0 +1,33 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"dependencies": {
+		"@morph/generation-core": "workspace:*",
+		"@morph/runtime-mcp": "workspace:*",
+		"@morph/schema-dsl-core": "workspace:*",
+		"effect": "^3.19.13"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "workspace:*",
+		"@morph/tsconfig": "workspace:*",
+		"@morph/scenario-runner-mcp": "workspace:*",
+		"@morph/scenarios": "workspace:*",
+		"eslint": "^9.39.0",
+		"prettier": "^3.4.2",
+		"typescript": "^5.7.2"
+	},
+	"name": "@morph/mcp",
+	"private": true,
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"inspect": "bunx @modelcontextprotocol/inspector bun src/index.ts",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"start": "bun src/index.ts",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
+	},
+	"type": "module",
+	"version": "0.0.0"
+}

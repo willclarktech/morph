@@ -1,0 +1,5 @@
+{
+	"extends": "../../../config/tsconfig/bun.json",
+	"include": ["src"],
+	"exclude": ["src/**/*.template.ts"]
+}
