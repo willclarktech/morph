@@ -40,7 +40,6 @@ export const generateUiPackageJson = (
 			"format:fix": "prettier --write .",
 			lint: "eslint .",
 			"lint:fix": "eslint . --fix",
-			postinstall: "playwright install --with-deps chromium",
 			start: "bun src/index.ts",
 			test: "bun test",
 			"test:coverage":

@@ -22,7 +22,6 @@
 | Task | Effort | Notes |
 |------|--------|-------|
 | Package metadata for publishing | M | Add license, description, repository fields to publishable packages. Remove `"private": true` from packages intended for npm |
-| Fix UI postinstall browser install on CI | S | `@code-generator/ui` postinstall fails when apt lock is held by concurrent process. Causes `generate:examples` to fail. Need graceful retry or deferred browser install |
 
 ## Post-MVP
 
@@ -77,3 +76,11 @@
 | Standardize package.json key order | P4 | S | Consistent ordering across generated and template files |
 | Multi-framework step gen | P4 | M | Abstract step generation for Playwright/Cypress |
 | Revisit functional lint rules | P4 | M | Re-enable disabled functional/* rules after refactoring |
+
+---
+
+## Recently Completed
+
+| Task | Notes |
+|------|-------|
+| Fix UI postinstall browser install on CI | Removed postinstall from generated UI packages, Playwright browsers installed once in CI |
