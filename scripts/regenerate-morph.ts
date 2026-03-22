@@ -718,7 +718,7 @@ const addCoreDependencies = (): void => {
 		packageJson.dependencies = {
 			...packageJson.dependencies,
 			"@morph/generation-impls": "workspace:*",
-			"fast-check": "^4.5.3",
+			"fast-check": "^3.23.1",
 		};
 
 		writeFileSync(
