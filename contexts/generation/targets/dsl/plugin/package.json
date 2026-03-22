@@ -1,0 +1,23 @@
+{
+	"name": "@morph/plugin-dsl",
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"@morph/domain-schema": "*",
+		"@morph/builder-app": "*",
+		"@morph/plugin": "*",
+		"@morph/generator-properties": "*",
+		"@morph/generator-scenarios": "*",
+		"@morph/generator-types": "*",
+		"@morph/utils": "*"
+	}
+}

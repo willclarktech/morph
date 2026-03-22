@@ -1,0 +1,23 @@
+{
+	"name": "@morph/scenario-runner-cli-client",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"lint": "eslint . --report-unused-disable-directives",
+		"lint:fix": "eslint . --fix --report-unused-disable-directives"
+	},
+	"dependencies": {
+		"@morph/scenario-runner": "workspace:*",
+		"@morph/scenario-runner-api": "workspace:*"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "workspace:*",
+		"@types/node": "^22.15.3",
+		"typescript": "^5.8.3"
+	}
+}

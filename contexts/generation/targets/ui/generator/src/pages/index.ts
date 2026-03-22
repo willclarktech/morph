@@ -1,0 +1,147 @@
+/**
+ * Page generation for UI.
+ */
+import type {
+	DomainSchema,
+	EntityDef,
+	QualifiedEntry,
+} from "@morph/domain-schema";
+
+import {
+	getAllEntities,
+	getAllFunctions,
+	getAllOperations,
+} from "@morph/domain-schema";
+import { pluralize } from "@morph/utils";
+
+import type { AuthOperations } from "../auth/detection";
+import type { UiConfig } from "../config";
+
+import { generateAuthPages } from "./auth-pages";
+import { generateEntityPages } from "./entity-pages";
+import { generateFunctionPages } from "./function-pages";
+
+/**
+ * Generate the home page template.
+ */
+const generateHomePage = (
+	entities: readonly QualifiedEntry<EntityDef>[],
+	hasAuth: boolean,
+	sseOptionsAfterAuth: string,
+	sseOptions: string,
+): string => {
+	const quickLinks = entities
+		.map((ent) => {
+			const pluralName = pluralize(ent.name.toLowerCase());
+			const entityKey = ent.name.toLowerCase();
+			return `<a href="/${pluralName}" role="button" class="outline">\${t("entity.${entityKey}.plural")}</a>`;
+		})
+		.join("\n\t\t\t");
+
+	const quickLinksSection = quickLinks
+		? `\n\t\t<div role="group">\n\t\t\t${quickLinks}\n\t\t</div>`
+		: "";
+
+	return `
+/**
+ * Home page with links to all entity lists.
+ */
+export const homePage = (${hasAuth ? "authState: AuthState" : ""}): string => layout(
+	t("nav.home"),
+	\`<article>
+		<header><h2>\${t("status.welcome")}${hasAuth ? `, \${authState.userName ?? t("auth.user")}` : ""}</h2></header>
+		<p>\${t("ui.homeDescription")}</p>${quickLinksSection}
+	</article>\`,
+	nav("/")${hasAuth ? ",\n\tauthState" : ""}${hasAuth ? sseOptionsAfterAuth : sseOptions},
+);`;
+};
+
+/**
+ * Generate the error alert template.
+ */
+const generateErrorAlert = (): string => `
+/**
+ * Inline error alert for displaying error messages.
+ */
+export const errorAlert = (message: string): string =>
+	\`<p role="alert" aria-invalid="true">\${message}</p>\`;
+`;
+
+/**
+ * Generate import statements for the pages module.
+ */
+const generateImports = (
+	entityImports: readonly string[],
+	hasAuth: boolean,
+): string => {
+	const layoutImports = hasAuth ? "layout, AuthState" : "layout";
+
+	return `import { formatArray, formatBoolean, formatDate, formatValue } from "./formatters";
+import { ${layoutImports} } from "./layout";
+import { nav } from "./nav";
+import { t } from "./text";
+${entityImports.length > 0 ? `import type { ${entityImports.join(", ")} } from "@PLACEHOLDER_DSL";` : ""}`;
+};
+
+/**
+ * Generate the pages module.
+ */
+export const generatePages = (
+	schema: DomainSchema,
+	_config: UiConfig = {},
+	hasAuth = false,
+	authOps?: AuthOperations,
+	hasEvents = false,
+): string => {
+	const resolvedAuthOps = authOps ?? { login: undefined, register: undefined };
+	const sseOptions = hasEvents
+		? hasAuth
+			? ", undefined, { apiUrl, enableSse: true }"
+			: ", { apiUrl, enableSse: true }"
+		: "";
+	const sseOptionsAfterAuth = hasEvents ? ", { apiUrl, enableSse: true }" : "";
+
+	const entities = getAllEntities(schema);
+	const ops = getAllOperations(schema).filter((op) =>
+		op.def.tags.includes("@ui"),
+	);
+	const functions = getAllFunctions(schema);
+
+	const pages: string[] = [];
+
+	pages.push(...generateEntityPages(schema, entities, sseOptions));
+
+	if (hasAuth) {
+		pages.push(...generateAuthPages(resolvedAuthOps, sseOptions));
+	}
+
+	pages.push(...generateFunctionPages(functions, sseOptions));
+
+	const homeEntities = entities.filter((ent) =>
+		ops.some(
+			(op) =>
+				(op.name.startsWith("list") || op.name.startsWith("getAll")) &&
+				op.name.toLowerCase().includes(ent.name.toLowerCase()),
+		),
+	);
+
+	pages.unshift(
+		generateHomePage(homeEntities, hasAuth, sseOptionsAfterAuth, sseOptions),
+	);
+	pages.push(generateErrorAlert());
+
+	const entityImports = entities
+		.filter((ent) =>
+			ops.some((op) => op.name.toLowerCase().includes(ent.name.toLowerCase())),
+		)
+		.map((ent) => ent.name);
+
+	const apiUrlConstant = hasEvents
+		? `\n// API URL for SSE connections (from environment or default)\nconst apiUrl = process.env["@PLACEHOLDER_APP_NAME_API_URL"] ?? "http://localhost:3000";\n`
+		: "";
+
+	return `${generateImports(entityImports, hasAuth)}
+${apiUrlConstant}
+${pages.join("\n")}
+`;
+};

@@ -1,0 +1,28 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morph/generator-dsl",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix ."
+	},
+	"dependencies": {
+		"@morph/domain-schema": "*",
+		"@morph/builder-readme": "*"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "*",
+		"@morph/tsconfig": "*",
+		"eslint": "^9.39.0"
+	}
+}

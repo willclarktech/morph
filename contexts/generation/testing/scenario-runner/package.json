@@ -1,0 +1,24 @@
+{
+	"name": "@morph/scenario-runner",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"lint": "eslint . --report-unused-disable-directives",
+		"lint:fix": "eslint . --fix --report-unused-disable-directives",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
+	},
+	"dependencies": {
+		"@morph/scenario": "workspace:*",
+		"effect": "^3.19.13"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "workspace:*",
+		"typescript": "^5.8.3"
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morph/builder-scaffold",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix .",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
+	},
+	"dependencies": {
+		"@morph/domain-schema": "workspace:*"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "*",
+		"@morph/tsconfig": "*",
+		"eslint": "^9.39.0"
+	}
+}

@@ -1,0 +1,1493 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$defs": {
+		"TypeRef": {
+			"anyOf": [
+				{
+					"type": "object",
+					"required": ["kind", "name"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["primitive"]
+						},
+						"name": {
+							"type": "string",
+							"enum": ["boolean", "number", "string", "unknown", "void"]
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "name"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["typeParam"]
+						},
+						"name": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["entity", "kind"],
+					"properties": {
+						"context": {
+							"type": "string"
+						},
+						"entity": {
+							"type": "string"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["entityId"]
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "name"],
+					"properties": {
+						"context": {
+							"type": "string"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["entity"]
+						},
+						"name": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "name"],
+					"properties": {
+						"context": {
+							"type": "string"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["type"]
+						},
+						"name": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "values"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["union"]
+						},
+						"values": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "name"],
+					"properties": {
+						"context": {
+							"type": "string"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["valueObject"]
+						},
+						"name": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["element", "kind"],
+					"properties": {
+						"element": {
+							"$ref": "#/$defs/TypeRef"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["array"]
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["inner", "kind"],
+					"properties": {
+						"inner": {
+							"$ref": "#/$defs/TypeRef"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["optional"]
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["args", "kind", "name"],
+					"properties": {
+						"args": {
+							"type": "array",
+							"items": {
+								"$ref": "#/$defs/TypeRef"
+							}
+						},
+						"context": {
+							"type": "string"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["generic"]
+						},
+						"name": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				}
+			]
+		},
+		"ConditionExpr": {
+			"anyOf": [
+				{
+					"type": "object",
+					"required": ["kind", "left", "right"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["equals"]
+						},
+						"left": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"right": {
+							"$ref": "#/$defs/ValueExpr"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "left", "right"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["notEquals"]
+						},
+						"left": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"right": {
+							"$ref": "#/$defs/ValueExpr"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "left", "right"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["greaterThan"]
+						},
+						"left": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"right": {
+							"$ref": "#/$defs/ValueExpr"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "left", "right"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["greaterThanOrEqual"]
+						},
+						"left": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"right": {
+							"$ref": "#/$defs/ValueExpr"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "left", "right"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["lessThan"]
+						},
+						"left": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"right": {
+							"$ref": "#/$defs/ValueExpr"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "left", "right"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["lessThanOrEqual"]
+						},
+						"left": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"right": {
+							"$ref": "#/$defs/ValueExpr"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["collection", "kind", "value"],
+					"properties": {
+						"collection": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["contains"]
+						},
+						"value": {
+							"$ref": "#/$defs/ValueExpr"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["condition", "kind"],
+					"properties": {
+						"condition": {
+							"$ref": "#/$defs/ConditionExpr"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["not"]
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["conditions", "kind"],
+					"properties": {
+						"conditions": {
+							"type": "array",
+							"items": {
+								"$ref": "#/$defs/ConditionExpr"
+							}
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["and"]
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["conditions", "kind"],
+					"properties": {
+						"conditions": {
+							"type": "array",
+							"items": {
+								"$ref": "#/$defs/ConditionExpr"
+							}
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["or"]
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["if", "kind", "then"],
+					"properties": {
+						"if": {
+							"$ref": "#/$defs/ConditionExpr"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["implies"]
+						},
+						"then": {
+							"$ref": "#/$defs/ConditionExpr"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["collection", "condition", "kind", "variable"],
+					"properties": {
+						"collection": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"condition": {
+							"$ref": "#/$defs/ConditionExpr"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["exists"]
+						},
+						"variable": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["collection", "condition", "kind", "variable"],
+					"properties": {
+						"collection": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"condition": {
+							"$ref": "#/$defs/ConditionExpr"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["forAll"]
+						},
+						"variable": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				}
+			]
+		},
+		"ValueExpr": {
+			"anyOf": [
+				{
+					"type": "object",
+					"required": ["kind", "path"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["field"]
+						},
+						"path": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "value"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["literal"]
+						},
+						"value": {
+							"$id": "/schemas/unknown",
+							"title": "unknown"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["kind", "name"],
+					"properties": {
+						"kind": {
+							"type": "string",
+							"enum": ["variable"]
+						},
+						"name": {
+							"type": "string"
+						}
+					},
+					"additionalProperties": false
+				},
+				{
+					"type": "object",
+					"required": ["collection", "kind"],
+					"properties": {
+						"collection": {
+							"$ref": "#/$defs/ValueExpr"
+						},
+						"kind": {
+							"type": "string",
+							"enum": ["count"]
+						}
+					},
+					"additionalProperties": false
+				}
+			]
+		}
+	},
+	"type": "object",
+	"required": ["contexts", "name"],
+	"properties": {
+		"$schema": {
+			"type": "string"
+		},
+		"contexts": {
+			"type": "object",
+			"required": [],
+			"properties": {},
+			"additionalProperties": {
+				"type": "object",
+				"required": ["description", "entities"],
+				"properties": {
+					"commands": {
+						"type": "object",
+						"required": [],
+						"properties": {},
+						"additionalProperties": {
+							"type": "object",
+							"required": ["description", "emits", "input", "output", "uses"],
+							"properties": {
+								"description": {
+									"type": "string"
+								},
+								"emits": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["description", "name"],
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									},
+									"description": "an array of at least 1 item(s)",
+									"title": "minItems(1)",
+									"minItems": 1
+								},
+								"errors": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["description", "name", "when"],
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"when": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"input": {
+									"type": "object",
+									"required": [],
+									"properties": {},
+									"additionalProperties": {
+										"type": "object",
+										"required": ["description", "type"],
+										"properties": {
+											"default": {
+												"$id": "/schemas/unknown",
+												"title": "unknown"
+											},
+											"description": {
+												"type": "string"
+											},
+											"optional": {
+												"type": "boolean"
+											},
+											"sensitive": {
+												"type": "boolean"
+											},
+											"type": {
+												"$ref": "#/$defs/TypeRef"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"output": {
+									"$ref": "#/$defs/TypeRef"
+								},
+								"post": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"pre": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"tags": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"uses": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["access", "aggregate"],
+										"properties": {
+											"access": {
+												"type": "string",
+												"enum": ["read", "write"]
+											},
+											"aggregate": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"dependencies": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"description": {
+						"type": "string"
+					},
+					"entities": {
+						"type": "object",
+						"required": [],
+						"properties": {},
+						"additionalProperties": {
+							"type": "object",
+							"required": ["attributes", "description"],
+							"properties": {
+								"aggregate": {
+									"type": "object",
+									"required": ["root"],
+									"properties": {
+										"cascadeDelete": {
+											"type": "boolean"
+										},
+										"parent": {
+											"type": "string"
+										},
+										"root": {
+											"type": "boolean"
+										}
+									},
+									"additionalProperties": false
+								},
+								"attributes": {
+									"type": "object",
+									"required": [],
+									"properties": {},
+									"additionalProperties": {
+										"type": "object",
+										"required": ["description", "type"],
+										"properties": {
+											"constraints": {
+												"type": "array",
+												"items": {
+													"anyOf": [
+														{
+															"type": "object",
+															"required": ["kind"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["nonEmpty"]
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["kind"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["positive"]
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["kind", "regex"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["pattern"]
+																},
+																"regex": {
+																	"type": "string"
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["kind"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["range"]
+																},
+																"max": {
+																	"type": "number"
+																},
+																"min": {
+																	"type": "number"
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["description", "kind", "name"],
+															"properties": {
+																"description": {
+																	"type": "string"
+																},
+																"kind": {
+																	"type": "string",
+																	"enum": ["custom"]
+																},
+																"name": {
+																	"type": "string"
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["kind"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["unique"]
+																}
+															},
+															"additionalProperties": false
+														}
+													]
+												}
+											},
+											"description": {
+												"type": "string"
+											},
+											"optional": {
+												"type": "boolean"
+											},
+											"type": {
+												"$ref": "#/$defs/TypeRef"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"description": {
+									"type": "string"
+								},
+								"relationships": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["description", "kind", "target"],
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"inverse": {
+												"type": "string"
+											},
+											"kind": {
+												"type": "string",
+												"enum": [
+													"belongs_to",
+													"has_many",
+													"has_one",
+													"references"
+												]
+											},
+											"target": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"errors": {
+						"type": "object",
+						"required": [],
+						"properties": {},
+						"additionalProperties": {
+							"type": "object",
+							"required": ["description", "fields"],
+							"properties": {
+								"description": {
+									"type": "string"
+								},
+								"fields": {
+									"type": "object",
+									"required": [],
+									"properties": {},
+									"additionalProperties": {
+										"type": "object",
+										"required": ["type"],
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"optional": {
+												"type": "boolean"
+											},
+											"type": {
+												"$ref": "#/$defs/TypeRef"
+											}
+										},
+										"additionalProperties": false
+									}
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"functions": {
+						"type": "object",
+						"required": [],
+						"properties": {},
+						"additionalProperties": {
+							"type": "object",
+							"required": ["description", "input", "output"],
+							"properties": {
+								"description": {
+									"type": "string"
+								},
+								"errors": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["description", "name", "when"],
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"when": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"input": {
+									"type": "object",
+									"required": [],
+									"properties": {},
+									"additionalProperties": {
+										"type": "object",
+										"required": ["description", "type"],
+										"properties": {
+											"default": {
+												"$id": "/schemas/unknown",
+												"title": "unknown"
+											},
+											"description": {
+												"type": "string"
+											},
+											"optional": {
+												"type": "boolean"
+											},
+											"sensitive": {
+												"type": "boolean"
+											},
+											"type": {
+												"$ref": "#/$defs/TypeRef"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"output": {
+									"$ref": "#/$defs/TypeRef"
+								},
+								"tags": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"typeParameters": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["name"],
+										"properties": {
+											"constraint": {
+												"$ref": "#/$defs/TypeRef"
+											},
+											"default": {
+												"$ref": "#/$defs/TypeRef"
+											},
+											"name": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"invariants": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": [
+								"condition",
+								"description",
+								"name",
+								"scope",
+								"violation"
+							],
+							"properties": {
+								"condition": {
+									"$ref": "#/$defs/ConditionExpr"
+								},
+								"description": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"scope": {
+									"anyOf": [
+										{
+											"type": "object",
+											"required": ["kind"],
+											"properties": {
+												"kind": {
+													"type": "string",
+													"enum": ["global"]
+												}
+											},
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"required": ["entity", "kind"],
+											"properties": {
+												"entity": {
+													"type": "string"
+												},
+												"kind": {
+													"type": "string",
+													"enum": ["entity"]
+												}
+											},
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"required": ["kind", "root"],
+											"properties": {
+												"kind": {
+													"type": "string",
+													"enum": ["aggregate"]
+												},
+												"root": {
+													"type": "string"
+												}
+											},
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"required": ["kind", "operation", "when"],
+											"properties": {
+												"kind": {
+													"type": "string",
+													"enum": ["operation"]
+												},
+												"operation": {
+													"type": "string"
+												},
+												"when": {
+													"type": "string",
+													"enum": ["pre", "post"]
+												}
+											},
+											"additionalProperties": false
+										},
+										{
+											"type": "object",
+											"required": ["kind"],
+											"properties": {
+												"kind": {
+													"type": "string",
+													"enum": ["context"]
+												}
+											},
+											"additionalProperties": false
+										}
+									]
+								},
+								"violation": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"ports": {
+						"type": "object",
+						"required": [],
+						"properties": {},
+						"additionalProperties": {
+							"type": "object",
+							"required": ["description", "methods"],
+							"properties": {
+								"description": {
+									"type": "string"
+								},
+								"methods": {
+									"type": "object",
+									"required": [],
+									"properties": {},
+									"additionalProperties": {
+										"type": "object",
+										"required": ["description", "params", "returns"],
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"errors": {
+												"type": "array",
+												"items": {
+													"type": "string"
+												}
+											},
+											"params": {
+												"type": "object",
+												"required": [],
+												"properties": {},
+												"additionalProperties": {
+													"type": "object",
+													"required": ["description", "type"],
+													"properties": {
+														"description": {
+															"type": "string"
+														},
+														"type": {
+															"$ref": "#/$defs/TypeRef"
+														}
+													},
+													"additionalProperties": false
+												}
+											},
+											"returns": {
+												"$ref": "#/$defs/TypeRef"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"typeParameters": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["name"],
+										"properties": {
+											"constraint": {
+												"$ref": "#/$defs/TypeRef"
+											},
+											"default": {
+												"$ref": "#/$defs/TypeRef"
+											},
+											"name": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"queries": {
+						"type": "object",
+						"required": [],
+						"properties": {},
+						"additionalProperties": {
+							"type": "object",
+							"required": ["description", "input", "output", "uses"],
+							"properties": {
+								"description": {
+									"type": "string"
+								},
+								"errors": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["description", "name", "when"],
+										"properties": {
+											"description": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"when": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"input": {
+									"type": "object",
+									"required": [],
+									"properties": {},
+									"additionalProperties": {
+										"type": "object",
+										"required": ["description", "type"],
+										"properties": {
+											"default": {
+												"$id": "/schemas/unknown",
+												"title": "unknown"
+											},
+											"description": {
+												"type": "string"
+											},
+											"optional": {
+												"type": "boolean"
+											},
+											"sensitive": {
+												"type": "boolean"
+											},
+											"type": {
+												"$ref": "#/$defs/TypeRef"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"output": {
+									"$ref": "#/$defs/TypeRef"
+								},
+								"pre": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"tags": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"uses": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": ["access", "aggregate"],
+										"properties": {
+											"access": {
+												"type": "string",
+												"enum": ["read", "write"]
+											},
+											"aggregate": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"subscribers": {
+						"type": "object",
+						"required": [],
+						"properties": {},
+						"additionalProperties": {
+							"type": "object",
+							"required": ["description", "events"],
+							"properties": {
+								"description": {
+									"type": "string"
+								},
+								"events": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"types": {
+						"type": "object",
+						"required": [],
+						"properties": {},
+						"additionalProperties": {
+							"anyOf": [
+								{
+									"type": "object",
+									"required": ["description", "fields", "kind"],
+									"properties": {
+										"description": {
+											"type": "string"
+										},
+										"fields": {
+											"type": "object",
+											"required": [],
+											"properties": {},
+											"additionalProperties": {
+												"type": "object",
+												"required": ["description", "type"],
+												"properties": {
+													"description": {
+														"type": "string"
+													},
+													"type": {
+														"$ref": "#/$defs/TypeRef"
+													}
+												},
+												"additionalProperties": false
+											}
+										},
+										"kind": {
+											"type": "string",
+											"enum": ["product"]
+										},
+										"typeParameters": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"required": ["name"],
+												"properties": {
+													"constraint": {
+														"$ref": "#/$defs/TypeRef"
+													},
+													"default": {
+														"$ref": "#/$defs/TypeRef"
+													},
+													"name": {
+														"type": "string"
+													}
+												},
+												"additionalProperties": false
+											}
+										}
+									},
+									"additionalProperties": false
+								},
+								{
+									"type": "object",
+									"required": [
+										"description",
+										"discriminator",
+										"kind",
+										"variants"
+									],
+									"properties": {
+										"description": {
+											"type": "string"
+										},
+										"discriminator": {
+											"type": "string"
+										},
+										"kind": {
+											"type": "string",
+											"enum": ["sum"]
+										},
+										"typeParameters": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"required": ["name"],
+												"properties": {
+													"constraint": {
+														"$ref": "#/$defs/TypeRef"
+													},
+													"default": {
+														"$ref": "#/$defs/TypeRef"
+													},
+													"name": {
+														"type": "string"
+													}
+												},
+												"additionalProperties": false
+											}
+										},
+										"variants": {
+											"type": "object",
+											"required": [],
+											"properties": {},
+											"additionalProperties": {
+												"type": "object",
+												"required": ["description"],
+												"properties": {
+													"description": {
+														"type": "string"
+													},
+													"fields": {
+														"type": "object",
+														"required": [],
+														"properties": {},
+														"additionalProperties": {
+															"type": "object",
+															"required": ["description", "type"],
+															"properties": {
+																"description": {
+																	"type": "string"
+																},
+																"type": {
+																	"$ref": "#/$defs/TypeRef"
+																}
+															},
+															"additionalProperties": false
+														}
+													}
+												},
+												"additionalProperties": false
+											}
+										}
+									},
+									"additionalProperties": false
+								},
+								{
+									"type": "object",
+									"required": ["description", "kind", "type"],
+									"properties": {
+										"description": {
+											"type": "string"
+										},
+										"kind": {
+											"type": "string",
+											"enum": ["alias"]
+										},
+										"type": {
+											"$ref": "#/$defs/TypeRef"
+										},
+										"typeParameters": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"required": ["name"],
+												"properties": {
+													"constraint": {
+														"$ref": "#/$defs/TypeRef"
+													},
+													"default": {
+														"$ref": "#/$defs/TypeRef"
+													},
+													"name": {
+														"type": "string"
+													}
+												},
+												"additionalProperties": false
+											}
+										}
+									},
+									"additionalProperties": false
+								}
+							]
+						}
+					},
+					"valueObjects": {
+						"type": "object",
+						"required": [],
+						"properties": {},
+						"additionalProperties": {
+							"type": "object",
+							"required": ["attributes", "description"],
+							"properties": {
+								"attributes": {
+									"type": "object",
+									"required": [],
+									"properties": {},
+									"additionalProperties": {
+										"type": "object",
+										"required": ["description", "type"],
+										"properties": {
+											"constraints": {
+												"type": "array",
+												"items": {
+													"anyOf": [
+														{
+															"type": "object",
+															"required": ["kind"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["nonEmpty"]
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["kind"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["positive"]
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["kind", "regex"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["pattern"]
+																},
+																"regex": {
+																	"type": "string"
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["kind"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["range"]
+																},
+																"max": {
+																	"type": "number"
+																},
+																"min": {
+																	"type": "number"
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["description", "kind", "name"],
+															"properties": {
+																"description": {
+																	"type": "string"
+																},
+																"kind": {
+																	"type": "string",
+																	"enum": ["custom"]
+																},
+																"name": {
+																	"type": "string"
+																}
+															},
+															"additionalProperties": false
+														},
+														{
+															"type": "object",
+															"required": ["kind"],
+															"properties": {
+																"kind": {
+																	"type": "string",
+																	"enum": ["unique"]
+																}
+															},
+															"additionalProperties": false
+														}
+													]
+												}
+											},
+											"description": {
+												"type": "string"
+											},
+											"optional": {
+												"type": "boolean"
+											},
+											"type": {
+												"$ref": "#/$defs/TypeRef"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"description": {
+									"type": "string"
+								}
+							},
+							"additionalProperties": false
+						}
+					}
+				},
+				"additionalProperties": false
+			}
+		},
+		"name": {
+			"type": "string"
+		}
+	},
+	"additionalProperties": false
+}

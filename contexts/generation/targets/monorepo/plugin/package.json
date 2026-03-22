@@ -1,0 +1,21 @@
+{
+	"name": "@morph/plugin-monorepo-root",
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"@morph/domain-schema": "*",
+		"@morph/builder-app": "*",
+		"@morph/generator-diagrams": "*",
+		"@morph/plugin": "*",
+		"@morph/builder-readme": "*"
+	}
+}

@@ -1,0 +1,33 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morph/runtime-mcp",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix ."
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.12.0",
+		"@morph/domain-schema": "*",
+		"@morph/builder-readme": "*",
+		"@morph/operation": "workspace:*",
+		"@morph/utils": "*",
+		"effect": "^3.16.0",
+		"zod": "^3.24.0"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "*",
+		"@morph/tsconfig": "*",
+		"eslint": "^9.39.0"
+	}
+}

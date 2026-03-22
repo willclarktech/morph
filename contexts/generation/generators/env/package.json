@@ -1,0 +1,16 @@
+{
+	"name": "@morph/generator-env",
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
+	}
+}

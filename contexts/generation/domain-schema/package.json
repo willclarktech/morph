@@ -1,0 +1,31 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morph/domain-schema",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"build:json-schema": "bun scripts/generate-json-schema.ts",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix .",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "*",
+		"@morph/tsconfig": "*",
+		"eslint": "^9.39.0"
+	},
+	"dependencies": {
+		"@morph/utils": "*",
+		"effect": "^3.19.13"
+	}
+}

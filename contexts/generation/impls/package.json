@@ -1,0 +1,47 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morph/generation-impls",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"dependencies": {
+		"@morph/domain-schema": "workspace:*",
+		"@morph/generation-dsl": "workspace:*",
+		"@morph/builder-app": "workspace:*",
+		"@morph/generator-env": "workspace:*",
+		"@morph/plugin": "workspace:*",
+		"@morph/builder-scaffold": "workspace:*",
+		"@morph/runtime-ui": "workspace:*",
+		"@morph/plugin-api": "workspace:*",
+		"@morph/plugin-cli": "workspace:*",
+		"@morph/plugin-cli-client": "workspace:*",
+		"@morph/plugin-client": "workspace:*",
+		"@morph/plugin-core": "workspace:*",
+		"@morph/plugin-dsl": "workspace:*",
+		"@morph/plugin-mcp": "workspace:*",
+		"@morph/plugin-monorepo-root": "workspace:*",
+		"@morph/plugin-proto": "workspace:*",
+		"@morph/plugin-ui": "workspace:*",
+		"@morph/plugin-vscode": "workspace:*",
+		"@morph/schema-dsl-parser": "workspace:*",
+		"@morph/schema-dsl-compiler": "workspace:*",
+		"effect": "^3.19.13"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "workspace:*",
+		"@morph/tsconfig": "workspace:*",
+		"eslint": "^9.39.0",
+		"prettier": "^3.4.2",
+		"typescript": "^5.7.2"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	}
+}

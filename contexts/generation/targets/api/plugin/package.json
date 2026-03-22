@@ -1,0 +1,24 @@
+{
+	"name": "@morph/plugin-api",
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
+	},
+	"dependencies": {
+		"@morph/domain-schema": "*",
+		"@morph/runtime-api": "*",
+		"@morph/builder-app": "*",
+		"@morph/generator-env": "*",
+		"@morph/generator-openapi": "*",
+		"@morph/plugin": "*",
+		"@morph/builder-test": "*",
+		"@morph/utils": "*"
+	}
+}

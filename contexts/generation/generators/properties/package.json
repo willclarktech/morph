@@ -1,0 +1,20 @@
+{
+	"name": "@morph/generator-properties",
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@morph/domain-schema": "*",
+		"@morph/generator-core": "*",
+		"@morph/builder-readme": "*",
+		"@morph/utils": "*"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
+	}
+}

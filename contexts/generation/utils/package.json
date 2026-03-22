@@ -1,0 +1,27 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morph/utils",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "workspace:*",
+		"@morph/tsconfig": "workspace:*",
+		"eslint": "^9.39.0",
+		"fast-check": "^3.23.1",
+		"prettier": "^3.4.2",
+		"typescript": "^5.7.2"
+	}
+}
