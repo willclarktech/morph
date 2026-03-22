@@ -1,0 +1,20 @@
+domain Auth
+
+context Auth "Authentication contracts and error types" {
+
+	port AuthService<TUser = unknown> "Authentication context provider" {
+		getCurrentUser(): TUser? "Get the currently authenticated user, or undefined if not authenticated"
+		requireAuth(): TUser throws Authentication "Require authentication - fails if not authenticated"
+	}
+
+	error Authentication "Authentication required but not present or invalid" {
+		code?: "EXPIRED_TOKEN" | "INVALID_TOKEN" | "UNAUTHENTICATED"
+		message: string
+	}
+
+	error Authorization "User is authenticated but not authorized for this action" {
+		action?: string
+		message: string
+		resource?: string
+	}
+}

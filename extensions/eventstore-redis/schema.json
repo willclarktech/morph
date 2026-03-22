@@ -1,0 +1,126 @@
+{
+	"description": "Redis event store transport using Bun.redis sorted sets",
+	"entities": {},
+	"dependencies": [
+		"eventstore"
+	],
+	"types": {
+		"RedisEventStoreInfo": {
+			"kind": "product",
+			"description": "Redis event store connection statistics",
+			"fields": {
+				"connected": {
+					"description": "Whether the client is currently connected",
+					"type": {
+						"kind": "primitive",
+						"name": "boolean"
+					}
+				},
+				"eventCount": {
+					"description": "Total number of stored events",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				},
+				"url": {
+					"description": "Redis server URL",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"errors": {
+		"ConnectionFailed": {
+			"description": "Failed to connect to the Redis event store",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"url": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"ConnectionTimeout": {
+			"description": "Redis event store connection timed out",
+			"fields": {
+				"timeoutMs": {
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				},
+				"url": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"connect": {
+			"description": "Establish a connection to a Redis event store",
+			"errors": [
+				{
+					"name": "ConnectionFailed",
+					"description": "Cannot reach the Redis server",
+					"when": "server is unreachable or refuses connection"
+				},
+				{
+					"name": "ConnectionTimeout",
+					"description": "Connection attempt timed out",
+					"when": "server does not respond in time"
+				}
+			],
+			"input": {
+				"url": {
+					"description": "Redis server URL (defaults to REDIS_URL env var)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				}
+			},
+			"output": {
+				"kind": "type",
+				"name": "RedisEventStoreInfo"
+			},
+			"tags": [
+				"@cli"
+			]
+		},
+		"getConnectionInfo": {
+			"description": "Get current Redis event store connection statistics",
+			"errors": [
+				{
+					"name": "ConnectionFailed",
+					"description": "Not connected to Redis",
+					"when": "client is not connected"
+				}
+			],
+			"input": {},
+			"output": {
+				"kind": "type",
+				"name": "RedisEventStoreInfo"
+			},
+			"tags": [
+				"@cli",
+				"@mcp"
+			]
+		}
+	},
+	"invariants": []
+}

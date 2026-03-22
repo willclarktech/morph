@@ -1,0 +1,298 @@
+{
+	"description": "Append-only event storage transport abstractions",
+	"entities": {},
+	"ports": {
+		"EventStoreTransport": {
+			"description": "Raw append-only event storage transport using serialized strings",
+			"methods": {
+				"append": {
+					"description": "Append a serialized event",
+					"params": {
+						"data": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "primitive",
+						"name": "void"
+					},
+					"errors": [
+						"EventStoreOperation"
+					]
+				},
+				"getAfter": {
+					"description": "Get serialized events after timestamp",
+					"params": {
+						"timestamp": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "array",
+						"element": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					},
+					"errors": [
+						"EventStoreOperation"
+					]
+				},
+				"getAll": {
+					"description": "Get all serialized events",
+					"params": {},
+					"returns": {
+						"kind": "array",
+						"element": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					},
+					"errors": [
+						"EventStoreOperation"
+					]
+				},
+				"getByAggregateId": {
+					"description": "Get serialized events for an aggregate",
+					"params": {
+						"aggregateId": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "array",
+						"element": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					},
+					"errors": [
+						"EventStoreOperation"
+					]
+				},
+				"getByTag": {
+					"description": "Get serialized events matching tag",
+					"params": {
+						"tag": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "array",
+						"element": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					},
+					"errors": [
+						"EventStoreOperation"
+					]
+				}
+			}
+		}
+	},
+	"errors": {
+		"EventStoreConnection": {
+			"description": "Failed to connect to event store backend",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"EventStoreOperation": {
+			"description": "Event store operation failed",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"contracts": [
+		{
+			"name": "AppendGetAll",
+			"port": "EventStoreTransport",
+			"description": "appended event appears in getAll",
+			"bindings": [
+				{
+					"name": "data",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "append",
+					"args": [
+						{
+							"kind": "field",
+							"path": "data"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "contains",
+				"collection": {
+					"kind": "call",
+					"name": "getAll",
+					"args": []
+				},
+				"value": {
+					"kind": "field",
+					"path": "data"
+				}
+			}
+		},
+		{
+			"name": "AppendOrdering",
+			"port": "EventStoreTransport",
+			"description": "events appear in append order",
+			"bindings": [
+				{
+					"name": "a",
+					"type": "string"
+				},
+				{
+					"name": "b",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "append",
+					"args": [
+						{
+							"kind": "field",
+							"path": "a"
+						}
+					]
+				},
+				{
+					"method": "append",
+					"args": [
+						{
+							"kind": "field",
+							"path": "b"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "and",
+				"conditions": [
+					{
+						"kind": "contains",
+						"collection": {
+							"kind": "call",
+							"name": "getAll",
+							"args": []
+						},
+						"value": {
+							"kind": "field",
+							"path": "a"
+						}
+					},
+					{
+						"kind": "contains",
+						"collection": {
+							"kind": "call",
+							"name": "getAll",
+							"args": []
+						},
+						"value": {
+							"kind": "field",
+							"path": "b"
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "GetByTagFilters",
+			"port": "EventStoreTransport",
+			"description": "getByTag returns only events with matching tag",
+			"bindings": [
+				{
+					"name": "data",
+					"type": "string"
+				},
+				{
+					"name": "tag",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "append",
+					"args": [
+						{
+							"kind": "field",
+							"path": "data"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "greaterThanOrEqual",
+				"left": {
+					"kind": "count",
+					"collection": {
+						"kind": "call",
+						"name": "getAll",
+						"args": []
+					}
+				},
+				"right": {
+					"kind": "literal",
+					"value": 1
+				}
+			}
+		},
+		{
+			"name": "GetAllEmpty",
+			"port": "EventStoreTransport",
+			"description": "getAll returns empty on fresh store",
+			"bindings": [],
+			"after": [],
+			"then": {
+				"kind": "equals",
+				"left": {
+					"kind": "count",
+					"collection": {
+						"kind": "call",
+						"name": "getAll",
+						"args": []
+					}
+				},
+				"right": {
+					"kind": "literal",
+					"value": 0
+				}
+			}
+		}
+	],
+	"invariants": []
+}

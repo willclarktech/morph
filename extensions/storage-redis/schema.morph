@@ -1,0 +1,41 @@
+domain StorageRedis
+
+context StorageRedis "Redis storage transport using Bun.redis" {
+	depends on storage
+
+	type ConnectionInfo "Redis connection statistics" {
+		connected: boolean "Whether the client is currently connected"
+		keyCount: float "Total number of keys in the current database"
+		memoryUsageBytes: float "Redis server memory usage in bytes"
+		url: string "Redis server URL"
+	}
+
+	error ConnectionFailed "Failed to connect to the Redis server" {
+		message: string
+		url: string
+	}
+
+	error ConnectionTimeout "Redis connection timed out" {
+		timeoutMs: float
+		url: string
+	}
+
+	@cli
+	function connect "Establish a connection to a Redis server"
+		input {
+			url?: string "Redis server URL (defaults to REDIS_URL env var)"
+		}
+		output ConnectionInfo
+		errors {
+			ConnectionFailed "Cannot reach the Redis server" when "server is unreachable or refuses connection"
+			ConnectionTimeout "Connection attempt timed out" when "server does not respond in time"
+		}
+
+	@cli @mcp
+	function getConnectionInfo "Get current Redis connection statistics"
+		input {}
+		output ConnectionInfo
+		errors {
+			ConnectionFailed "Not connected to Redis" when "client is not connected"
+		}
+}

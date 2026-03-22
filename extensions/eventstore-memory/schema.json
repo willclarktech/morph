@@ -1,0 +1,57 @@
+{
+	"description": "In-memory event store transport using Effect Ref",
+	"entities": {},
+	"dependencies": [
+		"eventstore"
+	],
+	"types": {
+		"MemoryEventStoreInfo": {
+			"kind": "product",
+			"description": "Statistics about the in-memory event store",
+			"fields": {
+				"eventCount": {
+					"description": "Total number of stored events",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				},
+				"tagCount": {
+					"description": "Number of distinct event tags",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"getStoreInfo": {
+			"description": "Get current statistics about the in-memory event store",
+			"errors": [],
+			"input": {},
+			"output": {
+				"kind": "type",
+				"name": "MemoryEventStoreInfo"
+			},
+			"tags": [
+				"@cli",
+				"@mcp"
+			]
+		},
+		"resetStore": {
+			"description": "Clear all events from the in-memory store (dev/test)",
+			"errors": [],
+			"input": {},
+			"output": {
+				"kind": "primitive",
+				"name": "void"
+			},
+			"tags": [
+				"@cli"
+			]
+		}
+	},
+	"invariants": []
+}

@@ -1,0 +1,50 @@
+domain StorageJsonfile
+
+context StorageJsonfile "JSON file storage transport for CLI persistence" {
+	depends on storage
+
+	type FileStoreInfo "Statistics about the JSON file store" {
+		collectionCount: float "Number of collections in the file"
+		entryCount: float "Total number of entries across all collections"
+		path: string "Absolute path to the JSON file"
+		sizeBytes: float "File size in bytes"
+	}
+
+	error FileAccess "Failed to access the JSON file (permission or lock failure)" {
+		message: string
+		path: string
+	}
+
+	error FileCorrupted "JSON file contains invalid or corrupted data" {
+		message: string
+		path: string
+	}
+
+	@cli
+	function compactFile "Rewrite the JSON file without fragmentation"
+		input {}
+		output FileStoreInfo
+		errors {
+			FileAccess "Cannot write to the file" when "file permissions prevent writing"
+			FileCorrupted "File contains invalid JSON" when "file content cannot be parsed before rewrite"
+		}
+
+	@cli @mcp
+	function getFileStoreInfo "Get current statistics about the JSON file store"
+		input {}
+		output FileStoreInfo
+		errors {
+			FileAccess "Cannot read the file" when "file is not accessible"
+			FileCorrupted "File contains invalid JSON" when "file content cannot be parsed"
+		}
+
+	@cli
+	function openFileStore "Open or create a JSON file store at the given path"
+		input {
+			path: string "File path for the JSON store"
+		}
+		output FileStoreInfo
+		errors {
+			FileAccess "Cannot access the file" when "file permissions or lock prevent access"
+		}
+}

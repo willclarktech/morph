@@ -1,0 +1,97 @@
+{
+	"description": "Password hashing and verification using bcrypt",
+	"entities": {},
+	"dependencies": [
+		"auth"
+	],
+	"errors": {
+		"PasswordHash": {
+			"description": "Failed to hash password",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"PasswordVerify": {
+			"description": "Failed to verify password",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"hashPassword": {
+			"description": "Hash a plain text password using bcrypt",
+			"errors": [
+				{
+					"name": "PasswordHash",
+					"description": "Failed to hash password",
+					"when": "bcrypt hashing fails"
+				}
+			],
+			"input": {
+				"password": {
+					"description": "Plain text password to hash",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"sensitive": true
+				}
+			},
+			"output": {
+				"kind": "primitive",
+				"name": "string"
+			},
+			"tags": [
+				"@cli",
+				"@mcp"
+			]
+		},
+		"verifyPassword": {
+			"description": "Verify a plain text password against a bcrypt hash",
+			"errors": [
+				{
+					"name": "PasswordVerify",
+					"description": "Failed to verify password",
+					"when": "bcrypt verification fails"
+				}
+			],
+			"input": {
+				"hash": {
+					"description": "Bcrypt hash to verify against",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"password": {
+					"description": "Plain text password to verify",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"sensitive": true
+				}
+			},
+			"output": {
+				"kind": "primitive",
+				"name": "boolean"
+			},
+			"tags": [
+				"@cli",
+				"@mcp"
+			]
+		}
+	},
+	"invariants": []
+}

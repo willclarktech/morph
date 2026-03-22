@@ -1,0 +1,195 @@
+{
+	"description": "Session management for authentication",
+	"entities": {},
+	"dependencies": [
+		"auth"
+	],
+	"types": {
+		"Session": {
+			"kind": "product",
+			"description": "Session data",
+			"fields": {
+				"createdAt": {
+					"description": "When the session was created (ISO 8601)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"data": {
+					"description": "Additional session data (JSON-serializable)",
+					"type": {
+						"kind": "primitive",
+						"name": "unknown"
+					},
+					"optional": true
+				},
+				"expiresAt": {
+					"description": "When the session expires (ISO 8601)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"id": {
+					"description": "Unique session identifier",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"userId": {
+					"description": "The authenticated user's ID",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"errors": {
+		"SessionExpired": {
+			"description": "Session has expired",
+			"fields": {
+				"sessionId": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"SessionNotFound": {
+			"description": "Session does not exist",
+			"fields": {
+				"sessionId": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"SessionStorage": {
+			"description": "Failed to access session storage",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"createSession": {
+			"description": "Create a new session for a user",
+			"errors": [
+				{
+					"name": "SessionStorage",
+					"description": "Failed to create session",
+					"when": "storage operation fails"
+				}
+			],
+			"input": {
+				"data": {
+					"description": "Additional session data (JSON-serializable)",
+					"type": {
+						"kind": "primitive",
+						"name": "unknown"
+					},
+					"optional": true
+				},
+				"expiresInSeconds": {
+					"description": "Session expiration in seconds (default: 86400 = 24 hours)",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					},
+					"optional": true
+				},
+				"userId": {
+					"description": "The user ID to create a session for",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			},
+			"output": {
+				"kind": "type",
+				"name": "Session"
+			},
+			"tags": [
+				"@cli",
+				"@mcp",
+				"@api"
+			]
+		},
+		"destroySession": {
+			"description": "Destroy a session (logout)",
+			"errors": [
+				{
+					"name": "SessionStorage",
+					"description": "Failed to destroy session",
+					"when": "storage operation fails"
+				}
+			],
+			"input": {
+				"sessionId": {
+					"description": "The session ID to destroy",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			},
+			"output": {
+				"kind": "primitive",
+				"name": "void"
+			},
+			"tags": [
+				"@cli",
+				"@mcp",
+				"@api"
+			]
+		},
+		"validateSession": {
+			"description": "Validate a session and return its data if valid",
+			"errors": [
+				{
+					"name": "SessionNotFound",
+					"description": "Session does not exist",
+					"when": "session ID is not found"
+				},
+				{
+					"name": "SessionExpired",
+					"description": "Session has expired",
+					"when": "session exists but is past expiration"
+				}
+			],
+			"input": {
+				"sessionId": {
+					"description": "The session ID to validate",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			},
+			"output": {
+				"kind": "type",
+				"name": "Session"
+			},
+			"tags": [
+				"@cli",
+				"@mcp",
+				"@api"
+			]
+		}
+	},
+	"invariants": []
+}

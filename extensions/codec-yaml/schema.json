@@ -1,0 +1,8 @@
+{
+	"description": "YAML wire encoding with custom BigInt and native timestamp tags",
+	"entities": {},
+	"dependencies": [
+		"codec"
+	],
+	"invariants": []
+}

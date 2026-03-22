@@ -1,0 +1,155 @@
+{
+	"description": "JSON file storage transport for CLI persistence",
+	"entities": {},
+	"dependencies": [
+		"storage"
+	],
+	"types": {
+		"FileStoreInfo": {
+			"kind": "product",
+			"description": "Statistics about the JSON file store",
+			"fields": {
+				"collectionCount": {
+					"description": "Number of collections in the file",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				},
+				"entryCount": {
+					"description": "Total number of entries across all collections",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				},
+				"path": {
+					"description": "Absolute path to the JSON file",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"sizeBytes": {
+					"description": "File size in bytes",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				}
+			}
+		}
+	},
+	"errors": {
+		"FileAccess": {
+			"description": "Failed to access the JSON file (permission or lock failure)",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"path": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"FileCorrupted": {
+			"description": "JSON file contains invalid or corrupted data",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"path": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"compactFile": {
+			"description": "Rewrite the JSON file without fragmentation",
+			"errors": [
+				{
+					"name": "FileAccess",
+					"description": "Cannot write to the file",
+					"when": "file permissions prevent writing"
+				},
+				{
+					"name": "FileCorrupted",
+					"description": "File contains invalid JSON",
+					"when": "file content cannot be parsed before rewrite"
+				}
+			],
+			"input": {},
+			"output": {
+				"kind": "type",
+				"name": "FileStoreInfo"
+			},
+			"tags": [
+				"@cli"
+			]
+		},
+		"getFileStoreInfo": {
+			"description": "Get current statistics about the JSON file store",
+			"errors": [
+				{
+					"name": "FileAccess",
+					"description": "Cannot read the file",
+					"when": "file is not accessible"
+				},
+				{
+					"name": "FileCorrupted",
+					"description": "File contains invalid JSON",
+					"when": "file content cannot be parsed"
+				}
+			],
+			"input": {},
+			"output": {
+				"kind": "type",
+				"name": "FileStoreInfo"
+			},
+			"tags": [
+				"@cli",
+				"@mcp"
+			]
+		},
+		"openFileStore": {
+			"description": "Open or create a JSON file store at the given path",
+			"errors": [
+				{
+					"name": "FileAccess",
+					"description": "Cannot access the file",
+					"when": "file permissions or lock prevent access"
+				}
+			],
+			"input": {
+				"path": {
+					"description": "File path for the JSON store",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			},
+			"output": {
+				"kind": "type",
+				"name": "FileStoreInfo"
+			},
+			"tags": [
+				"@cli"
+			]
+		}
+	},
+	"invariants": []
+}

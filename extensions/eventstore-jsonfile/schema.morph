@@ -1,0 +1,24 @@
+domain EventstoreJsonfile
+
+context EventstoreJsonfile "JSON file event store transport for CLI persistence" {
+	depends on eventstore
+
+	type FileEventStoreInfo "Statistics about the JSON file event store" {
+		eventCount: float "Total number of stored events"
+		path: string "Absolute path to the JSON file"
+		sizeBytes: float "File size in bytes"
+	}
+
+	error FileAccess "Failed to access the event store JSON file" {
+		message: string
+		path: string
+	}
+
+	@cli @mcp
+	function getFileStoreInfo "Get current statistics about the JSON file event store"
+		input {}
+		output FileEventStoreInfo
+		errors {
+			FileAccess "Cannot read the file" when "file is not accessible"
+		}
+}

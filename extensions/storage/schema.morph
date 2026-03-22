@@ -1,0 +1,78 @@
+domain Storage
+
+context Storage "Storage port and transport abstractions" {
+
+	type EntityStoreConfig "Configuration for an entity store instance" {
+		entityName: string "Name of the entity type"
+		indexes: IndexDescriptor[] "Secondary index descriptors"
+		tableName: string "Storage table or collection name"
+	}
+
+	type IndexDescriptor "Describes a secondary index on an entity field" {
+		field: string "Entity field name to index"
+		kind: "unique" | "nonUnique" "Whether the index enforces uniqueness"
+	}
+
+	type PaginatedResult "Paginated collection of stored values" {
+		items: string[] "Values in this page"
+		total: integer "Total count across all pages"
+	}
+
+	port EntityStore "Generic entity storage with secondary index support" {
+		findAllByIndex(field: string, value: string): PaginatedResult throws StorageOperation "Find all entities by indexed field value (non-unique index)"
+		findByIndex(field: string, value: string): string? throws StorageOperation "Find single entity by indexed field value (unique index)"
+		get(id: string): string? throws StorageOperation "Get entity JSON by ID"
+		getAll(): PaginatedResult throws StorageOperation "Get all entity JSON values"
+		put(data: string, id: string): void throws StorageOperation "Store entity JSON by ID"
+		remove(id: string): void throws StorageOperation "Remove entity by ID"
+	}
+
+	port StorageTransport "Raw key-value storage transport" {
+		get(id: string): string? throws StorageOperation "Get value by key"
+		getAll(): PaginatedResult throws StorageOperation "Get all values"
+		put(data: string, id: string): void throws StorageOperation "Store value by key"
+		remove(id: string): void throws StorageOperation "Remove value by key"
+	}
+
+	error StorageConnection "Failed to connect to storage backend" {
+		message: string
+	}
+
+	error StorageOperation "Storage operation failed" {
+		message: string
+	}
+
+	contract PutGetRoundtrip on StorageTransport "put then get returns stored value"
+	given key: string, value: string
+	when put(key, value)
+		then get(key) == value
+
+	contract GetUnknownKey on StorageTransport "get on unknown key returns undefined"
+	given key: string
+		then get(key) == null
+
+	contract PutOverwrite on StorageTransport "put overwrites previous value for same key"
+	given key: string, v1: string, v2: string
+	when put(key, v1), put(key, v2)
+		then get(key) == v2
+
+	contract RemoveGet on StorageTransport "remove then get returns undefined"
+	given key: string, value: string
+	when put(key, value), remove(key)
+		then get(key) == null
+
+	contract RemoveIdempotent on StorageTransport "remove on unknown key succeeds without error"
+	given key: string
+	when remove(key)
+		then true == true
+
+	contract GetAllContainsPut on StorageTransport "getAll contains value after put"
+	given key: string, value: string
+	when put(key, value)
+		then getAll().items contains value
+
+	contract PutGetAllCount on StorageTransport "getAll length increases after put with distinct keys"
+	given k1: string, v1: string, k2: string, v2: string
+	when put(k1, v1), put(k2, v2)
+		then count(getAll().items) >= 2
+}

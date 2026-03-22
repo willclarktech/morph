@@ -1,0 +1,132 @@
+{
+	"description": "SQLite storage transport using bun:sqlite",
+	"entities": {},
+	"dependencies": [
+		"storage"
+	],
+	"types": {
+		"DatabaseInfo": {
+			"kind": "product",
+			"description": "Statistics about the SQLite database",
+			"fields": {
+				"journalMode": {
+					"description": "Current journal mode (e.g. wal, delete)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"path": {
+					"description": "Absolute path to the database file",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"sizeBytes": {
+					"description": "Database file size in bytes",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				},
+				"tableCount": {
+					"description": "Number of tables in the database",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				}
+			}
+		}
+	},
+	"errors": {
+		"DatabaseLocked": {
+			"description": "Database is locked by another process",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"path": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"MigrationFailed": {
+			"description": "Database schema setup or migration failed",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"table": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"getDatabaseInfo": {
+			"description": "Get current statistics about the SQLite database",
+			"errors": [
+				{
+					"name": "DatabaseLocked",
+					"description": "Database file is locked",
+					"when": "another process holds the lock"
+				}
+			],
+			"input": {},
+			"output": {
+				"kind": "type",
+				"name": "DatabaseInfo"
+			},
+			"tags": [
+				"@cli",
+				"@mcp"
+			]
+		},
+		"initializeDatabase": {
+			"description": "Create tables and set pragmas for a SQLite database",
+			"errors": [
+				{
+					"name": "DatabaseLocked",
+					"description": "Database file is locked",
+					"when": "another process holds the lock"
+				},
+				{
+					"name": "MigrationFailed",
+					"description": "Table creation failed",
+					"when": "CREATE TABLE statement fails"
+				}
+			],
+			"input": {
+				"path": {
+					"description": "File path for the SQLite database",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			},
+			"output": {
+				"kind": "type",
+				"name": "DatabaseInfo"
+			},
+			"tags": [
+				"@cli"
+			]
+		}
+	},
+	"invariants": []
+}

@@ -1,0 +1,20 @@
+domain EventstoreMemory
+
+context EventstoreMemory "In-memory event store transport using Effect Ref" {
+	depends on eventstore
+
+	type MemoryEventStoreInfo "Statistics about the in-memory event store" {
+		eventCount: float "Total number of stored events"
+		tagCount: float "Number of distinct event tags"
+	}
+
+	@cli @mcp
+	function getStoreInfo "Get current statistics about the in-memory event store"
+		input {}
+		output MemoryEventStoreInfo
+
+	@cli
+	function resetStore "Clear all events from the in-memory store (dev/test)"
+		input {}
+		output void
+}

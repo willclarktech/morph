@@ -1,0 +1,5 @@
+domain CodecJson
+
+context CodecJson "JSON wire encoding using tagged JSON for BigInt and Date" {
+	depends on codec
+}

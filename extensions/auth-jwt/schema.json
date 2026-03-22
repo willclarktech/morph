@@ -1,0 +1,186 @@
+{
+	"description": "JWT token authentication",
+	"entities": {},
+	"dependencies": [
+		"auth"
+	],
+	"types": {
+		"JwtPayload": {
+			"kind": "product",
+			"description": "JWT token payload (claims)",
+			"fields": {
+				"aud": {
+					"description": "Audience",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"exp": {
+					"description": "Expiration time (Unix timestamp)",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					},
+					"optional": true
+				},
+				"iat": {
+					"description": "Issued at (Unix timestamp)",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				},
+				"iss": {
+					"description": "Issuer",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"sub": {
+					"description": "Subject (user ID)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"errors": {
+		"TokenExpired": {
+			"description": "JWT token has expired",
+			"fields": {
+				"expiredAt": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"TokenInvalid": {
+			"description": "JWT token is invalid (malformed, bad signature, etc.)",
+			"fields": {
+				"reason": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"refreshToken": {
+			"description": "Refresh an existing JWT token with new expiration",
+			"errors": [
+				{
+					"name": "TokenInvalid",
+					"description": "Token is malformed or signature is invalid",
+					"when": "token cannot be parsed or verified"
+				},
+				{
+					"name": "TokenExpired",
+					"description": "Token has expired and cannot be refreshed",
+					"when": "exp claim is too far in the past"
+				}
+			],
+			"input": {
+				"secret": {
+					"description": "Secret key for signing",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"sensitive": true
+				},
+				"token": {
+					"description": "JWT token to refresh",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			},
+			"output": {
+				"kind": "primitive",
+				"name": "string"
+			},
+			"tags": [
+				"@api"
+			]
+		},
+		"signToken": {
+			"description": "Sign a JWT token with a secret",
+			"errors": [],
+			"input": {
+				"payload": {
+					"description": "JWT payload to sign",
+					"type": {
+						"kind": "type",
+						"name": "JwtPayload"
+					}
+				},
+				"secret": {
+					"description": "Secret key for signing (HS256)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"sensitive": true
+				}
+			},
+			"output": {
+				"kind": "primitive",
+				"name": "string"
+			},
+			"tags": [
+				"@api"
+			]
+		},
+		"verifyToken": {
+			"description": "Verify a JWT token and extract payload",
+			"errors": [
+				{
+					"name": "TokenInvalid",
+					"description": "Token is malformed or signature is invalid",
+					"when": "token cannot be parsed or verified"
+				},
+				{
+					"name": "TokenExpired",
+					"description": "Token has expired",
+					"when": "exp claim is in the past"
+				}
+			],
+			"input": {
+				"secret": {
+					"description": "Secret key for verification",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"sensitive": true
+				},
+				"token": {
+					"description": "JWT token to verify",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			},
+			"output": {
+				"kind": "type",
+				"name": "JwtPayload"
+			},
+			"tags": [
+				"@api"
+			]
+		}
+	},
+	"invariants": []
+}

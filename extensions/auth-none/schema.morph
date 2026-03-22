@@ -1,0 +1,22 @@
+domain AuthNone
+
+context AuthNone "No authentication - passthrough for public APIs" {
+	depends on auth
+
+	error NoAuthEnabled "Authentication is not enabled for this endpoint" {
+		message: string
+	}
+
+	@api
+	function getAnonymousUser "Get anonymous user placeholder (always returns undefined)"
+		input {}
+		output void
+
+	@api
+	function requireAuth "Require authentication (always fails with NoAuthEnabled)"
+		input {}
+		output void
+		errors {
+			NoAuthEnabled "Authentication is not configured" when "always - this adapter has no auth"
+		}
+}

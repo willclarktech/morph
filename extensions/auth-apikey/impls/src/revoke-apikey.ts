@@ -1,0 +1,19 @@
+import { Context, Effect, Layer } from "effect";
+
+import type { ApiKeyStorageError } from "@morph/auth-apikey-dsl";
+import { revokeApiKey } from "./apikey-store";
+
+export interface RevokeApiKeyHandler {
+	readonly handle: (
+		params: { readonly keyId: string },
+		options: object,
+	) => Effect.Effect<void, ApiKeyStorageError>;
+}
+
+export const RevokeApiKeyHandler = Context.GenericTag<RevokeApiKeyHandler>(
+	"@morph/RevokeApiKeyHandler",
+);
+
+export const RevokeApiKeyHandlerLive = Layer.succeed(RevokeApiKeyHandler, {
+	handle: (params) => revokeApiKey(params.keyId),
+});

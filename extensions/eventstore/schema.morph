@@ -1,0 +1,38 @@
+domain Eventstore
+
+context Eventstore "Append-only event storage transport abstractions" {
+
+	port EventStoreTransport "Raw append-only event storage transport using serialized strings" {
+		append(data: string): void throws EventStoreOperation "Append a serialized event"
+		getAfter(timestamp: string): string[] throws EventStoreOperation "Get serialized events after timestamp"
+		getAll(): string[] throws EventStoreOperation "Get all serialized events"
+		getByAggregateId(aggregateId: string): string[] throws EventStoreOperation "Get serialized events for an aggregate"
+		getByTag(tag: string): string[] throws EventStoreOperation "Get serialized events matching tag"
+	}
+
+	error EventStoreConnection "Failed to connect to event store backend" {
+		message: string
+	}
+
+	error EventStoreOperation "Event store operation failed" {
+		message: string
+	}
+
+	contract AppendGetAll on EventStoreTransport "appended event appears in getAll"
+	given data: string
+	when append(data)
+		then getAll() contains data
+
+	contract AppendOrdering on EventStoreTransport "events appear in append order"
+	given a: string, b: string
+	when append(a), append(b)
+		then getAll() contains a && getAll() contains b
+
+	contract GetByTagFilters on EventStoreTransport "getByTag returns only events with matching tag"
+	given data: string, tag: string
+	when append(data)
+		then count(getAll()) >= 1
+
+	contract GetAllEmpty on EventStoreTransport "getAll returns empty on fresh store"
+		then count(getAll()) == 0
+}

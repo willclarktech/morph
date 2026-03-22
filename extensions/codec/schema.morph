@@ -1,0 +1,46 @@
+domain Codec
+
+context Codec "Wire encoding/decoding for API transport" {
+
+	type EncodeResult "Result of encoding a value" {
+		body: unknown "Encoded bytes or string"
+		contentType: string "MIME type of the encoded body"
+	}
+
+	type MimeContribution "MIME types contributed by a codec" {
+		format: string "Format identifier, e.g. json"
+		mimeTypes: string[] "Supported MIME types"
+	}
+
+	port Codec "Encode and decode values in a specific wire format" {
+		encode(value: unknown, messageName: string): EncodeResult throws CodecEncode
+		decode(body: unknown, messageName: string): unknown throws CodecDecode
+	}
+
+	port CodecRegistry "Composite registry with content negotiation" {
+		get(format: string): Codec throws CodecNegotiation
+		negotiate(acceptHeader: string): Codec throws CodecNegotiation
+		fromContentType(contentType: string): Codec throws CodecNegotiation
+		getAvailableFormats(): MimeContribution[] "List all registered formats and MIME types"
+	}
+
+	error CodecEncode "Failed to encode value" {
+		format: string
+		message: string
+	}
+
+	error CodecDecode "Failed to decode body" {
+		format: string
+		message: string
+	}
+
+	error CodecNegotiation "No codec available for requested format" {
+		requested: string
+		available: string[]
+	}
+
+	contract EncodeDecodeRoundtrip on Codec "encode then decode returns equivalent value"
+	given value: string, messageName: string
+	when encode(value, messageName)
+		then decode(encode(value, messageName).body, messageName) == value
+}

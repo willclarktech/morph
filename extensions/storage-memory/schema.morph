@@ -1,0 +1,20 @@
+domain StorageMemory
+
+context StorageMemory "In-memory storage transport using Effect Ref" {
+	depends on storage
+
+	type MemoryStoreInfo "Statistics about the in-memory store" {
+		collectionCount: float "Number of active collections"
+		entryCount: float "Total number of entries across all collections"
+	}
+
+	@cli @mcp
+	function getStoreInfo "Get current statistics about the in-memory store"
+		input {}
+		output MemoryStoreInfo
+
+	@cli
+	function resetStore "Clear all data from the in-memory store (dev/test)"
+		input {}
+		output void
+}

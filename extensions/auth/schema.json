@@ -1,0 +1,93 @@
+{
+	"description": "Authentication contracts and error types",
+	"entities": {},
+	"ports": {
+		"AuthService": {
+			"description": "Authentication context provider",
+			"methods": {
+				"getCurrentUser": {
+					"description": "Get the currently authenticated user, or undefined if not authenticated",
+					"params": {},
+					"returns": {
+						"kind": "optional",
+						"inner": {
+							"kind": "typeParam",
+							"name": "TUser"
+						}
+					},
+					"errors": []
+				},
+				"requireAuth": {
+					"description": "Require authentication - fails if not authenticated",
+					"params": {},
+					"returns": {
+						"kind": "typeParam",
+						"name": "TUser"
+					},
+					"errors": [
+						"Authentication"
+					]
+				}
+			},
+			"typeParameters": [
+				{
+					"name": "TUser",
+					"default": {
+						"kind": "primitive",
+						"name": "unknown"
+					}
+				}
+			]
+		}
+	},
+	"errors": {
+		"Authentication": {
+			"description": "Authentication required but not present or invalid",
+			"fields": {
+				"code": {
+					"type": {
+						"kind": "union",
+						"values": [
+							"EXPIRED_TOKEN",
+							"INVALID_TOKEN",
+							"UNAUTHENTICATED"
+						]
+					},
+					"optional": true
+				},
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"Authorization": {
+			"description": "User is authenticated but not authorized for this action",
+			"fields": {
+				"action": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"resource": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				}
+			}
+		}
+	},
+	"invariants": []
+}

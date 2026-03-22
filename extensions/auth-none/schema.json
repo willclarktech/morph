@@ -1,0 +1,53 @@
+{
+	"description": "No authentication - passthrough for public APIs",
+	"entities": {},
+	"dependencies": [
+		"auth"
+	],
+	"errors": {
+		"NoAuthEnabled": {
+			"description": "Authentication is not enabled for this endpoint",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"getAnonymousUser": {
+			"description": "Get anonymous user placeholder (always returns undefined)",
+			"errors": [],
+			"input": {},
+			"output": {
+				"kind": "primitive",
+				"name": "void"
+			},
+			"tags": [
+				"@api"
+			]
+		},
+		"requireAuth": {
+			"description": "Require authentication (always fails with NoAuthEnabled)",
+			"errors": [
+				{
+					"name": "NoAuthEnabled",
+					"description": "Authentication is not configured",
+					"when": "always - this adapter has no auth"
+				}
+			],
+			"input": {},
+			"output": {
+				"kind": "primitive",
+				"name": "void"
+			},
+			"tags": [
+				"@api"
+			]
+		}
+	},
+	"invariants": []
+}

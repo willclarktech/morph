@@ -1,0 +1,669 @@
+{
+	"description": "Storage port and transport abstractions",
+	"entities": {},
+	"ports": {
+		"EntityStore": {
+			"description": "Generic entity storage with secondary index support",
+			"methods": {
+				"findAllByIndex": {
+					"description": "Find all entities by indexed field value (non-unique index)",
+					"params": {
+						"field": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"value": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "type",
+						"name": "PaginatedResult"
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				},
+				"findByIndex": {
+					"description": "Find single entity by indexed field value (unique index)",
+					"params": {
+						"field": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"value": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "optional",
+						"inner": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				},
+				"get": {
+					"description": "Get entity JSON by ID",
+					"params": {
+						"id": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "optional",
+						"inner": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				},
+				"getAll": {
+					"description": "Get all entity JSON values",
+					"params": {},
+					"returns": {
+						"kind": "type",
+						"name": "PaginatedResult"
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				},
+				"put": {
+					"description": "Store entity JSON by ID",
+					"params": {
+						"data": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"id": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "primitive",
+						"name": "void"
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				},
+				"remove": {
+					"description": "Remove entity by ID",
+					"params": {
+						"id": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "primitive",
+						"name": "void"
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				}
+			}
+		},
+		"StorageTransport": {
+			"description": "Raw key-value storage transport",
+			"methods": {
+				"get": {
+					"description": "Get value by key",
+					"params": {
+						"id": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "optional",
+						"inner": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				},
+				"getAll": {
+					"description": "Get all values",
+					"params": {},
+					"returns": {
+						"kind": "type",
+						"name": "PaginatedResult"
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				},
+				"put": {
+					"description": "Store value by key",
+					"params": {
+						"data": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"id": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "primitive",
+						"name": "void"
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				},
+				"remove": {
+					"description": "Remove value by key",
+					"params": {
+						"id": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "primitive",
+						"name": "void"
+					},
+					"errors": [
+						"StorageOperation"
+					]
+				}
+			}
+		}
+	},
+	"types": {
+		"EntityStoreConfig": {
+			"kind": "product",
+			"description": "Configuration for an entity store instance",
+			"fields": {
+				"entityName": {
+					"description": "Name of the entity type",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"indexes": {
+					"description": "Secondary index descriptors",
+					"type": {
+						"kind": "array",
+						"element": {
+							"kind": "type",
+							"name": "IndexDescriptor"
+						}
+					}
+				},
+				"tableName": {
+					"description": "Storage table or collection name",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"IndexDescriptor": {
+			"kind": "product",
+			"description": "Describes a secondary index on an entity field",
+			"fields": {
+				"field": {
+					"description": "Entity field name to index",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"kind": {
+					"description": "Whether the index enforces uniqueness",
+					"type": {
+						"kind": "union",
+						"values": [
+							"unique",
+							"nonUnique"
+						]
+					}
+				}
+			}
+		},
+		"PaginatedResult": {
+			"kind": "product",
+			"description": "Paginated collection of stored values",
+			"fields": {
+				"items": {
+					"description": "Values in this page",
+					"type": {
+						"kind": "array",
+						"element": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					}
+				},
+				"total": {
+					"description": "Total count across all pages",
+					"type": {
+						"kind": "primitive",
+						"name": "integer"
+					}
+				}
+			}
+		}
+	},
+	"errors": {
+		"StorageConnection": {
+			"description": "Failed to connect to storage backend",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"StorageOperation": {
+			"description": "Storage operation failed",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"contracts": [
+		{
+			"name": "PutGetRoundtrip",
+			"port": "StorageTransport",
+			"description": "put then get returns stored value",
+			"bindings": [
+				{
+					"name": "key",
+					"type": "string"
+				},
+				{
+					"name": "value",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "put",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						},
+						{
+							"kind": "field",
+							"path": "value"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "equals",
+				"left": {
+					"kind": "call",
+					"name": "get",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						}
+					]
+				},
+				"right": {
+					"kind": "field",
+					"path": "value"
+				}
+			}
+		},
+		{
+			"name": "GetUnknownKey",
+			"port": "StorageTransport",
+			"description": "get on unknown key returns undefined",
+			"bindings": [
+				{
+					"name": "key",
+					"type": "string"
+				}
+			],
+			"after": [],
+			"then": {
+				"kind": "equals",
+				"left": {
+					"kind": "call",
+					"name": "get",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						}
+					]
+				},
+				"right": {
+					"kind": "literal"
+				}
+			}
+		},
+		{
+			"name": "PutOverwrite",
+			"port": "StorageTransport",
+			"description": "put overwrites previous value for same key",
+			"bindings": [
+				{
+					"name": "key",
+					"type": "string"
+				},
+				{
+					"name": "v1",
+					"type": "string"
+				},
+				{
+					"name": "v2",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "put",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						},
+						{
+							"kind": "field",
+							"path": "v1"
+						}
+					]
+				},
+				{
+					"method": "put",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						},
+						{
+							"kind": "field",
+							"path": "v2"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "equals",
+				"left": {
+					"kind": "call",
+					"name": "get",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						}
+					]
+				},
+				"right": {
+					"kind": "field",
+					"path": "v2"
+				}
+			}
+		},
+		{
+			"name": "RemoveGet",
+			"port": "StorageTransport",
+			"description": "remove then get returns undefined",
+			"bindings": [
+				{
+					"name": "key",
+					"type": "string"
+				},
+				{
+					"name": "value",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "put",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						},
+						{
+							"kind": "field",
+							"path": "value"
+						}
+					]
+				},
+				{
+					"method": "remove",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "equals",
+				"left": {
+					"kind": "call",
+					"name": "get",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						}
+					]
+				},
+				"right": {
+					"kind": "literal"
+				}
+			}
+		},
+		{
+			"name": "RemoveIdempotent",
+			"port": "StorageTransport",
+			"description": "remove on unknown key succeeds without error",
+			"bindings": [
+				{
+					"name": "key",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "remove",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "equals",
+				"left": {
+					"kind": "literal",
+					"value": true
+				},
+				"right": {
+					"kind": "literal",
+					"value": true
+				}
+			}
+		},
+		{
+			"name": "GetAllContainsPut",
+			"port": "StorageTransport",
+			"description": "getAll contains value after put",
+			"bindings": [
+				{
+					"name": "key",
+					"type": "string"
+				},
+				{
+					"name": "value",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "put",
+					"args": [
+						{
+							"kind": "field",
+							"path": "key"
+						},
+						{
+							"kind": "field",
+							"path": "value"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "contains",
+				"collection": {
+					"kind": "call",
+					"name": "getAll",
+					"args": [],
+					"field": "items"
+				},
+				"value": {
+					"kind": "field",
+					"path": "value"
+				}
+			}
+		},
+		{
+			"name": "PutGetAllCount",
+			"port": "StorageTransport",
+			"description": "getAll length increases after put with distinct keys",
+			"bindings": [
+				{
+					"name": "k1",
+					"type": "string"
+				},
+				{
+					"name": "v1",
+					"type": "string"
+				},
+				{
+					"name": "k2",
+					"type": "string"
+				},
+				{
+					"name": "v2",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "put",
+					"args": [
+						{
+							"kind": "field",
+							"path": "k1"
+						},
+						{
+							"kind": "field",
+							"path": "v1"
+						}
+					]
+				},
+				{
+					"method": "put",
+					"args": [
+						{
+							"kind": "field",
+							"path": "k2"
+						},
+						{
+							"kind": "field",
+							"path": "v2"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "greaterThanOrEqual",
+				"left": {
+					"kind": "count",
+					"collection": {
+						"kind": "call",
+						"name": "getAll",
+						"args": [],
+						"field": "items"
+					}
+				},
+				"right": {
+					"kind": "literal",
+					"value": 2
+				}
+			}
+		}
+	],
+	"invariants": []
+}

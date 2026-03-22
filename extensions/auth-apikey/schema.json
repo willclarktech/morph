@@ -1,0 +1,255 @@
+{
+	"description": "API key authentication for machine-to-machine",
+	"entities": {},
+	"dependencies": [
+		"auth"
+	],
+	"types": {
+		"ApiKey": {
+			"kind": "product",
+			"description": "API key for authentication",
+			"fields": {
+				"createdAt": {
+					"description": "When the key was created",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"expiresAt": {
+					"description": "When the key expires (if set)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"id": {
+					"description": "Unique identifier for this API key",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"keyHash": {
+					"description": "Hashed API key (never store plain text)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"lastUsedAt": {
+					"description": "When the key was last used",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"name": {
+					"description": "Human-readable name for this key",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"userId": {
+					"description": "User ID this key belongs to",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"ApiKeyWithSecret": {
+			"kind": "product",
+			"description": "API key with the plaintext secret (only returned on creation)",
+			"fields": {
+				"createdAt": {
+					"description": "When the key was created",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"expiresAt": {
+					"description": "When the key expires (if set)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"id": {
+					"description": "Unique identifier for this API key",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"key": {
+					"description": "Plaintext API key (only shown once on creation)",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"name": {
+					"description": "Human-readable name for this key",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"userId": {
+					"description": "User ID this key belongs to",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"errors": {
+		"ApiKeyExpired": {
+			"description": "API key has expired",
+			"fields": {
+				"keyId": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"ApiKeyInvalid": {
+			"description": "API key is invalid (not found or bad format)",
+			"fields": {
+				"reason": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"ApiKeyStorage": {
+			"description": "Error reading or writing API key storage",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"createApiKey": {
+			"description": "Create a new API key for a user",
+			"errors": [
+				{
+					"name": "ApiKeyStorage",
+					"description": "Failed to store the API key",
+					"when": "storage write fails"
+				}
+			],
+			"input": {
+				"expiresInSeconds": {
+					"description": "Seconds until key expires (optional)",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					},
+					"optional": true
+				},
+				"name": {
+					"description": "Human-readable name for this key",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"optional": true
+				},
+				"userId": {
+					"description": "User ID to create the key for",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			},
+			"output": {
+				"kind": "type",
+				"name": "ApiKeyWithSecret"
+			},
+			"tags": [
+				"@api"
+			]
+		},
+		"revokeApiKey": {
+			"description": "Revoke (delete) an API key",
+			"errors": [
+				{
+					"name": "ApiKeyStorage",
+					"description": "Failed to delete the API key",
+					"when": "storage delete fails"
+				}
+			],
+			"input": {
+				"keyId": {
+					"description": "ID of the API key to revoke",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			},
+			"output": {
+				"kind": "primitive",
+				"name": "void"
+			},
+			"tags": [
+				"@api"
+			]
+		},
+		"validateApiKey": {
+			"description": "Validate an API key and return associated metadata",
+			"errors": [
+				{
+					"name": "ApiKeyInvalid",
+					"description": "API key is not found or malformed",
+					"when": "key cannot be verified"
+				},
+				{
+					"name": "ApiKeyExpired",
+					"description": "API key has expired",
+					"when": "expiresAt is in the past"
+				}
+			],
+			"input": {
+				"key": {
+					"description": "API key to validate",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"sensitive": true
+				}
+			},
+			"output": {
+				"kind": "type",
+				"name": "ApiKey"
+			},
+			"tags": [
+				"@api"
+			]
+		}
+	},
+	"invariants": []
+}

@@ -1,0 +1,5 @@
+domain CodecYaml
+
+context CodecYaml "YAML wire encoding with custom BigInt and native timestamp tags" {
+	depends on codec
+}

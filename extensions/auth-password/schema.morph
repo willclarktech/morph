@@ -1,0 +1,36 @@
+domain AuthPassword
+
+context AuthPassword "Password hashing and verification using bcrypt" {
+	depends on auth
+
+	error PasswordHash "Failed to hash password" {
+		message: string
+	}
+
+	error PasswordVerify "Failed to verify password" {
+		message: string
+	}
+
+	@cli @mcp
+	function hashPassword "Hash a plain text password using bcrypt"
+		input {
+			@sensitive
+			password: string "Plain text password to hash"
+		}
+		output string
+		errors {
+			PasswordHash "Failed to hash password" when "bcrypt hashing fails"
+		}
+
+	@cli @mcp
+	function verifyPassword "Verify a plain text password against a bcrypt hash"
+		input {
+			hash: string "Bcrypt hash to verify against"
+			@sensitive
+			password: string "Plain text password to verify"
+		}
+		output boolean
+		errors {
+			PasswordVerify "Failed to verify password" when "bcrypt verification fails"
+		}
+}

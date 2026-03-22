@@ -1,0 +1,8 @@
+{
+	"description": "JSON wire encoding using tagged JSON for BigInt and Date",
+	"entities": {},
+	"dependencies": [
+		"codec"
+	],
+	"invariants": []
+}

@@ -1,0 +1,303 @@
+{
+	"description": "Wire encoding/decoding for API transport",
+	"entities": {},
+	"ports": {
+		"Codec": {
+			"description": "Encode and decode values in a specific wire format",
+			"methods": {
+				"encode": {
+					"description": "",
+					"params": {
+						"value": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "unknown"
+							}
+						},
+						"messageName": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "type",
+						"name": "EncodeResult"
+					},
+					"errors": [
+						"CodecEncode"
+					]
+				},
+				"decode": {
+					"description": "",
+					"params": {
+						"body": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "unknown"
+							}
+						},
+						"messageName": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "primitive",
+						"name": "unknown"
+					},
+					"errors": [
+						"CodecDecode"
+					]
+				}
+			}
+		},
+		"CodecRegistry": {
+			"description": "Composite registry with content negotiation",
+			"methods": {
+				"get": {
+					"description": "",
+					"params": {
+						"format": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "typeParam",
+						"name": "Codec"
+					},
+					"errors": [
+						"CodecNegotiation"
+					]
+				},
+				"negotiate": {
+					"description": "",
+					"params": {
+						"acceptHeader": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "typeParam",
+						"name": "Codec"
+					},
+					"errors": [
+						"CodecNegotiation"
+					]
+				},
+				"fromContentType": {
+					"description": "",
+					"params": {
+						"contentType": {
+							"description": "",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"returns": {
+						"kind": "typeParam",
+						"name": "Codec"
+					},
+					"errors": [
+						"CodecNegotiation"
+					]
+				},
+				"getAvailableFormats": {
+					"description": "List all registered formats and MIME types",
+					"params": {},
+					"returns": {
+						"kind": "array",
+						"element": {
+							"kind": "type",
+							"name": "MimeContribution"
+						}
+					},
+					"errors": []
+				}
+			}
+		}
+	},
+	"types": {
+		"EncodeResult": {
+			"kind": "product",
+			"description": "Result of encoding a value",
+			"fields": {
+				"body": {
+					"description": "Encoded bytes or string",
+					"type": {
+						"kind": "primitive",
+						"name": "unknown"
+					}
+				},
+				"contentType": {
+					"description": "MIME type of the encoded body",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"MimeContribution": {
+			"kind": "product",
+			"description": "MIME types contributed by a codec",
+			"fields": {
+				"format": {
+					"description": "Format identifier, e.g. json",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"mimeTypes": {
+					"description": "Supported MIME types",
+					"type": {
+						"kind": "array",
+						"element": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					}
+				}
+			}
+		}
+	},
+	"errors": {
+		"CodecEncode": {
+			"description": "Failed to encode value",
+			"fields": {
+				"format": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"CodecDecode": {
+			"description": "Failed to decode body",
+			"fields": {
+				"format": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		},
+		"CodecNegotiation": {
+			"description": "No codec available for requested format",
+			"fields": {
+				"requested": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"available": {
+					"type": {
+						"kind": "array",
+						"element": {
+							"kind": "primitive",
+							"name": "string"
+						}
+					}
+				}
+			}
+		}
+	},
+	"contracts": [
+		{
+			"name": "EncodeDecodeRoundtrip",
+			"port": "Codec",
+			"description": "encode then decode returns equivalent value",
+			"bindings": [
+				{
+					"name": "value",
+					"type": "string"
+				},
+				{
+					"name": "messageName",
+					"type": "string"
+				}
+			],
+			"after": [
+				{
+					"method": "encode",
+					"args": [
+						{
+							"kind": "field",
+							"path": "value"
+						},
+						{
+							"kind": "field",
+							"path": "messageName"
+						}
+					]
+				}
+			],
+			"then": {
+				"kind": "equals",
+				"left": {
+					"kind": "call",
+					"name": "decode",
+					"args": [
+						{
+							"kind": "call",
+							"name": "encode",
+							"args": [
+								{
+									"kind": "field",
+									"path": "value"
+								},
+								{
+									"kind": "field",
+									"path": "messageName"
+								}
+							],
+							"field": "body"
+						},
+						{
+							"kind": "field",
+							"path": "messageName"
+						}
+					]
+				},
+				"right": {
+					"kind": "field",
+					"path": "value"
+				}
+			}
+		}
+	],
+	"invariants": []
+}

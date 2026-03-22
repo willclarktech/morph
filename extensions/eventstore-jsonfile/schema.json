@@ -1,0 +1,77 @@
+{
+	"description": "JSON file event store transport for CLI persistence",
+	"entities": {},
+	"dependencies": [
+		"eventstore"
+	],
+	"types": {
+		"FileEventStoreInfo": {
+			"kind": "product",
+			"description": "Statistics about the JSON file event store",
+			"fields": {
+				"eventCount": {
+					"description": "Total number of stored events",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				},
+				"path": {
+					"description": "Absolute path to the JSON file",
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"sizeBytes": {
+					"description": "File size in bytes",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				}
+			}
+		}
+	},
+	"errors": {
+		"FileAccess": {
+			"description": "Failed to access the event store JSON file",
+			"fields": {
+				"message": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				},
+				"path": {
+					"type": {
+						"kind": "primitive",
+						"name": "string"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"getFileStoreInfo": {
+			"description": "Get current statistics about the JSON file event store",
+			"errors": [
+				{
+					"name": "FileAccess",
+					"description": "Cannot read the file",
+					"when": "file is not accessible"
+				}
+			],
+			"input": {},
+			"output": {
+				"kind": "type",
+				"name": "FileEventStoreInfo"
+			},
+			"tags": [
+				"@cli",
+				"@mcp"
+			]
+		}
+	},
+	"invariants": []
+}

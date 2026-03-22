@@ -1,0 +1,56 @@
+domain AuthJwt
+
+context AuthJwt "JWT token authentication" {
+	depends on auth
+
+	type JwtPayload "JWT token payload (claims)" {
+		aud?: string "Audience"
+		exp?: float "Expiration time (Unix timestamp)"
+		iat: float "Issued at (Unix timestamp)"
+		iss?: string "Issuer"
+		sub: string "Subject (user ID)"
+	}
+
+	error TokenExpired "JWT token has expired" {
+		expiredAt: string
+	}
+
+	error TokenInvalid "JWT token is invalid (malformed, bad signature, etc.)" {
+		reason: string
+	}
+
+	@api
+	function refreshToken "Refresh an existing JWT token with new expiration"
+		input {
+			@sensitive
+			secret: string "Secret key for signing"
+			token: string "JWT token to refresh"
+		}
+		output string
+		errors {
+			TokenInvalid "Token is malformed or signature is invalid" when "token cannot be parsed or verified"
+			TokenExpired "Token has expired and cannot be refreshed" when "exp claim is too far in the past"
+		}
+
+	@api
+	function signToken "Sign a JWT token with a secret"
+		input {
+			payload: JwtPayload "JWT payload to sign"
+			@sensitive
+			secret: string "Secret key for signing (HS256)"
+		}
+		output string
+
+	@api
+	function verifyToken "Verify a JWT token and extract payload"
+		input {
+			@sensitive
+			secret: string "Secret key for verification"
+			token: string "JWT token to verify"
+		}
+		output JwtPayload
+		errors {
+			TokenInvalid "Token is malformed or signature is invalid" when "token cannot be parsed or verified"
+			TokenExpired "Token has expired" when "exp claim is in the past"
+		}
+}

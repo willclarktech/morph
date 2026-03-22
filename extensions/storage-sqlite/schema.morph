@@ -1,0 +1,41 @@
+domain StorageSqlite
+
+context StorageSqlite "SQLite storage transport using bun:sqlite" {
+	depends on storage
+
+	type DatabaseInfo "Statistics about the SQLite database" {
+		journalMode: string "Current journal mode (e.g. wal, delete)"
+		path: string "Absolute path to the database file"
+		sizeBytes: float "Database file size in bytes"
+		tableCount: float "Number of tables in the database"
+	}
+
+	error DatabaseLocked "Database is locked by another process" {
+		message: string
+		path: string
+	}
+
+	error MigrationFailed "Database schema setup or migration failed" {
+		message: string
+		table: string
+	}
+
+	@cli @mcp
+	function getDatabaseInfo "Get current statistics about the SQLite database"
+		input {}
+		output DatabaseInfo
+		errors {
+			DatabaseLocked "Database file is locked" when "another process holds the lock"
+		}
+
+	@cli
+	function initializeDatabase "Create tables and set pragmas for a SQLite database"
+		input {
+			path: string "File path for the SQLite database"
+		}
+		output DatabaseInfo
+		errors {
+			DatabaseLocked "Database file is locked" when "another process holds the lock"
+			MigrationFailed "Table creation failed" when "CREATE TABLE statement fails"
+		}
+}

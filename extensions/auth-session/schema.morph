@@ -1,0 +1,58 @@
+domain AuthSession
+
+context AuthSession "Session management for authentication" {
+	depends on auth
+
+	type Session "Session data" {
+		createdAt: string "When the session was created (ISO 8601)"
+		data?: unknown "Additional session data (JSON-serializable)"
+		expiresAt?: string "When the session expires (ISO 8601)"
+		id: string "Unique session identifier"
+		userId: string "The authenticated user's ID"
+	}
+
+	error SessionExpired "Session has expired" {
+		sessionId: string
+	}
+
+	error SessionNotFound "Session does not exist" {
+		sessionId: string
+	}
+
+	error SessionStorage "Failed to access session storage" {
+		message: string
+	}
+
+	@cli @mcp @api
+	function createSession "Create a new session for a user"
+		input {
+			data?: unknown "Additional session data (JSON-serializable)"
+			expiresInSeconds?: float "Session expiration in seconds (default: 86400 = 24 hours)"
+			userId: string "The user ID to create a session for"
+		}
+		output Session
+		errors {
+			SessionStorage "Failed to create session" when "storage operation fails"
+		}
+
+	@cli @mcp @api
+	function destroySession "Destroy a session (logout)"
+		input {
+			sessionId: string "The session ID to destroy"
+		}
+		output void
+		errors {
+			SessionStorage "Failed to destroy session" when "storage operation fails"
+		}
+
+	@cli @mcp @api
+	function validateSession "Validate a session and return its data if valid"
+		input {
+			sessionId: string "The session ID to validate"
+		}
+		output Session
+		errors {
+			SessionNotFound "Session does not exist" when "session ID is not found"
+			SessionExpired "Session has expired" when "session exists but is past expiration"
+		}
+}

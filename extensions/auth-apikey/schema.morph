@@ -1,0 +1,70 @@
+domain AuthApikey
+
+context AuthApikey "API key authentication for machine-to-machine" {
+	depends on auth
+
+	type ApiKey "API key for authentication" {
+		createdAt: string "When the key was created"
+		expiresAt?: string "When the key expires (if set)"
+		id: string "Unique identifier for this API key"
+		keyHash: string "Hashed API key (never store plain text)"
+		lastUsedAt?: string "When the key was last used"
+		name?: string "Human-readable name for this key"
+		userId: string "User ID this key belongs to"
+	}
+
+	type ApiKeyWithSecret "API key with the plaintext secret (only returned on creation)" {
+		createdAt: string "When the key was created"
+		expiresAt?: string "When the key expires (if set)"
+		id: string "Unique identifier for this API key"
+		key: string "Plaintext API key (only shown once on creation)"
+		name?: string "Human-readable name for this key"
+		userId: string "User ID this key belongs to"
+	}
+
+	error ApiKeyExpired "API key has expired" {
+		keyId: string
+	}
+
+	error ApiKeyInvalid "API key is invalid (not found or bad format)" {
+		reason: string
+	}
+
+	error ApiKeyStorage "Error reading or writing API key storage" {
+		message: string
+	}
+
+	@api
+	function createApiKey "Create a new API key for a user"
+		input {
+			expiresInSeconds?: float "Seconds until key expires (optional)"
+			name?: string "Human-readable name for this key"
+			userId: string "User ID to create the key for"
+		}
+		output ApiKeyWithSecret
+		errors {
+			ApiKeyStorage "Failed to store the API key" when "storage write fails"
+		}
+
+	@api
+	function revokeApiKey "Revoke (delete) an API key"
+		input {
+			keyId: string "ID of the API key to revoke"
+		}
+		output void
+		errors {
+			ApiKeyStorage "Failed to delete the API key" when "storage delete fails"
+		}
+
+	@api
+	function validateApiKey "Validate an API key and return associated metadata"
+		input {
+			@sensitive
+			key: string "API key to validate"
+		}
+		output ApiKey
+		errors {
+			ApiKeyInvalid "API key is not found or malformed" when "key cannot be verified"
+			ApiKeyExpired "API key has expired" when "expiresAt is in the past"
+		}
+}

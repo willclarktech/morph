@@ -1,0 +1,57 @@
+{
+	"description": "In-memory storage transport using Effect Ref",
+	"entities": {},
+	"dependencies": [
+		"storage"
+	],
+	"types": {
+		"MemoryStoreInfo": {
+			"kind": "product",
+			"description": "Statistics about the in-memory store",
+			"fields": {
+				"collectionCount": {
+					"description": "Number of active collections",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				},
+				"entryCount": {
+					"description": "Total number of entries across all collections",
+					"type": {
+						"kind": "primitive",
+						"name": "float"
+					}
+				}
+			}
+		}
+	},
+	"functions": {
+		"getStoreInfo": {
+			"description": "Get current statistics about the in-memory store",
+			"errors": [],
+			"input": {},
+			"output": {
+				"kind": "type",
+				"name": "MemoryStoreInfo"
+			},
+			"tags": [
+				"@cli",
+				"@mcp"
+			]
+		},
+		"resetStore": {
+			"description": "Clear all data from the in-memory store (dev/test)",
+			"errors": [],
+			"input": {},
+			"output": {
+				"kind": "primitive",
+				"name": "void"
+			},
+			"tags": [
+				"@cli"
+			]
+		}
+	},
+	"invariants": []
+}

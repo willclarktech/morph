@@ -1,0 +1,40 @@
+domain EventstoreRedis
+
+context EventstoreRedis "Redis event store transport using Bun.redis sorted sets" {
+	depends on eventstore
+
+	type RedisEventStoreInfo "Redis event store connection statistics" {
+		connected: boolean "Whether the client is currently connected"
+		eventCount: float "Total number of stored events"
+		url: string "Redis server URL"
+	}
+
+	error ConnectionFailed "Failed to connect to the Redis event store" {
+		message: string
+		url: string
+	}
+
+	error ConnectionTimeout "Redis event store connection timed out" {
+		timeoutMs: float
+		url: string
+	}
+
+	@cli
+	function connect "Establish a connection to a Redis event store"
+		input {
+			url?: string "Redis server URL (defaults to REDIS_URL env var)"
+		}
+		output RedisEventStoreInfo
+		errors {
+			ConnectionFailed "Cannot reach the Redis server" when "server is unreachable or refuses connection"
+			ConnectionTimeout "Connection attempt timed out" when "server does not respond in time"
+		}
+
+	@cli @mcp
+	function getConnectionInfo "Get current Redis event store connection statistics"
+		input {}
+		output RedisEventStoreInfo
+		errors {
+			ConnectionFailed "Not connected to Redis" when "client is not connected"
+		}
+}
