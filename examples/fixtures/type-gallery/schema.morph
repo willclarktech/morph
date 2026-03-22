@@ -1,0 +1,46 @@
+domain TypeGallery
+
+context types "A collection of generic types, unions, and aliases demonstrating the type system." {
+
+	type Pair<A, B> "A pair of two values" {
+		first: A "First element"
+		second: B "Second element"
+	}
+
+	union Result<T, E> by kind "A result that is either success or failure" {
+		ok "Success variant" {
+			value: T "The success value"
+		}
+		err "Failure variant" {
+			error: E "The error value"
+		}
+	}
+
+	alias StringPair = Pair<string, string> "A pair of strings"
+
+	alias NumberResult = Result<float, string> "A result with a float value or string error"
+
+	type Bounded<T: string> "A value with an upper bound" {
+		value: T "The bounded value"
+		max: integer "Maximum allowed"
+	}
+
+	type Defaulted<T = string> "A list of items with a default type" {
+		items: T[] "The items"
+	}
+
+	@cli @api
+	function parseNumber "Parse a string into a number result"
+		input {
+			raw: string "The string to parse"
+		}
+		output Result<float, string>
+
+	@cli @api
+	function makePair "Create a pair from two values"
+		input {
+			first: string "First value"
+			second: string "Second value"
+		}
+		output Pair<string, string>
+}

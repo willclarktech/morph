@@ -1,0 +1,62 @@
+domain AddressBook
+
+extensions {
+	storage [memory, jsonfile, sqlite] default memory
+	auth [none, inmemory, test] default none
+}
+
+context contacts "Contact management with structured addresses." {
+
+	@root
+	entity Contact "A person in the address book." {
+		name: string "Full name"
+		@sensitive
+		phone: string "Phone number"
+		email: string "Email address"
+		address: Address "Mailing address"
+	}
+
+	value Address "A structured mailing address." {
+		street: string "Street address"
+		city: string "City name"
+		zip: string "Postal code"
+		country: string "Country name"
+	}
+
+	error DuplicateContact "A contact with this email already exists" {
+		email: string "The duplicate email"
+	}
+
+	@cli @api
+	command createContact "Add a new contact to the address book."
+		writes Contact
+		input {
+			name: string "Full name"
+			@sensitive
+			phone: string "Phone number"
+			email: string "Email address"
+			address: Address "Mailing address"
+		}
+		output Contact
+		emits ContactCreated "Emitted when a contact is added"
+		errors {
+			DuplicateEmail "A contact with this email already exists" when "email is not unique"
+		}
+
+	@cli @api
+	query listContacts "List all contacts."
+		reads Contact
+		input {}
+		output Contact[]
+
+	@cli @api
+	query findByCity "Find contacts in a given city."
+		reads Contact
+		input {
+			city: string "City to search for"
+		}
+		output Contact[]
+
+	subscriber logContactEvents "Log contact events for auditing"
+		on ContactCreated
+}

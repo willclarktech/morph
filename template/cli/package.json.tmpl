@@ -1,0 +1,21 @@
+{
+	"name": "@{{scope}}/{{name}}",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"bin": {
+		"{{name}}": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
+	"dependencies": {
+		"@{{scope}}/{{coreName}}": "workspace:*",
+		"@morph/domain-schema": "*"
+	},
+	"devDependencies": {
+		"typescript": "^5.7.2"
+	}
+}

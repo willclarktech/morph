@@ -1,0 +1,18 @@
+# @{{name}}/eslint-config
+
+Internal ESLint configuration package for the monorepo.
+
+## Usage
+
+This package re-exports configurations from `@morph/eslint-config`. Individual packages use it via their `eslint.config.ts`:
+
+```typescript
+import { configs } from "@{{name}}/eslint-config";
+
+export default configs.generated;
+```
+
+## Available Configs
+
+- `configs.generated` - Standard config for generated code
+- `configs.cli` - Additional rules for CLI entry points

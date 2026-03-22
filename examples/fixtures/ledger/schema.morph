@@ -1,0 +1,101 @@
+domain Ledger
+
+extensions {
+	storage [eventsourced] default eventsourced
+	auth [none, inmemory] default none
+	eventStore [memory, jsonfile] default memory
+}
+
+context accounts "Financial accounts with event-sourced transaction history." {
+
+	@root
+	entity Account "A financial account that tracks balance." {
+		balance: float "Current balance derived from transaction history"
+		name: string "Display name for the account"
+	}
+
+	value Transaction "A record of funds moving in or out of an account." {
+		amount: float "Transaction amount (positive or negative)"
+		description: string "Human-readable description"
+		timestamp: string "When the transaction occurred (ISO date)"
+	}
+
+	value ReplayStep "A single step in event replay showing how state was reconstructed." {
+		step: integer "Step number in the replay sequence"
+		event: string "Name of the domain event"
+		description: string "What happened in this step"
+		balanceAfter: float "Account balance after this event"
+		timestamp: string "When the event occurred (ISO date)"
+	}
+
+	@cli
+	command openAccount "Open a new financial account."
+		writes Account
+		input {
+			initialDeposit: float "Starting balance for the account"
+			name: string "Name for the new account"
+		}
+		output Account
+		emits AccountOpened "Emitted when a new account is created"
+
+	@cli
+	command deposit "Add funds to an account."
+		writes Account
+		input {
+			accountId: Account.id "The account to deposit into"
+			amount: float "Amount to deposit"
+			description: string "Description of the deposit"
+		}
+		output Account
+		emits FundsDeposited "Emitted when funds are added to an account"
+
+	@cli
+	command withdraw "Remove funds from an account."
+		writes Account
+		input {
+			accountId: Account.id "The account to withdraw from"
+			amount: float "Amount to withdraw"
+			description: string "Description of the withdrawal"
+		}
+		output Account
+		emits FundsWithdrawn "Emitted when funds are removed from an account"
+		errors {
+			InsufficientFunds "Account does not have enough balance" when "balance is less than withdrawal amount"
+		}
+
+	@cli
+	query getBalance "Get the current balance of an account."
+		reads Account
+		input {
+			accountId: Account.id "The account to check"
+		}
+		output Account
+		errors {
+			AccountNotFound "The specified account does not exist" when "accountId is invalid"
+		}
+
+	@cli
+	query getStatement "Get the transaction history of an account."
+		reads Account
+		input {
+			accountId: Account.id "The account to get history for"
+		}
+		output Transaction[]
+		errors {
+			AccountNotFound "The specified account does not exist" when "accountId is invalid"
+		}
+
+	@cli
+	query replayAccount "Replay event history showing step-by-step state reconstruction."
+		reads Account
+		input {
+			accountId: Account.id "The account to replay"
+		}
+		output ReplayStep[]
+		errors {
+			AccountNotFound "The specified account does not exist" when "accountId is invalid"
+		}
+
+	subscriber auditLog "Log all account events for auditing"
+		on AccountOpened, FundsDeposited, FundsWithdrawn
+}

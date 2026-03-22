@@ -1,0 +1,28 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+
+      - name: Type check
+        run: bun run build:check ${{ github.event_name == 'pull_request' && '-- --affected' || '' }}
+      - name: Lint
+        run: bun run lint ${{ github.event_name == 'pull_request' && '-- --affected' || '' }}
+      - name: Test with coverage
+        run: bun run test:coverage ${{ github.event_name == 'pull_request' && '-- --affected' || '' }}
+
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: coverage
+          path: "**/coverage/lcov.info"

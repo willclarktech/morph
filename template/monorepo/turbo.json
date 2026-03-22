@@ -1,0 +1,29 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"tasks": {
+		"build:check": {
+			"dependsOn": ["^build:check"],
+			"outputs": []
+		},
+		"format": {
+			"outputs": []
+		},
+		"format:fix": {
+			"outputs": []
+		},
+		"lint": {
+			"outputs": []
+		},
+		"lint:fix": {
+			"outputs": []
+		},
+		"test": {
+			"dependsOn": ["build:check"],
+			"outputs": []
+		},
+		"test:coverage": {
+			"dependsOn": ["build:check"],
+			"outputs": ["coverage/**"]
+		}
+	}
+}

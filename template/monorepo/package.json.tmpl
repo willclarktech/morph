@@ -1,0 +1,18 @@
+{
+	"name": "@{{name}}/root",
+	"packageManager": "bun@1.3.5",
+	"private": true,
+	"scripts": {
+		"build:check": "turbo run build:check",
+		"format": "turbo run format",
+		"format:fix": "turbo run format:fix",
+		"lint": "turbo run lint",
+		"lint:fix": "turbo run lint:fix",
+		"test": "turbo run test"
+	},
+	"type": "module",
+	"workspaces": ["config/*", "libs/*", "apps/*", "tests/*"],
+	"devDependencies": {
+		"turbo": "^2.7.4"
+	}
+}

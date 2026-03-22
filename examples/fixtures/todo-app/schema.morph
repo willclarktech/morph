@@ -1,0 +1,150 @@
+domain Todo
+
+extensions {
+	storage [memory, jsonfile, sqlite, redis] default memory
+	auth [none, inmemory, test, jwt] default jwt
+	eventStore [memory, jsonfile, redis] default memory
+	i18n [en, de] base en
+}
+
+context tasks "Task management. Users create and complete todos to track their work." {
+
+	@root
+	entity Todo "A task to be completed." {
+		completed: boolean "Whether the task is finished"
+		createdAt: string "When the todo was created (ISO date)"
+		dueDate?: date "When the task is due"
+		priority: "low" | "medium" | "high" "Task urgency level"
+		tags: string[] "Categorization labels"
+		title: string "What needs to be done"
+		userId: User.id "The user who owns this todo"
+		belongs_to User "Created by user"
+	}
+
+	@root
+	entity User "A person who creates and manages todos." {
+		@unique
+		email: string "Email address for notifications"
+		name: string "Display name"
+		passwordHash: string "Bcrypt hash of the user's password"
+		has_many Todo "Owns todos"
+	}
+
+	invariant TodoBelongsToUser on Todo
+		"Every todo must belong to exactly one user"
+		violation "Todo must have a valid user"
+		where exists user in users: user.id == todo.userId
+
+	@context
+	invariant UserIdMatchesCurrentUser
+		"Operation userId must match the authenticated user"
+		violation "You must be authenticated as the specified user"
+		where input.userId == context.currentUser.id
+
+	invariant UserOwnsTodo on Todo
+		"User can only modify their own todos"
+		violation "You can only modify your own todos"
+		where todo.userId == context.currentUser.id
+
+	@cli @cli_client @api @mcp @ui
+	command completeTodo "Mark a todo as completed."
+		writes Todo
+		pre UserOwnsTodo
+		input {
+			todoId: Todo.id "The todo to complete"
+		}
+		output Todo
+		emits TodoCompleted "Emitted when a todo is marked as complete"
+		errors {
+			TodoNotFound "The specified todo does not exist" when "todoId is invalid"
+			AlreadyCompleted "The todo is already completed" when "Todo.completed is true"
+		}
+
+	@cli @cli_client @api @mcp @ui
+	command createTodo "Create a new todo for a user."
+		reads User, writes Todo
+		pre UserIdMatchesCurrentUser
+		input {
+			dueDate?: date "Optional due date for the todo"
+			priority?: "low" | "medium" | "high" "Task urgency level (defaults to medium)"
+			tags?: string[] "Optional categorization labels"
+			title: string "What needs to be done"
+			userId: User.id "The user creating the todo"
+		}
+		output Todo
+		emits TodoCreated "Emitted when a new todo is created"
+		errors {
+			UserNotFound "The specified user does not exist" when "userId is invalid"
+			InvalidDueDate "The due date must be in the future" when "dueDate is in the past"
+		}
+
+	@cli @cli_client @api @mcp @ui
+	command createUser "Register a new user in the system."
+		writes User
+		input {
+			email: string "User's email address"
+			name: string "User's display name"
+			@sensitive
+			password: string "User's password (will be hashed)"
+		}
+		output User
+		emits UserCreated "Emitted when a new user is registered"
+		errors {
+			EmailAlreadyExists "A user with this email already exists" when "Email is not unique"
+		}
+
+	@cli @cli_client @api @mcp @ui
+	command deleteTodo "Remove a todo from the system."
+		writes Todo
+		pre UserOwnsTodo
+		input {
+			todoId: Todo.id "The todo to delete"
+		}
+		output boolean
+		emits TodoDeleted "Emitted when a todo is removed"
+		errors {
+			TodoNotFound "The specified todo does not exist" when "todoId is invalid"
+		}
+
+	@api
+	command transferTodos "Transfer all todos from one user to another. This is a domain service that coordinates across User and Todo aggregates."
+		reads User, writes Todo
+		input {
+			fromUserId: User.id "The user to transfer todos from"
+			toUserId: User.id "The user to transfer todos to"
+		}
+		output float
+		emits TodosTransferred "Emitted when todos are transferred between users"
+		errors {
+			UserNotFound "The source user does not exist" when "fromUserId or toUserId is invalid"
+			SameUser "Cannot transfer todos to the same user" when "fromUserId equals toUserId"
+		}
+
+	@cli @cli_client @api @mcp @ui
+	query getTodo "Get a single todo by ID."
+		reads Todo
+		pre UserOwnsTodo
+		input {
+			todoId: Todo.id "The todo to retrieve"
+		}
+		output Todo
+		errors {
+			TodoNotFound "The specified todo does not exist" when "todoId is invalid"
+		}
+
+	@cli @cli_client @api @mcp @ui
+	query listTodos "Get all todos for a user."
+		reads User, reads Todo
+		pre UserIdMatchesCurrentUser
+		input {
+			includeCompleted?: boolean "Whether to include completed todos"
+			userId: User.id "The user whose todos to list"
+		}
+		output Todo[]
+		errors {
+			UserNotFound "The specified user does not exist" when "userId is invalid"
+		}
+
+	subscriber logTodoEvents "Log all todo-related events for auditing"
+		on TodoCreated, TodoCompleted, TodoDeleted
+}

@@ -1,0 +1,78 @@
+domain Marketplace
+
+extensions {
+	storage [memory, jsonfile, sqlite] default memory
+	auth [none, inmemory, test] default none
+}
+
+profiles {
+	web: @cli @mcp
+}
+
+context catalog "Product catalog for the marketplace." {
+
+	@root
+	entity Product "An item available for purchase." {
+		name: string "Product name"
+		description: string "Product description"
+		price: float "Price in dollars"
+	}
+
+	#web
+	command addProduct "Add a new product to the catalog."
+		writes Product
+		input {
+			name: string "Product name"
+			description: string "Product description"
+			price: float "Price in dollars"
+		}
+		output Product
+		emits ProductAdded "Emitted when a product is added"
+
+	#web
+	query listProducts "List all products."
+		reads Product
+		input {}
+		output Product[]
+
+	subscriber logCatalogEvents "Log catalog events for auditing"
+		on ProductAdded
+}
+
+context orders "Order management." {
+	depends on catalog
+
+	@root
+	entity Order "A customer order." {
+		productId: string "The product being ordered"
+		quantity: integer "Number of units"
+		status: "pending" | "confirmed" | "shipped" "Order status"
+	}
+
+	#web
+	command placeOrder "Place a new order for a product."
+		writes Order
+		input {
+			productId: string "The product to order"
+			quantity: integer "Number of units"
+		}
+		output Order
+		emits OrderPlaced "Emitted when an order is placed"
+		errors {
+			ProductNotFound "The specified product does not exist" when "productId is invalid"
+		}
+
+	#web
+	query getOrder "Get an order by ID."
+		reads Order
+		input {
+			orderId: Order.id "The order to retrieve"
+		}
+		output Order
+		errors {
+			OrderNotFound "The specified order does not exist" when "orderId is invalid"
+		}
+
+	subscriber logOrderEvents "Log order events for auditing"
+		on OrderPlaced
+}

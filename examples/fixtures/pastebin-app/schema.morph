@@ -1,0 +1,58 @@
+domain Pastebin
+
+extensions {
+	storage [memory, jsonfile, sqlite, redis] default memory
+	auth [none, inmemory, test] default none
+}
+
+context pastes "Simple pastebin for sharing text snippets." {
+
+	@root
+	entity Paste "A text snippet shared via URL." {
+		content: string "The paste content"
+		createdAt: string "When the paste was created (ISO date)"
+		title: string "Optional title for the paste"
+	}
+
+	@cli @api @ui
+	command createPaste "Create a new paste."
+		writes Paste
+		input {
+			content: string "The paste content"
+			title?: string "Optional title"
+		}
+		output Paste
+		emits PasteCreated "Emitted when a new paste is created"
+
+	@cli @api @ui
+	command deletePaste "Delete a paste."
+		writes Paste
+		input {
+			pasteId: Paste.id "The paste to delete"
+		}
+		output boolean
+		emits PasteDeleted "Emitted when a paste is deleted"
+		errors {
+			PasteNotFound "The specified paste does not exist" when "pasteId is invalid"
+		}
+
+	@cli @api @ui
+	query getPaste "Get a paste by ID."
+		reads Paste
+		input {
+			pasteId: Paste.id "The paste to retrieve"
+		}
+		output Paste
+		errors {
+			PasteNotFound "The specified paste does not exist" when "pasteId is invalid"
+		}
+
+	@cli @api @ui
+	query listPastes "List all pastes."
+		reads Paste
+		input {}
+		output Paste[]
+
+	subscriber logPasteEvents "Log paste events for auditing"
+		on PasteCreated, PasteDeleted
+}

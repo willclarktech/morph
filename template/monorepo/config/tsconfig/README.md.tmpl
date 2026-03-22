@@ -1,0 +1,22 @@
+# @{{name}}/tsconfig
+
+Shared TypeScript configuration for the monorepo.
+
+## Usage
+
+Packages extend the base configuration in their `tsconfig.json`:
+
+```json
+{
+  "extends": "@{{name}}/tsconfig/base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}
+```
+
+## Configuration
+
+The `base.json` provides strict TypeScript settings optimized for Effect-based applications with ESNext target and bundler module resolution.

@@ -1,0 +1,23 @@
+# Local files
+.tmp/
+*.local.*
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Bun
+bun.lock
+
+# Turborepo
+.turbo
+
+# IDE
+.idea/
+.vscode/

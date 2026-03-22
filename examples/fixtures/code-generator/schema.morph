@@ -1,0 +1,37 @@
+domain CodeGenerator
+
+context generation "Pure code generation operations" {
+
+	type GeneratedFile "A file produced by code generation" {
+		content: string "File contents"
+		path: string "Relative path for the file"
+	}
+
+	union GenerationResult by status "Outcome of a generation operation" {
+		failure "Generation failed" {
+			errors: string[] "Error messages"
+		}
+		success "Generation completed successfully" {
+			files: GeneratedFile[] "Generated files"
+			warnings: string[] "Non-fatal warnings"
+		}
+	}
+
+	@cli @api @ui
+	function generate "Generate code from an input schema"
+		input {
+			dryRun?: boolean "If true, return files without writing"
+			schema: string "The source schema as JSON string"
+		}
+		output GenerationResult
+		errors {
+			InvalidSchema "The input schema is malformed" when "schema cannot be parsed as valid JSON"
+		}
+
+	@cli @api @ui
+	function validate "Validate a schema without generating code"
+		input {
+			schema: string "The schema to validate"
+		}
+		output GenerationResult
+}
