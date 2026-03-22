@@ -1,0 +1,272 @@
+export const textMateGrammar = {
+	$schema:
+		"https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	name: "Morph DSL",
+	scopeName: "source.morph",
+	fileTypes: ["morph"],
+	patterns: [
+		{ include: "#comments" },
+		{ include: "#strings" },
+		{ include: "#numbers" },
+		{ include: "#constants" },
+		{ include: "#tags" },
+		{ include: "#entity-declarations" },
+		{ include: "#operation-declarations" },
+		{ include: "#context-declaration" },
+		{ include: "#domain-declaration" },
+		{ include: "#other-declarations" },
+		{ include: "#property-with-type" },
+		{ include: "#clause-with-type-refs" },
+		{ include: "#clause-keywords" },
+		{ include: "#control-keywords" },
+		{ include: "#relationship-with-target" },
+		{ include: "#extension-keywords" },
+		{ include: "#operators" },
+		{ include: "#type-reference" },
+		{ include: "#punctuation" },
+	],
+	repository: {
+		comments: {
+			patterns: [
+				{
+					name: "comment.line.double-slash.morph",
+					match: "//.*$",
+				},
+			],
+		},
+		strings: {
+			patterns: [
+				{
+					name: "string.quoted.double.morph",
+					begin: '"',
+					end: '"',
+					patterns: [
+						{
+							name: "constant.character.escape.morph",
+							match: "\\\\.",
+						},
+					],
+				},
+			],
+		},
+		numbers: {
+			patterns: [
+				{
+					name: "constant.numeric.morph",
+					match: "\\b\\d+(?:\\.\\d+)?\\b",
+				},
+			],
+		},
+		constants: {
+			patterns: [
+				{
+					name: "constant.language.morph",
+					match: "\\b(?:true|false)\\b",
+				},
+			],
+		},
+		tags: {
+			patterns: [
+				{
+					name: "entity.name.function.decorator.morph",
+					match: "@[a-zA-Z_][\\w-]*",
+				},
+			],
+		},
+		"domain-declaration": {
+			patterns: [
+				{
+					match: "\\b(domain)\\s+([A-Za-z_]\\w*)",
+					captures: {
+						"1": { name: "keyword.other.morph" },
+						"2": { name: "entity.name.namespace.morph" },
+					},
+				},
+			],
+		},
+		"context-declaration": {
+			patterns: [
+				{
+					match: "\\b(context)\\s+([A-Za-z_]\\w*)",
+					captures: {
+						"1": { name: "keyword.other.morph" },
+						"2": { name: "entity.name.namespace.morph" },
+					},
+				},
+			],
+		},
+		"entity-declarations": {
+			patterns: [
+				{
+					match: "\\b(entity|value|type|union|alias|error)\\s+([A-Z]\\w*)",
+					captures: {
+						"1": { name: "keyword.other.morph" },
+						"2": { name: "entity.name.type.morph" },
+					},
+				},
+			],
+		},
+		"operation-declarations": {
+			patterns: [
+				{
+					match:
+						"\\b(command|query|function|invariant|subscriber|port)\\s+([A-Za-z_]\\w*)",
+					captures: {
+						"1": { name: "keyword.other.morph" },
+						"2": { name: "entity.name.function.morph" },
+					},
+				},
+			],
+		},
+		"other-declarations": {
+			patterns: [
+				{
+					name: "keyword.other.morph",
+					match:
+						"\\b(?:domain|context|entity|value|command|query|function|invariant|subscriber|port|type|union|alias|error)\\b",
+				},
+			],
+		},
+		"property-with-type": {
+			patterns: [
+				{
+					match:
+						"\\b([a-z_]\\w*)(\\??)(:)\\s+([A-Z]\\w*(?:\\.[a-zA-Z_]\\w*)?)(\\[\\])?",
+					captures: {
+						"1": { name: "variable.other.property.morph" },
+						"2": { name: "keyword.operator.optional.morph" },
+						"3": { name: "punctuation.separator.type.morph" },
+						"4": { name: "entity.name.type.morph" },
+						"5": { name: "punctuation.definition.bracket.morph" },
+					},
+				},
+				{
+					match:
+						"\\b([a-z_]\\w*)(\\??)(:)\\s+(string|float|integer|boolean|date|datetime|void)\\b(\\[\\])?",
+					captures: {
+						"1": { name: "variable.other.property.morph" },
+						"2": { name: "keyword.operator.optional.morph" },
+						"3": { name: "punctuation.separator.type.morph" },
+						"4": { name: "support.type.primitive.morph" },
+						"5": { name: "punctuation.definition.bracket.morph" },
+					},
+				},
+			],
+		},
+		"clause-with-type-refs": {
+			patterns: [
+				{
+					match:
+						"\\b(reads|writes|emits|output|pre|post|on)\\s+([A-Z]\\w*(?:,\\s*[A-Z]\\w*)*)",
+					captures: {
+						"1": { name: "keyword.other.clause.morph" },
+						"2": { name: "entity.name.type.morph" },
+					},
+				},
+			],
+		},
+		"clause-keywords": {
+			patterns: [
+				{
+					name: "keyword.other.clause.morph",
+					match:
+						"\\b(?:input|output|reads|writes|emits|errors|pre|post|throws|violation|depends|default|base|by)\\b",
+				},
+			],
+		},
+		"control-keywords": {
+			patterns: [
+				{
+					name: "keyword.control.morph",
+					match:
+						"\\b(?:if|then|where|when|on|in|forall|exists|contains|count|and|or|not)\\b",
+				},
+			],
+		},
+		"relationship-with-target": {
+			patterns: [
+				{
+					match: "\\b(belongs_to|has_many|has_one|references)\\s+([A-Z]\\w*)",
+					captures: {
+						"1": { name: "keyword.other.relationship.morph" },
+						"2": { name: "entity.name.type.morph" },
+					},
+				},
+			],
+		},
+		"extension-keywords": {
+			patterns: [
+				{
+					name: "storage.type.morph",
+					match: "\\b(?:extensions)\\b",
+				},
+				{
+					name: "support.type.morph",
+					match: "\\b(?:storage|auth|eventStore|sse|i18n)(?=\\s+\\[|\\s+\\w)",
+				},
+			],
+		},
+		operators: {
+			patterns: [
+				{
+					name: "keyword.operator.morph",
+					match: "==|!=|&&|\\|\\||>=|<=|=>|\\.\\.",
+				},
+			],
+		},
+		"type-reference": {
+			patterns: [
+				{
+					name: "entity.name.type.morph",
+					match: "\\b[A-Z]\\w*\\b",
+				},
+			],
+		},
+		punctuation: {
+			patterns: [
+				{
+					name: "punctuation.definition.block.morph",
+					match: "[{}]",
+				},
+				{
+					name: "punctuation.definition.bracket.morph",
+					match: "[\\[\\]]",
+				},
+			],
+		},
+	},
+};
+
+export const languageConfiguration = {
+	comments: {
+		lineComment: "//",
+	},
+	brackets: [
+		["{", "}"],
+		["[", "]"],
+		["(", ")"],
+	],
+	autoClosingPairs: [
+		{ open: "{", close: "}" },
+		{ open: "[", close: "]" },
+		{ open: "(", close: ")" },
+		{ open: '"', close: '"', notIn: ["string"] },
+	],
+	surroundingPairs: [
+		{ open: "{", close: "}" },
+		{ open: "[", close: "]" },
+		{ open: "(", close: ")" },
+		{ open: '"', close: '"' },
+	],
+	folding: {
+		markers: {
+			start: "\\{",
+			end: "\\}",
+		},
+	},
+	indentationRules: {
+		increaseIndentPattern: "\\{\\s*$",
+		decreaseIndentPattern: "^\\s*\\}",
+	},
+	wordPattern: "[a-zA-Z_]\\w*",
+};

@@ -1,0 +1,704 @@
+{
+	"contexts": {
+		"generation": {
+			"commands": {},
+			"dependencies": [],
+			"description": "Code generation from domain schemas",
+			"entities": {},
+			"functions": {
+				"generate": {
+					"description": "Generate all packages from a domain schema",
+					"errors": [
+						{
+							"description": "The input schema is malformed",
+							"name": "InvalidSchema",
+							"when": "schema cannot be parsed or validated"
+						}
+					],
+					"input": {
+						"name": {
+							"description": "Project name for package naming",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"schema": {
+							"description": "The domain schema as .morph DSL or JSON text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "type",
+						"name": "GenerationResult"
+					},
+					"tags": [
+						"@cli",
+						"@mcp"
+					]
+				},
+				"init": {
+					"description": "Initialize a new morph monorepo scaffold",
+					"errors": [],
+					"input": {
+						"name": {
+							"description": "Project name",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "type",
+						"name": "GenerationResult"
+					},
+					"tags": [
+						"@cli",
+						"@mcp"
+					]
+				},
+				"newProject": {
+					"description": "Create a new morph project (init + generate)",
+					"errors": [
+						{
+							"description": "The input schema is malformed",
+							"name": "InvalidSchema",
+							"when": "schema cannot be parsed or validated"
+						}
+					],
+					"input": {
+						"name": {
+							"description": "Project name",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"schema": {
+							"description": "The domain schema as .morph DSL or JSON text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "type",
+						"name": "GenerationResult"
+					},
+					"tags": [
+						"@cli",
+						"@mcp"
+					]
+				},
+				"validate": {
+					"description": "Validate a domain schema",
+					"errors": [
+						{
+							"description": "The input schema is malformed",
+							"name": "InvalidSchema",
+							"when": "schema cannot be parsed or validated"
+						}
+					],
+					"input": {
+						"schema": {
+							"description": "The domain schema as .morph DSL or JSON text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "primitive",
+						"name": "void"
+					},
+					"tags": [
+						"@cli"
+					]
+				}
+			},
+			"invariants": [],
+			"queries": {},
+			"types": {
+				"GeneratedFile": {
+					"description": "A file produced by code generation",
+					"fields": {
+						"content": {
+							"description": "File contents",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"filename": {
+							"description": "Relative path for the file",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"kind": "product"
+				},
+				"GenerationResult": {
+					"description": "Result of a generation operation",
+					"fields": {
+						"files": {
+							"description": "Generated files",
+							"type": {
+								"element": {
+									"kind": "type",
+									"name": "GeneratedFile"
+								},
+								"kind": "array"
+							}
+						}
+					},
+					"kind": "product"
+				}
+			}
+		},
+		"schema-dsl": {
+			"commands": {},
+			"dependencies": [],
+			"description": "Parse, compile, and decompile .morph DSL files",
+			"entities": {},
+			"functions": {
+				"decompileSchema": {
+					"description": "Convert a domain schema JSON to .morph DSL text",
+					"errors": [
+						{
+							"description": "The input is not valid domain schema JSON",
+							"name": "InvalidSchema",
+							"when": "schema cannot be parsed"
+						}
+					],
+					"input": {
+						"schema": {
+							"description": "Domain schema as JSON string",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"tags": [
+						"@cli",
+						"@mcp"
+					]
+				},
+				"formatDsl": {
+					"description": "Format .morph DSL source text (parse and re-emit)",
+					"errors": [
+						{
+							"description": "The source could not be parsed",
+							"name": "ParseFailed",
+							"when": "source contains syntax errors"
+						}
+					],
+					"input": {
+						"source": {
+							"description": "The .morph DSL source text to format",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"tags": [
+						"@cli",
+						"@mcp",
+						"@vscode"
+					]
+				},
+				"getCompletions": {
+					"description": "Get context-aware completions at a position in a .morph source file",
+					"errors": [],
+					"input": {
+						"column": {
+							"description": "Column number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"line": {
+							"description": "Line number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"source": {
+							"description": "The .morph DSL source text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"element": {
+							"kind": "type",
+							"name": "DslCompletion"
+						},
+						"kind": "array"
+					},
+					"tags": [
+						"@vscode"
+					]
+				},
+				"getDefinition": {
+					"description": "Get go-to-definition location for a symbol at a position in a .morph source file",
+					"errors": [],
+					"input": {
+						"column": {
+							"description": "Column number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"line": {
+							"description": "Line number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"source": {
+							"description": "The .morph DSL source text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "type",
+						"name": "DslLocation"
+					},
+					"tags": [
+						"@vscode"
+					]
+				},
+				"getDiagnostics": {
+					"description": "Get diagnostics (errors and warnings) for a .morph source file",
+					"errors": [],
+					"input": {
+						"source": {
+							"description": "The .morph DSL source text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"element": {
+							"kind": "type",
+							"name": "DslDiagnostic"
+						},
+						"kind": "array"
+					},
+					"tags": [
+						"@vscode"
+					]
+				},
+				"getFoldingRanges": {
+					"description": "Get folding ranges for a .morph source file",
+					"errors": [],
+					"input": {
+						"source": {
+							"description": "The .morph DSL source text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"element": {
+							"kind": "type",
+							"name": "DslFoldingRange"
+						},
+						"kind": "array"
+					},
+					"tags": [
+						"@vscode"
+					]
+				},
+				"getHover": {
+					"description": "Get hover information at a position in a .morph source file",
+					"errors": [],
+					"input": {
+						"column": {
+							"description": "Column number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"line": {
+							"description": "Line number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"source": {
+							"description": "The .morph DSL source text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "type",
+						"name": "DslHoverResult"
+					},
+					"tags": [
+						"@vscode"
+					]
+				},
+				"getSymbols": {
+					"description": "Get document symbols (outline) for a .morph source file",
+					"errors": [],
+					"input": {
+						"source": {
+							"description": "The .morph DSL source text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"element": {
+							"kind": "type",
+							"name": "DslSymbol"
+						},
+						"kind": "array"
+					},
+					"tags": [
+						"@vscode"
+					]
+				},
+				"parseMorph": {
+					"description": "Parse and compile a .morph DSL source to domain schema JSON",
+					"errors": [
+						{
+							"description": "The source could not be parsed",
+							"name": "ParseFailed",
+							"when": "source contains syntax errors"
+						}
+					],
+					"input": {
+						"source": {
+							"description": "The .morph DSL source text",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "type",
+						"name": "ParseResult"
+					},
+					"tags": [
+						"@cli",
+						"@mcp"
+					]
+				},
+				"validateDsl": {
+					"description": "Validate a .morph DSL source file",
+					"errors": [
+						{
+							"description": "The source could not be parsed",
+							"name": "ParseFailed",
+							"when": "source contains syntax errors"
+						}
+					],
+					"input": {
+						"source": {
+							"description": "The .morph DSL source text to validate",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"output": {
+						"kind": "primitive",
+						"name": "void"
+					},
+					"tags": [
+						"@cli",
+						"@mcp"
+					]
+				},
+				"templateSchema": {
+					"description": "Get a template .morph schema showing all available DSL features and field types",
+					"errors": [],
+					"input": {},
+					"output": {
+						"kind": "primitive",
+						"name": "string"
+					},
+					"tags": [
+						"@cli",
+						"@mcp",
+						"@vscode"
+					]
+				}
+			},
+			"invariants": [],
+			"queries": {},
+			"types": {
+				"DslDiagnostic": {
+					"description": "A diagnostic message from parsing or compilation",
+					"fields": {
+						"column": {
+							"description": "Column number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"endColumn": {
+							"description": "End column number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"endLine": {
+							"description": "End line number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"line": {
+							"description": "Line number (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"message": {
+							"description": "Human-readable error message",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"severity": {
+							"description": "Diagnostic severity level",
+							"type": {
+								"kind": "union",
+								"values": [
+									"error",
+									"warning"
+								]
+							}
+						}
+					},
+					"kind": "product"
+				},
+				"ParseResult": {
+					"description": "Result of parsing a .morph source file",
+					"fields": {
+						"diagnostics": {
+							"description": "Parse and compile diagnostics",
+							"type": {
+								"element": {
+									"kind": "type",
+									"name": "DslDiagnostic"
+								},
+								"kind": "array"
+							}
+						},
+						"schema": {
+							"description": "Compiled domain schema as JSON string, empty on error",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"kind": "product"
+				},
+				"DslRange": {
+					"description": "A source range in a .morph file (1-based lines and columns)",
+					"fields": {
+						"endColumn": {
+							"description": "End column (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"endLine": {
+							"description": "End line (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"startColumn": {
+							"description": "Start column (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"startLine": {
+							"description": "Start line (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						}
+					},
+					"kind": "product"
+				},
+				"DslSymbol": {
+					"description": "A document symbol (entity, command, etc.) for outline navigation",
+					"fields": {
+						"children": {
+							"description": "Nested child symbols",
+							"type": {
+								"element": {
+									"kind": "type",
+									"name": "DslSymbol"
+								},
+								"kind": "array"
+							}
+						},
+						"kind": {
+							"description": "Symbol kind (domain, context, entity, command, query, function, invariant, type, value, subscriber, port, error, attribute, extensions)",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"name": {
+							"description": "Symbol name",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"range": {
+							"description": "Source range of the symbol",
+							"type": {
+								"kind": "type",
+								"name": "DslRange"
+							}
+						}
+					},
+					"kind": "product"
+				},
+				"DslCompletion": {
+					"description": "A completion item for auto-complete",
+					"fields": {
+						"detail": {
+							"description": "Short description shown beside the completion",
+							"optional": true,
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"kind": {
+							"description": "Completion kind (keyword, type, entity, tag, snippet)",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"label": {
+							"description": "Completion text to insert",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						}
+					},
+					"kind": "product"
+				},
+				"DslHoverResult": {
+					"description": "Hover information for a source position",
+					"fields": {
+						"content": {
+							"description": "Markdown content to display on hover",
+							"type": {
+								"kind": "primitive",
+								"name": "string"
+							}
+						},
+						"range": {
+							"description": "Source range of the hovered element",
+							"optional": true,
+							"type": {
+								"kind": "type",
+								"name": "DslRange"
+							}
+						}
+					},
+					"kind": "product"
+				},
+				"DslLocation": {
+					"description": "A location in a .morph file for go-to-definition",
+					"fields": {
+						"range": {
+							"description": "Source range of the definition",
+							"type": {
+								"kind": "type",
+								"name": "DslRange"
+							}
+						}
+					},
+					"kind": "product"
+				},
+				"DslFoldingRange": {
+					"description": "A range that can be folded in the editor",
+					"fields": {
+						"endLine": {
+							"description": "End line (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						},
+						"startLine": {
+							"description": "Start line (1-based)",
+							"type": {
+								"kind": "primitive",
+								"name": "float"
+							}
+						}
+					},
+					"kind": "product"
+				}
+			}
+		}
+	},
+	"name": "Morph"
+}

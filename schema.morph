@@ -1,0 +1,196 @@
+domain Morph
+
+context generation "Code generation from domain schemas" {
+
+	type GeneratedFile "A file produced by code generation" {
+		content: string "File contents"
+		filename: string "Relative path for the file"
+	}
+
+	type GenerationResult "Result of a generation operation" {
+		files: GeneratedFile[] "Generated files"
+	}
+
+	@cli @mcp
+	function generate "Generate all packages from a domain schema"
+		input {
+			name: string "Project name for package naming"
+			schema: string "The domain schema as .morph DSL or JSON text"
+		}
+		output GenerationResult
+		errors {
+			InvalidSchema "The input schema is malformed" when "schema cannot be parsed or validated"
+		}
+
+	@cli @mcp
+	function init "Initialize a new morph monorepo scaffold"
+		input {
+			name: string "Project name"
+		}
+		output GenerationResult
+
+	@cli @mcp
+	function newProject "Create a new morph project (init + generate)"
+		input {
+			name: string "Project name"
+			schema: string "The domain schema as .morph DSL or JSON text"
+		}
+		output GenerationResult
+		errors {
+			InvalidSchema "The input schema is malformed" when "schema cannot be parsed or validated"
+		}
+
+	@cli
+	function validate "Validate a domain schema"
+		input {
+			schema: string "The domain schema as .morph DSL or JSON text"
+		}
+		output void
+		errors {
+			InvalidSchema "The input schema is malformed" when "schema cannot be parsed or validated"
+		}
+}
+
+context schema-dsl "Parse, compile, and decompile .morph DSL files" {
+
+	type DslDiagnostic "A diagnostic message from parsing or compilation" {
+		column: float "Column number (1-based)"
+		endColumn: float "End column number (1-based)"
+		endLine: float "End line number (1-based)"
+		line: float "Line number (1-based)"
+		message: string "Human-readable error message"
+		severity: "error" | "warning" "Diagnostic severity level"
+	}
+
+	type ParseResult "Result of parsing a .morph source file" {
+		diagnostics: DslDiagnostic[] "Parse and compile diagnostics"
+		schema: string "Compiled domain schema as JSON string, empty on error"
+	}
+
+	type DslRange "A source range in a .morph file (1-based lines and columns)" {
+		endColumn: float "End column (1-based)"
+		endLine: float "End line (1-based)"
+		startColumn: float "Start column (1-based)"
+		startLine: float "Start line (1-based)"
+	}
+
+	type DslSymbol "A document symbol (entity, command, etc.) for outline navigation" {
+		children: DslSymbol[] "Nested child symbols"
+		kind: string "Symbol kind (domain, context, entity, command, query, function, invariant, type, value, subscriber, port, error, attribute, extensions)"
+		name: string "Symbol name"
+		range: DslRange "Source range of the symbol"
+	}
+
+	type DslCompletion "A completion item for auto-complete" {
+		detail?: string "Short description shown beside the completion"
+		kind: string "Completion kind (keyword, type, entity, tag, snippet)"
+		label: string "Completion text to insert"
+	}
+
+	type DslHoverResult "Hover information for a source position" {
+		content: string "Markdown content to display on hover"
+		range?: DslRange "Source range of the hovered element"
+	}
+
+	type DslLocation "A location in a .morph file for go-to-definition" {
+		range: DslRange "Source range of the definition"
+	}
+
+	type DslFoldingRange "A range that can be folded in the editor" {
+		endLine: float "End line (1-based)"
+		startLine: float "Start line (1-based)"
+	}
+
+	@cli @mcp
+	function decompileSchema "Convert a domain schema JSON to .morph DSL text"
+		input {
+			schema: string "Domain schema as JSON string"
+		}
+		output string
+		errors {
+			InvalidSchema "The input is not valid domain schema JSON" when "schema cannot be parsed"
+		}
+
+	@cli @mcp @vscode
+	function formatDsl "Format .morph DSL source text (parse and re-emit)"
+		input {
+			source: string "The .morph DSL source text to format"
+		}
+		output string
+		errors {
+			ParseFailed "The source could not be parsed" when "source contains syntax errors"
+		}
+
+	@vscode
+	function getCompletions "Get context-aware completions at a position in a .morph source file"
+		input {
+			column: float "Column number (1-based)"
+			line: float "Line number (1-based)"
+			source: string "The .morph DSL source text"
+		}
+		output DslCompletion[]
+
+	@vscode
+	function getDefinition "Get go-to-definition location for a symbol at a position in a .morph source file"
+		input {
+			column: float "Column number (1-based)"
+			line: float "Line number (1-based)"
+			source: string "The .morph DSL source text"
+		}
+		output DslLocation
+
+	@vscode
+	function getDiagnostics "Get diagnostics (errors and warnings) for a .morph source file"
+		input {
+			source: string "The .morph DSL source text"
+		}
+		output DslDiagnostic[]
+
+	@vscode
+	function getFoldingRanges "Get folding ranges for a .morph source file"
+		input {
+			source: string "The .morph DSL source text"
+		}
+		output DslFoldingRange[]
+
+	@vscode
+	function getHover "Get hover information at a position in a .morph source file"
+		input {
+			column: float "Column number (1-based)"
+			line: float "Line number (1-based)"
+			source: string "The .morph DSL source text"
+		}
+		output DslHoverResult
+
+	@vscode
+	function getSymbols "Get document symbols (outline) for a .morph source file"
+		input {
+			source: string "The .morph DSL source text"
+		}
+		output DslSymbol[]
+
+	@cli @mcp
+	function parseMorph "Parse and compile a .morph DSL source to domain schema JSON"
+		input {
+			source: string "The .morph DSL source text"
+		}
+		output ParseResult
+		errors {
+			ParseFailed "The source could not be parsed" when "source contains syntax errors"
+		}
+
+	@cli @mcp
+	function validateDsl "Validate a .morph DSL source file"
+		input {
+			source: string "The .morph DSL source text to validate"
+		}
+		output void
+		errors {
+			ParseFailed "The source could not be parsed" when "source contains syntax errors"
+		}
+
+	@cli @mcp @vscode
+	function templateSchema "Get a template .morph schema showing all available DSL features and field types"
+		input {}
+		output string
+}
