@@ -1,0 +1,32 @@
+# Local files
+.tmp/
+*.local.*
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Example apps (generated, regenerate with bun generate:examples)
+examples/*/
+!examples/fixtures/
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.vsix
+
+# Coverage
+coverage/
+
+# Bun
+bun.lock
+
+# Turborepo
+.turbo
+
+# IDE
+.idea/
+.vscode/
+.worktrees/
