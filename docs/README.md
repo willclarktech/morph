@@ -23,7 +23,7 @@
 - [Contexts Structure](architecture/contexts-structure.md) — Context-centric package organization
 - [Libs vs Contexts](architecture/libs-vs-modules.md) — When to use `libs/` vs `contexts/`
 - [Domain Schema](architecture/domain-schema.md) — Formal schema format for the domain algebra
-- [Domain Model](architecture/domain-model.md) — Visual documentation generated from schema
+- [Domain Model](domain-model.md) — Visual documentation generated from schema
 - [12-Factor](architecture/12-factor.md) — How generated apps follow 12-factor methodology
 
 ## Design

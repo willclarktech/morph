@@ -230,7 +230,7 @@ No backward compatibility guarantees. Breaking changes happen freely.
 - **[Contexts Structure](docs/architecture/contexts-structure.md)** — Context-centric package organization
 - **[Libs vs Contexts](docs/architecture/libs-vs-modules.md)** — When to use each
 - **[Domain Schema](docs/architecture/domain-schema.md)** — Canonical intermediate representation
-- **[Domain Model](docs/architecture/domain-model.md)** — Visual documentation from schema
+- **[Domain Model](docs/domain-model.md)** — Visual documentation from schema
 - **[12-Factor Conformance](docs/architecture/12-factor.md)** — Generated apps follow 12-factor
 
 ### Design
