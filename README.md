@@ -6,7 +6,7 @@ Software contains enormous amounts of mechanical duplication — types echoed ac
 
 In practice: write a schema once, generate branded types, Effect-based operations, a REST API, CLI, MCP server, VS Code extension, web UI, HTTP client, protocol buffers, property-based tests, and SMT-LIB2 formal verification. You implement only the business logic handlers.
 
-Morph is deterministic — no LLMs in the generation pipeline. Every transformation is mechanical and structure-preserving, not probabilistic. This confines LLM hallucination risk to the parts that actually need human judgment: business logic handlers and scenario tests. Morph is also therefore fast, computationally efficient, and reliable.
+Morph is deterministic — no LLMs in the generation pipeline. Every transformation is mechanical and structure-preserving, not probabilistic. This confines LLM hallucination risk to the parts that actually need human (or artificial) judgment: business logic handlers and scenario tests. Morph is also therefore fast, computationally efficient, and reliable.
 
 ## Example
 
