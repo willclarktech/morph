@@ -12,7 +12,18 @@
 	"ignoreDependencies": [
 		"@morph/tsconfig",
 		"@morph/eslint-config",
-		"@morph/generation-dsl"
+		"@morph/generation-dsl",
+		"@morph/schema-dsl-dsl",
+		"@morph/testing",
+		"@morph/codec-json-impls",
+		"@morph/codec-yaml-impls",
+		"@types/vscode",
+		"effect"
 	],
-	"ignoreExportsUsedInFile": true
+	"ignoreExportsUsedInFile": true,
+	"workspaces": {
+		"apps/vscode": {
+			"entry": ["src/extension.ts"]
+		}
+	}
 }

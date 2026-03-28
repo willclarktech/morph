@@ -16,7 +16,6 @@
 		"@morph/builder-app": "*",
 		"@morph/generator-core": "*",
 		"@morph/plugin": "*",
-		"@morph/builder-readme": "*",
-		"@morph/utils": "*"
+		"@morph/builder-readme": "*"
 	}
 }

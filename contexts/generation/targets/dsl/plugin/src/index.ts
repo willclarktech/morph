@@ -142,7 +142,8 @@ const generateScenariosPackage = (ctx: PluginContext): GeneratedFile[] => {
 		dslPackage: primaryDslPackage,
 		name,
 		packagePath,
-		generatePackageJson: () => generateScenariosPackageJson(name, dslPackages),
+		generatePackageJson: () =>
+			generateScenariosPackageJson(name, [primaryDslPackage]),
 		generateConfigFiles: () => buildConfigFiles(packagePath, name),
 	});
 };
@@ -162,7 +163,8 @@ const generatePropertiesPackage = (ctx: PluginContext): GeneratedFile[] => {
 		dslPackage: primaryDslPackage,
 		name,
 		packagePath,
-		generatePackageJson: () => generatePropertiesPackageJson(name, dslPackages),
+		generatePackageJson: () =>
+			generatePropertiesPackageJson(name, [primaryDslPackage]),
 		generateConfigFiles: () => buildConfigFiles(packagePath, name),
 	});
 };

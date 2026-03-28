@@ -71,13 +71,19 @@ export const generateCorePackageJson = (
 			eventStoreDeps["@morph/eventstore-redis-impls"] = "workspace:*";
 	}
 
+	// @morph/utils is only needed when storage adapters are generated (they use jsonParse/jsonStringify)
+	const utilsDeps: Record<string, string> =
+		info.hasEntities && storageBackends.length > 0
+			? { "@morph/utils": "workspace:*" }
+			: {};
+
 	return buildPackageJson({
 		projectName,
 		packageSuffix: `${info.kebabName}-core`,
 		dependencies: {
 			"@morph/operation": "workspace:*",
 			"@morph/testing": "workspace:*",
-			"@morph/utils": "workspace:*",
+			...utilsDeps,
 			[dslPackage]: "workspace:*",
 			...authDeps,
 			...storageDeps,

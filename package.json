@@ -71,8 +71,5 @@
 		"prettier": "^3.8.0",
 		"turbo": "^2.7.5",
 		"typescript": "^5.9.3"
-	},
-	"dependencies": {
-		"yaml": "^2.8.2"
 	}
 }

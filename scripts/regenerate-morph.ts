@@ -746,11 +746,9 @@ const addCoreDependencies = (): void => {
 		};
 
 		// Generation-core re-exports from @morph/generation-impls, which has all generator dependencies
-		// fast-check is needed for mock implementations
 		packageJson.dependencies = {
 			...packageJson.dependencies,
 			"@morph/generation-impls": "workspace:*",
-			"fast-check": "^3.23.1",
 		};
 
 		writeFileSync(

@@ -19,11 +19,9 @@
 	"dependencies": {
 		"@morph/auth-password-impls": "workspace:*",
 		"@morph/domain-schema": "*",
-		"@morph/utils": "*",
-		"common-tags": "^1.8.2"
+		"@morph/utils": "*"
 	},
 	"devDependencies": {
-		"@types/common-tags": "^1.8.4",
 		"@morph/eslint-config": "*",
 		"@morph/tsconfig": "*",
 		"eslint": "^9.39.0"

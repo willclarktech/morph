@@ -4,10 +4,8 @@
 		"@morph/generation-dsl": "workspace:*",
 		"@morph/operation": "workspace:*",
 		"@morph/testing": "workspace:*",
-		"@morph/utils": "workspace:*",
 		"effect": "^3.19.13",
-		"@morph/generation-impls": "workspace:*",
-		"fast-check": "^3.23.1"
+		"@morph/generation-impls": "workspace:*"
 	},
 	"devDependencies": {
 		"@morph/eslint-config": "workspace:*",

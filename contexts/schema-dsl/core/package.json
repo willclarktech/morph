@@ -4,7 +4,6 @@
 		"@morph/operation": "workspace:*",
 		"@morph/schema-dsl-dsl": "workspace:*",
 		"@morph/testing": "workspace:*",
-		"@morph/utils": "workspace:*",
 		"effect": "^3.19.13",
 		"@morph/schema-dsl-impls": "workspace:*"
 	},

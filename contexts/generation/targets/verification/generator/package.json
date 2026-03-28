@@ -15,8 +15,7 @@
 		"test": "bun test"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/utils": "*"
+		"@morph/domain-schema": "*"
 	},
 	"devDependencies": {
 		"@morph/eslint-config": "*",
