@@ -187,8 +187,15 @@ const runGenerate = async (schema: DomainSchema): Promise<boolean> => {
 	try {
 		const result = await Effect.runPromise(executeGenerate(schema, "Morph"));
 
+		// Files that are hand-written in the morph repo and should not be overwritten
+		const SKIP_FILES = new Set(["README.md"]);
+
 		// Write generated files
 		for (const file of result.files) {
+			if (SKIP_FILES.has(file.filename)) {
+				console.info(`Skipped: ${file.filename} (hand-written)`);
+				continue;
+			}
 			const filePath = path.join(MORPH_DIR, file.filename);
 			const dir = path.dirname(filePath);
 			mkdirSync(dir, { recursive: true });
