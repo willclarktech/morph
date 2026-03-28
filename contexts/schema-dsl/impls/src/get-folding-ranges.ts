@@ -2,9 +2,8 @@ import type { DslFoldingRange } from "@morph/schema-dsl-dsl";
 import type { DomainAst, SourceRange } from "@morph/schema-dsl-parser";
 import type { Effect } from "effect";
 
-import { Context, Effect as E, Layer } from "effect";
-
 import { parse } from "@morph/schema-dsl-parser";
+import { Context, Effect as E, Layer } from "effect";
 
 export interface GetFoldingRangesHandler {
 	readonly handle: (
@@ -33,19 +32,20 @@ const collectFoldingRanges = (ast: DomainAst): DslFoldingRange[] => {
 		addRange(ranges, ast.extensions.range);
 	}
 
-	for (const ctx of ast.contexts) {
-		addRange(ranges, ctx.range);
+	for (const context of ast.contexts) {
+		addRange(ranges, context.range);
 
-		for (const entity of ctx.entities) addRange(ranges, entity.range);
-		for (const vo of ctx.valueObjects) addRange(ranges, vo.range);
-		for (const cmd of ctx.commands) addRange(ranges, cmd.range);
-		for (const query of ctx.queries) addRange(ranges, query.range);
-		for (const fn of ctx.functions) addRange(ranges, fn.range);
-		for (const inv of ctx.invariants) addRange(ranges, inv.range);
-		for (const sub of ctx.subscribers) addRange(ranges, sub.range);
-		for (const port of ctx.ports) addRange(ranges, port.range);
-		for (const err of ctx.errors) addRange(ranges, err.range);
-		for (const type of ctx.types) addRange(ranges, type.range);
+		for (const entity of context.entities) addRange(ranges, entity.range);
+		for (const vo of context.valueObjects) addRange(ranges, vo.range);
+		for (const cmd of context.commands) addRange(ranges, cmd.range);
+		for (const query of context.queries) addRange(ranges, query.range);
+		for (const function_ of context.functions)
+			addRange(ranges, function_.range);
+		for (const inv of context.invariants) addRange(ranges, inv.range);
+		for (const sub of context.subscribers) addRange(ranges, sub.range);
+		for (const port of context.ports) addRange(ranges, port.range);
+		for (const error of context.errors) addRange(ranges, error.range);
+		for (const type of context.types) addRange(ranges, type.range);
 	}
 
 	return ranges;

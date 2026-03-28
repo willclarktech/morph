@@ -39,7 +39,7 @@ export const createRepl = async (config: ReplConfig): Promise<void> => {
 	const rl = readline.createInterface({
 		input: process.stdin,
 		output: process.stdout,
-		terminal: process.stdin.isTTY ?? false,
+		terminal: process.stdin.isTTY,
 	});
 
 	console.info(
@@ -63,7 +63,7 @@ export const createRepl = async (config: ReplConfig): Promise<void> => {
 			break;
 		}
 		if (trimmed === "clear") {
-			console.clear();
+			console.clear(); // eslint-disable-line no-console -- REPL clear command
 			rl.prompt();
 			continue;
 		}

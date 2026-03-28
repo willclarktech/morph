@@ -1,15 +1,17 @@
-import { Context, Effect, Layer } from "effect";
-
 import type {
 	JwtPayload,
 	TokenExpiredError,
 	TokenInvalidError,
 } from "@morph/auth-jwt-dsl";
+import type { Effect } from "effect";
+
+import { Context, Layer } from "effect";
+
 import { verifyToken } from "./jwt";
 
 export interface VerifyTokenHandler {
 	readonly handle: (
-		params: { readonly token: string; readonly secret: string },
+		params: { readonly secret: string; readonly token: string },
 		options: object,
 	) => Effect.Effect<JwtPayload, TokenInvalidError | TokenExpiredError>;
 }

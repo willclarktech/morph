@@ -15,16 +15,19 @@ export interface PluginGraphError {
 	reason: string;
 }
 
-const isPluginActive = (plugin: GeneratorPlugin, ctx: PluginContext): boolean =>
+const isPluginActive = (
+	plugin: GeneratorPlugin,
+	context: PluginContext,
+): boolean =>
 	!plugin.tags ||
 	plugin.tags.length === 0 ||
-	plugin.tags.some((tag) => schemaHasTag(ctx.schema, tag));
+	plugin.tags.some((tag) => schemaHasTag(context.schema, tag));
 
 export const validatePluginGraph = (
 	plugins: readonly GeneratorPlugin[],
-	ctx: PluginContext,
+	context: PluginContext,
 ): PluginGraphError[] => {
-	const activePlugins = plugins.filter((p) => isPluginActive(p, ctx));
+	const activePlugins = plugins.filter((p) => isPluginActive(p, context));
 	const pluginIds = new Set(plugins.map((p) => p.id));
 	const activeIds = new Set(activePlugins.map((p) => p.id));
 	const errors: PluginGraphError[] = [];
@@ -75,12 +78,12 @@ const toposort = (plugins: GeneratorPlugin[]): GeneratorPlugin[] => {
 
 const shouldRunPlugin = (
 	plugin: GeneratorPlugin,
-	ctx: PluginContext,
+	context: PluginContext,
 	completedPlugins: Set<string>,
 ): boolean => {
 	if (plugin.tags && plugin.tags.length > 0) {
 		const hasRequiredTag = plugin.tags.some((tag) =>
-			schemaHasTag(ctx.schema, tag),
+			schemaHasTag(context.schema, tag),
 		);
 		if (!hasRequiredTag) return false;
 	}
@@ -96,37 +99,39 @@ const shouldRunPlugin = (
 
 const collectPluginMetadata = (
 	plugins: readonly GeneratorPlugin[],
-	ctx: PluginContext,
+	context: PluginContext,
 ): readonly PluginMetadataEntry[] => {
 	const sorted = toposort([...plugins]);
-	return sorted
-		.filter((p) => isPluginActive(p, ctx) && p.metadata)
-		.map((p) => ({ pluginId: p.id, ...p.metadata! }));
+	return sorted.flatMap((p) => {
+		if (!isPluginActive(p, context) || !p.metadata) return [];
+		return [{ pluginId: p.id, ...p.metadata }];
+	});
 };
 
 export const runPlugins = (
 	plugins: readonly GeneratorPlugin[],
-	ctx: PluginContext,
+	context: PluginContext,
 ): GeneratedFile[] => {
-	const errors = validatePluginGraph(plugins, ctx);
+	const errors = validatePluginGraph(plugins, context);
 	if (errors.length > 0) {
-		const msg = errors
+		const message = errors
 			.map(
-				(e) => `Plugin "${e.plugin}" requires "${e.missingDep}" (${e.reason})`,
+				(error) =>
+					`Plugin "${error.plugin}" requires "${error.missingDep}" (${error.reason})`,
 			)
 			.join("; ");
-		throw new Error(`Plugin dependency errors: ${msg}`);
+		throw new Error(`Plugin dependency errors: ${message}`);
 	}
 
 	const sorted = toposort([...plugins]);
-	const pluginMetadata = collectPluginMetadata(plugins, ctx);
-	const enrichedCtx = { ...ctx, pluginMetadata };
+	const pluginMetadata = collectPluginMetadata(plugins, context);
+	const enrichedContext = { ...context, pluginMetadata };
 	const completed = new Set<string>();
 	const files: GeneratedFile[] = [];
 
 	for (const plugin of sorted) {
-		if (shouldRunPlugin(plugin, enrichedCtx, completed)) {
-			const result = plugin.generate(enrichedCtx);
+		if (shouldRunPlugin(plugin, enrichedContext, completed)) {
+			const result = plugin.generate(enrichedContext);
 			files.push(...result);
 			completed.add(plugin.id);
 		}
@@ -137,27 +142,28 @@ export const runPlugins = (
 
 export const runPluginsWithResults = (
 	plugins: readonly GeneratorPlugin[],
-	ctx: PluginContext,
+	context: PluginContext,
 ): PluginResult[] => {
-	const errors = validatePluginGraph(plugins, ctx);
+	const errors = validatePluginGraph(plugins, context);
 	if (errors.length > 0) {
-		const msg = errors
+		const message = errors
 			.map(
-				(e) => `Plugin "${e.plugin}" requires "${e.missingDep}" (${e.reason})`,
+				(error) =>
+					`Plugin "${error.plugin}" requires "${error.missingDep}" (${error.reason})`,
 			)
 			.join("; ");
-		throw new Error(`Plugin dependency errors: ${msg}`);
+		throw new Error(`Plugin dependency errors: ${message}`);
 	}
 
 	const sorted = toposort([...plugins]);
-	const pluginMetadata = collectPluginMetadata(plugins, ctx);
-	const enrichedCtx = { ...ctx, pluginMetadata };
+	const pluginMetadata = collectPluginMetadata(plugins, context);
+	const enrichedContext = { ...context, pluginMetadata };
 	const completed = new Set<string>();
 	const results: PluginResult[] = [];
 
 	for (const plugin of sorted) {
-		if (shouldRunPlugin(plugin, enrichedCtx, completed)) {
-			const files = plugin.generate(enrichedCtx);
+		if (shouldRunPlugin(plugin, enrichedContext, completed)) {
+			const files = plugin.generate(enrichedContext);
 			results.push({ pluginId: plugin.id, files });
 			completed.add(plugin.id);
 		}

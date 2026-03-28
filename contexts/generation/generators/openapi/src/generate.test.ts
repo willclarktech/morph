@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
-
 import type { DomainSchema } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import { generate } from "./generate";
 
@@ -70,38 +70,38 @@ describe("generate", () => {
 		expect(result.files).toHaveLength(1);
 		expect(result.files[0]!.filename).toBe("openapi.json");
 
-		const doc = JSON.parse(result.files[0]!.content);
+		const document = JSON.parse(result.files[0]!.content);
 
-		expect(doc.openapi).toBe("3.0.3");
-		expect(doc.info.title).toBe("TestApp API");
-		expect(doc.info.version).toBe("1.0.0");
-		expect(doc.components).toBeDefined();
-		expect(doc.paths).toBeDefined();
+		expect(document.openapi).toBe("3.0.3");
+		expect(document.info.title).toBe("TestApp API");
+		expect(document.info.version).toBe("1.0.0");
+		expect(document.components).toBeDefined();
+		expect(document.paths).toBeDefined();
 	});
 
 	test("includes entity schemas in components", () => {
 		const result = generate(minimalSchema);
-		const doc = JSON.parse(result.files[0]!.content);
+		const document = JSON.parse(result.files[0]!.content);
 
-		expect(doc.components.schemas.Todo).toBeDefined();
-		expect(doc.components.schemas.Todo.type).toBe("object");
-		expect(doc.components.schemas.Todo.properties.id).toBeDefined();
-		expect(doc.components.schemas.Todo.properties.title).toBeDefined();
+		expect(document.components.schemas.Todo).toBeDefined();
+		expect(document.components.schemas.Todo.type).toBe("object");
+		expect(document.components.schemas.Todo.properties.id).toBeDefined();
+		expect(document.components.schemas.Todo.properties.title).toBeDefined();
 	});
 
 	test("generates operation paths", () => {
 		const result = generate(minimalSchema);
-		const doc = JSON.parse(result.files[0]!.content);
+		const document = JSON.parse(result.files[0]!.content);
 
-		const paths = Object.keys(doc.paths);
+		const paths = Object.keys(document.paths);
 		expect(paths.length).toBeGreaterThan(0);
 	});
 
 	test("uses custom API version", () => {
 		const result = generate(minimalSchema, { apiVersion: "2.0.0" });
-		const doc = JSON.parse(result.files[0]!.content);
+		const document = JSON.parse(result.files[0]!.content);
 
-		expect(doc.info.version).toBe("2.0.0");
+		expect(document.info.version).toBe("2.0.0");
 	});
 
 	test("supports yaml output format", () => {
@@ -113,22 +113,22 @@ describe("generate", () => {
 
 	test("applies base path prefix", () => {
 		const result = generate(minimalSchema, { basePath: "/api/v1" });
-		const doc = JSON.parse(result.files[0]!.content);
+		const document = JSON.parse(result.files[0]!.content);
 
-		const paths = Object.keys(doc.paths);
+		const paths = Object.keys(document.paths);
 		expect(paths.every((p) => p.startsWith("/api/v1"))).toBe(true);
 	});
 
 	test("includes error schemas from operations", () => {
 		const result = generate(minimalSchema);
-		const doc = JSON.parse(result.files[0]!.content);
+		const document = JSON.parse(result.files[0]!.content);
 
-		expect(doc.components.schemas.ValidationError).toBeDefined();
+		expect(document.components.schemas.ValidationError).toBeDefined();
 		expect(
-			doc.components.schemas.ValidationError.properties._tag,
+			document.components.schemas.ValidationError.properties._tag,
 		).toBeDefined();
 		expect(
-			doc.components.schemas.ValidationError.properties._tag.enum,
+			document.components.schemas.ValidationError.properties._tag.enum,
 		).toContain("ValidationError");
 	});
 
@@ -158,17 +158,17 @@ describe("generate", () => {
 		};
 
 		const result = generate(schemaWithVOs);
-		const doc = JSON.parse(result.files[0]!.content);
+		const document = JSON.parse(result.files[0]!.content);
 
-		expect(doc.components.schemas.Address).toBeDefined();
-		expect(doc.components.schemas.Address.type).toBe("object");
+		expect(document.components.schemas.Address).toBeDefined();
+		expect(document.components.schemas.Address.type).toBe("object");
 	});
 
 	test("omits security schemes when no auth required", () => {
 		const result = generate(minimalSchema);
-		const doc = JSON.parse(result.files[0]!.content);
+		const document = JSON.parse(result.files[0]!.content);
 
-		expect(doc.components.securitySchemes).toBeUndefined();
+		expect(document.components.securitySchemes).toBeUndefined();
 	});
 
 	test("generates function paths as POST endpoints", () => {
@@ -199,12 +199,12 @@ describe("generate", () => {
 		};
 
 		const result = generate(schemaWithFns);
-		const doc = JSON.parse(result.files[0]!.content);
+		const document = JSON.parse(result.files[0]!.content);
 
-		const fnPath = Object.keys(doc.paths).find((p) =>
+		const functionPath = Object.keys(document.paths).find((p) =>
 			p.includes("calculate-totals"),
 		);
-		expect(fnPath).toBeDefined();
-		expect(doc.paths[fnPath!].post).toBeDefined();
+		expect(functionPath).toBeDefined();
+		expect(document.paths[functionPath!].post).toBeDefined();
 	});
 });

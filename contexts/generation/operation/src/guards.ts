@@ -1,6 +1,8 @@
 import type * as S from "effect/Schema";
 
-import { OPERATION_BRAND, type OperationDefinition } from "./define-operation";
+import type { OperationDefinition } from "./define-operation";
+
+import { OPERATION_BRAND } from "./define-operation";
 
 /**
  * Type alias for any operation definition.

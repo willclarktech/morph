@@ -2,12 +2,12 @@ import { describe, expect, test } from "bun:test";
 import * as fc from "fast-check";
 
 import {
-	configProps,
+	configProperties,
 	indent,
 	indentBlock,
 	joinLines,
 	lines,
-	sep,
+	separator,
 } from "./template";
 
 describe("lines", () => {
@@ -97,30 +97,30 @@ describe("indentBlock", () => {
 	});
 });
 
-describe("sep", () => {
+describe("separator", () => {
 	test("creates newline + tabs separator", () => {
-		expect(sep(3)).toBe("\n\t\t\t");
+		expect(separator(3)).toBe("\n\t\t\t");
 	});
 
 	test("adds pre-separator", () => {
-		expect(sep(1, ",")).toBe(",\n\t");
+		expect(separator(1, ",")).toBe(",\n\t");
 	});
 
 	test("adds post-separator", () => {
-		expect(sep(1, "", "| ")).toBe("\n\t| ");
+		expect(separator(1, "", "| ")).toBe("\n\t| ");
 	});
 
 	test("adds both pre and post", () => {
-		expect(sep(2, ";", "- ")).toBe(";\n\t\t- ");
+		expect(separator(2, ";", "- ")).toBe(";\n\t\t- ");
 	});
 
 	test("zero level creates just newline", () => {
-		expect(sep(0)).toBe("\n");
+		expect(separator(0)).toBe("\n");
 	});
 
 	test("can be used with Array.join", () => {
 		const items = ["a", "b", "c"];
-		expect(items.join(sep(2))).toBe("a\n\t\tb\n\t\tc");
+		expect(items.join(separator(2))).toBe("a\n\t\tb\n\t\tc");
 	});
 });
 
@@ -146,34 +146,34 @@ describe("joinLines", () => {
 	});
 });
 
-describe("configProps", () => {
+describe("configProperties", () => {
 	test("keeps string values", () => {
-		expect(configProps(["a", "b"])).toEqual(["a", "b"]);
+		expect(configProperties(["a", "b"])).toEqual(["a", "b"]);
 	});
 
 	test("filters out false values", () => {
-		expect(configProps([false, "a", false, "b"])).toEqual(["a", "b"]);
+		expect(configProperties([false, "a", false, "b"])).toEqual(["a", "b"]);
 	});
 
 	test("filters out undefined values", () => {
-		expect(configProps([undefined, "a", undefined])).toEqual(["a"]);
+		expect(configProperties([undefined, "a", undefined])).toEqual(["a"]);
 	});
 
 	test("filters mixed falsy values", () => {
-		expect(configProps([false, undefined, "only"])).toEqual(["only"]);
+		expect(configProperties([false, undefined, "only"])).toEqual(["only"]);
 	});
 
 	test("returns empty array for all falsy", () => {
-		expect(configProps([false, undefined, false])).toEqual([]);
+		expect(configProperties([false, undefined, false])).toEqual([]);
 	});
 
 	test("returns empty array for empty input", () => {
-		expect(configProps([])).toEqual([]);
+		expect(configProperties([])).toEqual([]);
 	});
 
 	test("conditional pattern works as expected", () => {
-		const hasAuth = false;
-		const props = configProps([
+		const hasAuth = false as boolean;
+		const props = configProperties([
 			hasAuth && "auth: authStrategy,",
 			"required: true,",
 		]);

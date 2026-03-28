@@ -17,7 +17,7 @@ export const GetTodoHandlerLive = Layer.effect(
 					// Find the todo
 					const todo = yield* todoRepo
 						.findById(params.todoId)
-						.pipe(Effect.mapError((e) => new TodoNotFoundError({ message: e.message })));
+						.pipe(Effect.mapError((error) => new TodoNotFoundError({ message: error.message })));
 					if (!todo) {
 						return yield* Effect.fail(
 							new TodoNotFoundError({

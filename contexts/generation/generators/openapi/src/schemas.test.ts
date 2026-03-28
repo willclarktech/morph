@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
-
 import type { EntityDef, ValueObjectDef } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import { entityToSchema, valueObjectToSchema } from "./schemas";
 

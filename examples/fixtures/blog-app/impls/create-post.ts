@@ -20,7 +20,7 @@ export const CreatePostHandlerLive = Layer.effect(
 						.findById(params.authorId)
 						.pipe(
 							Effect.mapError(
-								(e) => new UserNotFoundError({ message: e.message }),
+								(error) => new UserNotFoundError({ message: error.message }),
 							),
 						);
 					if (!author) {
@@ -44,7 +44,7 @@ export const CreatePostHandlerLive = Layer.effect(
 						.save(post)
 						.pipe(
 							Effect.mapError(
-								(e) => new UserNotFoundError({ message: e.message }),
+								(error) => new UserNotFoundError({ message: error.message }),
 							),
 						);
 					return post;

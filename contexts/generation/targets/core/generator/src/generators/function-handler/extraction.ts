@@ -73,10 +73,6 @@ export const collectFunctionTypesFromTypeRef = (
 		case "entity": {
 			return [reference.name];
 		}
-		case "generic": {
-			// Include the base type name for generic types like StepBuilder<T>
-			return [reference.name];
-		}
 		case "entityId":
 		case "function":
 		case "primitive":
@@ -84,6 +80,10 @@ export const collectFunctionTypesFromTypeRef = (
 		case "union":
 		case "valueObject": {
 			return [];
+		}
+		case "generic": {
+			// Include the base type name for generic types like StepBuilder<T>
+			return [reference.name];
 		}
 		case "optional": {
 			return collectFunctionTypesFromTypeRef(reference.inner);

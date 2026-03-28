@@ -14,11 +14,13 @@ export const generateEventStoreService = (
 	const content = `// Generated EventStore service interface
 // Do not edit - regenerate from schema
 
-import { Context, Effect } from "effect";
+import type { Effect } from "effect";
+
+import { Context } from "effect";
 
 import type { DomainEvent } from "${typesImportPath}";
 
-import { EventStoreOperationError } from "@morph/eventstore-dsl";
+import type { EventStoreOperationError } from "@morph/eventstore-dsl";
 
 /**
  * Service for durable event storage.

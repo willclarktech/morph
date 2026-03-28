@@ -16,7 +16,7 @@ export const UpdateStatusHandlerLive = Layer.effect(
 		return {
 			handle: (params, _options) =>
 				Effect.gen(function* () {
-					const record = yield* repo.findById(params.trackingRecordId).pipe(Effect.mapError((e) => new TrackingRecordNotFoundError({ message: e.message })));
+					const record = yield* repo.findById(params.trackingRecordId).pipe(Effect.mapError((error) => new TrackingRecordNotFoundError({ message: error.message })));
 					if (!record) {
 						return yield* Effect.fail(
 							new TrackingRecordNotFoundError({

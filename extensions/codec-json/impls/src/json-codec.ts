@@ -1,8 +1,8 @@
-import { Effect } from "effect";
-
 import type { Codec } from "@morph/codec-dsl";
+
 import { CodecDecodeError, CodecEncodeError } from "@morph/codec-dsl";
 import { jsonParse, jsonStringify } from "@morph/utils";
+import { Effect } from "effect";
 
 export const createJsonCodec = (): Codec => ({
 	format: "json",
@@ -17,8 +17,8 @@ export const createJsonCodec = (): Codec => ({
 				body: jsonStringify(value),
 				contentType: "application/json" as const,
 			}),
-			catch: (e) =>
-				new CodecEncodeError({ format: "json", message: String(e) }),
+			catch: (error) =>
+				new CodecEncodeError({ format: "json", message: String(error) }),
 		}),
 
 	decode: (body, _messageName) =>
@@ -29,7 +29,7 @@ export const createJsonCodec = (): Codec => ({
 						? body
 						: new TextDecoder().decode(body as Uint8Array),
 				),
-			catch: (e) =>
-				new CodecDecodeError({ format: "json", message: String(e) }),
+			catch: (error) =>
+				new CodecDecodeError({ format: "json", message: String(error) }),
 		}),
 });

@@ -9,8 +9,8 @@ import { Data } from "effect";
 export class DatabaseLockedError extends Data.TaggedError(
 	"DatabaseLockedError",
 )<{
-	readonly path: string;
 	readonly message: string;
+	readonly path: string;
 }> {}
 
 /**

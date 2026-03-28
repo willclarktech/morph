@@ -1,3 +1,6 @@
+import type { JwtPayload } from "@morph/auth-jwt-dsl";
+
+import { TokenExpiredError, TokenInvalidError } from "@morph/auth-jwt-dsl";
 /**
  * JWT implementation using Web Crypto API (HS256).
  *
@@ -5,9 +8,6 @@
  * No external dependencies - uses native Web Crypto.
  */
 import { Effect } from "effect";
-
-import type { JwtPayload } from "@morph/auth-jwt-dsl";
-import { TokenExpiredError, TokenInvalidError } from "@morph/auth-jwt-dsl";
 
 const textEncoder = new TextEncoder();
 
@@ -17,24 +17,25 @@ const textEncoder = new TextEncoder();
 const base64UrlEncode = (data: Uint8Array): string => {
 	let binary = "";
 	for (const byte of data) {
-		binary += String.fromCharCode(byte);
+		binary += String.fromCodePoint(byte);
 	}
 	return btoa(binary)
-		.replace(/\+/g, "-")
-		.replace(/\//g, "_")
+		.replaceAll("+", "-")
+		.replaceAll("/", "_")
 		.replace(/=+$/, "");
 };
 
 /**
  * Base64URL decode a string to Uint8Array.
  */
-const base64UrlDecode = (str: string): Uint8Array => {
-	const padded = str + "=".repeat((4 - (str.length % 4)) % 4);
-	const base64 = padded.replace(/-/g, "+").replace(/_/g, "/");
+const base64UrlDecode = (string_: string): Uint8Array => {
+	const padded = string_ + "=".repeat((4 - (string_.length % 4)) % 4);
+	const base64 = padded.replaceAll("-", "+").replaceAll("_", "/");
 	const binary = atob(base64);
 	const bytes = new Uint8Array(binary.length);
-	for (let i = 0; i < binary.length; i++) {
-		bytes[i] = binary.charCodeAt(i);
+	for (let index = 0; index < binary.length; index++) {
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- codePointAt on valid index always returns a number
+		bytes[index] = binary.codePointAt(index)!;
 	}
 	return bytes;
 };
@@ -82,7 +83,7 @@ const DEFAULT_EXPIRY_SECONDS = 3600; // 1 hour
 export const signToken = (
 	payload: JwtPayload,
 	secret: string,
-): Effect.Effect<string, never> =>
+): Effect.Effect<string> =>
 	Effect.promise(async () => {
 		const key = await importKey(secret);
 
@@ -109,20 +110,17 @@ const parseToken = (
 	{
 		header: string;
 		payload: string;
-		signature: string;
 		payloadData: JwtPayload;
+		signature: string;
 	},
 	TokenInvalidError
 > =>
 	Effect.try({
 		try: () => {
-			const parts = token.split(".");
-			if (parts.length !== 3) {
+			const [header, payload, signature, ...rest] = token.split(".");
+			if (!header || !payload || !signature || rest.length > 0) {
 				throw new Error("Invalid token format: expected 3 parts");
 			}
-			const header = parts[0] as string;
-			const payload = parts[1] as string;
-			const signature = parts[2] as string;
 			const payloadBytes = base64UrlDecode(payload);
 			const payloadJson = new TextDecoder().decode(payloadBytes);
 			const payloadData = JSON.parse(payloadJson) as JwtPayload;

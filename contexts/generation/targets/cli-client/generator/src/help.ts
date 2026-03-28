@@ -35,17 +35,17 @@ export const generateHelpText = (
 			)
 			.map(([name]) => `<${toKebabCase(name)}>`)
 			.join(" ");
-		const desc = op.def.description ?? "";
+		const desc = op.def.description;
 		return `  ${kebab} ${params}`.padEnd(35) + desc;
 	});
 
 	return `${cliName} - CLI client for remote API
 
 Configuration:
-${configCommands.join("\\n")}
+${configCommands.join(String.raw`\n`)}
 
 Commands:
-${operationHelp.join("\\n")}
+${operationHelp.join(String.raw`\n`)}
 
 Environment:
   ${toEnvironmentPrefix(cliName)}_API_URL      Override API URL

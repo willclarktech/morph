@@ -3,16 +3,17 @@ import type * as Layer from "effect/Layer";
 
 import { getFieldNames } from "@morph/operation";
 import { jsonStringify, toKebabCase } from "@morph/utils";
-import * as Effect from "effect/Effect";
 import { Exit } from "effect";
+import * as Effect from "effect/Effect";
 import * as S from "effect/Schema";
 
 import type { CliConfig, CliOperation } from "./help";
+import type { parseArguments } from "./parser";
 
 import { readSchemaFile, readUiConfigFile } from "./env";
 import { isGenerationResult } from "./guards";
 import { formatHelp, formatUsage } from "./help";
-import { isHelpRequest, parseArguments } from "./parser";
+import { isHelpRequest } from "./parser";
 import { promptSecure } from "./prompt";
 import {
 	getSchemaDescription,
@@ -25,12 +26,12 @@ import { writeFiles } from "./write";
  * Coerce a positional CLI arg string to its intended type.
  * CLI args are always strings, but schemas may expect numbers or booleans.
  */
-const coercePositionalArg = (value: string | undefined): unknown => {
+const coercePositionalArgument = (value: string | undefined): unknown => {
 	if (value === undefined) return undefined;
 	if (value === "true") return true;
 	if (value === "false") return false;
-	const num = Number(value);
-	if (value !== "" && !Number.isNaN(num)) return num;
+	const number_ = Number(value);
+	if (value !== "" && !Number.isNaN(number_)) return number_;
 	return value;
 };
 
@@ -96,7 +97,7 @@ export const executeCommand = async <R>(
 	const parameters = Object.fromEntries(
 		positionalParamNames.map((name, index) => [
 			name,
-			coercePositionalArg(parsed.positional[index]),
+			coercePositionalArgument(parsed.positional[index]),
 		]),
 	);
 
@@ -117,9 +118,9 @@ export const executeCommand = async <R>(
 	// Load UI config file if specified
 	const uiConfigFile = parsed.options["ui-config-file"];
 	const uiConfigResult =
-		uiConfigFile !== undefined
-			? await readUiConfigFile(uiConfigFile)
-			: undefined;
+		uiConfigFile === undefined
+			? undefined
+			: await readUiConfigFile(uiConfigFile);
 
 	if (uiConfigResult !== undefined && !uiConfigResult.ok) {
 		return 1;

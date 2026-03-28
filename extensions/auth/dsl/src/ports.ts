@@ -14,7 +14,7 @@ export interface AuthService<TUser = unknown> {
 	/**
 	 * Get the currently authenticated user, or undefined if not authenticated
 	 */
-	readonly getCurrentUser: () => Effect.Effect<TUser | undefined, never>;
+	readonly getCurrentUser: () => Effect.Effect<TUser | undefined>;
 
 	/**
 	 * Require authentication - fails if not authenticated

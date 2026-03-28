@@ -34,7 +34,7 @@ export interface JwtConfig {
  * Holds the decoded user from the current request.
  */
 interface JwtAuthState {
-	readonly user: unknown | undefined;
+	readonly user: unknown;
 }
 
 let currentRequestState: JwtAuthState = { user: undefined };
@@ -43,7 +43,7 @@ let currentRequestState: JwtAuthState = { user: undefined };
  * Set the current request's authenticated user.
  * Called by middleware/handlers before processing.
  */
-export const setJwtUser = (user: unknown | undefined): void => {
+export const setJwtUser = (user: unknown): void => {
 	currentRequestState = { user };
 };
 

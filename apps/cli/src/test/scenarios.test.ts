@@ -1,7 +1,7 @@
-import { createCliRunner } from "@morph/scenario-runner-cli";
 import { prose as GenerationProse } from "@morph/generation-core";
-import { prose as SchemaDslProse } from "@morph/schema-dsl-core";
+import { createCliRunner } from "@morph/scenario-runner-cli";
 import { scenarios } from "@morph/scenarios";
+import { prose as SchemaDslProse } from "@morph/schema-dsl-core";
 import { expect, test } from "bun:test";
 import path from "node:path";
 

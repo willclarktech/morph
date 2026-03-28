@@ -1,10 +1,10 @@
+import { Glob } from "bun";
 import { Database } from "bun:sqlite";
 import { Effect } from "effect";
-import { Glob } from "bun";
 
 interface MigrationModule {
-	readonly up: (db: Database) => void;
-	readonly down?: (db: Database) => void;
+	readonly up: (database: Database) => void;
+	readonly down?: (database: Database) => void;
 }
 
 interface MigrationStatus {
@@ -20,8 +20,8 @@ interface MigrationRunner {
 
 const TRACKING_TABLE = "_migrations";
 
-const ensureTrackingTable = (db: Database): void => {
-	db.run(`
+const ensureTrackingTable = (database: Database): void => {
+	database.run(`
 		CREATE TABLE IF NOT EXISTS ${TRACKING_TABLE} (
 			version TEXT PRIMARY KEY,
 			applied_at TEXT NOT NULL
@@ -29,9 +29,9 @@ const ensureTrackingTable = (db: Database): void => {
 	`);
 };
 
-const getApplied = (db: Database): ReadonlySet<string> => {
-	ensureTrackingTable(db);
-	const rows = db
+const getApplied = (database: Database): ReadonlySet<string> => {
+	ensureTrackingTable(database);
+	const rows = database
 		.query<{ version: string }, []>(`SELECT version FROM ${TRACKING_TABLE}`)
 		.all();
 	return new Set(rows.map((r) => r.version));
@@ -49,8 +49,10 @@ const loadMigrations = async (
 	const migrations: Record<string, MigrationModule> = {};
 	for (const file of files) {
 		const version = file.replace(/\.ts$/, "");
-		const mod = (await import(`${migrationsDir}/${file}`)) as MigrationModule;
-		migrations[version] = mod;
+		const module_ = (await import(
+			`${migrationsDir}/${file}`
+		)) as MigrationModule;
+		migrations[version] = module_;
 	}
 	return migrations;
 };
@@ -61,26 +63,16 @@ export const runMigrateCli = (
 ): Effect.Effect<void> =>
 	Effect.gen(function* () {
 		const subcommand = argv[0] ?? "status";
-		const dbPath = resolveSqlitePath(envPrefix);
+		const databasePath = resolveSqlitePath(envPrefix);
 		const migrationsDir = `${process.cwd()}/migrations`;
 
-		const db = new Database(dbPath);
+		const database = new Database(databasePath);
 		const migrations = yield* Effect.promise(() =>
 			loadMigrations(migrationsDir),
 		);
-		const runner = createMigrationRunner(db, migrations);
+		const runner = createMigrationRunner(database, migrations);
 
 		switch (subcommand) {
-			case "up": {
-				const applied = runner.up();
-				if (applied.length === 0) {
-					console.info("No pending migrations.");
-				} else {
-					for (const v of applied) console.info(`Applied: ${v}`);
-					console.info(`${applied.length} migration(s) applied.`);
-				}
-				break;
-			}
 			case "down": {
 				const reverted = runner.down();
 				if (reverted) {
@@ -102,6 +94,16 @@ export const runMigrateCli = (
 				}
 				break;
 			}
+			case "up": {
+				const applied = runner.up();
+				if (applied.length === 0) {
+					console.info("No pending migrations.");
+				} else {
+					for (const v of applied) console.info(`Applied: ${v}`);
+					console.info(`${applied.length} migration(s) applied.`);
+				}
+				break;
+			}
 			default: {
 				console.error(
 					`Unknown migrate subcommand: ${subcommand}. Use up, down, or status.`,
@@ -109,25 +111,25 @@ export const runMigrateCli = (
 			}
 		}
 
-		db.close();
+		database.close();
 	});
 
 export const createMigrationRunner = (
-	db: Database,
+	database: Database,
 	migrations: Record<string, MigrationModule>,
 ): MigrationRunner => {
 	const sortedVersions = Object.keys(migrations).sort();
 
 	return {
 		up: () => {
-			const applied = getApplied(db);
+			const applied = getApplied(database);
 			const pending = sortedVersions.filter((v) => !applied.has(v));
 			for (const version of pending) {
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- filtered from sortedVersions
 				const migration = migrations[version]!;
-				db.transaction(() => {
-					migration.up(db);
-					db.run(
+				database.transaction(() => {
+					migration.up(database);
+					database.run(
 						`INSERT INTO ${TRACKING_TABLE} (version, applied_at) VALUES (?, ?)`,
 						[version, new Date().toISOString()],
 					);
@@ -137,9 +139,9 @@ export const createMigrationRunner = (
 		},
 
 		down: () => {
-			const applied = getApplied(db);
-			const lastApplied = [...sortedVersions]
-				.reverse()
+			const applied = getApplied(database);
+			const lastApplied = sortedVersions
+				.toReversed()
 				.find((v) => applied.has(v));
 			if (!lastApplied) return undefined;
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- found via find()
@@ -147,9 +149,10 @@ export const createMigrationRunner = (
 			if (!migration.down) {
 				throw new Error(`Migration ${lastApplied} has no down function`);
 			}
-			db.transaction(() => {
-				migration.down!(db);
-				db.run(`DELETE FROM ${TRACKING_TABLE} WHERE version = ?`, [
+			const downFunction = migration.down;
+			database.transaction(() => {
+				downFunction(database);
+				database.run(`DELETE FROM ${TRACKING_TABLE} WHERE version = ?`, [
 					lastApplied,
 				]);
 			})();
@@ -157,10 +160,10 @@ export const createMigrationRunner = (
 		},
 
 		status: () => {
-			ensureTrackingTable(db);
-			const rows = db
+			ensureTrackingTable(database);
+			const rows = database
 				.query<
-					{ version: string; applied_at: string },
+					{ applied_at: string; version: string },
 					[]
 				>(`SELECT version, applied_at FROM ${TRACKING_TABLE} ORDER BY version`)
 				.all();

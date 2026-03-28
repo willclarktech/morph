@@ -1,6 +1,5 @@
-import { Context, Effect, Layer } from "effect";
-
 import { NoAuthEnabledError } from "@morph/auth-none-dsl";
+import { Context, Effect, Layer } from "effect";
 
 export interface RequireAuthHandler {
 	readonly handle: (

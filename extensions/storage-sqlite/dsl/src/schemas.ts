@@ -24,7 +24,7 @@ export const encodeDatabaseInfo = S.encodeSync(DatabaseInfoSchema);
 
 // Function Schemas (pure transformations)
 
-import { DatabaseLockedError, MigrationFailedError } from "./errors";
+import type { DatabaseLockedError, MigrationFailedError } from "./errors";
 
 // Create tables and set pragmas for a SQLite database
 export const InitializeDatabaseInputSchema = S.Struct({

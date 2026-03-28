@@ -1,10 +1,9 @@
 import type { DomainSchema } from "@morph/domain-schema";
 import type { Effect } from "effect";
 
-import { Context, Effect as E, Layer } from "effect";
-
-import { InvalidSchemaError } from "@morph/schema-dsl-dsl";
 import { decompile } from "@morph/schema-dsl-decompiler";
+import { InvalidSchemaError } from "@morph/schema-dsl-dsl";
+import { Context, Effect as E, Layer } from "effect";
 
 export interface DecompileSchemaHandler {
 	readonly handle: (

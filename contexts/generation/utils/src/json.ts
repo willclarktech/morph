@@ -11,11 +11,11 @@ export const taggedReplacer = function (
 
 export const taggedReviver = (_key: string, value: unknown): unknown => {
 	if (typeof value === "object" && value !== null) {
-		const obj = value as Record<string, unknown>;
-		if ("$bigint" in obj && typeof obj["$bigint"] === "string")
-			return BigInt(obj["$bigint"]);
-		if ("$date" in obj && typeof obj["$date"] === "string")
-			return new Date(obj["$date"] as string);
+		const object = value as Record<string, unknown>;
+		if ("$bigint" in object && typeof object["$bigint"] === "string")
+			return BigInt(object["$bigint"]);
+		if ("$date" in object && typeof object["$date"] === "string")
+			return new Date(object["$date"]);
 	}
 	return value;
 };

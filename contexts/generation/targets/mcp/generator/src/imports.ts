@@ -1,6 +1,6 @@
 import type { InjectableParam } from "@morph/domain-schema";
 
-import { sep } from "@morph/utils";
+import { separator } from "@morph/utils";
 
 /**
  * Context package information for multi-context apps.
@@ -32,9 +32,9 @@ export const generateContextImports = (
 	const isMultiContext = contexts.length > 1;
 
 	return contexts
-		.map((ctx) => {
-			const pascal = toPascalCase(ctx.contextName);
-			const isFirst = ctx === contexts[0];
+		.map((context) => {
+			const pascal = toPascalCase(context.contextName);
+			const isFirst = context === contexts[0];
 			const baseImports = ["HandlersLayer", "ops"];
 
 			// Storage: import from every context (each context has its own repositories)
@@ -65,9 +65,9 @@ export const generateContextImports = (
 						return `resolveStorage as resolve${pascal}Storage`;
 					return imp;
 				});
-				return `import {\n\t${aliasedImports.join(sep(1, ","))},\n} from "${ctx.corePackage}";`;
+				return `import {\n\t${aliasedImports.join(separator(1, ","))},\n} from "${context.corePackage}";`;
 			}
-			return `import {\n\t${allImports.join(sep(1, ","))},\n} from "${ctx.corePackage}";`;
+			return `import {\n\t${allImports.join(separator(1, ","))},\n} from "${context.corePackage}";`;
 		})
 		.join("\n");
 };
@@ -80,7 +80,7 @@ export const generateOpsMergeCode = (
 	return `
 // Merge operations from all contexts with prefixes
 const ops = {
-${contexts.map((ctx) => `\t...Object.fromEntries(Object.entries(${toPascalCase(ctx.contextName)}Ops).map(([k, v]) => [\`${ctx.contextName.replace(/-/g, "_")}_\${k}\`, v])),`).join("\n")}
+${contexts.map((context) => `\t...Object.fromEntries(Object.entries(${toPascalCase(context.contextName)}Ops).map(([k, v]) => [\`${context.contextName.replaceAll("-", "_")}_\${k}\`, v])),`).join("\n")}
 };
 `;
 };
@@ -90,7 +90,7 @@ export const generateHandlersLayerMergeCode = (
 ): string => {
 	if (contexts.length <= 1) return "";
 
-	return `const HandlersLayer = Layer.mergeAll(${contexts.map((ctx) => `${toPascalCase(ctx.contextName)}HandlersLayer`).join(", ")});`;
+	return `const HandlersLayer = Layer.mergeAll(${contexts.map((context) => `${toPascalCase(context.contextName)}HandlersLayer`).join(", ")});`;
 };
 
 export const generateInjectableParamsCode = (

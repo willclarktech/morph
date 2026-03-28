@@ -26,9 +26,9 @@ export const CreateShipmentHandlerLive = Layer.effect(
 						.findById(params.warehouseId)
 						.pipe(
 							Effect.mapError(
-								(e) =>
+								(error) =>
 									new WarehouseNotFoundError({
-										message: e.message,
+										message: error.message,
 									}),
 							),
 						);

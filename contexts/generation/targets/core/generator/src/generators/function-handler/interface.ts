@@ -54,7 +54,7 @@ export const generateFunctionHandler = (
 	// Generate return type
 	const outputType = describeFunctionOutput(function_);
 	// Error union type - all errors this function can return
-	const errorType = hasErrors ? errorNames.join(" | ") : "never";
+	const errorType = hasErrors ? errorNames.join(" | ") : undefined;
 
 	// Handle type parameters for generic functions
 	const typeParams = function_.typeParameters ?? [];
@@ -98,7 +98,10 @@ export const generateFunctionHandler = (
 		indent(`readonly handle: (`, 1),
 		indent(`params: ${paramsType},`, 2),
 		indent(`options: ${optionsType},`, 2),
-		indent(`) => Effect.Effect<${outputType}, ${errorType}>;`, 1),
+		indent(
+			`) => Effect.Effect<${outputType}${errorType ? `, ${errorType}` : ""}>;`,
+			1,
+		),
 		`}`,
 		"",
 		`/**`,

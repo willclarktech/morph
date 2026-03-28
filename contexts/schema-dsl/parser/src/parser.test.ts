@@ -34,7 +34,7 @@ const normalize = (value: unknown): unknown => {
 
 const loadSchema = (
 	name: string,
-): { readonly schema: Record<string, unknown>; readonly dsl: string } => {
+): { readonly dsl: string; readonly schema: Record<string, unknown> } => {
 	const source = readFileSync(
 		path.resolve(fixturesDir, name, "schema.morph"),
 		"utf8",
@@ -170,7 +170,7 @@ describe("round-trip", () => {
 	for (const name of examples) {
 		test(`${name}: .morph → compile → decompile → parse → compile → compare`, () => {
 			const { schema } = loadSchema(name);
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any -- test: schema is DomainSchema via compile()
+
 			const dsl = decompile(schema as any);
 			const parseResult = parse(dsl);
 			expect(parseResult.errors).toHaveLength(0);

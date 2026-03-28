@@ -18,6 +18,11 @@ export const typeRefToSchema = (reference: TypeRef): string => {
 			return `${reference.entity}IdSchema`;
 		}
 
+		case "function": {
+			// Functions can't be validated at runtime, use S.Unknown
+			return "S.Unknown";
+		}
+
 		case "generic": {
 			// Generic instantiations can't be runtime schemas directly
 			const args = reference.args.map(typeRefToSchema).join(", ");
@@ -50,11 +55,6 @@ export const typeRefToSchema = (reference: TypeRef): string => {
 
 		case "valueObject": {
 			return `${reference.name}Schema`;
-		}
-
-		case "function": {
-			// Functions can't be validated at runtime, use S.Unknown
-			return "S.Unknown";
 		}
 
 		default: {

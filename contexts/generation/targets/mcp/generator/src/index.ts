@@ -10,8 +10,8 @@ export { createMcp, type McpConfig, type McpResult } from "./mcp";
 
 // Re-export code generation
 export {
-	generate,
 	type ContextPackages,
+	generate,
 	type GenerateMcpAppOptions,
 } from "./generate";
 export {

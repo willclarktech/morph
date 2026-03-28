@@ -1,3 +1,11 @@
+import type { Session } from "@morph/auth-session-dsl";
+
+import {
+	SessionExpiredError,
+	SessionNotFoundError,
+	SessionStorageError,
+} from "@morph/auth-session-dsl";
+import { jsonParse, jsonStringify } from "@morph/utils";
 /**
  * Session storage with pluggable strategies.
  *
@@ -13,14 +21,6 @@ import {
 	writeFileSync,
 } from "node:fs";
 import path from "node:path";
-import { jsonParse, jsonStringify } from "@morph/utils";
-
-import type { Session } from "@morph/auth-session-dsl";
-import {
-	SessionExpiredError,
-	SessionNotFoundError,
-	SessionStorageError,
-} from "@morph/auth-session-dsl";
 
 /**
  * Session store interface - pluggable storage backend.
@@ -138,7 +138,7 @@ export const generateSessionId = (): string => {
 	return crypto.randomUUID();
 };
 
-const DEFAULT_EXPIRY_SECONDS = 86400; // 24 hours
+const DEFAULT_EXPIRY_SECONDS = 86_400; // 24 hours
 
 /**
  * Create a new session for a user.

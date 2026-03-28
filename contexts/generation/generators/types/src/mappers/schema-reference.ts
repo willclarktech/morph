@@ -12,11 +12,11 @@ export interface SchemaContext {
  */
 export const typeRefToSchema = (
 	reference: TypeRef,
-	ctx: SchemaContext = {},
+	context: SchemaContext = {},
 ): string => {
 	switch (reference.kind) {
 		case "array": {
-			return `S.Array(${typeRefToSchema(reference.element, ctx)})`;
+			return `S.Array(${typeRefToSchema(reference.element, context)})`;
 		}
 
 		case "entity": {
@@ -27,15 +27,20 @@ export const typeRefToSchema = (
 			return `${reference.entity}IdSchema`;
 		}
 
+		case "function": {
+			// Functions can't be validated at runtime, use S.Unknown
+			return "S.Unknown";
+		}
+
 		case "generic": {
 			const args = reference.args
-				.map((arg) => typeRefToSchema(arg, ctx))
+				.map((argument) => typeRefToSchema(argument, context))
 				.join(", ");
 			return `${reference.name}Schema(${args})`;
 		}
 
 		case "optional": {
-			return `S.optional(${typeRefToSchema(reference.inner, ctx)})`;
+			return `S.optional(${typeRefToSchema(reference.inner, context)})`;
 		}
 
 		case "primitive": {
@@ -47,7 +52,7 @@ export const typeRefToSchema = (
 		}
 
 		case "typeParam": {
-			return ctx.typeParams?.[reference.name] ?? reference.name;
+			return context.typeParams?.[reference.name] ?? reference.name;
 		}
 
 		case "union": {
@@ -59,11 +64,6 @@ export const typeRefToSchema = (
 
 		case "valueObject": {
 			return `${reference.name}Schema`;
-		}
-
-		case "function": {
-			// Functions can't be validated at runtime, use S.Unknown
-			return "S.Unknown";
 		}
 
 		default: {

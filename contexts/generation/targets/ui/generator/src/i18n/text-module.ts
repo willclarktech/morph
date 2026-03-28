@@ -154,7 +154,7 @@ export const t = (key: string, params?: Record<string, string>): string => {
 	let result = langTranslations?.[key] ?? translations[defaultLanguage]?.[key] ?? key;
 	if (params) {
 		for (const [name, value] of Object.entries(params)) {
-			result = result.replace(new RegExp(\`\\\\{\${name}\\\\}\`, "g"), value);
+			result = result.replaceAll(\`{\${name}}\`, value);
 		}
 	}
 	return result;

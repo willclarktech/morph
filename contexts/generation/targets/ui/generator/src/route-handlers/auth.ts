@@ -7,15 +7,14 @@ import type { AuthOperations } from "../auth/detection";
  * Generate session management code.
  */
 export const generateSessionCode = (envPrefix: string): string => `
-import { createInMemorySessionStore, type Session } from "./session";
+import { createInMemorySessionStore } from "./session";
 
 // Session management
-const SESSION_COOKIE = "session_id";
 const sessionStore = createInMemorySessionStore();
 
-const getSessionId = (req: Request): string | undefined => {
-	const cookies = req.headers.get("Cookie") ?? "";
-	const match = cookies.match(/session_id=([^;]+)/);
+const getSessionId = (request: Request): string | undefined => {
+	const cookies = request.headers.get("Cookie") ?? "";
+	const match = /session_id=([^;]+)/.exec(cookies);
 	return match?.[1];
 };
 
@@ -32,8 +31,8 @@ interface AuthState {
 	readonly token: string | undefined;
 }
 
-const getAuthState = (req: Request): AuthState => {
-	const sessionId = getSessionId(req);
+const getAuthState = (request: Request): AuthState => {
+	const sessionId = getSessionId(request);
 	if (!sessionId) return { isAuthenticated: false, userId: undefined, userName: undefined, token: undefined };
 	const session = sessionStore.get(sessionId);
 	if (!session) return { isAuthenticated: false, userId: undefined, userName: undefined, token: undefined };
@@ -45,11 +44,11 @@ const getAuthState = (req: Request): AuthState => {
 	};
 };
 
-const createClientForRequest = (req: Request) => {
-	const { token } = getAuthState(req);
+const createClientForRequest = (request: Request) => {
+	const { token } = getAuthState(request);
 	return createClient({
 		baseUrl: process.env["${envPrefix}_API_URL"] ?? "http://localhost:3000",
-		...(token !== undefined ? { token } : {}),
+		...(token === undefined ? {} : { token }),
 	});
 };
 `;
@@ -65,16 +64,16 @@ const generateLoginRoute = (
 		return `
 		// Login
 		"/login": {
-			GET: (req: Request) => {
-				initLanguage(req);
-				if (getAuthState(req).isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/" } });
+			GET: (request: Request) => {
+				initLanguage(request);
+				if (getAuthState(request).isAuthenticated) {
+					return new Response(undefined, { status: 303, headers: { Location: "/" } });
 				}
 				return html(loginPage());
 			},
-			POST: async (req: Request) => {
+			POST: async (request: Request) => {
 				// eslint-disable-next-line @typescript-eslint/no-deprecated -- Bun.serve supports formData
-				const formData = await req.formData();
+				const formData = await request.formData();
 				const email = formData.get("email") as string;
 				const password = formData.get("password") as string;
 				try {
@@ -88,7 +87,7 @@ const generateLoginRoute = (
 						(result as { id: string }).id,
 						(result as { name?: string }).name,
 					);
-					return new Response(null, {
+					return new Response(undefined, {
 						status: 303,
 						headers: {
 							Location: "/",
@@ -106,16 +105,16 @@ const generateLoginRoute = (
 		return `
 		// Login (uses /auth/login API endpoint via HTTP client)
 		"/login": {
-			GET: (req: Request) => {
-				initLanguage(req);
-				if (getAuthState(req).isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/" } });
+			GET: (request: Request) => {
+				initLanguage(request);
+				if (getAuthState(request).isAuthenticated) {
+					return new Response(undefined, { status: 303, headers: { Location: "/" } });
 				}
 				return html(loginPage());
 			},
-			POST: async (req: Request) => {
+			POST: async (request: Request) => {
 				// eslint-disable-next-line @typescript-eslint/no-deprecated -- Bun.serve supports formData
-				const formData = await req.formData();
+				const formData = await request.formData();
 				const email = formData.get("email") as string;
 				const password = formData.get("password") as string;
 
@@ -123,13 +122,14 @@ const generateLoginRoute = (
 					const loginClient = createClient({
 						baseUrl: process.env["${envPrefix}_API_URL"] ?? "http://localhost:3000",
 					});
-					const user = await Effect.runPromise(loginClient.login({ email, password }));
+					const result = await Effect.runPromise(loginClient.login({ email, password }));
+					const token = (result as { token?: string }).token ?? (result as { id: string }).id;
 					const session = sessionStore.create(
-						user.token ?? user.id,
-						user.id,
-						(user as { name?: string }).name,
+						token,
+						(result as { id: string }).id,
+						(result as { name?: string }).name,
 					);
-					return new Response(null, {
+					return new Response(undefined, {
 						status: 303,
 						headers: {
 							Location: "/",
@@ -157,16 +157,16 @@ const generateRegisterRoute = (resolvedAuthOps: AuthOperations): string => {
 	return `
 		// Register
 		"/register": {
-			GET: (req: Request) => {
-				initLanguage(req);
-				if (getAuthState(req).isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/" } });
+			GET: (request: Request) => {
+				initLanguage(request);
+				if (getAuthState(request).isAuthenticated) {
+					return new Response(undefined, { status: 303, headers: { Location: "/" } });
 				}
 				return html(registerPage());
 			},
-			POST: async (req: Request) => {
+			POST: async (request: Request) => {
 				// eslint-disable-next-line @typescript-eslint/no-deprecated -- Bun.serve supports formData
-				const formData = await req.formData();
+				const formData = await request.formData();
 				const params = Object.fromEntries(formData) as Parameters<typeof client.${resolvedAuthOps.register.name}>[0];
 				try {
 					const result = await Effect.runPromise(client.${resolvedAuthOps.register.name}(params));
@@ -177,7 +177,7 @@ const generateRegisterRoute = (resolvedAuthOps: AuthOperations): string => {
 						(result as { id: string }).id,
 						(result as { name?: string }).name,
 					);
-					return new Response(null, {
+					return new Response(undefined, {
 						status: 303,
 						headers: {
 							Location: "/",
@@ -205,10 +205,10 @@ export const generateAuthRoutes = (
 	return `${loginRoute}
 		// Logout
 		"/logout": {
-			GET: (req: Request) => {
-				const sessionId = getSessionId(req);
+			GET: (request: Request) => {
+				const sessionId = getSessionId(request);
 				if (sessionId) sessionStore.destroy(sessionId);
-				return new Response(null, {
+				return new Response(undefined, {
 					status: 303,
 					headers: {
 						Location: "/login",

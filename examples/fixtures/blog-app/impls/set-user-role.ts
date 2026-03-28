@@ -18,7 +18,7 @@ export const SetUserRoleHandlerLive = Layer.effect(
 						.findById(params.userId)
 						.pipe(
 							Effect.mapError(
-								(e) => new UserNotFoundError({ message: e.message }),
+								(error) => new UserNotFoundError({ message: error.message }),
 							),
 						);
 					if (!user) {
@@ -35,7 +35,7 @@ export const SetUserRoleHandlerLive = Layer.effect(
 						.save(updated)
 						.pipe(
 							Effect.mapError(
-								(e) => new UserNotFoundError({ message: e.message }),
+								(error) => new UserNotFoundError({ message: error.message }),
 							),
 						);
 					return updated;

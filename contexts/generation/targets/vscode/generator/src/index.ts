@@ -1,13 +1,13 @@
 export { createExtension, type ExtensionConfig } from "./extension-factory";
 
 export {
-	generate,
 	type ContextPackages,
+	generate,
 	type GenerateVsCodeAppOptions,
 } from "./generate";
 
 export {
-	generateVsCodePackageJson,
 	type CommandOp,
+	generateVsCodePackageJson,
 	type VsCodePackageJsonOptions,
 } from "./package-json";

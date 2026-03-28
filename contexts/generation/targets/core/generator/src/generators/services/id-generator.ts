@@ -13,7 +13,9 @@ export const generateIdGeneratorService = (
 	const content = `// Generated IdGenerator service interface
 // Do not edit - regenerate from schema
 
-import { Context, Effect } from "effect";
+import type { Effect } from "effect";
+
+import { Context } from "effect";
 
 /**
  * Service for generating unique identifiers.

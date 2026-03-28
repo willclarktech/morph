@@ -55,19 +55,21 @@ export const generateStorageLayerCode = (
 		: "";
 
 	if (!contextNames || contextNames.length <= 1) {
-		return `const storageLayer = yield* resolveStorage({ envPrefix: "${envPrefix}", backendName: parseBackendArg(process.argv.slice(2), "--storage", "${envPrefix}_STORAGE") })${provideSuffix};\n`;
+		return `const storageLayer = yield* resolveStorage({ envPrefix: "${envPrefix}", backendName: parseBackendArgument(process.argv.slice(2), "--storage", "${envPrefix}_STORAGE") })${provideSuffix};\n`;
 	}
-	const lines = contextNames.map((ctx) => {
-		const pascal = toPascalCase(ctx);
-		return `\tconst ${ctx}Storage = yield* resolve${pascal}Storage({ envPrefix: "${envPrefix}", backendName: parseBackendArg(process.argv.slice(2), "--storage", "${envPrefix}_STORAGE") })${provideSuffix};`;
+	const lines = contextNames.map((context) => {
+		const pascal = toPascalCase(context);
+		return `\tconst ${context}Storage = yield* resolve${pascal}Storage({ envPrefix: "${envPrefix}", backendName: parseBackendArgument(process.argv.slice(2), "--storage", "${envPrefix}_STORAGE") })${provideSuffix};`;
 	});
-	const mergeArgs = contextNames.map((ctx) => `${ctx}Storage`).join(", ");
-	return `${lines.join("\n")}\n\tconst storageLayer = Layer.mergeAll(${mergeArgs});\n`;
+	const mergeArguments = contextNames
+		.map((context) => `${context}Storage`)
+		.join(", ");
+	return `${lines.join("\n")}\n\tconst storageLayer = Layer.mergeAll(${mergeArguments});\n`;
 };
 
 /**
  * Generate event store layer code in main.
  */
 export const generateEventStoreLayerCode = (envPrefix: string): string =>
-	`const eventStoreLayer = yield* resolveEventStore({ envPrefix: "${envPrefix}", backendName: parseBackendArg(process.argv.slice(2), "--event-store", "${envPrefix}_EVENT_STORE") });
+	`const eventStoreLayer = yield* resolveEventStore({ envPrefix: "${envPrefix}", backendName: parseBackendArgument(process.argv.slice(2), "--event-store", "${envPrefix}_EVENT_STORE") });
 `;

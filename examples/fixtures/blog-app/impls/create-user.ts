@@ -19,8 +19,8 @@ export const CreateUserHandlerLive = Layer.effect(
 						.findAll()
 						.pipe(
 							Effect.mapError(
-								(e) =>
-									new EmailAlreadyExistsError({ message: e.message }),
+								(error) =>
+									new EmailAlreadyExistsError({ message: error.message }),
 							),
 						);
 					const existingUser = result.items.find(
@@ -59,8 +59,8 @@ export const CreateUserHandlerLive = Layer.effect(
 						.save(user)
 						.pipe(
 							Effect.mapError(
-								(e) =>
-									new EmailAlreadyExistsError({ message: e.message }),
+								(error) =>
+									new EmailAlreadyExistsError({ message: error.message }),
 							),
 						);
 					return user;

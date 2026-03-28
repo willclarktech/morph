@@ -59,7 +59,11 @@ describe("interpolate", () => {
 
 	test("actor and params combined", () => {
 		expect(
-			interpolate("{actor} creates {item}", { item: "todo" }, { actor: "Taylor" }),
+			interpolate(
+				"{actor} creates {item}",
+				{ item: "todo" },
+				{ actor: "Taylor" },
+			),
 		).toBe("Taylor creates todo");
 	});
 });

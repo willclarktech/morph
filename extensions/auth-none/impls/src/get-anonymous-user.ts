@@ -1,10 +1,7 @@
 import { Context, Effect, Layer } from "effect";
 
 export interface GetAnonymousUserHandler {
-	readonly handle: (
-		params: object,
-		options: object,
-	) => Effect.Effect<void, never>;
+	readonly handle: (params: object, options: object) => Effect.Effect<void>;
 }
 
 export const GetAnonymousUserHandler =

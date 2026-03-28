@@ -91,7 +91,7 @@ export const inferContextFields = (
 	): void => {
 		switch (value.kind) {
 			case "call": {
-				for (const arg of value.args) walkValue(arg, boundVariables);
+				for (const argument of value.args) walkValue(argument, boundVariables);
 				break;
 			}
 			case "count": {
@@ -227,7 +227,7 @@ export const inferInputFields = (condition: ConditionExpr): string[] => {
 	const walkValue = (value: ValueExpr): void => {
 		switch (value.kind) {
 			case "call": {
-				for (const arg of value.args) walkValue(arg);
+				for (const argument of value.args) walkValue(argument);
 				break;
 			}
 			case "count": {

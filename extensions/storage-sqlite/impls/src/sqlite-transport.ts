@@ -1,13 +1,12 @@
-import { Database } from "bun:sqlite";
-import { Effect } from "effect";
-
 import type { PaginationParams, StorageTransport } from "@morph/storage-dsl";
 
 import {
+	applyPagination,
 	StorageConnectionError,
 	StorageOperationError,
-	applyPagination,
 } from "@morph/storage-dsl";
+import { Database } from "bun:sqlite";
+import { Effect } from "effect";
 
 import { quoteId } from "./field-flattening";
 
@@ -20,9 +19,9 @@ export const openSqliteDatabase = (
 ): Effect.Effect<Database, StorageConnectionError> =>
 	Effect.try({
 		try: () => {
-			const db = new Database(path, { create: true, strict: true });
-			db.run("PRAGMA journal_mode = WAL;");
-			return db;
+			const database = new Database(path, { create: true, strict: true });
+			database.run("PRAGMA journal_mode = WAL;");
+			return database;
 		},
 		catch: (error) =>
 			new StorageConnectionError({
@@ -35,24 +34,26 @@ export const openSqliteDatabase = (
  * Auto-creates the table if it doesn't exist.
  */
 export const createSqliteTransport = (
-	db: Database,
+	database: Database,
 	tableName: string,
 ): StorageTransport => {
 	const qt = quoteId(tableName);
-	db.run(
+	database.run(
 		`CREATE TABLE IF NOT EXISTS ${qt} (${quoteId("id")} TEXT PRIMARY KEY, ${quoteId("data")} TEXT NOT NULL)`,
 	);
 
-	const findById = db.query<{ data: string }, [string]>(
+	const findById = database.query<{ data: string }, [string]>(
 		`SELECT ${quoteId("data")} FROM ${qt} WHERE ${quoteId("id")} = ?`,
 	);
-	const findAll = db.query<{ data: string }, []>(
+	const findAll = database.query<{ data: string }, []>(
 		`SELECT ${quoteId("data")} FROM ${qt}`,
 	);
-	const upsert = db.query(
+	const upsert = database.query(
 		`INSERT OR REPLACE INTO ${qt} (${quoteId("id")}, ${quoteId("data")}) VALUES (?, ?)`,
 	);
-	const deleteById = db.query(`DELETE FROM ${qt} WHERE ${quoteId("id")} = ?`);
+	const deleteById = database.query(
+		`DELETE FROM ${qt} WHERE ${quoteId("id")} = ?`,
+	);
 
 	return {
 		get: (id) =>
@@ -63,7 +64,7 @@ export const createSqliteTransport = (
 						message: `SQLite get failed: ${String(error)}`,
 					}),
 			}),
-		getAll: (pagination?: PaginationParams | undefined) =>
+		getAll: (pagination?: PaginationParams) =>
 			Effect.try({
 				try: () =>
 					applyPagination(

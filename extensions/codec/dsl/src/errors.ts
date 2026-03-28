@@ -25,8 +25,8 @@ export class CodecDecodeError extends Data.TaggedError("CodecDecodeError")<{
 export class CodecNegotiationError extends Data.TaggedError(
 	"CodecNegotiationError",
 )<{
-	readonly requested: string;
 	readonly available: readonly string[];
+	readonly requested: string;
 }> {}
 
 /**

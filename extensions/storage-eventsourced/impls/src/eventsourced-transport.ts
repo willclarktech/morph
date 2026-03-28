@@ -1,10 +1,9 @@
-import { Effect, Ref } from "effect";
-
 import type { EventStoreTransport } from "@morph/eventstore-dsl";
 import type { PaginationParams, StorageTransport } from "@morph/storage-dsl";
 
-import { StorageOperationError, applyPagination } from "@morph/storage-dsl";
+import { applyPagination, StorageOperationError } from "@morph/storage-dsl";
 import { jsonParse, jsonStringify } from "@morph/utils";
+import { Effect, Ref } from "effect";
 
 interface ParsedEvent {
 	readonly aggregateId: string;
@@ -29,9 +28,11 @@ const parseEvent = (data: string): ParsedEvent | undefined => {
 	return undefined;
 };
 
-const mapErr = Effect.mapError(
-	(e: unknown) =>
-		new StorageOperationError({ message: `Event store error: ${String(e)}` }),
+const mapError = Effect.mapError(
+	(error: unknown) =>
+		new StorageOperationError({
+			message: `Event store error: ${String(error)}`,
+		}),
 );
 
 /**
@@ -71,9 +72,10 @@ export const createEventsourcedTransport = (
 					// Try event store first (source of truth)
 					const events = yield* eventStoreTransport
 						.getByAggregateId(id)
-						.pipe(mapErr);
-					if (events.length > 0) {
-						const lastEvent = parseEvent(events[events.length - 1]!);
+						.pipe(mapError);
+					const lastRawEvent = events.at(-1);
+					if (lastRawEvent !== undefined) {
+						const lastEvent = parseEvent(lastRawEvent);
 						if (lastEvent) return jsonStringify(lastEvent.result);
 					}
 					// Fall back to snapshot cache (populated by put() calls)
@@ -81,7 +83,7 @@ export const createEventsourcedTransport = (
 					return cache.get(id);
 				}),
 
-			getAll: (pagination?: PaginationParams | undefined) =>
+			getAll: (pagination?: PaginationParams) =>
 				Ref.get(snapshotCache).pipe(
 					Effect.map((m) => applyPagination([...m.values()], pagination)),
 				),

@@ -19,6 +19,12 @@ export const typeRefToTsType = (
 		case "entityId": {
 			return `${reference.entity}Id`;
 		}
+		case "function": {
+			const params = reference.params
+				.map((p) => `${p.name}: ${typeRefToTsType(p.type)}`)
+				.join(", ");
+			return `(${params}) => ${typeRefToTsType(reference.returns)}`;
+		}
 		case "generic": {
 			const argsString = reference.args.map(typeRefToTsType).join(", ");
 			return `${reference.name}<${argsString}>`;
@@ -50,12 +56,6 @@ export const typeRefToTsType = (
 		}
 		case "valueObject": {
 			return reference.name;
-		}
-		case "function": {
-			const params = reference.params
-				.map((p) => `${p.name}: ${typeRefToTsType(p.type)}`)
-				.join(", ");
-			return `(${params}) => ${typeRefToTsType(reference.returns)}`;
 		}
 	}
 };

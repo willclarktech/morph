@@ -19,7 +19,7 @@ export const CreateTodoHandlerLive = Layer.effect(
 					// Verify user exists
 					const user = yield* userRepo
 						.findById(params.userId)
-						.pipe(Effect.mapError((e) => new UserNotFoundError({ message: e.message })));
+						.pipe(Effect.mapError((error) => new UserNotFoundError({ message: error.message })));
 					if (!user) {
 						return yield* Effect.fail(
 							new UserNotFoundError({
@@ -36,12 +36,12 @@ export const CreateTodoHandlerLive = Layer.effect(
 						userId: params.userId,
 						completed: false,
 						createdAt: new Date().toISOString(),
-						priority: options?.priority ?? ("medium" as const),
-						tags: options?.tags ?? [],
-						...(options?.dueDate ? { dueDate: options.dueDate } : {}),
+						priority: options.priority ?? ("medium" as const),
+						tags: options.tags ?? [],
+						...(options.dueDate ? { dueDate: options.dueDate } : {}),
 					};
 
-					yield* todoRepo.save(todo).pipe(Effect.mapError((e) => new UserNotFoundError({ message: e.message })));
+					yield* todoRepo.save(todo).pipe(Effect.mapError((error) => new UserNotFoundError({ message: error.message })));
 					return todo;
 				}),
 		};

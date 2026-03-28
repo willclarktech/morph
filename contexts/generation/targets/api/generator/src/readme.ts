@@ -8,12 +8,6 @@ import type {
 } from "@morph/domain-schema";
 
 import {
-	getAllEntities,
-	getAllFunctions,
-	getAllOperations,
-	getAllValueObjects,
-} from "@morph/domain-schema";
-import {
 	codeBlock,
 	description,
 	entities,
@@ -24,6 +18,12 @@ import {
 	operations,
 	valueObjects,
 } from "@morph/builder-readme";
+import {
+	getAllEntities,
+	getAllFunctions,
+	getAllOperations,
+	getAllValueObjects,
+} from "@morph/domain-schema";
 
 /**
  * Infer HTTP method from operation name.

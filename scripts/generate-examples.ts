@@ -29,6 +29,10 @@ import {
 } from "node:fs";
 import path from "node:path";
 
+import { sortFileImports } from "../contexts/generation/utils/src/imports";
+import { compile } from "../contexts/schema-dsl/compiler/src/index";
+import { parse } from "../contexts/schema-dsl/parser/src/index";
+
 const ROOT_DIR = path.join(import.meta.dir, "..");
 const EXAMPLES_DIR = path.join(ROOT_DIR, "examples");
 const FIXTURES_DIR = path.join(EXAMPLES_DIR, "fixtures");
@@ -56,7 +60,9 @@ const EXAMPLES = discoverExamples();
 /**
  * Find all core package directories, keyed by context name.
  */
-const findAllCorePackageDirs = (name: string): Record<string, string> => {
+const findAllCorePackageDirectories = (
+	name: string,
+): Record<string, string> => {
 	const contextsDir = path.join(EXAMPLES_DIR, name, "contexts");
 	if (!existsSync(contextsDir)) {
 		return {};
@@ -77,15 +83,15 @@ const findAllCorePackageDirs = (name: string): Record<string, string> => {
 /**
  * Find the primary core package directory (first context with a core/ subdir).
  */
-const findCorePackageDir = (name: string): string | undefined => {
-	const all = findAllCorePackageDirs(name);
+const _findCorePackageDir = (name: string): string | undefined => {
+	const all = findAllCorePackageDirectories(name);
 	return Object.values(all)[0];
 };
 
 /**
  * Find all DSL package directories, keyed by context name.
  */
-const findAllDslPackageDirs = (name: string): Record<string, string> => {
+const findAllDslPackageDirectories = (name: string): Record<string, string> => {
 	const contextsDir = path.join(EXAMPLES_DIR, name, "contexts");
 	if (!existsSync(contextsDir)) {
 		return {};
@@ -106,8 +112,8 @@ const findAllDslPackageDirs = (name: string): Record<string, string> => {
 /**
  * Find the primary DSL package directory (first context with a dsl/ subdir).
  */
-const findDslPackageDir = (name: string): string | undefined => {
-	const all = findAllDslPackageDirs(name);
+const _findDslPackageDir = (name: string): string | undefined => {
+	const all = findAllDslPackageDirectories(name);
 	return Object.values(all)[0];
 };
 
@@ -123,8 +129,8 @@ const copyImplFixtures = (name: string): number => {
 		return 0;
 	}
 
-	const allCoreDirs = findAllCorePackageDirs(name);
-	const coreDirList = Object.values(allCoreDirs);
+	const allCoreDirectories = findAllCorePackageDirectories(name);
+	const coreDirList = Object.values(allCoreDirectories);
 	if (coreDirList.length === 0) {
 		console.warn(`  Warning: No core package found for ${name}`);
 		return 0;
@@ -139,7 +145,7 @@ const copyImplFixtures = (name: string): number => {
 		const targetCore =
 			coreDirList.find((coreDir) =>
 				existsSync(path.join(coreDir, "src/operations", opName)),
-			) ?? coreDirList[0]!;
+			) ?? coreDirList[0];
 		const target = path.join(targetCore, "src/operations", opName, "impl.ts");
 		Bun.spawnSync(["cp", source, target]);
 	}
@@ -159,8 +165,8 @@ const copySubscriberFixtures = (name: string): number => {
 		return 0;
 	}
 
-	const allCoreDirs = findAllCorePackageDirs(name);
-	const coreDirList = Object.values(allCoreDirs);
+	const allCoreDirectories = findAllCorePackageDirectories(name);
+	const coreDirList = Object.values(allCoreDirectories);
 	if (coreDirList.length === 0) {
 		console.warn(`  Warning: No core package found for ${name}`);
 		return 0;
@@ -175,7 +181,7 @@ const copySubscriberFixtures = (name: string): number => {
 		const targetCore =
 			coreDirList.find((coreDir) =>
 				existsSync(path.join(coreDir, "src/subscribers", subscriberName)),
-			) ?? coreDirList[0]!;
+			) ?? coreDirList[0];
 		const target = path.join(
 			targetCore,
 			"src/subscribers",
@@ -269,20 +275,20 @@ const copyDslFixtures = (name: string): number => {
 		return 0;
 	}
 
-	const allDslDirs = findAllDslPackageDirs(name);
-	const allCoreDirs = findAllCorePackageDirs(name);
+	const allDslDirectories = findAllDslPackageDirectories(name);
+	const allCoreDirectories = findAllCorePackageDirectories(name);
 	let count = 0;
 
 	// Copy top-level .ts files to the primary (first) DSL package
 	const topLevelFiles = readdirSync(dslFixturesDir).filter(
 		(f) =>
 			f.endsWith(".ts") &&
-			!readdirSync(dslFixturesDir, { withFileTypes: true }).find(
-				(e) => e.name === f && e.isDirectory(),
+			!readdirSync(dslFixturesDir, { withFileTypes: true }).some(
+				(entry) => entry.name === f && entry.isDirectory(),
 			),
 	);
-	const primaryDslDir = Object.values(allDslDirs)[0];
-	const primaryContextName = Object.keys(allDslDirs)[0];
+	const primaryDslDir = Object.values(allDslDirectories)[0];
+	const primaryContextName = Object.keys(allDslDirectories)[0];
 
 	if (topLevelFiles.length > 0 && primaryDslDir) {
 		const targetDir = path.join(primaryDslDir, "src");
@@ -293,7 +299,7 @@ const copyDslFixtures = (name: string): number => {
 			count++;
 		}
 		if (topLevelFiles.includes("prose.ts") && primaryContextName) {
-			const coreDir = allCoreDirs[primaryContextName];
+			const coreDir = allCoreDirectories[primaryContextName];
 			if (coreDir) wireProseForContext(primaryDslDir, coreDir);
 		}
 	}
@@ -303,7 +309,7 @@ const copyDslFixtures = (name: string): number => {
 	for (const entry of entries) {
 		if (!entry.isDirectory()) continue;
 		const contextName = entry.name;
-		const dslDir = allDslDirs[contextName];
+		const dslDir = allDslDirectories[contextName];
 		if (!dslDir) {
 			console.warn(`  Warning: No DSL package for context ${contextName}`);
 			continue;
@@ -320,7 +326,7 @@ const copyDslFixtures = (name: string): number => {
 			count++;
 		}
 		if (files.includes("prose.ts")) {
-			const coreDir = allCoreDirs[contextName];
+			const coreDir = allCoreDirectories[contextName];
 			if (coreDir) wireProseForContext(dslDir, coreDir);
 		}
 	}
@@ -368,33 +374,32 @@ const copyFixtures = (name: string): void => {
 };
 
 const compileMorphToJson = (morphFile: string): string => {
-	const { parse } =
-		require("../contexts/schema-dsl/parser/src/index") as typeof import("@morph/schema-dsl-parser");
-	const { compile } =
-		require("../contexts/schema-dsl/compiler/src/index") as typeof import("@morph/schema-dsl-compiler");
-
 	const source = readFileSync(morphFile, "utf8");
 	const parseResult = parse(source);
 	if (parseResult.errors.length > 0) {
 		const msgs = parseResult.errors.map(
-			(e) =>
-				`  Line ${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+			(error) =>
+				`  Line ${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 		);
 		throw new Error(`Parse errors in ${morphFile}:\n${msgs.join("\n")}`);
 	}
 
-	const compileResult = compile(parseResult.ast!);
+	if (!parseResult.ast) throw new Error(`No AST produced for ${morphFile}`);
+	const compileResult = compile(parseResult.ast);
 	if (compileResult.errors.length > 0) {
 		const msgs = compileResult.errors.map(
-			(e) =>
-				`  Line ${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+			(error) =>
+				`  Line ${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 		);
 		throw new Error(`Compile errors in ${morphFile}:\n${msgs.join("\n")}`);
 	}
 
-	const tmpFile = morphFile.replace(/\.morph$/, ".schema-dsl-tmp.json");
-	writeFileSync(tmpFile, JSON.stringify(compileResult.schema, null, "\t"));
-	return tmpFile;
+	const temporaryFile = morphFile.replace(/\.morph$/, ".schema-dsl-tmp.json");
+	writeFileSync(
+		temporaryFile,
+		JSON.stringify(compileResult.schema, undefined, "\t"),
+	);
+	return temporaryFile;
 };
 
 const generateExample = (name: string): boolean => {
@@ -408,11 +413,11 @@ const generateExample = (name: string): boolean => {
 	}
 
 	let schemaFile = sourceSchemaFile;
-	let tmpJsonFile: string | undefined;
+	let temporaryJsonFile: string | undefined;
 	if (sourceSchemaFile.endsWith(".morph")) {
 		console.info(`  Compiling ${path.basename(sourceSchemaFile)} → JSON...`);
-		tmpJsonFile = compileMorphToJson(sourceSchemaFile);
-		schemaFile = tmpJsonFile;
+		temporaryJsonFile = compileMorphToJson(sourceSchemaFile);
+		schemaFile = temporaryJsonFile;
 	}
 
 	console.info(`\nGenerating ${name}...`);
@@ -478,11 +483,14 @@ const generateExample = (name: string): boolean => {
 	);
 
 	// Fix internal package references to use @morph scope
-	fixInternalPackageRefs(outputDir);
+	fixInternalPackageReferences(outputDir);
+
+	// Sort imports in all generated TypeScript files
+	sortExampleImports(name);
 
 	// Clean up temporary compiled JSON if we used a .morph source
-	if (tmpJsonFile && existsSync(tmpJsonFile)) {
-		rmSync(tmpJsonFile);
+	if (temporaryJsonFile && existsSync(temporaryJsonFile)) {
+		rmSync(temporaryJsonFile);
 	}
 
 	return true;
@@ -492,7 +500,7 @@ const generateExample = (name: string): boolean => {
  * Fix internal package references in generated examples.
  * Internal packages (modules/) use @morph/* scope.
  */
-const fixInternalPackageRefs = (outputDir: string): void => {
+const fixInternalPackageReferences = (outputDir: string): void => {
 	// Find all package.json files recursively
 	const findPackageJsonFiles = (dir: string): string[] => {
 		const results: string[] = [];
@@ -509,8 +517,8 @@ const fixInternalPackageRefs = (outputDir: string): void => {
 	};
 
 	const packageJsonFiles = findPackageJsonFiles(outputDir);
-	for (const pkgPath of packageJsonFiles) {
-		let content = readFileSync(pkgPath, "utf8");
+	for (const packagePath of packageJsonFiles) {
+		let content = readFileSync(packagePath, "utf8");
 
 		// Fix internal package references
 		content = content.replaceAll(
@@ -534,8 +542,53 @@ const fixInternalPackageRefs = (outputDir: string): void => {
 			'"@morph/auth-password-impls": "workspace:*"',
 		);
 
-		writeFileSync(pkgPath, content);
+		writeFileSync(packagePath, content);
 	}
+};
+
+/**
+ * Sort imports in all generated TypeScript files for an example.
+ */
+const sortExampleImports = (name: string): void => {
+	const exampleDir = path.join(EXAMPLES_DIR, name);
+	let count = 0;
+
+	const processDir = (dirPath: string): void => {
+		if (!existsSync(dirPath)) return;
+		const entries = readdirSync(dirPath, { withFileTypes: true });
+		for (const entry of entries) {
+			const fullPath = path.join(dirPath, entry.name);
+			if (entry.isDirectory() && entry.name !== "node_modules") {
+				processDir(fullPath);
+			} else if (entry.name.endsWith(".ts") && !entry.name.endsWith(".d.ts")) {
+				const content = readFileSync(fullPath, "utf8");
+				const sorted = sortFileImports(content);
+				if (sorted !== content) {
+					writeFileSync(fullPath, sorted);
+					count++;
+				}
+			}
+		}
+	};
+
+	// Walk all src/ directories in the example
+	const contextsDir = path.join(exampleDir, "contexts");
+	if (existsSync(contextsDir)) {
+		const contexts = readdirSync(contextsDir, { withFileTypes: true });
+		for (const context of contexts) {
+			if (!context.isDirectory()) continue;
+			for (const sub of ["dsl", "core"]) {
+				processDir(path.join(contextsDir, context.name, sub, "src"));
+			}
+		}
+	}
+
+	for (const sub of ["apps", "libs", "tests"]) {
+		const subDir = path.join(exampleDir, sub);
+		if (existsSync(subDir)) processDir(subDir);
+	}
+
+	if (count > 0) console.info(`  Sorted imports in ${count} file(s)`);
 };
 
 const main = (): void => {

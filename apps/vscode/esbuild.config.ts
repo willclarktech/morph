@@ -12,4 +12,4 @@ await esbuild.build({
 	minify: true,
 });
 
-console.log("Build complete: dist/extension.js");
+console.info("Build complete: dist/extension.js");

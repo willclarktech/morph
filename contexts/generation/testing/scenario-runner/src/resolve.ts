@@ -18,7 +18,8 @@ export const resolveOperationName = (
 		(known) => known.endsWith(`_${name}`) || known.endsWith(`:${name}`),
 	);
 
-	if (matches.length === 1) return matches[0]!;
+	const [match] = matches;
+	if (matches.length === 1 && match !== undefined) return match;
 
 	return name;
 };

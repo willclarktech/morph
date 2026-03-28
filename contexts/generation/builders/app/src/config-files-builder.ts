@@ -15,7 +15,7 @@ export const buildConfigFiles = (
 		{
 			content: `import { configs } from "@${scope}/eslint-config";
 
-export default configs.generated;
+export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated];
 `,
 			filename: `${packagePath}/eslint.config.ts`,
 		},
@@ -46,7 +46,7 @@ export const buildCliConfigFiles = (
 		{
 			content: `import { configs } from "@${scope}/eslint-config";
 
-export default [...configs.generated, ...configs.cli];
+export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated, ...configs.cli];
 `,
 			filename: `${packagePath}/eslint.config.ts`,
 		},

@@ -52,6 +52,10 @@ export const outputToArbitrary = (output: OutputTypeRef): string => {
 		case "entityId": {
 			return `${output.entity}IdArbitrary`;
 		}
+		case "function": {
+			// Functions can't be meaningfully generated as arbitraries
+			return "fc.constant(() => {})";
+		}
 		case "generic": {
 			return `${output.name}Arbitrary`;
 		}
@@ -78,13 +82,15 @@ export const outputToArbitrary = (output: OutputTypeRef): string => {
 				case "string": {
 					return "fc.string()";
 				}
+				case "unknown": {
+					return "fc.anything()";
+				}
 				case "void": {
 					return "fc.constant(undefined)";
 				}
-				default: {
-					return "fc.string()";
-				}
 			}
+			// Exhaustive switch above, but satisfying no-fallthrough
+			return "fc.string()";
 		}
 		case "type": {
 			return `${output.name}Arbitrary`;
@@ -101,10 +107,6 @@ export const outputToArbitrary = (output: OutputTypeRef): string => {
 		}
 		case "valueObject": {
 			return `${output.name}Arbitrary`;
-		}
-		case "function": {
-			// Functions can't be meaningfully generated as arbitraries
-			return "fc.constant(() => {})";
 		}
 		default: {
 			const _exhaustive: never = output;
@@ -130,15 +132,15 @@ export const collectArbitraryImports = (
 		case "entityId": {
 			return [`${output.entity}IdArbitrary`];
 		}
-		case "generic": {
-			// Include arbitrary for generic types like StepBuilder<T> -> StepBuilderArbitrary
-			return [`${output.name}Arbitrary`];
-		}
 		case "function":
 		case "primitive":
 		case "typeParam":
 		case "union": {
 			return [];
+		}
+		case "generic": {
+			// Include arbitrary for generic types like StepBuilder<T> -> StepBuilderArbitrary
+			return [`${output.name}Arbitrary`];
 		}
 		case "optional": {
 			return collectArbitraryImports(output.inner);

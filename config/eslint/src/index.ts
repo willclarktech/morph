@@ -142,6 +142,23 @@ const ruleOverridesConfig: Linter.Config = {
 const testFileConfig: Linter.Config = {
 	files: testFiles,
 	...(functionalPlugin.configs.off as Linter.Config),
+	rules: {
+		...(functionalPlugin.configs.off as Linter.Config).rules,
+		"@typescript-eslint/no-confusing-void-expression": "off",
+		"@typescript-eslint/no-empty-function": "off",
+		"@typescript-eslint/no-explicit-any": "off",
+		"@typescript-eslint/no-non-null-assertion": "off",
+		"@typescript-eslint/no-require-imports": "off",
+		"@typescript-eslint/no-unsafe-argument": "off",
+		"@typescript-eslint/no-unsafe-assignment": "off",
+		"@typescript-eslint/no-unsafe-call": "off",
+		"@typescript-eslint/no-unsafe-member-access": "off",
+		"@typescript-eslint/no-unsafe-return": "off",
+		"@typescript-eslint/require-await": "off",
+		"no-empty": "off",
+		"unicorn/no-null": "off",
+		"unicorn/prevent-abbreviations": "off",
+	},
 };
 
 /**
@@ -168,6 +185,7 @@ const perfectionistOverridesConfig: Linter.Config = {
 		"perfectionist/sort-interfaces": "off",
 		"perfectionist/sort-intersection-types": "off",
 		"perfectionist/sort-modules": "off",
+		"perfectionist/sort-object-types": "off",
 		"perfectionist/sort-objects": "off",
 		"perfectionist/sort-union-types": "off",
 		// Keep: sort-imports, sort-named-imports, sort-named-exports

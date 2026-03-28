@@ -1,8 +1,8 @@
 import { Layer } from "effect";
 
 import { CreateApiKeyHandlerLive } from "./create-apikey";
-import { ValidateApiKeyHandlerLive } from "./validate-apikey";
 import { RevokeApiKeyHandlerLive } from "./revoke-apikey";
+import { ValidateApiKeyHandlerLive } from "./validate-apikey";
 
 /**
  * Combined layer for all auth-apikey handlers.

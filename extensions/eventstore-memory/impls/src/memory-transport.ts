@@ -1,6 +1,6 @@
-import { Effect, Ref } from "effect";
-
 import type { EventStoreTransport } from "@morph/eventstore-dsl";
+
+import { Effect, Ref } from "effect";
 
 interface StoredEvent {
 	readonly data: string;
@@ -27,8 +27,8 @@ export const createMemoryEventStoreTransport =
 						try {
 							const parsed = JSON.parse(data) as {
 								_tag?: string;
-								occurredAt?: string;
 								aggregateId?: string;
+								occurredAt?: string;
 							};
 							tag = parsed._tag ?? "";
 							occurredAt = parsed.occurredAt ?? "";
@@ -40,21 +40,25 @@ export const createMemoryEventStoreTransport =
 					}),
 
 				getAll: () =>
-					Ref.get(store).pipe(Effect.map((list) => list.map((ev) => ev.data))),
+					Ref.get(store).pipe(
+						Effect.map((list) => list.map((event) => event.data)),
+					),
 
 				getByAggregateId: (aggregateId) =>
 					Ref.get(store).pipe(
 						Effect.map((list) =>
 							list
-								.filter((ev) => ev.aggregateId === aggregateId)
-								.map((ev) => ev.data),
+								.filter((event) => event.aggregateId === aggregateId)
+								.map((event) => event.data),
 						),
 					),
 
 				getByTag: (tag) =>
 					Ref.get(store).pipe(
 						Effect.map((list) =>
-							list.filter((ev) => ev.tag === tag).map((ev) => ev.data),
+							list
+								.filter((event) => event.tag === tag)
+								.map((event) => event.data),
 						),
 					),
 
@@ -62,8 +66,8 @@ export const createMemoryEventStoreTransport =
 					Ref.get(store).pipe(
 						Effect.map((list) =>
 							list
-								.filter((ev) => ev.occurredAt > timestamp)
-								.map((ev) => ev.data),
+								.filter((event) => event.occurredAt > timestamp)
+								.map((event) => event.data),
 						),
 					),
 			};

@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
-
 import type { DomainSchema } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import { generatePorts } from "./ports";
 
@@ -111,7 +111,7 @@ describe("generatePorts", () => {
 	test("generates Effect return types for methods", () => {
 		const output = generatePorts(withPort, { packageScope: "test" });
 		expect(output).toContain("Effect.Effect<string, NotFoundError>");
-		expect(output).toContain("Effect.Effect<void, never>");
+		expect(output).toContain("Effect.Effect<void>");
 	});
 
 	test("generates Context.GenericTag with package scope", () => {

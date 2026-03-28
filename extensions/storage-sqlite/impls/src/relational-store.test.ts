@@ -1,13 +1,17 @@
-import { describe, expect, test } from "bun:test";
 import { Database } from "bun:sqlite";
+import { describe, expect, test } from "bun:test";
 import { Effect } from "effect";
-
-import { createRelationalSqliteStore } from "./relational-store";
+import { unlinkSync } from "node:fs";
 
 import type { RelationalTableConfig } from "./relational-store";
 
+import { createRelationalSqliteStore } from "./relational-store";
+
 const run = <T>(effect: Effect.Effect<T, unknown>) =>
-	Effect.runPromise(effect.pipe(Effect.orDie) as Effect.Effect<T>);
+	Effect.runPromise(effect.pipe(Effect.orDie));
+
+const parse = (json: string): Record<string, unknown> =>
+	JSON.parse(json) as Record<string, unknown>;
 
 const simpleConfig: RelationalTableConfig = {
 	tableName: "items",
@@ -54,8 +58,8 @@ const fullConfig: RelationalTableConfig = {
 
 describe("createRelationalSqliteStore", () => {
 	const makeStore = (config: RelationalTableConfig) => {
-		const db = new Database(":memory:");
-		return createRelationalSqliteStore(db, config);
+		const database = new Database(":memory:");
+		return createRelationalSqliteStore(database, config);
 	};
 
 	describe("basic CRUD", () => {
@@ -70,7 +74,7 @@ describe("createRelationalSqliteStore", () => {
 			await run(store.put("1", data));
 			const result = await run(store.get("1"));
 			expect(result).toBeDefined();
-			expect(JSON.parse(result!)).toEqual({
+			expect(parse(result!)).toEqual({
 				id: "1",
 				title: "Hello",
 				count: 42,
@@ -99,7 +103,7 @@ describe("createRelationalSqliteStore", () => {
 				),
 			);
 			const result = await run(store.get("1"));
-			expect(JSON.parse(result!)).toEqual({
+			expect(parse(result!)).toEqual({
 				id: "1",
 				title: "v2",
 				count: 2,
@@ -141,11 +145,8 @@ describe("createRelationalSqliteStore", () => {
 			const result = await run(store.getAll());
 			expect(result.items).toHaveLength(2);
 			expect(result.total).toBe(2);
-			const parsed = result.items.map((s) => JSON.parse(s));
-			expect(parsed.map((p: { title: string }) => p.title).sort()).toEqual([
-				"a",
-				"b",
-			]);
+			const parsed = result.items.map((s) => parse(s));
+			expect(parsed.map((p) => p["title"]).sort()).toEqual(["a", "b"]);
 		});
 	});
 
@@ -158,8 +159,8 @@ describe("createRelationalSqliteStore", () => {
 					JSON.stringify({ id: "1", title: "t", count: 0, active: true }),
 				),
 			);
-			const result = JSON.parse((await run(store.get("1")))!);
-			expect(result.active).toBe(true);
+			const result = parse((await run(store.get("1")))!);
+			expect(result["active"]).toBe(true);
 		});
 
 		test("false stores as 0, reads as false", async () => {
@@ -170,8 +171,8 @@ describe("createRelationalSqliteStore", () => {
 					JSON.stringify({ id: "1", title: "t", count: 0, active: false }),
 				),
 			);
-			const result = JSON.parse((await run(store.get("1")))!);
-			expect(result.active).toBe(false);
+			const result = parse((await run(store.get("1")))!);
+			expect(result["active"]).toBe(false);
 		});
 	});
 
@@ -188,8 +189,8 @@ describe("createRelationalSqliteStore", () => {
 				userId: "u1",
 			};
 			await run(store.put("t1", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("t1")))!);
-			expect(result.dueDate).toEqual({
+			const result = parse((await run(store.get("t1")))!);
+			expect(result["dueDate"]).toEqual({
 				date: "2025-01-15",
 				timezone: "America/New_York",
 			});
@@ -206,8 +207,8 @@ describe("createRelationalSqliteStore", () => {
 				userId: "u1",
 			};
 			await run(store.put("t1", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("t1")))!);
-			expect(result.dueDate).toBeUndefined();
+			const result = parse((await run(store.get("t1")))!);
+			expect(result["dueDate"]).toBeUndefined();
 		});
 	});
 
@@ -223,8 +224,8 @@ describe("createRelationalSqliteStore", () => {
 				userId: "u1",
 			};
 			await run(store.put("t1", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("t1")))!);
-			expect(result.priority).toBe("medium");
+			const result = parse((await run(store.get("t1")))!);
+			expect(result["priority"]).toBe("medium");
 		});
 
 		test("invalid union value rejected", async () => {
@@ -256,8 +257,8 @@ describe("createRelationalSqliteStore", () => {
 				userId: "u1",
 			};
 			await run(store.put("t1", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("t1")))!);
-			expect(result.tags).toEqual(["work", "urgent"]);
+			const result = parse((await run(store.get("t1")))!);
+			expect(result["tags"]).toEqual(["work", "urgent"]);
 		});
 
 		test("empty array roundtrips", async () => {
@@ -271,8 +272,8 @@ describe("createRelationalSqliteStore", () => {
 				userId: "u1",
 			};
 			await run(store.put("t1", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("t1")))!);
-			expect(result.tags).toEqual([]);
+			const result = parse((await run(store.get("t1")))!);
+			expect(result["tags"]).toEqual([]);
 		});
 
 		test("updating entity replaces array children", async () => {
@@ -290,8 +291,8 @@ describe("createRelationalSqliteStore", () => {
 			const v2 = { ...v1, tags: ["gamma"] };
 			await run(store.put("t1", JSON.stringify(v2)));
 
-			const result = JSON.parse((await run(store.get("t1")))!);
-			expect(result.tags).toEqual(["gamma"]);
+			const result = parse((await run(store.get("t1")))!);
+			expect(result["tags"]).toEqual(["gamma"]);
 		});
 
 		test("removing entity cascades to children", async () => {
@@ -338,11 +339,11 @@ describe("createRelationalSqliteStore", () => {
 				),
 			);
 			const result = await run(store.getAll());
-			const parsed = result.items.map((s) => JSON.parse(s));
-			const t1 = parsed.find((p: { id: string }) => p.id === "t1");
-			const t2 = parsed.find((p: { id: string }) => p.id === "t2");
-			expect(t1.tags).toEqual(["x"]);
-			expect(t2.tags).toEqual(["y", "z"]);
+			const parsed = result.items.map((s) => parse(s));
+			const t1 = parsed.find((p) => p["id"] === "t1");
+			const t2 = parsed.find((p) => p["id"] === "t2");
+			expect(t1!["tags"]).toEqual(["x"]);
+			expect(t2!["tags"]).toEqual(["y", "z"]);
 		});
 	});
 
@@ -364,7 +365,7 @@ describe("createRelationalSqliteStore", () => {
 			);
 			const result = await run(store.findByIndex("userId", "user-1"));
 			expect(result).toBeDefined();
-			expect(JSON.parse(result!).id).toBe("t1");
+			expect(parse(result!)["id"]).toBe("t1");
 		});
 
 		test("findAllByIndex returns all matches", async () => {
@@ -448,8 +449,8 @@ describe("createRelationalSqliteStore", () => {
 			const store = makeStore(stiConfig);
 			const data = { id: "s1", shape: { kind: "circle", radius: 5 } };
 			await run(store.put("s1", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("s1")))!);
-			expect(result.shape).toEqual({ kind: "circle", radius: 5 });
+			const result = parse((await run(store.get("s1")))!);
+			expect(result["shape"]).toEqual({ kind: "circle", radius: 5 });
 		});
 
 		test("rectangle variant roundtrip", async () => {
@@ -459,8 +460,8 @@ describe("createRelationalSqliteStore", () => {
 				shape: { kind: "rectangle", width: 10, height: 20 },
 			};
 			await run(store.put("s2", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("s2")))!);
-			expect(result.shape).toEqual({
+			const result = parse((await run(store.get("s2")))!);
+			expect(result["shape"]).toEqual({
 				kind: "rectangle",
 				width: 10,
 				height: 20,
@@ -470,9 +471,9 @@ describe("createRelationalSqliteStore", () => {
 
 	describe("schema reconciliation", () => {
 		test("creates table on first use", () => {
-			const db = new Database(":memory:");
-			createRelationalSqliteStore(db, simpleConfig);
-			const tables = db
+			const database = new Database(":memory:");
+			createRelationalSqliteStore(database, simpleConfig);
+			const tables = database
 				.query<{ name: string }, []>(
 					"SELECT name FROM sqlite_master WHERE type='table'",
 				)
@@ -482,9 +483,9 @@ describe("createRelationalSqliteStore", () => {
 		});
 
 		test("creates child tables", () => {
-			const db = new Database(":memory:");
-			createRelationalSqliteStore(db, fullConfig);
-			const tables = db
+			const database = new Database(":memory:");
+			createRelationalSqliteStore(database, fullConfig);
+			const tables = database
 				.query<{ name: string }, []>(
 					"SELECT name FROM sqlite_master WHERE type='table'",
 				)
@@ -495,21 +496,21 @@ describe("createRelationalSqliteStore", () => {
 		});
 
 		test("creates indexes", () => {
-			const db = new Database(":memory:");
-			createRelationalSqliteStore(db, fullConfig);
-			const indexes = db
+			const database = new Database(":memory:");
+			createRelationalSqliteStore(database, fullConfig);
+			const indexes = database
 				.query<{ name: string }, []>(
 					"SELECT name FROM sqlite_master WHERE type='index' AND name NOT LIKE 'sqlite_%'",
 				)
 				.all()
-				.map((i) => i.name);
+				.map((index) => index.name);
 			expect(indexes).toContain("idx_todos_user_id");
 		});
 
 		test("column names use snake_case with __ nesting", () => {
-			const db = new Database(":memory:");
-			createRelationalSqliteStore(db, fullConfig);
-			const cols = db
+			const database = new Database(":memory:");
+			createRelationalSqliteStore(database, fullConfig);
+			const cols = database
 				.query<{ name: string }, []>("PRAGMA table_info(todos)")
 				.all()
 				.map((c) => c.name);
@@ -522,9 +523,9 @@ describe("createRelationalSqliteStore", () => {
 		});
 
 		test("child table uses parent_id column", () => {
-			const db = new Database(":memory:");
-			createRelationalSqliteStore(db, fullConfig);
-			const cols = db
+			const database = new Database(":memory:");
+			createRelationalSqliteStore(database, fullConfig);
+			const cols = database
 				.query<{ name: string }, []>("PRAGMA table_info(todo_tags)")
 				.all()
 				.map((c) => c.name);
@@ -553,9 +554,9 @@ describe("createRelationalSqliteStore", () => {
 				],
 				indexes: [],
 			};
-			const db = new Database(":memory:");
-			createRelationalSqliteStore(db, stiConfig);
-			const cols = db
+			const database = new Database(":memory:");
+			createRelationalSqliteStore(database, stiConfig);
+			const cols = database
 				.query<{ name: string }, []>("PRAGMA table_info(shapes)")
 				.all()
 				.map((c) => c.name);
@@ -568,8 +569,10 @@ describe("createRelationalSqliteStore", () => {
 		});
 
 		test("adds new columns to existing table", () => {
-			const db = new Database(":memory:");
-			db.run("CREATE TABLE items (id TEXT PRIMARY KEY, title TEXT NOT NULL)");
+			const database = new Database(":memory:");
+			database.run(
+				"CREATE TABLE items (id TEXT PRIMARY KEY, title TEXT NOT NULL)",
+			);
 			const extendedConfig: RelationalTableConfig = {
 				...simpleConfig,
 				fields: [
@@ -577,8 +580,8 @@ describe("createRelationalSqliteStore", () => {
 					{ name: "extra", type: { kind: "string" }, nullable: true },
 				],
 			};
-			createRelationalSqliteStore(db, extendedConfig);
-			const cols = db
+			createRelationalSqliteStore(database, extendedConfig);
+			const cols = database
 				.query<{ name: string }, []>("PRAGMA table_info(items)")
 				.all()
 				.map((c) => c.name);
@@ -586,8 +589,8 @@ describe("createRelationalSqliteStore", () => {
 		});
 
 		test("adds NOT NULL column with default to existing rows", async () => {
-			const db = new Database(":memory:");
-			const store1 = createRelationalSqliteStore(db, simpleConfig);
+			const database = new Database(":memory:");
+			const store1 = createRelationalSqliteStore(database, simpleConfig);
 			await run(
 				store1.put(
 					"1",
@@ -601,33 +604,39 @@ describe("createRelationalSqliteStore", () => {
 					{ name: "extra", type: { kind: "string" } },
 				],
 			};
-			const store2 = createRelationalSqliteStore(db, extendedConfig);
+			const store2 = createRelationalSqliteStore(database, extendedConfig);
 			const result = await run(store2.get("1"));
 			expect(result).toBeDefined();
-			const parsed = JSON.parse(result!);
-			expect(parsed.extra).toBe("");
+			const parsed = parse(result!);
+			expect(parsed["extra"]).toBe("");
 		});
 
 		test("WAL mode is enabled", () => {
-			const tmpPath = `${import.meta.dir}/test-wal-${Date.now()}.db`;
-			const db = new Database(tmpPath, { create: true });
+			const temporaryPath = `${import.meta.dir}/test-wal-${Date.now()}.db`;
+			const database = new Database(temporaryPath, { create: true });
 			try {
-				createRelationalSqliteStore(db, simpleConfig);
-				const mode = db
+				createRelationalSqliteStore(database, simpleConfig);
+				const mode = database
 					.query<{ journal_mode: string }, []>("PRAGMA journal_mode")
 					.get();
 				expect(mode?.journal_mode).toBe("wal");
 			} finally {
-				db.close();
+				database.close();
 				try {
-					require("fs").unlinkSync(tmpPath);
-				} catch {}
+					unlinkSync(temporaryPath);
+				} catch {
+					// Ignore cleanup errors
+				}
 				try {
-					require("fs").unlinkSync(`${tmpPath}-wal`);
-				} catch {}
+					unlinkSync(`${temporaryPath}-wal`);
+				} catch {
+					// Ignore cleanup errors
+				}
 				try {
-					require("fs").unlinkSync(`${tmpPath}-shm`);
-				} catch {}
+					unlinkSync(`${temporaryPath}-shm`);
+				} catch {
+					// Ignore cleanup errors
+				}
 			}
 		});
 	});
@@ -645,7 +654,7 @@ describe("createRelationalSqliteStore", () => {
 			const store = makeStore(keywordConfig);
 			const data = { id: "o1", status: "pending", total: 42.5 };
 			await run(store.put("o1", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("o1")))!);
+			const result = parse((await run(store.get("o1")))!);
 			expect(result).toEqual({ id: "o1", status: "pending", total: 42.5 });
 		});
 
@@ -666,8 +675,8 @@ describe("createRelationalSqliteStore", () => {
 			const store = makeStore(quoteConfig);
 			const data = { id: "1", label: "it's" };
 			await run(store.put("1", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("1")))!);
-			expect(result.label).toBe("it's");
+			const result = parse((await run(store.get("1")))!);
+			expect(result["label"]).toBe("it's");
 		});
 	});
 
@@ -699,8 +708,8 @@ describe("createRelationalSqliteStore", () => {
 			const store = makeStore(config);
 			const data = { id: "e1", payload: { type: "click", x: 10, y: 20 } };
 			await run(store.put("e1", JSON.stringify(data)));
-			const result = JSON.parse((await run(store.get("e1")))!);
-			expect(result.payload).toEqual({ type: "click", x: 10, y: 20 });
+			const result = parse((await run(store.get("e1")))!);
+			expect(result["payload"]).toEqual({ type: "click", x: 10, y: 20 });
 		});
 	});
 });

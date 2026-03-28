@@ -9,7 +9,7 @@ import type {
 	StorageBackend,
 } from "@morph/domain-schema";
 
-import { indent, sep, toKebabCase, toPascalCase } from "@morph/utils";
+import { indent, separator, toKebabCase, toPascalCase } from "@morph/utils";
 
 /**
  * Aggregate root entry with name and entity definition.
@@ -117,7 +117,7 @@ export const generateStorageLayers = (
 				(entry) =>
 					`Layer.succeed(${toPascalCase(entry.name)}Repository, ${entry.name.toLowerCase()}Repo)`,
 			),
-		].join(sep(2, ","));
+		].join(separator(2, ","));
 		return `Layer.mergeAll(\n\t\t${args},\n\t)`;
 	};
 
@@ -184,7 +184,7 @@ ${indent(storeLines.join("\n"), 2)}
 			const lower = entry.name.toLowerCase();
 			const pascal = toPascalCase(entry.name);
 			storeLines.push(
-				`const ${lower}Store = createRelationalSqliteStore(db, ${lower}RelationalConfig);`,
+				`const ${lower}Store = createRelationalSqliteStore(database, ${lower}RelationalConfig);`,
 			);
 			storeLines.push(
 				`const ${lower}Repo = create${pascal}RepositoryAdapter(${lower}Store);`,
@@ -196,7 +196,7 @@ ${indent(storeLines.join("\n"), 2)}
  */
 export const createSqliteLayers = () =>
 \tEffect.gen(function* () {
-\t\tconst db = yield* openSqliteDatabase(${sqlitePath});
+\t\tconst database = yield* openSqliteDatabase(${sqlitePath});
 ${indent(storeLines.join("\n"), 2)}
 
 \t\treturn ${buildLayerMerge(aggregateRootEntries)};

@@ -1,9 +1,8 @@
-import { Effect } from "effect";
-
 import type { EventStoreTransport } from "@morph/eventstore-dsl";
 
 import { EventStoreOperationError } from "@morph/eventstore-dsl";
 import { jsonParse, jsonStringify } from "@morph/utils";
+import { Effect } from "effect";
 
 /**
  * Shape of a typed event store — matches generated EventStore interface.

@@ -11,22 +11,31 @@ import {
 	formatTypeParams,
 	hasFunctionFields,
 	hasTypeParameters,
-} from "./type-utils";
+} from "./type-utilities";
 
 const typeRefReferencesName = (ref: TypeRef, name: string): boolean => {
 	switch (ref.kind) {
-		case "type":
-		case "entity":
-		case "valueObject":
-			return ref.name === name;
-		case "array":
+		case "array": {
 			return typeRefReferencesName(ref.element, name);
-		case "optional":
-			return typeRefReferencesName(ref.inner, name);
-		case "generic":
-			return ref.args.some((a) => typeRefReferencesName(a, name));
-		default:
+		}
+		case "entity":
+		case "type":
+		case "valueObject": {
+			return ref.name === name;
+		}
+		case "entityId":
+		case "function":
+		case "primitive":
+		case "typeParam":
+		case "union": {
 			return false;
+		}
+		case "generic": {
+			return ref.args.some((a) => typeRefReferencesName(a, name));
+		}
+		case "optional": {
+			return typeRefReferencesName(ref.inner, name);
+		}
 	}
 };
 
@@ -58,9 +67,9 @@ export const generateProductTypeSchema = (
 	}
 
 	// Generic types: generate schema factory, derive type from it
-	if (hasTypeParameters(typeDef)) {
-		const typeParams = typeDef.typeParameters!;
-		const ctx = buildSchemaContext(typeParams);
+	if (hasTypeParameters(typeDef) && typeDef.typeParameters) {
+		const typeParams = typeDef.typeParameters;
+		const context = buildSchemaContext(typeParams);
 
 		const schemaTypeParams = typeParams.map(formatTypeParam).join(", ");
 		const schemaParams = formatSchemaParams(typeParams);
@@ -69,7 +78,7 @@ export const generateProductTypeSchema = (
 		const schemaFields = indent(
 			Object.entries(typeDef.fields)
 				.map(([fieldName, fieldDef]) => {
-					const schema = typeRefToSchema(fieldDef.type, ctx);
+					const schema = typeRefToSchema(fieldDef.type, context);
 					const optionalWrapper = fieldDef.optional ? "S.optional(" : "";
 					const optionalClose = fieldDef.optional ? ")" : "";
 					return `${fieldName}: ${optionalWrapper}${schema}${optionalClose},`;

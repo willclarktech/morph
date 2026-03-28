@@ -112,7 +112,7 @@ export const generateServicesBarrel = (
 
 	// Determine which storage creation function to use for InMemoryLayer
 	const hasInMemoryLayer = hasMemory || hasEventsourced;
-	const storageCreatorFn = hasMemory
+	const storageCreatorFunction = hasMemory
 		? "createInMemoryLayers"
 		: "createEventsourcedLayers";
 	const storageCreatorImport = hasMemory
@@ -150,8 +150,8 @@ export const generateServicesBarrel = (
 			// For memory: storage is independent, event store created after
 			const storageLayerLine =
 				hasEventsourced && hasEventStoreLayer
-					? `const storageLayer = yield* ${storageCreatorFn}().pipe(Effect.provide(eventStoreLayer));`
-					: `const storageLayer = yield* ${storageCreatorFn}();`;
+					? `const storageLayer = yield* ${storageCreatorFunction}().pipe(Effect.provide(eventStoreLayer));`
+					: `const storageLayer = yield* ${storageCreatorFunction}();`;
 			const eventStoreLayerLine = hasEventStoreLayer
 				? "const eventStoreLayer = yield* createInMemoryEventStore();"
 				: "";
@@ -162,13 +162,13 @@ export const generateServicesBarrel = (
 					? [eventStoreLayerLine, storageLayerLine].filter(Boolean)
 					: [storageLayerLine, eventStoreLayerLine].filter(Boolean);
 
-			const mergeArgs = [
+			const mergeArguments = [
 				"storageLayer",
 				...(hasEvents ? ["EventEmitterInMemory"] : []),
 				...(hasEventStoreLayer ? ["eventStoreLayer"] : []),
 				...(hasSubscribers ? ["EventSubscriberRegistry"] : []),
 			]
-				.map((arg) => `\t\t\t\t${arg},`)
+				.map((argument) => `\t\t\t\t${argument},`)
 				.join("\n");
 
 			const setupCode = setupLines.map((l) => `\t\t${l}`).join("\n");
@@ -182,7 +182,7 @@ export const InMemoryLayer = Layer.unwrapEffect(
 	Effect.gen(function* () {
 ${setupCode}
 \t\treturn Layer.mergeAll(
-${mergeArgs}
+${mergeArguments}
 \t\t);
 \t}),
 );`;
@@ -192,7 +192,7 @@ ${mergeArgs}
  * Composed layer with all InMemory implementations.
  * Replace with production layers in real applications.
  */
-export const InMemoryLayer = Layer.unwrapEffect(${storageCreatorFn}());`;
+export const InMemoryLayer = Layer.unwrapEffect(${storageCreatorFunction}());`;
 		}
 	}
 

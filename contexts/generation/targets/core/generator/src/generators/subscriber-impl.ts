@@ -23,7 +23,7 @@ export const generateSubscriberImpl = (
 		"",
 		'import { Effect, Layer } from "effect";',
 		"",
-		`import { ${subscriberName} } from "./index";`,
+		`import { ${subscriberName} } from ".";`,
 		"",
 	].join("\n");
 

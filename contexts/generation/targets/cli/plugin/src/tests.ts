@@ -6,7 +6,7 @@ import {
 	getParamNames,
 	getSensitiveNames,
 } from "@morph/builder-test";
-import { indent, toKebabCase, toPascalCase } from "@morph/utils";
+import { indent, sortImports, toKebabCase, toPascalCase } from "@morph/utils";
 import { schemaHasAuthRequirement } from "@morph/domain-schema";
 
 interface ContextPackages {
@@ -79,11 +79,17 @@ export const generateCliScenarioTest = (
 			? `const prose = ${toPascalCase(contexts[0]!.contextName)}Prose;`
 			: `const prose = {\n${contexts.map((ctx) => `\t...${toPascalCase(ctx.contextName)}Prose,`).join("\n")}\n};`;
 
-	return `import { createCliRunner } from "@morph/scenario-runner-cli";
-${proseImports}
-import { scenarios } from "${scenariosPackage}";
-import { expect, test } from "bun:test";
-import path from "node:path";
+	const imports = sortImports(
+		[
+			`import { createCliRunner } from "@morph/scenario-runner-cli";`,
+			proseImports,
+			`import { scenarios } from "${scenariosPackage}";`,
+			`import { expect, test } from "bun:test";`,
+			`import path from "node:path";`,
+		].join("\n"),
+	);
+
+	return `${imports}
 
 ${proseMerge}
 

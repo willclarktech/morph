@@ -1,14 +1,13 @@
 import type { InvariantDef } from "@morph/domain-schema";
 
+import { indent, lines, separator } from "@morph/utils";
 import { stripIndent } from "common-tags";
 
-import { indent, lines, sep } from "@morph/utils";
-
-import { inferContextFields } from "./invariants/context";
 import {
 	conditionReferencesCurrentUser,
 	conditionReferencesInput,
 } from "./invariants";
+import { inferContextFields } from "./invariants/context";
 
 const generateInvariantCall = (inv: InvariantDef): string => {
 	if (inv.scope.kind === "context") {
@@ -21,7 +20,9 @@ const generateInvariantCall = (inv: InvariantDef): string => {
 };
 
 const generateEventBlock = (eventName: string): string => stripIndent`
+	/* eslint-disable @typescript-eslint/no-unnecessary-condition -- defensive check for generic result type */
 	const aggregateId${eventName} = typeof result === "object" && result !== null && "id" in (result as Record<string, unknown>) ? String((result as Record<string, unknown>)["id"]) : "";
+	/* eslint-enable @typescript-eslint/no-unnecessary-condition */
 	const version${eventName} = aggregateId${eventName} ? (yield* eventStore.getByAggregateId(aggregateId${eventName})).length + 1 : 1;
 	const event${eventName} = {
 		_tag: "${eventName}",
@@ -41,7 +42,7 @@ const generateEventBlock = (eventName: string): string => stripIndent`
  * Collects all property accesses on `currentUser` across all invariants.
  */
 const inferCurrentUserType = (invariants: readonly InvariantDef[]): string => {
-	const allProps = new Set<string>();
+	const allProperties = new Set<string>();
 	for (const inv of invariants) {
 		if (inv.scope.kind !== "context") continue;
 		const contextFields = inferContextFields(inv.condition);
@@ -55,13 +56,13 @@ const inferCurrentUserType = (invariants: readonly InvariantDef[]): string => {
 			);
 			for (const match of propMatches) {
 				if (match[1] !== undefined) {
-					allProps.add(match[1]);
+					allProperties.add(match[1]);
 				}
 			}
 		}
 	}
-	if (allProps.size === 0) return "{ readonly id: unknown }";
-	return `{ ${[...allProps].map((p) => `readonly ${p}: unknown`).join("; ")} }`;
+	if (allProperties.size === 0) return "{ readonly id: unknown }";
+	return `{ ${[...allProperties].map((p) => `readonly ${p}: unknown`).join("; ")} }`;
 };
 
 /**
@@ -127,12 +128,15 @@ export const generateExecuteWithInvariants = (
 
 	const eventBlocks =
 		eventNames.length > 0
-			? eventNames.map((name) => generateEventBlock(name)).join(sep(3, "\n"))
+			? eventNames
+					.map((name) => generateEventBlock(name))
+					.join(separator(3, "\n"))
 			: undefined;
 
+	const needsAuthService = requiresAuth || hasContextScopedInvariants;
 	const bodyLines = lines([
 		`const handler = yield* ${handlerName};`,
-		`const authService = yield* AuthService;`,
+		needsAuthService ? `const authService = yield* AuthService;` : undefined,
 		eventServicesBlock,
 		"",
 		authBlock,
@@ -163,7 +167,9 @@ export const generateExecuteWithEvents = (
 	const eventBlocks = eventNames
 		.map(
 			(eventName) => stripIndent`
-			const aggregateId${eventName} = typeof result === "object" && result !== null && "id" in (result as Record<string, unknown>) ? String((result as Record<string, unknown>)["id"]) : "";
+			/* eslint-disable @typescript-eslint/no-unnecessary-condition -- defensive check for generic result type */
+	const aggregateId${eventName} = typeof result === "object" && result !== null && "id" in (result as Record<string, unknown>) ? String((result as Record<string, unknown>)["id"]) : "";
+			/* eslint-enable @typescript-eslint/no-unnecessary-condition */
 			const version${eventName} = aggregateId${eventName} ? (yield* eventStore.getByAggregateId(aggregateId${eventName})).length + 1 : 1;
 			const event${eventName} = {
 				_tag: "${eventName}",
@@ -184,7 +190,7 @@ export const generateExecuteWithEvents = (
 			yield* eventStore.append(event${eventName});
 		`,
 		)
-		.join(sep(3, "\n"));
+		.join(separator(3, "\n"));
 
 	return `Effect.gen(function* () {
 			const handler = yield* ${handlerName};

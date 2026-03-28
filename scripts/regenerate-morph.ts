@@ -18,13 +18,23 @@ import {
 	writeFileSync,
 } from "node:fs";
 import path from "node:path";
+// eslint-disable-next-line import/default -- prettier uses CJS-compat exports that confuse static analysis
+import prettier from "prettier";
 
-import type { ContractDef } from "../contexts/generation/domain-schema/src/schemas";
-import type { DomainSchema } from "../contexts/generation/domain-schema/src/schemas";
+import type {
+	ContractDef,
+	DomainSchema,
+} from "../contexts/generation/domain-schema/src/schemas";
 
 import { parseSchema } from "../contexts/generation/domain-schema/src/schemas";
 import { generateContractTests } from "../contexts/generation/generators/contracts/src/index";
 import { executeGenerate } from "../contexts/generation/impls/src/generate";
+import { sortFileImports } from "../contexts/generation/utils/src/imports";
+import {
+	compile,
+	compileContract,
+} from "../contexts/schema-dsl/compiler/src/index";
+import { parse } from "../contexts/schema-dsl/parser/src/index";
 
 const ROOT_DIR = path.join(import.meta.dir, "..");
 const MORPH_DIR = ROOT_DIR;
@@ -41,27 +51,23 @@ const compileMorphSchema = (): DomainSchema | undefined => {
 	console.info("Compiling schema.morph...");
 
 	try {
-		const { parse } =
-			require("../contexts/schema-dsl/parser/src/index") as typeof import("@morph/schema-dsl-parser");
-		const { compile } =
-			require("../contexts/schema-dsl/compiler/src/index") as typeof import("@morph/schema-dsl-compiler");
-
 		const source = readFileSync(SCHEMA_MORPH_PATH, "utf8");
 		const parseResult = parse(source);
 		if (parseResult.errors.length > 0) {
 			const msgs = parseResult.errors.map(
-				(e) =>
-					`  Line ${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+				(error) =>
+					`  Line ${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 			);
 			console.error(`Parse errors in schema.morph:\n${msgs.join("\n")}`);
 			return undefined;
 		}
 
-		const compileResult = compile(parseResult.ast!);
+		if (!parseResult.ast) return undefined;
+		const compileResult = compile(parseResult.ast);
 		if (compileResult.errors.length > 0) {
 			const msgs = compileResult.errors.map(
-				(e) =>
-					`  Line ${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+				(error) =>
+					`  Line ${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 			);
 			console.error(`Compile errors in schema.morph:\n${msgs.join("\n")}`);
 			return undefined;
@@ -88,48 +94,47 @@ const compileMorphSchema = (): DomainSchema | undefined => {
 const compileExtensionSchemas = (): void => {
 	console.info("Compiling extension schemas...");
 
-	const { parse } =
-		require("../contexts/schema-dsl/parser/src/index") as typeof import("@morph/schema-dsl-parser");
-	const { compile, compileContract } =
-		require("../contexts/schema-dsl/compiler/src/index") as typeof import("@morph/schema-dsl-compiler");
-
-	const extDirs = readdirSync(EXTENSIONS_DIR, { withFileTypes: true })
+	const extensionDirectories = readdirSync(EXTENSIONS_DIR, {
+		withFileTypes: true,
+	})
 		.filter((d) => d.isDirectory())
 		.map((d) => d.name);
 
-	for (const extName of extDirs) {
-		const morphPath = path.join(EXTENSIONS_DIR, extName, "schema.morph");
+	for (const extensionName of extensionDirectories) {
+		const morphPath = path.join(EXTENSIONS_DIR, extensionName, "schema.morph");
 		if (!existsSync(morphPath)) continue;
 
 		const source = readFileSync(morphPath, "utf8");
 		const parseResult = parse(source);
 		if (parseResult.errors.length > 0) {
 			const msgs = parseResult.errors.map(
-				(e) =>
-					`  Line ${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+				(error) =>
+					`  Line ${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 			);
 			console.error(
-				`Parse errors in ${extName}/schema.morph:\n${msgs.join("\n")}`,
+				`Parse errors in ${extensionName}/schema.morph:\n${msgs.join("\n")}`,
 			);
 			continue;
 		}
 
-		const ast = parseResult.ast!;
+		if (!parseResult.ast) continue;
+		const ast = parseResult.ast;
 		const compileResult = compile(ast);
 		if (compileResult.errors.length > 0) {
 			const msgs = compileResult.errors.map(
-				(e) =>
-					`  Line ${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+				(error) =>
+					`  Line ${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 			);
 			console.error(
-				`Compile errors in ${extName}/schema.morph:\n${msgs.join("\n")}`,
+				`Compile errors in ${extensionName}/schema.morph:\n${msgs.join("\n")}`,
 			);
 			continue;
 		}
 
+		if (!compileResult.schema) continue;
 		// Extract the single context as a flat fragment
-		const contextAst = ast.contexts[0]!;
-		const contextDef = compileResult.schema!.contexts[contextAst.name]!;
+		const contextAst = ast.contexts[0];
+		const contextDef = compileResult.schema.contexts[contextAst.name];
 
 		// Build extension JSON object (flat context fragment, not wrapped in domain)
 		const extensionJson: Record<string, unknown> = {
@@ -138,36 +143,36 @@ const compileExtensionSchemas = (): void => {
 		};
 
 		if (contextDef.dependencies.length > 0) {
-			extensionJson["dependencies"] = contextDef.dependencies;
+			extensionJson.dependencies = contextDef.dependencies;
 		}
 
 		// Only include non-empty optional collections
 		if (contextDef.ports && Object.keys(contextDef.ports).length > 0) {
-			extensionJson["ports"] = contextDef.ports;
+			extensionJson.ports = contextDef.ports;
 		}
 		if (contextDef.types && Object.keys(contextDef.types).length > 0) {
-			extensionJson["types"] = contextDef.types;
+			extensionJson.types = contextDef.types;
 		}
 		if (contextDef.errors && Object.keys(contextDef.errors).length > 0) {
-			extensionJson["errors"] = contextDef.errors;
+			extensionJson.errors = contextDef.errors;
 		}
 		if (contextDef.functions && Object.keys(contextDef.functions).length > 0) {
-			extensionJson["functions"] = contextDef.functions;
+			extensionJson.functions = contextDef.functions;
 		}
 
 		// Compile contracts from AST (not in ContextDef)
 		if (contextAst.contracts.length > 0) {
-			extensionJson["contracts"] = contextAst.contracts.map(compileContract);
+			extensionJson.contracts = contextAst.contracts.map(compileContract);
 		}
 
-		extensionJson["invariants"] = contextDef.invariants;
+		extensionJson.invariants = contextDef.invariants;
 
-		const jsonPath = path.join(EXTENSIONS_DIR, extName, "schema.json");
+		const jsonPath = path.join(EXTENSIONS_DIR, extensionName, "schema.json");
 		writeFileSync(
 			jsonPath,
 			JSON.stringify(extensionJson, undefined, "\t") + "\n",
 		);
-		console.info(`  Compiled: ${extName}/schema.json`);
+		console.info(`  Compiled: ${extensionName}/schema.json`);
 	}
 };
 
@@ -276,7 +281,7 @@ const copyScenariosFixtures = (): void => {
 /**
  * Get all generated package directories.
  */
-const getGeneratedPackageDirs = (): string[] => {
+const getGeneratedPackageDirectories = (): string[] => {
 	const dirs: string[] = [];
 
 	// Per-context DSL/core packages in contexts/
@@ -317,9 +322,9 @@ const getGeneratedPackageDirs = (): string[] => {
 const fixPackageJsonFiles = (): void => {
 	console.info("Fixing package.json files...");
 
-	const packageDirs = getGeneratedPackageDirs();
+	const packageDirectories = getGeneratedPackageDirectories();
 
-	for (const dir of packageDirs) {
+	for (const dir of packageDirectories) {
 		const packagePath = path.join(MORPH_DIR, dir, "package.json");
 		let content: string;
 		try {
@@ -342,9 +347,9 @@ const fixPackageJsonFiles = (): void => {
 const fixTsconfigFiles = (): void => {
 	console.info("Fixing tsconfig.json files...");
 
-	const packageDirs = getGeneratedPackageDirs();
+	const packageDirectories = getGeneratedPackageDirectories();
 
-	for (const dir of packageDirs) {
+	for (const dir of packageDirectories) {
 		const tsconfigPath = path.join(MORPH_DIR, dir, "tsconfig.json");
 		try {
 			readFileSync(tsconfigPath);
@@ -385,15 +390,22 @@ const fixVsCodeApp = async (): Promise<void> => {
 
 	try {
 		const impls = await import("../contexts/schema-dsl/impls/src/grammar");
+		const formatJson = async (object: unknown, filepath: string) =>
+			prettier.format(JSON.stringify(object), {
+				filepath,
+				...(await prettier.resolveConfig(filepath, { editorconfig: true })),
+			});
+		const langConfigPath = path.join(vscodePath, "language-configuration.json");
 		writeFileSync(
-			path.join(vscodePath, "language-configuration.json"),
-			JSON.stringify(impls.languageConfiguration, undefined, "\t") + "\n",
+			langConfigPath,
+			await formatJson(impls.languageConfiguration, langConfigPath),
 		);
 		const syntaxesDir = path.join(vscodePath, "syntaxes");
 		mkdirSync(syntaxesDir, { recursive: true });
+		const tmLangPath = path.join(syntaxesDir, "morph.tmLanguage.json");
 		writeFileSync(
-			path.join(syntaxesDir, "morph.tmLanguage.json"),
-			JSON.stringify(impls.textMateGrammar, undefined, "\t") + "\n",
+			tmLangPath,
+			await formatJson(impls.textMateGrammar, tmLangPath),
 		);
 	} catch {
 		console.info("  (grammar files will be written on next regeneration)");
@@ -403,17 +415,27 @@ const fixVsCodeApp = async (): Promise<void> => {
 /**
  * Fix eslint.config.ts files to use morph config.
  */
+const cliPackageDirectories = new Set(["apps/cli"]);
+const customEslintDirectories = new Set(["contexts/schema-dsl/core"]);
+
 const fixEslintConfigFiles = (): void => {
 	console.info("Fixing eslint.config.ts files...");
 
-	const packageDirs = getGeneratedPackageDirs();
+	const packageDirectories = getGeneratedPackageDirectories();
 
 	const eslintContent = `import { configs } from "@morph/eslint-config";
 
-export default configs.generated;
+export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated];
 `;
 
-	for (const dir of packageDirs) {
+	const cliEslintContent = `import { configs } from "@morph/eslint-config";
+
+export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated, ...configs.cli];
+`;
+
+	for (const dir of packageDirectories) {
+		if (customEslintDirectories.has(dir)) continue;
+
 		const eslintPath = path.join(MORPH_DIR, dir, "eslint.config.ts");
 		try {
 			readFileSync(eslintPath);
@@ -421,7 +443,10 @@ export default configs.generated;
 			continue;
 		}
 
-		writeFileSync(eslintPath, eslintContent);
+		writeFileSync(
+			eslintPath,
+			cliPackageDirectories.has(dir) ? cliEslintContent : eslintContent,
+		);
 	}
 };
 
@@ -851,8 +876,8 @@ const addCoreFixtureExports = (): void => {
 const fixImports = (): void => {
 	console.info("Fixing imports in TypeScript files...");
 
-	const packageDirs = getGeneratedPackageDirs();
-	const directories = packageDirs.map((dir) => `${dir}/src`);
+	const packageDirectories = getGeneratedPackageDirectories();
+	const directories = packageDirectories.map((dir) => `${dir}/src`);
 
 	for (const dir of directories) {
 		const fullDir = path.join(MORPH_DIR, dir);
@@ -896,6 +921,46 @@ const fixImports = (): void => {
 
 		fixFilesInDir(fullDir);
 	}
+};
+
+/**
+ * Sort imports in all generated TypeScript files.
+ * This is a post-processing step that ensures all generated files have
+ * correctly sorted imports matching perfectionist/sort-imports rules,
+ * regardless of which generator produced them.
+ */
+const sortAllGeneratedImports = (): void => {
+	console.info("Sorting imports in generated files...");
+
+	const packageDirectories = getGeneratedPackageDirectories();
+	let count = 0;
+
+	const processDir = (dirPath: string): void => {
+		if (!existsSync(dirPath)) return;
+		const entries = readdirSync(dirPath, { withFileTypes: true });
+		for (const entry of entries) {
+			const fullPath = path.join(dirPath, entry.name);
+			if (entry.isDirectory()) {
+				processDir(fullPath);
+			} else if (entry.name.endsWith(".ts")) {
+				const content = readFileSync(fullPath, "utf8");
+				const sorted = sortFileImports(content);
+				if (sorted !== content) {
+					writeFileSync(fullPath, sorted);
+					count++;
+				}
+			}
+		}
+	};
+
+	for (const dir of packageDirectories) {
+		processDir(path.join(MORPH_DIR, dir, "src"));
+	}
+
+	// Also process contract tests
+	processDir(path.join(MORPH_DIR, "tests/contracts/src"));
+
+	console.info(`  Sorted imports in ${count} file(s)`);
 };
 
 /**
@@ -957,7 +1022,10 @@ const main = async (): Promise<void> => {
 	// 12. Fix all imports
 	fixImports();
 
-	// 13. Run bun install
+	// 13. Sort imports in all generated files
+	sortAllGeneratedImports();
+
+	// 14. Run bun install
 	console.info("\nInstalling dependencies...");
 	const installResult = Bun.spawnSync(["bun", "install"], {
 		cwd: ROOT_DIR,
@@ -970,7 +1038,7 @@ const main = async (): Promise<void> => {
 		process.exit(1);
 	}
 
-	// 14. Run format:fix on @morph packages
+	// 15. Run format:fix on @morph packages
 	// Prettier handles formatting consistently; skip lint:fix to avoid
 	// issues with non-auto-fixable errors causing inconsistent behavior
 	console.info("\nRunning format:fix...");
@@ -991,7 +1059,9 @@ const main = async (): Promise<void> => {
 	console.info("\nMorph regenerated successfully!");
 };
 
-main().catch((error) => {
+try {
+	await main();
+} catch (error) {
 	console.error("Regeneration failed:", error);
 	process.exit(1);
-});
+}

@@ -18,7 +18,7 @@ export const EditPostHandlerLive = Layer.effect(
 						.findById(params.postId)
 						.pipe(
 							Effect.mapError(
-								(e) => new PostNotFoundError({ message: e.message }),
+								(error) => new PostNotFoundError({ message: error.message }),
 							),
 						);
 					if (!post) {
@@ -41,7 +41,7 @@ export const EditPostHandlerLive = Layer.effect(
 						.save(updated)
 						.pipe(
 							Effect.mapError(
-								(e) => new PostNotFoundError({ message: e.message }),
+								(error) => new PostNotFoundError({ message: error.message }),
 							),
 						);
 					return updated;

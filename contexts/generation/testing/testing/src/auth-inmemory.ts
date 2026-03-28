@@ -1,6 +1,5 @@
-import { Context, Effect, Layer, Ref } from "effect";
-
 import { AuthenticationError, AuthService } from "@morph/auth-dsl";
+import { Context, Effect, Layer, Ref } from "effect";
 
 export interface AuthState<TUser> {
 	readonly ref: Ref.Ref<TUser | undefined>;

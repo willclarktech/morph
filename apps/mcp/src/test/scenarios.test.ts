@@ -1,7 +1,7 @@
-import { createMcpRunner } from "@morph/scenario-runner-mcp";
 import { prose as GenerationProse } from "@morph/generation-core";
-import { prose as SchemaDslProse } from "@morph/schema-dsl-core";
+import { createMcpRunner } from "@morph/scenario-runner-mcp";
 import { scenarios } from "@morph/scenarios";
+import { prose as SchemaDslProse } from "@morph/schema-dsl-core";
 import { expect, test } from "bun:test";
 import path from "node:path";
 

@@ -1,6 +1,6 @@
 import type { OperationDef, QualifiedEntry } from "@morph/domain-schema";
 
-import { toEnvironmentPrefix, toKebabCase } from "@morph/utils";
+import { toKebabCase } from "@morph/utils";
 
 export const generateLoginCommand = (hasAuth: boolean): string => {
 	if (!hasAuth) return "";
@@ -8,7 +8,7 @@ export const generateLoginCommand = (hasAuth: boolean): string => {
 	return `
 const handleLogin = async (argv: readonly string[]): Promise<number> => {
 	const emailIndex = argv.indexOf("--email");
-	const email = emailIndex >= 0 ? argv[emailIndex + 1] : undefined;
+	const email = emailIndex === -1 ? undefined : argv[emailIndex + 1];
 
 	if (!email) {
 		console.error("Usage: login --email <email>");
@@ -57,25 +57,27 @@ export const generateOperationHandler = (
 	);
 
 	const paramAssignments = params
-		.map(([name], idx) => `\t\t${name}: argv[${idx + 1}],`)
+		.map(([name], index) => `\t\t${name}: argv[${index + 1}],`)
 		.join("\n");
 
 	const optionalAssignments = optionalParams
 		.map(([name]) => {
 			const kebab = toKebabCase(name);
 			return `\t\tconst ${name}Index = argv.indexOf("--${kebab}");
-		if (${name}Index >= 0 && argv[${name}Index + 1]) {
+		if (${name}Index !== -1 && argv[${name}Index + 1]) {
 			params["${name}"] = argv[${name}Index + 1];
 		}`;
 		})
 		.join("\n");
 
-	const commandEnvPart = kebabName.toUpperCase().replaceAll("-", "_");
+	const commandEnvironmentPart = kebabName.toUpperCase().replaceAll("-", "_");
 	const sensitiveAssignments = sensitiveParams
 		.map(([name]) => {
-			const paramEnvPart = toKebabCase(name).toUpperCase().replaceAll("-", "_");
-			const envVar = `${envPrefix}_${commandEnvPart}_${paramEnvPart}`;
-			return `\t\tparams["${name}"] = process.env["${envVar}"] ?? await promptSecure("${name}: ");`;
+			const paramEnvironmentPart = toKebabCase(name)
+				.toUpperCase()
+				.replaceAll("-", "_");
+			const envVariable = `${envPrefix}_${commandEnvironmentPart}_${paramEnvironmentPart}`;
+			return `\t\tparams["${name}"] = process.env["${envVariable}"] ?? await promptSecure("${name}: ");`;
 		})
 		.join("\n");
 
@@ -99,9 +101,10 @@ ${optionalAssignments ? `\n${optionalAssignments}\n` : ""}${sensitiveAssignments
 			),
 		);
 
-		if (result !== undefined) {
-			console.info(JSON.stringify(result, undefined, 2));
+		if (result === undefined) {
+			return 1;
 		}
-		return result !== undefined ? 0 : 1;
+		console.info(JSON.stringify(result, undefined, 2));
+		return 0;
 	}`;
 };

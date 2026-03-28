@@ -17,7 +17,7 @@ export const DeleteTodoHandlerLive = Layer.effect(
 					// Find the todo
 					const todo = yield* todoRepo
 						.findById(params.todoId)
-						.pipe(Effect.mapError((e) => new TodoNotFoundError({ message: e.message })));
+						.pipe(Effect.mapError((error) => new TodoNotFoundError({ message: error.message })));
 					if (!todo) {
 						return yield* Effect.fail(
 							new TodoNotFoundError({
@@ -27,7 +27,7 @@ export const DeleteTodoHandlerLive = Layer.effect(
 					}
 
 					// Delete it
-					yield* todoRepo.delete(params.todoId).pipe(Effect.mapError((e) => new TodoNotFoundError({ message: e.message })));
+					yield* todoRepo.delete(params.todoId).pipe(Effect.mapError((error) => new TodoNotFoundError({ message: error.message })));
 					return true;
 				}),
 		};

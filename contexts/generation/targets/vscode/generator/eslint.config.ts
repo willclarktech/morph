@@ -1,3 +1,3 @@
 import { configs } from "@morph/eslint-config";
 
-export default configs.base;
+export default [...configs.recommended, ...configs.imperative];

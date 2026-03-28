@@ -24,7 +24,7 @@ export const encodeFileStoreInfo = S.encodeSync(FileStoreInfoSchema);
 
 // Function Schemas (pure transformations)
 
-import { FileAccessError, FileCorruptedError } from "./errors";
+import type { FileAccessError, FileCorruptedError } from "./errors";
 
 // Open or create a JSON file store at the given path
 export const OpenFileStoreInputSchema = S.Struct({

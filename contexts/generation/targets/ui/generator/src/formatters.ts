@@ -16,9 +16,9 @@ export const formatBoolean = (value: unknown): string => {
 };
 
 export const formatDate = (value: unknown): string => {
-	if (value === undefined || value === null) return EMPTY;
+	if (value == undefined) return EMPTY;
 	const d = typeof value === "string" ? new Date(value) : value;
-	if (!(d instanceof Date) || isNaN(d.getTime())) return String(value);
+	if (!(d instanceof Date) || Number.isNaN(d.getTime())) return typeof value === "string" ? value : "Invalid date";
 	return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
 };
 
@@ -28,7 +28,7 @@ export const formatArray = (value: unknown): string => {
 };
 
 export const formatValue = (value: unknown): string => {
-	if (value === undefined || value === null) return EMPTY;
-	return String(value);
+	if (value == undefined) return EMPTY;
+	return typeof value === "object" ? JSON.stringify(value) : String(value as string | number | boolean);
 };
 `;

@@ -1,22 +1,21 @@
-import { describe, test, afterEach } from "bun:test";
+import { createJsonFileTransport } from "@morph/storage-jsonfile-impls";
+import { createMemoryTransport } from "@morph/storage-memory-impls";
+import { createSqliteTransport } from "@morph/storage-sqlite-impls";
 import { Database } from "bun:sqlite";
-import { mkdtempSync, rmSync } from "node:fs";
-import { join } from "node:path";
-import { tmpdir } from "node:os";
-import * as fc from "fast-check";
+import { afterEach, describe, test } from "bun:test";
 import { Effect } from "effect";
+import * as fc from "fast-check";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 import { storageTransportContracts } from "./storageTransport.contracts";
-import { createMemoryTransport } from "@morph/storage-memory-impls";
-import { createJsonFileTransport } from "@morph/storage-jsonfile-impls";
-import { createSqliteTransport } from "@morph/storage-sqlite-impls";
 
 describe("StorageTransport contracts", () => {
 	describe("memory", () => {
 		const suites = storageTransportContracts(() => createMemoryTransport());
 		for (const suite of suites) {
 			test(suite.name, async () => {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 				await fc.assert(fc.asyncProperty(suite.arbitrary, async (input: any) => suite.law(input)));
 			});
 		}
@@ -35,7 +34,6 @@ describe("StorageTransport contracts", () => {
 		});
 		for (const suite of suites) {
 			test(suite.name, async () => {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 				await fc.assert(fc.asyncProperty(suite.arbitrary, async (input: any) => suite.law(input)));
 			});
 		}
@@ -47,7 +45,6 @@ describe("StorageTransport contracts", () => {
 		});
 		for (const suite of suites) {
 			test(suite.name, async () => {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 				await fc.assert(fc.asyncProperty(suite.arbitrary, async (input: any) => suite.law(input)));
 			});
 		}

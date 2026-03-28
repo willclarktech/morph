@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
-
 import type { ContextDef, DomainSchema } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import { filterFunctions, filterOperations } from "./filter-operations";
 

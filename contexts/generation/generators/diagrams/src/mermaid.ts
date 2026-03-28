@@ -14,6 +14,13 @@ export const toMermaidType = (typeRef: TypeRef): string => {
 		case "entityId": {
 			return "string";
 		}
+		case "function": {
+			return "Function";
+		}
+		case "generic": {
+			const args = typeRef.args.map(toMermaidType).join(", ");
+			return `${typeRef.name}<${args}>`;
+		}
 		case "optional": {
 			return toMermaidType(typeRef.inner);
 		}
@@ -23,21 +30,14 @@ export const toMermaidType = (typeRef: TypeRef): string => {
 		case "type": {
 			return typeRef.name;
 		}
+		case "typeParam": {
+			return typeRef.name;
+		}
 		case "union": {
 			return "string";
 		}
 		case "valueObject": {
 			return typeRef.name;
-		}
-		case "generic": {
-			const args = typeRef.args.map(toMermaidType).join(", ");
-			return `${typeRef.name}<${args}>`;
-		}
-		case "typeParam": {
-			return typeRef.name;
-		}
-		case "function": {
-			return "Function";
 		}
 	}
 };

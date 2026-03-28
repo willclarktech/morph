@@ -33,14 +33,14 @@ export const generateEditRoutes = (
 		return [
 			{
 				comment: `Edit ${entityName} form`,
-				handler: String.raw`async (req: Request & { params: { id: string } }) => {
-				initLanguage(req);
-				const authState = getAuthState(req);
+				handler: String.raw`async (request: Request & { params: { id: string } }) => {
+				initLanguage(request);
+				const authState = getAuthState(request);
 				if (!authState.isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/login" } });
+					return new Response(undefined, { status: 303, headers: { Location: "/login" } });
 				}
-				const client = createClientForRequest(req);
-				const id = req.params.id as ${idType};
+				const client = createClientForRequest(request);
+				const id = request.params.id as ${idType};
 				try {
 					const item = await Effect.runPromise(client.${getOp.name}({ ${entityName.toLowerCase()}Id: id })) as ${entityName};
 					return html(edit${entityName}Page(item));
@@ -53,19 +53,19 @@ export const generateEditRoutes = (
 			},
 			{
 				comment: `Edit ${entityName} submit`,
-				handler: `async (req: Request & { params: { id: string } }) => {
-				const authState = getAuthState(req);
+				handler: `async (request: Request & { params: { id: string } }) => {
+				const authState = getAuthState(request);
 				if (!authState.isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/login" } });
+					return new Response(undefined, { status: 303, headers: { Location: "/login" } });
 				}
-				const client = createClientForRequest(req);
-				const id = req.params.id as ${idType};
+				const client = createClientForRequest(request);
+				const id = request.params.id as ${idType};
 				// eslint-disable-next-line @typescript-eslint/no-deprecated -- Bun.serve supports formData
-				const formData = await req.formData();
+				const formData = await request.formData();
 				const params = { ${entityName.toLowerCase()}Id: id, ...Object.fromEntries(formData) } as Parameters<typeof client.${op.name}>[0];
 				try {
 					await Effect.runPromise(client.${op.name}(params));
-					return new Response(null, {
+					return new Response(undefined, {
 						status: 303,
 						headers: { Location: "/${pluralName}/" + id },
 					});
@@ -83,9 +83,9 @@ export const generateEditRoutes = (
 	return [
 		{
 			comment: `Edit ${entityName} form`,
-			handler: String.raw`async (req: Request & { params: { id: string } }) => {
-				initLanguage(req);
-				const id = req.params.id as ${idType};
+			handler: String.raw`async (request: Request & { params: { id: string } }) => {
+				initLanguage(request);
+				const id = request.params.id as ${idType};
 				try {
 					const item = await Effect.runPromise(client.${getOp.name}({ ${entityName.toLowerCase()}Id: id })) as ${entityName};
 					return html(edit${entityName}Page(item));
@@ -98,14 +98,14 @@ export const generateEditRoutes = (
 		},
 		{
 			comment: `Edit ${entityName} submit`,
-			handler: `async (req: Request & { params: { id: string } }) => {
-				const id = req.params.id as ${idType};
+			handler: `async (request: Request & { params: { id: string } }) => {
+				const id = request.params.id as ${idType};
 				// eslint-disable-next-line @typescript-eslint/no-deprecated -- Bun.serve supports formData
-				const formData = await req.formData();
+				const formData = await request.formData();
 				const params = { ${entityName.toLowerCase()}Id: id, ...Object.fromEntries(formData) } as Parameters<typeof client.${op.name}>[0];
 				try {
 					await Effect.runPromise(client.${op.name}(params));
-					return new Response(null, {
+					return new Response(undefined, {
 						status: 303,
 						headers: { Location: "/${pluralName}/" + id },
 					});

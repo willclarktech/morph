@@ -1,11 +1,10 @@
-import { Effect } from "effect";
-
 import type { EventStoreTransport } from "@morph/eventstore-dsl";
 
 import {
 	EventStoreConnectionError,
 	EventStoreOperationError,
 } from "@morph/eventstore-dsl";
+import { Effect } from "effect";
 
 type RedisClient = InstanceType<typeof Bun.RedisClient>;
 
@@ -55,7 +54,7 @@ export const createRedisEventStoreTransport = (
 		Effect.tryPromise({
 			try: async () => {
 				const results = await redis.zrange(key, 0, -1);
-				return results as string[];
+				return results;
 			},
 			catch: (error) =>
 				new EventStoreOperationError({
@@ -67,7 +66,7 @@ export const createRedisEventStoreTransport = (
 		Effect.tryPromise({
 			try: async () => {
 				const results = await redis.zrange(key, 0, -1);
-				return (results as string[]).filter((item) => {
+				return results.filter((item) => {
 					const parsed = JSON.parse(item) as { aggregateId?: string };
 					return parsed.aggregateId === aggregateId;
 				});
@@ -82,7 +81,7 @@ export const createRedisEventStoreTransport = (
 		Effect.tryPromise({
 			try: async () => {
 				const results = await redis.zrange(key, 0, -1);
-				return (results as string[]).filter((item) => {
+				return results.filter((item) => {
 					const parsed = JSON.parse(item) as { _tag?: string };
 					return parsed._tag === tag;
 				});
@@ -98,7 +97,7 @@ export const createRedisEventStoreTransport = (
 			try: async () => {
 				const minScore = new Date(timestamp).getTime();
 				const results = await redis.zrangebyscore(key, minScore, "+inf");
-				return results as string[];
+				return results;
 			},
 			catch: (error) =>
 				new EventStoreOperationError({

@@ -1,14 +1,13 @@
-import { Database } from "bun:sqlite";
-import { Context, Effect, Layer } from "effect";
-import { statSync } from "node:fs";
-import path from "node:path";
-
 import type { DatabaseInfo } from "@morph/storage-sqlite-dsl";
 
 import {
 	DatabaseLockedError,
 	MigrationFailedError,
 } from "@morph/storage-sqlite-dsl";
+import { Database } from "bun:sqlite";
+import { Context, Effect, Layer } from "effect";
+import { statSync } from "node:fs";
+import path from "node:path";
 
 export interface InitializeDatabaseHandler {
 	readonly handle: (
@@ -22,8 +21,8 @@ export const InitializeDatabaseHandler =
 		"@morph/InitializeDatabaseHandler",
 	);
 
-const getTableCount = (db: Database): number => {
-	const row = db
+const getTableCount = (database: Database): number => {
+	const row = database
 		.query<
 			{ count: number },
 			[]
@@ -32,8 +31,8 @@ const getTableCount = (db: Database): number => {
 	return row?.count ?? 0;
 };
 
-const getJournalMode = (db: Database): string => {
-	const row = db
+const getJournalMode = (database: Database): string => {
+	const row = database
 		.query<{ journal_mode: string }, []>("PRAGMA journal_mode")
 		.get();
 	return row?.journal_mode ?? "unknown";
@@ -44,20 +43,20 @@ export const InitializeDatabaseHandlerLive = Layer.succeed(
 	{
 		handle: (params, _options) =>
 			Effect.gen(function* () {
-				const dbPath = path.resolve(params.path);
+				const databasePath = path.resolve(params.path);
 
-				const db = yield* Effect.try({
-					try: () => new Database(dbPath, { create: true, strict: true }),
+				const database = yield* Effect.try({
+					try: () => new Database(databasePath, { create: true, strict: true }),
 					catch: (error) =>
 						new DatabaseLockedError({
-							path: dbPath,
+							path: databasePath,
 							message: String(error),
 						}),
 				});
 
 				yield* Effect.try({
 					try: () => {
-						db.run("PRAGMA journal_mode = WAL;");
+						database.run("PRAGMA journal_mode = WAL;");
 					},
 					catch: (error) =>
 						new MigrationFailedError({
@@ -67,19 +66,19 @@ export const InitializeDatabaseHandlerLive = Layer.succeed(
 				});
 
 				const sizeBytes = yield* Effect.try({
-					try: () => statSync(dbPath).size,
+					try: () => statSync(databasePath).size,
 					catch: () =>
 						new DatabaseLockedError({
-							path: dbPath,
+							path: databasePath,
 							message: "Cannot stat database file",
 						}),
 				});
 
 				return {
-					path: dbPath,
+					path: databasePath,
 					sizeBytes,
-					tableCount: getTableCount(db),
-					journalMode: getJournalMode(db),
+					tableCount: getTableCount(database),
+					journalMode: getJournalMode(database),
 				} satisfies DatabaseInfo;
 			}),
 	},

@@ -22,14 +22,14 @@ export const generateDetailRoutes = (
 		return [
 			{
 				comment: `View ${entityName}`,
-				handler: String.raw`async (req: Request & { params: { id: string } }) => {
-				initLanguage(req);
-				const authState = getAuthState(req);
+				handler: String.raw`async (request: Request & { params: { id: string } }) => {
+				initLanguage(request);
+				const authState = getAuthState(request);
 				if (!authState.isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/login" } });
+					return new Response(undefined, { status: 303, headers: { Location: "/login" } });
 				}
-				const client = createClientForRequest(req);
-				const id = req.params.id as ${idType};
+				const client = createClientForRequest(request);
+				const id = request.params.id as ${idType};
 				try {
 					const item = await Effect.runPromise(client.${op.name}({ ${entityName.toLowerCase()}Id: id })) as ${entityName};
 					return html(view${entityName}Page(item));
@@ -46,9 +46,9 @@ export const generateDetailRoutes = (
 	return [
 		{
 			comment: `View ${entityName}`,
-			handler: String.raw`async (req: Request & { params: { id: string } }) => {
-				initLanguage(req);
-				const id = req.params.id as ${idType};
+			handler: String.raw`async (request: Request & { params: { id: string } }) => {
+				initLanguage(request);
+				const id = request.params.id as ${idType};
 				try {
 					const item = await Effect.runPromise(client.${op.name}({ ${entityName.toLowerCase()}Id: id })) as ${entityName};
 					return html(view${entityName}Page(item));

@@ -26,11 +26,11 @@ export const generateCreateRoutes = (
 		return [
 			{
 				comment: `Create ${entityName} form`,
-				handler: `(req: Request) => {
-				initLanguage(req);
-				const authState = getAuthState(req);
+				handler: `(request: Request) => {
+				initLanguage(request);
+				const authState = getAuthState(request);
 				if (!authState.isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/login" } });
+					return new Response(undefined, { status: 303, headers: { Location: "/login" } });
 				}
 				return html(create${entityName}Page());
 			}`,
@@ -38,14 +38,14 @@ export const generateCreateRoutes = (
 			},
 			{
 				comment: `Create ${entityName} submit`,
-				handler: `async (req: Request) => {
-				const authState = getAuthState(req);
+				handler: `async (request: Request) => {
+				const authState = getAuthState(request);
 				if (!authState.isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/login" } });
+					return new Response(undefined, { status: 303, headers: { Location: "/login" } });
 				}
-				const client = createClientForRequest(req);
+				const client = createClientForRequest(request);
 				// eslint-disable-next-line @typescript-eslint/no-deprecated -- Bun.serve supports formData
-				const formData = await req.formData();
+				const formData = await request.formData();
 				const params = Object.fromEntries(formData) as unknown as Parameters<typeof client.${op.name}>[0];
 				try {
 					const result = await Effect.runPromise(client.${op.name}(params)) as ${entityName};
@@ -70,17 +70,17 @@ export const generateCreateRoutes = (
 	return [
 		{
 			comment: `Create ${entityName} form`,
-			handler: `(req: Request) => {
-				initLanguage(req);
+			handler: `(request: Request) => {
+				initLanguage(request);
 				return html(create${entityName}Page());
 			}`,
 			method: "GET",
 		},
 		{
 			comment: `Create ${entityName} submit`,
-			handler: `async (req: Request) => {
+			handler: `async (request: Request) => {
 				// eslint-disable-next-line @typescript-eslint/no-deprecated -- Bun.serve supports formData
-				const formData = await req.formData();
+				const formData = await request.formData();
 				const params = Object.fromEntries(formData) as unknown as Parameters<typeof client.${op.name}>[0];
 				try {
 					const result = await Effect.runPromise(client.${op.name}(params)) as ${entityName};

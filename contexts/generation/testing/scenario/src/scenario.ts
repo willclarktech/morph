@@ -168,10 +168,11 @@ export const then = (assertion: Assertion): Step<void> => ({
  * when(createPost.call({ authorId: ref<User>("admin").id }))
  * ```
  */
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters -- T is intentional: callers write ref<User>("admin").id for type-safe field access
 export const ref = <T extends object>(binding: string): T =>
 	new Proxy({} as T, {
 		get: (_target, field: string) => `$${binding}.${field}`,
-	}) as T;
+	});
 
 /**
  * Create an assertion on a bound value.

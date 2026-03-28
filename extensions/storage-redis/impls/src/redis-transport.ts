@@ -1,12 +1,11 @@
-import { Effect } from "effect";
-
 import type { PaginationParams, StorageTransport } from "@morph/storage-dsl";
 
 import {
+	applyPagination,
 	StorageConnectionError,
 	StorageOperationError,
-	applyPagination,
 } from "@morph/storage-dsl";
+import { Effect } from "effect";
 
 type RedisClient = InstanceType<typeof Bun.RedisClient>;
 
@@ -48,11 +47,11 @@ export const createRedisTransport = (
 					message: `Redis get failed: ${String(error)}`,
 				}),
 		}),
-	getAll: (pagination?: PaginationParams | undefined) =>
+	getAll: (pagination?: PaginationParams) =>
 		Effect.tryPromise({
 			try: async () => {
 				const all = await redis.hvals(collection);
-				return applyPagination(all as string[], pagination);
+				return applyPagination(all, pagination);
 			},
 			catch: (error) =>
 				new StorageOperationError({

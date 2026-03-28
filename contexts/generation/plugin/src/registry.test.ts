@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
-
 import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import type { GeneratorPlugin, PluginContext } from "./interface";
 
@@ -15,7 +15,7 @@ const makeSchema = (contexts: DomainSchema["contexts"] = {}): DomainSchema => ({
 	contexts,
 });
 
-const makeCtx = (overrides?: Partial<PluginContext>): PluginContext => ({
+const makeContext = (overrides?: Partial<PluginContext>): PluginContext => ({
 	schema: makeSchema(),
 	name: "test",
 	features: {
@@ -47,17 +47,17 @@ describe("validatePluginGraph", () => {
 			makePlugin({ id: "a" }),
 			makePlugin({ id: "b", dependencies: ["a"] }),
 		];
-		const errors = validatePluginGraph(plugins, makeCtx());
+		const errors = validatePluginGraph(plugins, makeContext());
 		expect(errors).toEqual([]);
 	});
 
 	test("returns empty for no plugins", () => {
-		expect(validatePluginGraph([], makeCtx())).toEqual([]);
+		expect(validatePluginGraph([], makeContext())).toEqual([]);
 	});
 
 	test("reports missing dependency", () => {
 		const plugins = [makePlugin({ id: "a", dependencies: ["nonexistent"] })];
-		const errors = validatePluginGraph(plugins, makeCtx());
+		const errors = validatePluginGraph(plugins, makeContext());
 		expect(errors).toHaveLength(1);
 		expect(errors[0]!.plugin).toBe("a");
 		expect(errors[0]!.missingDep).toBe("nonexistent");
@@ -72,12 +72,12 @@ describe("validatePluginGraph", () => {
 				dependencies: ["missing"],
 			}),
 		];
-		const errors = validatePluginGraph(plugins, makeCtx());
+		const errors = validatePluginGraph(plugins, makeContext());
 		expect(errors).toEqual([]);
 	});
 
 	test("reports inactive dependency for tagged plugin", () => {
-		const ctx = makeCtx({
+		const context = makeContext({
 			schema: makeSchema({
 				main: {
 					description: "test",
@@ -103,7 +103,7 @@ describe("validatePluginGraph", () => {
 			makePlugin({ id: "dep", tags: ["cli"] }),
 			makePlugin({ id: "consumer", tags: ["api"], dependencies: ["dep"] }),
 		];
-		const errors = validatePluginGraph(plugins, ctx);
+		const errors = validatePluginGraph(plugins, context);
 		expect(errors).toHaveLength(1);
 		expect(errors[0]!.plugin).toBe("consumer");
 		expect(errors[0]!.missingDep).toBe("dep");
@@ -116,7 +116,7 @@ describe("validatePluginGraph", () => {
 			makePlugin({ id: "b" }),
 			makePlugin({ id: "c", dependencies: ["a", "b"] }),
 		];
-		expect(validatePluginGraph(plugins, makeCtx())).toEqual([]);
+		expect(validatePluginGraph(plugins, makeContext())).toEqual([]);
 	});
 });
 
@@ -140,7 +140,7 @@ describe("runPlugins", () => {
 				},
 			}),
 		];
-		runPlugins(plugins, makeCtx());
+		runPlugins(plugins, makeContext());
 		expect(order).toEqual(["a", "b"]);
 	});
 
@@ -155,7 +155,7 @@ describe("runPlugins", () => {
 				generate: () => [file("b.ts")],
 			}),
 		];
-		const files = runPlugins(plugins, makeCtx());
+		const files = runPlugins(plugins, makeContext());
 		expect(files).toHaveLength(2);
 		expect(files.map((f) => f.filename)).toEqual(["a.ts", "b.ts"]);
 	});
@@ -168,12 +168,12 @@ describe("runPlugins", () => {
 				generate: () => [file("a.ts")],
 			}),
 		];
-		const files = runPlugins(plugins, makeCtx());
+		const files = runPlugins(plugins, makeContext());
 		expect(files).toHaveLength(0);
 	});
 
 	test("runs plugins with matching tags", () => {
-		const ctx = makeCtx({
+		const context = makeContext({
 			schema: makeSchema({
 				main: {
 					description: "test",
@@ -202,13 +202,13 @@ describe("runPlugins", () => {
 				generate: () => [file("api.ts")],
 			}),
 		];
-		const files = runPlugins(plugins, ctx);
+		const files = runPlugins(plugins, context);
 		expect(files).toHaveLength(1);
 	});
 
 	test("throws on dependency errors", () => {
 		const plugins = [makePlugin({ id: "a", dependencies: ["missing"] })];
-		expect(() => runPlugins(plugins, makeCtx())).toThrow(
+		expect(() => runPlugins(plugins, makeContext())).toThrow(
 			"Plugin dependency errors",
 		);
 	});
@@ -222,7 +222,7 @@ describe("runPlugins", () => {
 				generate: () => [file("c.ts")],
 			}),
 		];
-		const files = runPlugins(plugins, makeCtx());
+		const files = runPlugins(plugins, makeContext());
 		expect(files).toHaveLength(0);
 	});
 
@@ -233,28 +233,28 @@ describe("runPlugins", () => {
 				generate: () => [file("a.ts")],
 			}),
 		];
-		const files = runPlugins(plugins, makeCtx());
+		const files = runPlugins(plugins, makeContext());
 		expect(files).toHaveLength(1);
 	});
 
 	test("enriches context with plugin metadata", () => {
-		let capturedCtx: PluginContext | undefined;
+		let capturedContext: PluginContext | undefined;
 		const plugins = [
 			makePlugin({
 				id: "a",
 				metadata: {
 					quickStartSteps: [{ description: "Run", command: "bun run" }],
 				},
-				generate: (ctx) => {
-					capturedCtx = ctx;
+				generate: (context) => {
+					capturedContext = context;
 					return [];
 				},
 			}),
 		];
-		runPlugins(plugins, makeCtx());
-		expect(capturedCtx!.pluginMetadata).toBeDefined();
-		expect(capturedCtx!.pluginMetadata).toHaveLength(1);
-		expect(capturedCtx!.pluginMetadata![0]!.pluginId).toBe("a");
+		runPlugins(plugins, makeContext());
+		expect(capturedContext!.pluginMetadata).toBeDefined();
+		expect(capturedContext!.pluginMetadata).toHaveLength(1);
+		expect(capturedContext!.pluginMetadata![0]!.pluginId).toBe("a");
 	});
 });
 
@@ -271,7 +271,7 @@ describe("runPluginsWithResults", () => {
 				generate: () => [file("b.ts")],
 			}),
 		];
-		const results = runPluginsWithResults(plugins, makeCtx());
+		const results = runPluginsWithResults(plugins, makeContext());
 		expect(results).toHaveLength(2);
 		expect(results[0]!.pluginId).toBe("a");
 		expect(results[0]!.files).toHaveLength(1);
@@ -281,7 +281,7 @@ describe("runPluginsWithResults", () => {
 
 	test("throws on dependency errors", () => {
 		const plugins = [makePlugin({ id: "a", dependencies: ["missing"] })];
-		expect(() => runPluginsWithResults(plugins, makeCtx())).toThrow(
+		expect(() => runPluginsWithResults(plugins, makeContext())).toThrow(
 			"Plugin dependency errors",
 		);
 	});
@@ -291,7 +291,7 @@ describe("runPluginsWithResults", () => {
 			makePlugin({ id: "a", tags: ["nonexistent-tag"], generate: () => [] }),
 			makePlugin({ id: "b", generate: () => [file("b.ts")] }),
 		];
-		const results = runPluginsWithResults(plugins, makeCtx());
+		const results = runPluginsWithResults(plugins, makeContext());
 		expect(results).toHaveLength(1);
 		expect(results[0]!.pluginId).toBe("b");
 	});

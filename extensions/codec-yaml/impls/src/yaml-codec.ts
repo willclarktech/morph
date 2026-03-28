@@ -1,14 +1,12 @@
+import type { Codec } from "@morph/codec-dsl";
+
+import { CodecDecodeError, CodecEncodeError } from "@morph/codec-dsl";
 import { Effect } from "effect";
 import { parseDocument, stringify } from "yaml";
-
-import type { Codec } from "@morph/codec-dsl";
-import { CodecDecodeError, CodecEncodeError } from "@morph/codec-dsl";
 
 const YAML_MIME = "application/x-yaml";
 const BIGINT_MARKER = "__$bigint__";
 const DATE_MARKER = "__$date__";
-const ISO_DATE_RE =
-	/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 
 /**
  * Pre-process values for YAML encoding.
@@ -37,15 +35,15 @@ const prepareForYaml = (value: unknown): unknown => {
 const restoreFromYaml = (value: unknown): unknown => {
 	if (Array.isArray(value)) return value.map(restoreFromYaml);
 	if (typeof value === "object" && value !== null) {
-		const obj = value as Record<string, unknown>;
-		if (BIGINT_MARKER in obj && typeof obj[BIGINT_MARKER] === "string") {
-			return BigInt(obj[BIGINT_MARKER]);
+		const object = value as Record<string, unknown>;
+		if (BIGINT_MARKER in object && typeof object[BIGINT_MARKER] === "string") {
+			return BigInt(object[BIGINT_MARKER]);
 		}
-		if (DATE_MARKER in obj && typeof obj[DATE_MARKER] === "string") {
-			return new Date(obj[DATE_MARKER]);
+		if (DATE_MARKER in object && typeof object[DATE_MARKER] === "string") {
+			return new Date(object[DATE_MARKER]);
 		}
 		const result: Record<string, unknown> = {};
-		for (const [k, v] of Object.entries(obj)) {
+		for (const [k, v] of Object.entries(object)) {
 			result[k] = restoreFromYaml(v);
 		}
 		return result;
@@ -66,8 +64,8 @@ export const createYamlCodec = (): Codec => ({
 				body: stringify(prepareForYaml(value)),
 				contentType: YAML_MIME,
 			}),
-			catch: (e) =>
-				new CodecEncodeError({ format: "yaml", message: String(e) }),
+			catch: (error) =>
+				new CodecEncodeError({ format: "yaml", message: String(error) }),
 		}),
 
 	decode: (body, _messageName) =>
@@ -77,13 +75,15 @@ export const createYamlCodec = (): Codec => ({
 					typeof body === "string"
 						? body
 						: new TextDecoder().decode(body as Uint8Array);
-				const doc = parseDocument(text);
-				if (doc.errors.length > 0) {
-					throw new Error(doc.errors.map((e) => e.message).join("; "));
+				const document = parseDocument(text);
+				if (document.errors.length > 0) {
+					throw new Error(
+						document.errors.map((error) => error.message).join("; "),
+					);
 				}
-				return restoreFromYaml(doc.toJS());
+				return restoreFromYaml(document.toJS());
 			},
-			catch: (e) =>
-				new CodecDecodeError({ format: "yaml", message: String(e) }),
+			catch: (error) =>
+				new CodecDecodeError({ format: "yaml", message: String(error) }),
 		}),
 });

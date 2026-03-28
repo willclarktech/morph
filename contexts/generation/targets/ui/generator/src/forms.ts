@@ -3,7 +3,7 @@
  */
 import type { OperationDef, QualifiedEntry } from "@morph/domain-schema";
 
-import { sep, toTitleCase } from "@morph/utils";
+import { separator, toTitleCase } from "@morph/utils";
 
 import { typeRefToInputType } from "./utilities";
 
@@ -62,7 +62,7 @@ export const generateFormFields = (
 					: "Select...";
 				const options = param.type.values
 					.map((v) => `<option value="${v}">${v}</option>`)
-					.join(sep(3));
+					.join(separator(3));
 				return `
 	<label for="${name}">${label}${required ? "" : optionalSuffix}</label>
 	<select name="${name}" id="${name}"${required ? " required" : ""} ${describedBy}>

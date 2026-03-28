@@ -17,6 +17,7 @@
 		"@morph/runtime-client": "*",
 		"@morph/plugin": "*",
 		"@morph/builder-readme": "*",
-		"@morph/builder-test": "*"
+		"@morph/builder-test": "*",
+		"@morph/utils": "*"
 	}
 }

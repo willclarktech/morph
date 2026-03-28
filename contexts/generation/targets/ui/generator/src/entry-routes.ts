@@ -7,7 +7,7 @@ import {
 	getAllOperations,
 	schemaHasAuthRequirement,
 } from "@morph/domain-schema";
-import { pluralize, sep, toKebabCase } from "@morph/utils";
+import { pluralize, separator, toKebabCase } from "@morph/utils";
 
 import type { GenerateUiAppOptions } from "./config";
 import type { RouteHandler } from "./route-handlers";
@@ -63,6 +63,7 @@ export const buildEntryRoutes = (
 
 	// Collect route handlers by path (to merge methods on same path)
 	const routesByPath = new Map<string, RouteHandler[]>();
+	const entitiesNeedingIdImport = new Set<string>();
 	const hasEntities = entityOps.size > 0;
 	const pageImports: string[] = hasEntities
 		? ["homePage", "errorAlert"]
@@ -100,20 +101,25 @@ export const buildEntryRoutes = (
 
 			switch (route.pageType) {
 				case "create": {
-					pageImports.push(`create${entityName}Page`);
+					if (op.name !== resolvedAuthOps.register?.name) {
+						pageImports.push(`create${entityName}Page`);
+					}
 					addRoutes(`/${pluralName}/new`, generateCreateRoutes(context));
 					break;
 				}
 				case "delete": {
+					entitiesNeedingIdImport.add(entityName);
 					addRoutes(`/${pluralName}/:id`, generateDeleteRoutes(context));
 					break;
 				}
 				case "detail": {
+					entitiesNeedingIdImport.add(entityName);
 					pageImports.push(`view${entityName}Page`);
 					addRoutes(`/${pluralName}/:id`, generateDetailRoutes(context));
 					break;
 				}
 				case "edit": {
+					entitiesNeedingIdImport.add(entityName);
 					pageImports.push(`edit${entityName}Page`);
 					addRoutes(`/${pluralName}/:id/edit`, generateEditRoutes(context));
 					break;
@@ -138,6 +144,7 @@ export const buildEntryRoutes = (
 				options.schema,
 			);
 			if (actionCmds.length > 0) {
+				entitiesNeedingIdImport.add(entityName);
 				if (!pageImports.includes(`list${entityName}Page`)) {
 					pageImports.push(`list${entityName}Page`);
 				}
@@ -183,19 +190,15 @@ export const buildEntryRoutes = (
 		routeHandlers.push(`
 		// ${comments.join(", ")}
 		"${path}": {
-			${methods.join(sep(3, ","))},
+			${methods.join(separator(3, ","))},
 		},`);
 	}
 
-	// Type imports from DSL
+	// Type imports from DSL (entity names for type casts + IDs for :id routes)
 	const typeImportsSet = new Set([
-		...[...entityOps.keys()].map((entityName) => `${entityName}Id`),
+		...[...entitiesNeedingIdImport].map((entityName) => `${entityName}Id`),
 		...entityOps.keys(),
 	]);
-
-	if (hasAuth && !typeImportsSet.has("UserId")) {
-		typeImportsSet.add("UserId");
-	}
 
 	const typeImports = [...typeImportsSet];
 

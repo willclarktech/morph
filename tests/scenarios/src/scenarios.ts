@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars -- Scaffold imports for convenience */
-import { assert, given, scenario, then, when } from "@morph/scenario";
 import * as ops from "@morph/generation-dsl";
+import { assert, given, scenario, then, when } from "@morph/scenario";
+
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 /**

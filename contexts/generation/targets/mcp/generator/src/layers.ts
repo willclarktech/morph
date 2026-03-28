@@ -36,12 +36,14 @@ export const buildStorageSetup = (
 	if (!contextNames || contextNames.length <= 1) {
 		return `const storageLayer = yield* resolveStorage({ envPrefix: "${envPrefix}" })${provideSuffix};\n`;
 	}
-	const lines = contextNames.map((ctx) => {
-		const pascal = toPascalCase(ctx);
-		return `\tconst ${ctx}Storage = yield* resolve${pascal}Storage({ envPrefix: "${envPrefix}" })${provideSuffix};`;
+	const lines = contextNames.map((context) => {
+		const pascal = toPascalCase(context);
+		return `\tconst ${context}Storage = yield* resolve${pascal}Storage({ envPrefix: "${envPrefix}" })${provideSuffix};`;
 	});
-	const mergeArgs = contextNames.map((ctx) => `${ctx}Storage`).join(", ");
-	return `${lines.join("\n")}\n\tconst storageLayer = Layer.mergeAll(${mergeArgs});\n`;
+	const mergeArguments = contextNames
+		.map((context) => `${context}Storage`)
+		.join(", ");
+	return `${lines.join("\n")}\n\tconst storageLayer = Layer.mergeAll(${mergeArguments});\n`;
 };
 
 /**

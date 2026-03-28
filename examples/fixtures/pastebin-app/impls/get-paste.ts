@@ -14,7 +14,7 @@ export const GetPasteHandlerLive = Layer.effect(
 		return {
 			handle: (params, _options) =>
 				Effect.gen(function* () {
-					const paste = yield* repo.findById(params.pasteId).pipe(Effect.mapError((e) => new PasteNotFoundError({ message: e.message })));
+					const paste = yield* repo.findById(params.pasteId).pipe(Effect.mapError((error) => new PasteNotFoundError({ message: error.message })));
 					if (!paste) {
 						return yield* Effect.fail(
 							new PasteNotFoundError({

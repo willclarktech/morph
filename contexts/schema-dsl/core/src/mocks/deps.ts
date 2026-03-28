@@ -1,9 +1,11 @@
 // Generated mocks for Morph DSL testing
 // Do not edit - regenerate from schema
+import type { MockFunction } from "@morph/testing";
 
-import { type MockFunction, createMockFunction } from "@morph/testing";
+import { createMockFunction } from "@morph/testing";
 
-export { type MockFunction, createMockFunction } from "@morph/testing";
+export type { MockFunction } from "@morph/testing";
+export { createMockFunction } from "@morph/testing";
 
 /**
  * Mock dependencies for testing.

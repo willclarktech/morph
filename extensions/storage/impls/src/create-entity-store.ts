@@ -1,5 +1,5 @@
-import { Effect } from "effect";
-
+/* eslint-disable @typescript-eslint/no-non-null-assertion -- index maps are pre-populated from config.indexes; .get(field)! is safe within the allIndexedFields loop */
+/* eslint-disable @typescript-eslint/no-base-to-string -- indexed field values are primitives (string/number/boolean) */
 import type {
 	EntityStore,
 	EntityStoreConfig,
@@ -7,7 +7,8 @@ import type {
 	StorageTransport,
 } from "@morph/storage-dsl";
 
-import { StorageOperationError, applyPagination } from "@morph/storage-dsl";
+import { applyPagination, StorageOperationError } from "@morph/storage-dsl";
+import { Effect } from "effect";
 
 /**
  * Create an EntityStore by wrapping a StorageTransport with secondary index management.
@@ -23,20 +24,20 @@ export const createEntityStore = (
 		// Build index descriptors lookup
 		const uniqueIndexes = new Set(
 			config.indexes
-				.filter((idx) => idx.kind === "unique")
-				.map((idx) => idx.field),
+				.filter((index) => index.kind === "unique")
+				.map((index) => index.field),
 		);
-		const allIndexedFields = config.indexes.map((idx) => idx.field);
+		const allIndexedFields = config.indexes.map((index) => index.field);
 
 		// Secondary index state: field -> (value -> id) for unique, field -> (value -> Set<id>) for non-unique
 		const uniqueMaps = new Map<string, Map<string, string>>();
 		const nonUniqueMaps = new Map<string, Map<string, Set<string>>>();
 
-		for (const idx of config.indexes) {
-			if (idx.kind === "unique") {
-				uniqueMaps.set(idx.field, new Map());
+		for (const index of config.indexes) {
+			if (index.kind === "unique") {
+				uniqueMaps.set(index.field, new Map());
 			} else {
-				nonUniqueMaps.set(idx.field, new Map());
+				nonUniqueMaps.set(index.field, new Map());
 			}
 		}
 
@@ -49,14 +50,14 @@ export const createEntityStore = (
 				for (const field of allIndexedFields) {
 					const value = parsed[field];
 					if (value === undefined) continue;
-					const strValue = String(value);
+					const stringValue = String(value);
 					if (uniqueIndexes.has(field)) {
-						uniqueMaps.get(field)!.set(strValue, id);
+						uniqueMaps.get(field)!.set(stringValue, id);
 					} else {
 						const map = nonUniqueMaps.get(field)!;
-						const set = map.get(strValue) ?? new Set();
+						const set = map.get(stringValue) ?? new Set();
 						set.add(id);
-						map.set(strValue, set);
+						map.set(stringValue, set);
 					}
 				}
 			}
@@ -67,14 +68,14 @@ export const createEntityStore = (
 			for (const field of allIndexedFields) {
 				const value = parsed[field];
 				if (value === undefined) continue;
-				const strValue = String(value);
+				const stringValue = String(value);
 				if (uniqueIndexes.has(field)) {
-					uniqueMaps.get(field)!.set(strValue, id);
+					uniqueMaps.get(field)!.set(stringValue, id);
 				} else {
 					const map = nonUniqueMaps.get(field)!;
-					const set = map.get(strValue) ?? new Set();
+					const set = map.get(stringValue) ?? new Set();
 					set.add(id);
-					map.set(strValue, set);
+					map.set(stringValue, set);
 				}
 			}
 		};
@@ -84,15 +85,15 @@ export const createEntityStore = (
 			for (const field of allIndexedFields) {
 				const value = parsed[field];
 				if (value === undefined) continue;
-				const strValue = String(value);
+				const stringValue = String(value);
 				if (uniqueIndexes.has(field)) {
-					uniqueMaps.get(field)!.delete(strValue);
+					uniqueMaps.get(field)!.delete(stringValue);
 				} else {
 					const map = nonUniqueMaps.get(field)!;
-					const set = map.get(strValue);
+					const set = map.get(stringValue);
 					if (set) {
 						set.delete(id);
-						if (set.size === 0) map.delete(strValue);
+						if (set.size === 0) map.delete(stringValue);
 					}
 				}
 			}
@@ -101,8 +102,7 @@ export const createEntityStore = (
 		return {
 			get: (id) => transport.get(id),
 
-			getAll: (pagination?: PaginationParams | undefined) =>
-				transport.getAll(pagination),
+			getAll: (pagination?: PaginationParams) => transport.getAll(pagination),
 
 			put: (id, data) =>
 				Effect.gen(function* () {
@@ -141,7 +141,7 @@ export const createEntityStore = (
 					if (nonUniqueMap) {
 						const ids = nonUniqueMap.get(value);
 						if (!ids || ids.size === 0) return undefined;
-						const firstId = ids.values().next().value as string;
+						const firstId = ids.values().next().value!;
 						return yield* transport.get(firstId);
 					}
 					return yield* Effect.fail(
@@ -151,11 +151,7 @@ export const createEntityStore = (
 					);
 				}),
 
-			findAllByIndex: (
-				field,
-				value,
-				pagination?: PaginationParams | undefined,
-			) =>
+			findAllByIndex: (field, value, pagination?: PaginationParams) =>
 				Effect.gen(function* () {
 					const nonUniqueMap = nonUniqueMaps.get(field);
 					if (nonUniqueMap) {
@@ -175,7 +171,7 @@ export const createEntityStore = (
 						const id = uniqueMap.get(value);
 						if (!id) return { items: [] as string[], total: 0 };
 						const data = yield* transport.get(id);
-						const all = data !== undefined ? [data] : [];
+						const all = data === undefined ? [] : [data];
 						return applyPagination(all, pagination);
 					}
 					return yield* Effect.fail(

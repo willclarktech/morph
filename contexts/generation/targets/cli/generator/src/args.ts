@@ -6,7 +6,7 @@
  * Parse a backend selection flag from CLI argv.
  * Returns the flag value, env var value, or undefined to let the caller use its own default.
  */
-export const parseBackendArg = (
+export const parseBackendArgument = (
 	argv: readonly string[],
 	flag: string,
 	envKey: string,
@@ -20,7 +20,7 @@ export const parseBackendArg = (
 /**
  * Filter a backend selection flag (and its value) from argv.
  */
-export const filterBackendArg = (
+export const filterBackendArgument = (
 	argv: readonly string[],
 	flag: string,
 ): readonly string[] => {

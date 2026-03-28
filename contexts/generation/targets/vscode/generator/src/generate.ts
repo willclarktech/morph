@@ -22,31 +22,32 @@ export const generate = (
 	const isMultiContext = contexts.length > 1;
 
 	const contextImports = contexts
-		.map((ctx) => {
-			const pascal = toPascalCase(ctx.contextName);
+		.map((context) => {
+			const pascal = toPascalCase(context.contextName);
 			if (isMultiContext) {
-				return `import { HandlersLayer as ${pascal}HandlersLayer, ops as ${pascal}Ops } from "${ctx.corePackage}";
-import { textMateGrammar as ${pascal}Grammar, languageConfiguration as ${pascal}LangConfig } from "${ctx.corePackage}";`;
+				return `import {\n\tHandlersLayer as ${pascal}HandlersLayer,\n\tlanguageConfiguration as ${pascal}LangConfig,\n\tops as ${pascal}Ops,\n\ttextMateGrammar as ${pascal}Grammar,\n} from "${context.corePackage}";`;
 			}
-			return `import { HandlersLayer, ops } from "${ctx.corePackage}";
-import { textMateGrammar, languageConfiguration } from "${ctx.corePackage}";`;
+			return `import {\n\tHandlersLayer,\n\tlanguageConfiguration,\n\tops,\n\ttextMateGrammar,\n} from "${context.corePackage}";`;
 		})
 		.join("\n");
 
 	const layerMerge = isMultiContext
-		? `const HandlersLayer = Layer.mergeAll(${contexts.map((ctx) => `${toPascalCase(ctx.contextName)}HandlersLayer`).join(", ")});`
+		? `const HandlersLayer = Layer.mergeAll(${contexts.map((context) => `${toPascalCase(context.contextName)}HandlersLayer`).join(", ")});`
 		: "";
 
 	const opsMerge = isMultiContext
-		? `const ops = {\n${contexts.map((ctx) => `\t...${toPascalCase(ctx.contextName)}Ops,`).join("\n")}\n};`
+		? `const ops = {\n${contexts.map((context) => `\t...${toPascalCase(context.contextName)}Ops,`).join("\n")}\n};`
 		: "";
 
-	const grammarRef = isMultiContext
-		? `${toPascalCase(contexts[0]!.contextName)}Grammar`
-		: "textMateGrammar";
-	const langConfigRef = isMultiContext
-		? `${toPascalCase(contexts[0]!.contextName)}LangConfig`
-		: "languageConfiguration";
+	const [firstContext] = contexts;
+	const grammarRef =
+		isMultiContext && firstContext
+			? `${toPascalCase(firstContext.contextName)}Grammar`
+			: "textMateGrammar";
+	const langConfigRef =
+		isMultiContext && firstContext
+			? `${toPascalCase(firstContext.contextName)}LangConfig`
+			: "languageConfiguration";
 
 	const importBlock = sortImports(
 		[
@@ -68,9 +69,10 @@ const extension = createExtension({
 	layer: HandlersLayer,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- vscode types are structurally richer than runtime stubs
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument -- vscode types are structurally richer than runtime stubs */
 export const activate = (context: vscode.ExtensionContext) =>
 	extension.activate(context as any, vscode as any);
+/* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
 
 export const deactivate = () => extension.deactivate();
 `;

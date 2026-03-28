@@ -20,6 +20,6 @@ export const HandlersLayer = Layer.mergeAll(
 export {
 	createFileSessionStore,
 	resetSessionStore,
-	setSessionStore,
 	type SessionStore,
+	setSessionStore,
 } from "./session-store";

@@ -18,6 +18,9 @@ export const describeFunctionOutput = (function_: FunctionDef): string => {
 		case "entityId": {
 			return `${output.entity}Id`;
 		}
+		case "function": {
+			return "Function";
+		}
 		case "generic": {
 			const argsString = output.args
 				.map((a) => describeFunctionOutput({ output: a } as FunctionDef))
@@ -47,9 +50,6 @@ export const describeFunctionOutput = (function_: FunctionDef): string => {
 		}
 		case "valueObject": {
 			return output.name;
-		}
-		case "function": {
-			return "Function";
 		}
 		default: {
 			const _exhaustive: never = output;
@@ -84,10 +84,6 @@ const collectFunctionTypesFromTypeRef = (
 		case "entity": {
 			return [reference.name];
 		}
-		case "generic": {
-			// Include the base type name for generic types like StepBuilder<T>
-			return [reference.name];
-		}
 		case "entityId":
 		case "function":
 		case "primitive":
@@ -95,6 +91,10 @@ const collectFunctionTypesFromTypeRef = (
 		case "union":
 		case "valueObject": {
 			return [];
+		}
+		case "generic": {
+			// Include the base type name for generic types like StepBuilder<T>
+			return [reference.name];
 		}
 		case "optional": {
 			return collectFunctionTypesFromTypeRef(reference.inner);

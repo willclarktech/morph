@@ -26,13 +26,23 @@ export interface GenerateFunctionSchemasOptions {
  */
 const getExternalTypeName = (ref: TypeRef): string | undefined => {
 	switch (ref.kind) {
-		case "type":
-		case "entity":
-			return ref.name;
-		case "generic":
-			return ref.name;
-		default:
+		case "array":
+		case "entityId":
+		case "function":
+		case "optional":
+		case "primitive":
+		case "typeParam":
+		case "union":
+		case "valueObject": {
 			return undefined;
+		}
+		case "entity":
+		case "type": {
+			return ref.name;
+		}
+		case "generic": {
+			return ref.name;
+		}
 	}
 };
 
@@ -90,7 +100,7 @@ export const generateFunctionSchemas = (
 	// Add import for error types if any
 	const errorImport =
 		errorTypes.size > 0
-			? `import { ${[...errorTypes].sort().join(", ")} } from "./errors";\n\n`
+			? `import type { ${[...errorTypes].sort().join(", ")} } from "./errors";\n\n`
 			: "";
 
 	// Add import for external types if any
@@ -133,7 +143,9 @@ const generateFunctionSchema = (
 	);
 
 	// Generate output type with type parameters if the function is generic
-	const outputType = typeRefToTypeScript(functionDef.output);
+	// Use undefined instead of void for type aliases (void is only valid as return type or generic argument)
+	const rawOutputType = typeRefToTypeScript(functionDef.output);
+	const outputType = rawOutputType === "void" ? "undefined" : rawOutputType;
 	const typeParams = functionDef.typeParameters ?? [];
 	const typeParamList =
 		typeParams.length > 0

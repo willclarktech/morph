@@ -1,18 +1,17 @@
-import { Effect } from "effect";
+import { createJsonCodec } from "@morph/codec-json-impls";
+import { createYamlCodec } from "@morph/codec-yaml-impls";
 import { describe, expect, test } from "bun:test";
+import { Effect } from "effect";
 
 import { createCodecRegistry } from "./create-codec-registry";
 import { parseAcceptHeader } from "./negotiation";
-
-import { createJsonCodec } from "@morph/codec-json-impls";
-import { createYamlCodec } from "@morph/codec-yaml-impls";
 
 const run = <A>(effect: Effect.Effect<A, unknown>) => Effect.runPromise(effect);
 
 describe("parseAcceptHeader", () => {
 	test("parses simple accept header", () => {
 		const result = parseAcceptHeader("application/json");
-		expect(result).toEqual([{ type: "application/json", quality: 1.0 }]);
+		expect(result).toEqual([{ type: "application/json", quality: 1 }]);
 	});
 
 	test("parses multiple types with quality factors", () => {
@@ -20,7 +19,7 @@ describe("parseAcceptHeader", () => {
 			"application/json, application/x-yaml;q=0.9, */*;q=0.1",
 		);
 		expect(result).toEqual([
-			{ type: "application/json", quality: 1.0 },
+			{ type: "application/json", quality: 1 },
 			{ type: "application/x-yaml", quality: 0.9 },
 			{ type: "*/*", quality: 0.1 },
 		]);
@@ -28,7 +27,7 @@ describe("parseAcceptHeader", () => {
 
 	test("empty header defaults to */*", () => {
 		const result = parseAcceptHeader("");
-		expect(result).toEqual([{ type: "*/*", quality: 1.0 }]);
+		expect(result).toEqual([{ type: "*/*", quality: 1 }]);
 	});
 });
 
@@ -49,12 +48,12 @@ describe("createJsonCodec", () => {
 	});
 
 	test("round-trips BigInt via tagged JSON", async () => {
-		const value = { amount: BigInt(123456789) };
+		const value = { amount: 123_456_789n };
 		const encoded = await run(codec.encode(value, ""));
 		const decoded = (await run(codec.decode(encoded.body, ""))) as {
 			amount: bigint;
 		};
-		expect(decoded.amount).toBe(BigInt(123456789));
+		expect(decoded.amount).toBe(123_456_789n);
 	});
 
 	test("round-trips Date via tagged JSON", async () => {
@@ -134,12 +133,12 @@ describe("createYamlCodec", () => {
 	});
 
 	test("round-trips BigInt via marker object", async () => {
-		const value = { amount: BigInt(123456789) };
+		const value = { amount: 123_456_789n };
 		const encoded = await run(codec.encode(value, ""));
 		const decoded = (await run(codec.decode(encoded.body, ""))) as {
 			amount: bigint;
 		};
-		expect(decoded.amount).toBe(BigInt(123456789));
+		expect(decoded.amount).toBe(123_456_789n);
 	});
 
 	test("round-trips Date via YAML timestamp", async () => {

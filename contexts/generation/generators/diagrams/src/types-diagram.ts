@@ -18,6 +18,13 @@ const renderTypeRef = (typeRef: TypeRef): string => {
 		case "entityId": {
 			return `${typeRef.entity}Id`;
 		}
+		case "function": {
+			return "Function";
+		}
+		case "generic": {
+			const args = typeRef.args.map(renderTypeRef).join(", ");
+			return `${typeRef.name}<${args}>`;
+		}
 		case "optional": {
 			return `${renderTypeRef(typeRef.inner)}?`;
 		}
@@ -27,21 +34,14 @@ const renderTypeRef = (typeRef: TypeRef): string => {
 		case "type": {
 			return typeRef.name;
 		}
+		case "typeParam": {
+			return typeRef.name;
+		}
 		case "union": {
 			return typeRef.values.map((m: string) => `"${m}"`).join(" | ");
 		}
 		case "valueObject": {
 			return typeRef.name;
-		}
-		case "generic": {
-			const args = typeRef.args.map(renderTypeRef).join(", ");
-			return `${typeRef.name}<${args}>`;
-		}
-		case "typeParam": {
-			return typeRef.name;
-		}
-		case "function": {
-			return "Function";
 		}
 	}
 };

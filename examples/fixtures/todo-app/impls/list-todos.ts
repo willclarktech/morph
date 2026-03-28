@@ -18,7 +18,7 @@ export const ListTodosHandlerLive = Layer.effect(
 					// Verify user exists
 					const user = yield* userRepo
 						.findById(params.userId)
-						.pipe(Effect.mapError((e) => new UserNotFoundError({ message: e.message })));
+						.pipe(Effect.mapError((error) => new UserNotFoundError({ message: error.message })));
 					if (!user) {
 						return yield* Effect.fail(
 							new UserNotFoundError({
@@ -28,7 +28,7 @@ export const ListTodosHandlerLive = Layer.effect(
 					}
 
 					// Get all todos and filter by user
-					const result = yield* todoRepo.findAll().pipe(Effect.mapError((e) => new UserNotFoundError({ message: e.message })));
+					const result = yield* todoRepo.findAll().pipe(Effect.mapError((error) => new UserNotFoundError({ message: error.message })));
 					const userTodos = result.items.filter(
 						(todo) => todo.userId === params.userId,
 					);

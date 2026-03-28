@@ -5,10 +5,11 @@ import type {
 	PropertyRunOptions,
 	PropertySuiteResult,
 } from "@morph/property-runner";
+import type { Layer } from "effect";
 
 import { isOperationSuite, isValidatorSuite } from "@morph/property";
 import { printPropertySuiteResult } from "@morph/property-runner";
-import { Effect, Layer } from "effect";
+import { Effect } from "effect";
 
 import { runOperationSuite } from "./operation-suite";
 import { runValidatorSuite } from "./validator-suite";

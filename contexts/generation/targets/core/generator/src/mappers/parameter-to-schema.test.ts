@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
-
 import type { ParamDef } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import { parameterDefToSchema } from "./parameter-to-schema";
 
@@ -81,7 +81,7 @@ describe("parameterDefToSchema", () => {
 			type: { kind: "primitive", name: "string" },
 		};
 		const result = parameterDefToSchema(param);
-		expect(result).toContain('The \\"name\\" field');
+		expect(result).toContain(String.raw`The \"name\" field`);
 	});
 
 	test("array parameter", () => {

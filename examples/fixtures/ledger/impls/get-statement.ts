@@ -34,25 +34,25 @@ export const GetStatementHandlerLive = Layer.effect(
 
 					const transactions: Transaction[] = events
 						.filter(
-							(e: DomainEvent) =>
-								e._tag === "FundsDeposited" ||
-								e._tag === "FundsWithdrawn" ||
-								e._tag === "AccountOpened",
+							(event: DomainEvent) =>
+								event._tag === "FundsDeposited" ||
+								event._tag === "FundsWithdrawn" ||
+								event._tag === "AccountOpened",
 						)
-						.map((e: DomainEvent) => {
-							const p = e.params as Record<string, unknown>;
-							const isWithdraw = e._tag === "FundsWithdrawn";
+						.map((event: DomainEvent) => {
+							const p = event.params as Record<string, unknown>;
+							const isWithdraw = event._tag === "FundsWithdrawn";
 							const amount = isWithdraw
 								? -(p["amount"] as number)
 								: ((p["amount"] as number | undefined) ??
-									(p["initialDeposit"] as number) ??
+									(p["initialDeposit"] as number | undefined) ??
 									0);
 							return {
 								amount,
 								description:
 									(p["description"] as string | undefined) ??
 									`Account opened: ${(p["name"] as string | undefined) ?? ""}`,
-								timestamp: e.occurredAt,
+								timestamp: event.occurredAt,
 							};
 						});
 

@@ -1,7 +1,4 @@
-export interface MockFunction<
-	TArguments extends readonly unknown[],
-	TReturn,
-> {
+export interface MockFunction<TArguments extends readonly unknown[], TReturn> {
 	(...arguments_: TArguments): TReturn;
 	readonly calls: TArguments[];
 	readonly lastCall: TArguments | undefined;

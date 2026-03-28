@@ -4,11 +4,15 @@ import { formatAssertionProse, getField, runAssertion } from "./assertions";
 
 describe("runAssertion", () => {
 	test("toBe passes on match", () => {
-		expect(() => runAssertion(42, { type: "toBe", expected: 42 })).not.toThrow();
+		expect(() =>
+			runAssertion(42, { type: "toBe", expected: 42 }),
+		).not.toThrow();
 	});
 
 	test("toBe fails on mismatch", () => {
-		expect(() => runAssertion(42, { type: "toBe", expected: 99 })).toThrow("Expected 99, got 42");
+		expect(() => runAssertion(42, { type: "toBe", expected: 99 })).toThrow(
+			"Expected 99, got 42",
+		);
 	});
 
 	test("toBe uses strict equality", () => {
@@ -32,12 +36,14 @@ describe("runAssertion", () => {
 	});
 
 	test("toBeUndefined passes for undefined", () => {
-		expect(() => runAssertion(undefined, { type: "toBeUndefined" })).not.toThrow();
+		expect(() =>
+			runAssertion(undefined, { type: "toBeUndefined" }),
+		).not.toThrow();
 	});
 
 	test("toBeUndefined fails for defined value", () => {
 		expect(() => runAssertion("hello", { type: "toBeUndefined" })).toThrow(
-			'Expected undefined, got hello',
+			"Expected undefined, got hello",
 		);
 	});
 
@@ -66,9 +72,9 @@ describe("runAssertion", () => {
 	});
 
 	test("toContain throws TypeError for non-array/non-string", () => {
-		expect(() =>
-			runAssertion(42, { type: "toContain", expected: 4 }),
-		).toThrow("Expected array or string");
+		expect(() => runAssertion(42, { type: "toContain", expected: 4 })).toThrow(
+			"Expected array or string",
+		);
 	});
 
 	test("toHaveLength passes on correct length", () => {
@@ -114,9 +120,12 @@ describe("getField", () => {
 
 describe("formatAssertionProse", () => {
 	test("toBe format", () => {
-		expect(formatAssertionProse("result", ".name", { type: "toBe", expected: "test" })).toBe(
-			'result.name is "test"',
-		);
+		expect(
+			formatAssertionProse("result", ".name", {
+				type: "toBe",
+				expected: "test",
+			}),
+		).toBe('result.name is "test"');
 	});
 
 	test("toBeDefined format", () => {
@@ -126,20 +135,26 @@ describe("formatAssertionProse", () => {
 	});
 
 	test("toBeUndefined format", () => {
-		expect(formatAssertionProse("result", ".error", { type: "toBeUndefined" })).toBe(
-			"result.error is undefined",
-		);
+		expect(
+			formatAssertionProse("result", ".error", { type: "toBeUndefined" }),
+		).toBe("result.error is undefined");
 	});
 
 	test("toContain format", () => {
 		expect(
-			formatAssertionProse("result", ".items", { type: "toContain", expected: "apple" }),
+			formatAssertionProse("result", ".items", {
+				type: "toContain",
+				expected: "apple",
+			}),
 		).toBe('result.items contains "apple"');
 	});
 
 	test("toHaveLength format", () => {
 		expect(
-			formatAssertionProse("result", ".items", { type: "toHaveLength", expected: 3 }),
+			formatAssertionProse("result", ".items", {
+				type: "toHaveLength",
+				expected: 3,
+			}),
 		).toBe("result.items has length 3");
 	});
 

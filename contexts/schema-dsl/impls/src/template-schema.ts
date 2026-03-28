@@ -6,7 +6,7 @@ export interface TemplateSchemaHandler {
 	readonly handle: (
 		params: Record<string, never>,
 		options: Record<string, never>,
-	) => Effect.Effect<string, never>;
+	) => Effect.Effect<string>;
 }
 
 export const TemplateSchemaHandler = Context.GenericTag<TemplateSchemaHandler>(

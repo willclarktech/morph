@@ -70,7 +70,7 @@ export const createInMemoryEventStore = () =>
  * Create a JSON file-backed EventStore layer.
  */
 export const createJsonFileEventStore = () =>
-\tEffect.gen(function* () {
+\tEffect.sync(() => {
 \t\tconst filePath = process.env["${envPrefix}_EVENT_STORE_FILE"] ?? ".events.json";
 \t\tconst transport = createJsonFileEventStoreTransport(filePath);
 \t\tconst store = createEventStore<DomainEvent>(transport);

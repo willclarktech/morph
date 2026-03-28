@@ -47,7 +47,9 @@ export const generateEventSubscriberService = (
 	const content = `// Generated EventSubscriber service interface
 // Do not edit - regenerate from schema
 
-import { Context, Effect } from "effect";
+import type { Effect } from "effect";
+
+import { Context } from "effect";
 
 import type { DomainEvent, ${eventTypeImports} } from "${typesImportPath}";
 
@@ -194,8 +196,8 @@ export const generateSubscriberBootstrap = (
 
 import { Effect, Layer } from "effect";
 
-import { EventSubscriber } from "./event-subscriber";
 ${subscriberImports}
+import { EventSubscriber } from "./event-subscriber";
 
 /**
  * Bootstrap layer that registers all subscribers with the event registry.

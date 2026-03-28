@@ -1,17 +1,19 @@
-import { Context, Effect, Layer } from "effect";
-
 import type {
 	ApiKeyStorageError,
 	ApiKeyWithSecret,
 } from "@morph/auth-apikey-dsl";
+import type { Effect } from "effect";
+
+import { Context, Layer } from "effect";
+
 import { createApiKey } from "./apikey-store";
 
 export interface CreateApiKeyHandler {
 	readonly handle: (
 		params: { readonly userId: string },
 		options: {
-			readonly name?: string | undefined;
 			readonly expiresInSeconds?: number | undefined;
+			readonly name?: string | undefined;
 		},
 	) => Effect.Effect<ApiKeyWithSecret, ApiKeyStorageError>;
 }

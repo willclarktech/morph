@@ -27,7 +27,7 @@ export const TransferTodosHandlerLive = Layer.effect(
 					// Verify source user exists
 					const fromUser = yield* userRepo
 						.findById(params.fromUserId)
-						.pipe(Effect.mapError((e) => new UserNotFoundError({ message: e.message })));
+						.pipe(Effect.mapError((error) => new UserNotFoundError({ message: error.message })));
 					if (!fromUser) {
 						return yield* Effect.fail(
 							new UserNotFoundError({
@@ -39,7 +39,7 @@ export const TransferTodosHandlerLive = Layer.effect(
 					// Verify target user exists
 					const toUser = yield* userRepo
 						.findById(params.toUserId)
-						.pipe(Effect.mapError((e) => new UserNotFoundError({ message: e.message })));
+						.pipe(Effect.mapError((error) => new UserNotFoundError({ message: error.message })));
 					if (!toUser) {
 						return yield* Effect.fail(
 							new UserNotFoundError({
@@ -49,7 +49,7 @@ export const TransferTodosHandlerLive = Layer.effect(
 					}
 
 					// Get all todos for the source user
-					const allTodosResult = yield* todoRepo.findAll().pipe(Effect.mapError((e) => new UserNotFoundError({ message: e.message })));
+					const allTodosResult = yield* todoRepo.findAll().pipe(Effect.mapError((error) => new UserNotFoundError({ message: error.message })));
 					const todosToTransfer = allTodosResult.items.filter(
 						(todo) => todo.userId === params.fromUserId,
 					);
@@ -57,7 +57,7 @@ export const TransferTodosHandlerLive = Layer.effect(
 					// Transfer each todo to the target user
 					for (const todo of todosToTransfer) {
 						const updatedTodo = { ...todo, userId: params.toUserId };
-						yield* todoRepo.save(updatedTodo).pipe(Effect.mapError((e) => new UserNotFoundError({ message: e.message })));
+						yield* todoRepo.save(updatedTodo).pipe(Effect.mapError((error) => new UserNotFoundError({ message: error.message })));
 					}
 
 					return todosToTransfer.length;

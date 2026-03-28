@@ -17,7 +17,12 @@ import {
 	generateMcpPackageJson,
 } from "@morph/runtime-mcp";
 import { buildTokenAuthConfig } from "@morph/builder-test";
-import { toEnvironmentPrefix, toKebabCase, toPascalCase } from "@morph/utils";
+import {
+	sortImports,
+	toEnvironmentPrefix,
+	toKebabCase,
+	toPascalCase,
+} from "@morph/utils";
 
 interface ContextPackages {
 	readonly contextName: string;
@@ -65,11 +70,17 @@ const generateMcpScenarioTest = (
 			? `const prose = ${toPascalCase(contexts[0]!.contextName)}Prose;`
 			: `const prose = {\n${contexts.map((ctx) => `\t...${toPascalCase(ctx.contextName)}Prose,`).join("\n")}\n};`;
 
-	return `import { createMcpRunner } from "@morph/scenario-runner-mcp";
-${proseImports}
-import { scenarios } from "${scenariosPackage}";
-import { expect, test } from "bun:test";
-import path from "node:path";
+	const imports = sortImports(
+		[
+			`import { createMcpRunner } from "@morph/scenario-runner-mcp";`,
+			proseImports,
+			`import { scenarios } from "${scenariosPackage}";`,
+			`import { expect, test } from "bun:test";`,
+			`import path from "node:path";`,
+		].join("\n"),
+	);
+
+	return `${imports}
 
 ${proseMerge}
 

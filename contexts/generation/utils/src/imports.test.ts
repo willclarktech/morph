@@ -43,7 +43,7 @@ import { foo } from "./foo";`);
 test("handles multi-line imports", () => {
 	const input = `import {
 	createCli,
-	filterBackendArg,
+	filterBackendArgument,
 } from "@morph/runtime-cli";
 import { Effect } from "effect";`;
 
@@ -51,7 +51,7 @@ import { Effect } from "effect";`;
 
 	expect(result).toBe(`import {
 	createCli,
-	filterBackendArg,
+	filterBackendArgument,
 } from "@morph/runtime-cli";
 import { Effect } from "effect";`);
 });

@@ -10,6 +10,7 @@ import {
 	getAllOperations,
 	getOperationPreInvariantDefs,
 } from "@morph/domain-schema";
+import { sortImports } from "@morph/utils";
 
 import { generateClientFactory } from "./implementation";
 import {
@@ -64,33 +65,47 @@ export const generate = (
 		// Find the context for the auth entity
 		for (const [contextName, context] of Object.entries(schema.contexts)) {
 			if (context.entities[authEntityName]) {
-				if (!typeImports.has(contextName)) {
-					typeImports.set(contextName, new Set());
-				}
-				typeImports.get(contextName)!.add(authEntityName);
+				const existing = typeImports.get(contextName) ?? new Set<string>();
+				typeImports.set(contextName, existing);
+				existing.add(authEntityName);
 				break;
 			}
 		}
 	}
 
+	const factory = generateClientFactory(
+		apiOperations,
+		schema,
+		basePath,
+		hasAuth,
+		authEntityName,
+	);
+
+	const httpValueImports = [
+		...(hasAuth ? ["authHeaders"] : []),
+		...(factory.needsJsonHeaders ? ["jsonHeaders"] : []),
+		"request",
+	].join(", ");
+
+	const importBlock = sortImports(
+		[
+			'import type { ClientConfig, HttpClientError } from "@morph/http-client";',
+			'import type { Effect } from "effect";',
+			`import { ${httpValueImports} } from "@morph/http-client";`,
+			generateMultiContextTypeImports(scope, typeImports, errorImports),
+		]
+			.filter(Boolean)
+			.join("\n"),
+	);
+
 	const sections = [
 		"// Generated HTTP Client",
 		"",
-		'import type { Effect } from "effect";',
-		"",
-		'import { type ClientConfig, type HttpClientError, authHeaders, jsonHeaders, request } from "@morph/http-client";',
-		"",
-		generateMultiContextTypeImports(scope, typeImports, errorImports),
+		importBlock,
 		"",
 		generateClientInterface(apiOperations, schema, authEntityName),
 		"",
-		generateClientFactory(
-			apiOperations,
-			schema,
-			basePath,
-			hasAuth,
-			authEntityName,
-		),
+		factory.code,
 	];
 
 	return sections.join("\n") + "\n";

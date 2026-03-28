@@ -1,9 +1,8 @@
-import { Context, Effect, Layer } from "effect";
-import { statSync } from "node:fs";
-
 import type { DatabaseInfo } from "@morph/storage-sqlite-dsl";
 
 import { DatabaseLockedError } from "@morph/storage-sqlite-dsl";
+import { Context, Effect, Layer } from "effect";
+import { statSync } from "node:fs";
 
 import { getDatabaseState } from "./database-state";
 

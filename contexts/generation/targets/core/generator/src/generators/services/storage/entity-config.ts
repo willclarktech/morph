@@ -33,7 +33,7 @@ export const generateEntityConfigs = (
 
 		const indexes = [
 			...uniqueAttributes.map(
-				(attr) => `{ kind: "unique" as const, field: "${attr}" }`,
+				(attribute) => `{ kind: "unique" as const, field: "${attribute}" }`,
 			),
 			...foreignKeys.map(
 				(fk) => `{ kind: "nonUnique" as const, field: "${fk.name}" }`,
@@ -77,13 +77,7 @@ export const generateRepositoryAdapter = (
 	const uniqueAttributes = getUniqueAttributes(entityDef);
 	const foreignKeys = getForeignKeyAttributes(entityDef);
 
-	// Collect type imports for FK types
-	const fkTypeImports = foreignKeys
-		.map((fk) => `${toPascalCase(fk.targetEntity)}Id`)
-		.filter((t) => t !== idType);
-	const typeImports = [pascalName, idType, ...new Set(fkTypeImports)].join(
-		", ",
-	);
+	const typeImports = [pascalName, idType].join(", ");
 
 	// Generate findBy methods for unique attributes
 	const uniqueFindByMethods = uniqueAttributes.map((attributeName) => {

@@ -83,7 +83,6 @@ ${operationsMap}
 };
 
 const runner = createLibraryRunner({
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Layer type variance
 	layer: TestLayer as Layer.Layer<any>,
 	operations,
 	prose,
@@ -176,7 +175,6 @@ ${validatorsMap}
 };
 
 const runner = createPropertyLibraryRunner({
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Layer type variance
 	layer: TestLayer as Layer.Layer<any>,
 	validators,
 	operations: {},

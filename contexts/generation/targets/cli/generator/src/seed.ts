@@ -28,18 +28,18 @@ export const generateSeedFile = (options: SeedOptions): string | undefined => {
 		'import { Effect } from "effect";',
 	];
 
-	for (const ctx of contexts) {
-		const contextEntities = entitiesByContext.get(ctx.contextName) ?? [];
+	for (const context of contexts) {
+		const contextEntities = entitiesByContext.get(context.contextName) ?? [];
 		if (contextEntities.length === 0) continue;
 
 		const arbitraryImports = contextEntities.map((name) => `${name}Arbitrary`);
 		importLines.push(
-			`import { ${arbitraryImports.join(", ")} } from "${ctx.dslPackage}";`,
+			`import { ${arbitraryImports.join(", ")} } from "${context.dslPackage}";`,
 		);
 
 		const repoImports = contextEntities.map((name) => `${name}Repository`);
 		importLines.push(
-			`import { ${repoImports.join(", ")} } from "${ctx.corePackage}";`,
+			`import { ${repoImports.join(", ")} } from "${context.corePackage}";`,
 		);
 	}
 
@@ -59,16 +59,16 @@ export const generateSeedFile = (options: SeedOptions): string | undefined => {
 
 	return `${imports}
 
-export const parseSeedArgs = (argv: readonly string[]) => {
-	const countIdx = argv.indexOf("--count");
+export const parseSeedArguments = (argv: readonly string[]) => {
+	const countIndex = argv.indexOf("--count");
 	const count =
-		countIdx >= 0 && argv[countIdx + 1] !== undefined
-			? Number(argv[countIdx + 1])
+		countIndex !== -1 && argv[countIndex + 1] !== undefined
+			? Number(argv[countIndex + 1])
 			: 10;
-	const seedIdx = argv.indexOf("--seed");
+	const seedIndex = argv.indexOf("--seed");
 	const seedValue =
-		seedIdx >= 0 && argv[seedIdx + 1] !== undefined
-			? Number(argv[seedIdx + 1])
+		seedIndex !== -1 && argv[seedIndex + 1] !== undefined
+			? Number(argv[seedIndex + 1])
 			: 42;
 	return { count, seedValue };
 };

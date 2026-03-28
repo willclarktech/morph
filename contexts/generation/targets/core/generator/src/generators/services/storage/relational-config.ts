@@ -36,7 +36,7 @@ export const generateRelationalConfigs = (
 		const fieldsCode = fieldSpecsToCodeString(fieldSpecs, "\t");
 		const indexesCode =
 			indexSpecs.length > 0
-				? `[\n${indexSpecs.map((idx) => `\t\t{ kind: "${idx.kind}" as const, field: "${idx.field}" }`).join(",\n")},\n\t]`
+				? `[\n${indexSpecs.map((index) => `\t\t{ kind: "${index.kind}" as const, field: "${index.field}" }`).join(",\n")},\n\t]`
 				: "[]";
 
 		return `export const ${lower}RelationalConfig: RelationalTableConfig = {

@@ -1,4 +1,4 @@
-import type { AssertionMatcher, Step } from "@morph/scenario";
+import type { Step } from "@morph/scenario";
 
 import { interpolate, isAssertion } from "@morph/scenario";
 

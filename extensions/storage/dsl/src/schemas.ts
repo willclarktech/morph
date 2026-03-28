@@ -60,7 +60,7 @@ export type PaginatedResult = S.Schema.Type<typeof PaginatedResultSchema>;
  */
 export const applyPagination = (
 	items: readonly string[],
-	pagination?: PaginationParams | undefined,
+	pagination?: PaginationParams,
 ): PaginatedResult => {
 	const total = items.length;
 	if (!pagination) return { items, total };

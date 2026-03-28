@@ -33,4 +33,4 @@ export type GetStoreInfoOutput = MemoryStoreInfo;
 export const ResetStoreInputSchema = S.Struct({});
 
 export type ResetStoreInput = S.Schema.Type<typeof ResetStoreInputSchema>;
-export type ResetStoreOutput = void;
+export type ResetStoreOutput = undefined;

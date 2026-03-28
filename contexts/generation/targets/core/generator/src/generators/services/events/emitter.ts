@@ -14,7 +14,9 @@ export const generateEventEmitterService = (
 	const content = `// Generated EventEmitter service interface
 // Do not edit - regenerate from schema
 
-import { Context, Effect } from "effect";
+import type { Effect } from "effect";
+
+import { Context } from "effect";
 
 import type { DomainEvent } from "${typesImportPath}";
 

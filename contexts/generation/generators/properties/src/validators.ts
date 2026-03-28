@@ -7,7 +7,7 @@ import {
 	getAllInvariants,
 } from "@morph/domain-schema";
 import { compileCondition } from "@morph/generator-core";
-import { toCamelCase } from "@morph/utils";
+import { sortImports, toCamelCase } from "@morph/utils";
 
 export const generateValidatorProperties = (
 	schema: DomainSchema,
@@ -79,7 +79,7 @@ export const validatorProperties = [];
 	arbitrary: ${entityName}Arbitrary,
 	contextArbitrary: ${contextArbitrary},
 	validatorName: "validate${name}",
-	predicate: (${entityVariable}, context) => ${predicateExpr},
+	predicate: (${entityVariable}, ${predicateExpr.includes("context") ? "context" : "_context"}) => ${predicateExpr},
 });`;
 		} else {
 			const predicateExpr = compileCondition(
@@ -104,12 +104,18 @@ export const validatorProperties = [];
 		.map((entry) => toCamelCase(entry.name))
 		.join(", ");
 
+	const imports = sortImports(
+		[
+			`import type { AnyPropertySuite } from "@morph/property";`,
+			`import { validatorProperty } from "@morph/property";`,
+			`import * as fc from "fast-check";`,
+			`import { ${arbitraryImportsStr} } from "${dslPackage}";`,
+		].join("\n"),
+	);
+
 	return `// Generated validator property suites from invariants
 // Do not edit - regenerate from schema
-import type { AnyPropertySuite } from "@morph/property";
-import { validatorProperty } from "@morph/property";
-import * as fc from "fast-check";
-import { ${arbitraryImportsStr} } from "${dslPackage}";
+${imports}
 
 ${propertyDefs.join("\n\n")}
 

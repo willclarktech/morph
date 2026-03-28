@@ -1,6 +1,5 @@
-import { describe, expect, test } from "bun:test";
-
 import { assert, given, scenario, then, when } from "@morph/scenario";
+import { describe, expect, test } from "bun:test";
 
 import type { ExecuteOperation, RunScenarioConfig } from "./run";
 
@@ -14,14 +13,7 @@ const makeOp = (name: string, params: unknown) => ({
 
 const mockExecute: ExecuteOperation = async (name, params) => {
 	switch (name) {
-		case "createUser":
-			return {
-				result: {
-					id: "u1",
-					name: (params as { name: string }).name,
-				},
-			};
-		case "createPost":
+		case "createPost": {
 			return {
 				result: {
 					id: "p1",
@@ -29,10 +21,21 @@ const mockExecute: ExecuteOperation = async (name, params) => {
 					title: (params as { title: string }).title,
 				},
 			};
-		case "failOp":
+		}
+		case "createUser": {
+			return {
+				result: {
+					id: "u1",
+					name: (params as { name: string }).name,
+				},
+			};
+		}
+		case "failOp": {
 			throw new Error("operation failed");
-		default:
+		}
+		default: {
 			return { result: { ok: true } };
+		}
 	}
 };
 
@@ -57,12 +60,13 @@ describe("runScenario", () => {
 	});
 
 	test("bindings from step 1 are available in step 2", async () => {
-		const s = scenario("Cross-step bindings")
-			.steps(
-				given(makeOp("createUser", { name: "Bob" })).as("user"),
-				when(makeOp("createPost", { authorId: "$user.id", title: "Test" })).as("post"),
-				then(assert("post", "authorId").toBe("u1")),
-			);
+		const s = scenario("Cross-step bindings").steps(
+			given(makeOp("createUser", { name: "Bob" })).as("user"),
+			when(makeOp("createPost", { authorId: "$user.id", title: "Test" })).as(
+				"post",
+			),
+			then(assert("post", "authorId").toBe("u1")),
+		);
 
 		const result = await runScenario(s, config);
 
@@ -71,12 +75,11 @@ describe("runScenario", () => {
 	});
 
 	test("stops on first failure", async () => {
-		const s = scenario("Fail early")
-			.steps(
-				given(makeOp("createUser", { name: "Alice" })).as("user"),
-				then(assert("user", "name").toBe("WRONG")),
-				then(assert("user", "id").toBeDefined()),
-			);
+		const s = scenario("Fail early").steps(
+			given(makeOp("createUser", { name: "Alice" })).as("user"),
+			then(assert("user", "name").toBe("WRONG")),
+			then(assert("user", "id").toBeDefined()),
+		);
 
 		const result = await runScenario(s, config);
 
@@ -89,10 +92,9 @@ describe("runScenario", () => {
 	});
 
 	test("captures execute errors", async () => {
-		const s = scenario("Operation throws")
-			.steps(
-				when(makeOp("failOp", {})).step,
-			);
+		const s = scenario("Operation throws").steps(
+			when(makeOp("failOp", {})).step,
+		);
 
 		const result = await runScenario(s, config);
 
@@ -109,9 +111,7 @@ describe("runScenario", () => {
 
 		const s = scenario("With prose")
 			.withActor("Admin")
-			.steps(
-				given(makeOp("createUser", { name: "Alice" })).as("user"),
-			);
+			.steps(given(makeOp("createUser", { name: "Alice" })).as("user"));
 
 		const result = await runScenario(s, proseConfig);
 
@@ -119,10 +119,9 @@ describe("runScenario", () => {
 	});
 
 	test("tracks timing for each step", async () => {
-		const s = scenario("Timing test")
-			.steps(
-				given(makeOp("createUser", { name: "Timed" })).as("user"),
-			);
+		const s = scenario("Timing test").steps(
+			given(makeOp("createUser", { name: "Timed" })).as("user"),
+		);
 
 		const result = await runScenario(s, config);
 
@@ -159,7 +158,9 @@ describe("createRunner", () => {
 	test("runAll calls reset between scenarios", async () => {
 		let resetCount = 0;
 		const runner = createRunner(config, {
-			reset: () => { resetCount++; },
+			reset: () => {
+				resetCount++;
+			},
 		});
 
 		const scenarios = [
@@ -177,12 +178,12 @@ describe("createRunner", () => {
 	test("runAll calls cleanup after all scenarios", async () => {
 		let cleaned = false;
 		const runner = createRunner(config, {
-			cleanup: () => { cleaned = true; },
+			cleanup: () => {
+				cleaned = true;
+			},
 		});
 
-		await runner.runAll([
-			scenario("S1").steps(given(makeOp("noop", {})).step),
-		]);
+		await runner.runAll([scenario("S1").steps(given(makeOp("noop", {})).step)]);
 
 		expect(cleaned).toBe(true);
 	});
@@ -191,7 +192,9 @@ describe("createRunner", () => {
 		const runner = createRunner(config);
 
 		const scenarios = [
-			scenario("Tagged").withTags("smoke").steps(given(makeOp("noop", {})).step),
+			scenario("Tagged")
+				.withTags("smoke")
+				.steps(given(makeOp("noop", {})).step),
 			scenario("Untagged").steps(given(makeOp("noop", {})).step),
 		];
 

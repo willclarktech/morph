@@ -1,8 +1,4 @@
-import type {
-	Operations,
-	Prose,
-	Runner,
-} from "@morph/scenario-runner";
+import type { Operations, Prose, Runner } from "@morph/scenario-runner";
 import type { Runtime as EffectRuntime } from "effect";
 
 import { createRunner } from "@morph/scenario-runner";

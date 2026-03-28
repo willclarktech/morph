@@ -8,7 +8,7 @@
  * Finds all coverage/lcov.info files, parses line coverage, and prints
  * a grouped summary (morph generation, morph apps, examples).
  */
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 interface PackageCoverage {
@@ -40,22 +40,24 @@ const findLcovFiles = (dir: string): readonly string[] => {
 const classifyPackage = (
 	lcovPath: string,
 ): "generation" | "apps" | "examples" | "other" => {
-	const rel = path.relative(ROOT, lcovPath);
-	if (rel.startsWith("contexts/generation/")) return "generation";
-	if (rel.startsWith("contexts/schema-dsl/")) return "generation";
-	if (rel.startsWith("apps/")) return "apps";
-	if (rel.startsWith("examples/")) return "examples";
+	const relative = path.relative(ROOT, lcovPath);
+	if (relative.startsWith("contexts/generation/")) return "generation";
+	if (relative.startsWith("contexts/schema-dsl/")) return "generation";
+	if (relative.startsWith("apps/")) return "apps";
+	if (relative.startsWith("examples/")) return "examples";
 	return "other";
 };
 
 const getPackageName = (lcovPath: string): string => {
-	const pkgDir = path.dirname(path.dirname(lcovPath));
-	const pkgJsonPath = path.join(pkgDir, "package.json");
+	const packageDir = path.dirname(path.dirname(lcovPath));
+	const packageJsonPath = path.join(packageDir, "package.json");
 	try {
-		const pkg = JSON.parse(readFileSync(pkgJsonPath, "utf-8"));
-		return pkg.name ?? path.relative(ROOT, pkgDir);
+		const package_ = JSON.parse(readFileSync(packageJsonPath, "utf8")) as {
+			name?: string;
+		};
+		return package_.name ?? path.relative(ROOT, packageDir);
 	} catch {
-		return path.relative(ROOT, pkgDir);
+		return path.relative(ROOT, packageDir);
 	}
 };
 
@@ -66,9 +68,9 @@ const parseLcov = (
 	let linesTotal = 0;
 	for (const line of content.split("\n")) {
 		if (line.startsWith("LH:")) {
-			linesHit += parseInt(line.slice(3), 10);
+			linesHit += Number.parseInt(line.slice(3), 10);
 		} else if (line.startsWith("LF:")) {
-			linesTotal += parseInt(line.slice(3), 10);
+			linesTotal += Number.parseInt(line.slice(3), 10);
 		}
 	}
 	return { linesHit, linesTotal };
@@ -87,7 +89,7 @@ const run = async (): Promise<void> => {
 	const lcovFiles = findLcovFiles(ROOT);
 
 	if (lcovFiles.length === 0) {
-		console.log("No coverage data found. Run `bun run test:coverage` first.");
+		console.warn("No coverage data found. Run `bun run test:coverage` first.");
 		process.exit(1);
 	}
 
@@ -117,13 +119,13 @@ const run = async (): Promise<void> => {
 		"Package".length,
 		...packages.map((p) => p.name.length),
 	);
-	const sep = "-".repeat(nameWidth + 32);
+	const separator = "-".repeat(nameWidth + 32);
 
-	console.log();
-	console.log(
+	console.info();
+	console.info(
 		`${pad("Package", nameWidth)}  ${"Hit".padStart(6)}  ${"Total".padStart(6)}  ${"Line %".padStart(7)}`,
 	);
-	console.log(sep);
+	console.info(separator);
 
 	let totalHit = 0;
 	let totalTotal = 0;
@@ -132,22 +134,22 @@ const run = async (): Promise<void> => {
 		const pkgs = packages.filter((p) => p.group === group.key);
 		if (pkgs.length === 0) continue;
 
-		console.log(`\n  ${group.label}`);
+		console.info(`\n  ${group.label}`);
 
-		for (const pkg of pkgs) {
-			totalHit += pkg.linesHit;
-			totalTotal += pkg.linesTotal;
-			console.log(
-				`${pad(pkg.name, nameWidth)}  ${pad(String(pkg.linesHit), 6, "right")}  ${pad(String(pkg.linesTotal), 6, "right")}  ${pad(pct(pkg.linesHit, pkg.linesTotal), 7, "right")}`,
+		for (const package_ of pkgs) {
+			totalHit += package_.linesHit;
+			totalTotal += package_.linesTotal;
+			console.info(
+				`${pad(package_.name, nameWidth)}  ${pad(String(package_.linesHit), 6, "right")}  ${pad(String(package_.linesTotal), 6, "right")}  ${pad(pct(package_.linesHit, package_.linesTotal), 7, "right")}`,
 			);
 		}
 	}
 
-	console.log(sep);
-	console.log(
+	console.info(separator);
+	console.info(
 		`${pad("TOTAL", nameWidth)}  ${pad(String(totalHit), 6, "right")}  ${pad(String(totalTotal), 6, "right")}  ${pad(pct(totalHit, totalTotal), 7, "right")}`,
 	);
-	console.log();
+	console.info();
 };
 
 await run();

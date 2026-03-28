@@ -46,7 +46,7 @@ export const indentBlock = (content: string, level: number): string => {
 	const prefix = "\t".repeat(level);
 	return content
 		.split("\n")
-		.map((line, i) => (i === 0 || !line.trim() ? line : prefix + line))
+		.map((line, index) => (index === 0 || !line.trim() ? line : prefix + line))
 		.join("\n");
 };
 
@@ -55,20 +55,17 @@ export const indentBlock = (content: string, level: number): string => {
  * Replaces manual tab-counting in `.join("\n\t\t\t")` patterns.
  *
  * @example
- * items.join(sep(5))           // same as .join("\n\t\t\t\t\t")
- * items.join(sep(1, "", "| ")) // same as .join("\n\t| ")
- * items.join(sep(1, ","))      // same as .join(",\n\t")
- * items.join(sep(3, "\n"))     // same as .join("\n\n\t\t\t")
+ * items.join(separator(5))           // same as .join("\n\t\t\t\t\t")
+ * items.join(separator(1, "", "| ")) // same as .join("\n\t| ")
+ * items.join(separator(1, ","))      // same as .join(",\n\t")
+ * items.join(separator(3, "\n"))     // same as .join("\n\n\t\t\t")
  */
-export const sep = (
-	level: number,
-	pre: string = "",
-	post: string = "",
-): string => pre + "\n" + "\t".repeat(level) + post;
+export const separator = (level: number, pre = "", post = ""): string =>
+	pre + "\n" + "\t".repeat(level) + post;
 
 /**
  * Join items with newline + N tabs as separator.
- * Filters out undefined/empty items. Convenience wrapper around sep().
+ * Filters out undefined/empty items. Convenience wrapper around separator().
  *
  * @example
  * joinLines(["<th>A</th>", "<th>B</th>"], 5)
@@ -77,20 +74,21 @@ export const sep = (
 export const joinLines = (
 	items: readonly (string | undefined)[],
 	level: number,
-): string => items.filter(Boolean).join(sep(level));
+): string => items.filter(Boolean).join(separator(level));
 
 /**
  * Filter falsy values from config property arrays.
  * Use with conditional expressions to build object properties.
  *
  * @example
- * const props = configProps([
+ * const props = configProperties([
  *   hasAuth && "auth: authStrategy,",
  *   "required: true,",
  * ]);
  * // If hasAuth is false: ["required: true,"]
  * // If hasAuth is true: ["auth: authStrategy,", "required: true,"]
  */
-export const configProps = (
+export const configProperties = (
 	items: readonly (string | false | undefined)[],
+	// eslint-disable-next-line unicorn/prefer-native-coercion-functions -- type guard needed for TypeScript narrowing
 ): string[] => items.filter((item): item is string => Boolean(item));

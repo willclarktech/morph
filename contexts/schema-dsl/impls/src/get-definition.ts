@@ -6,16 +6,15 @@ import type {
 } from "@morph/schema-dsl-parser";
 import type { Effect } from "effect";
 
-import { Context, Effect as E, Layer } from "effect";
-
 import { parse } from "@morph/schema-dsl-parser";
+import { Context, Effect as E, Layer } from "effect";
 
 export interface GetDefinitionHandler {
 	readonly handle: (
 		params: {
-			readonly source: string;
-			readonly line: number;
 			readonly column: number;
+			readonly line: number;
+			readonly source: string;
 		},
 		options: Record<string, never>,
 	) => Effect.Effect<DslLocation>;
@@ -49,8 +48,8 @@ const getWordAtPosition = (
 	let start = col;
 	let end = col;
 
-	while (start > 0 && /\w/.test(targetLine[start - 1]!)) start--;
-	while (end < targetLine.length && /\w/.test(targetLine[end]!)) end++;
+	while (start > 0 && /\w/.test(targetLine[start - 1] ?? "")) start--;
+	while (end < targetLine.length && /\w/.test(targetLine[end] ?? "")) end++;
 
 	return targetLine.slice(start, end);
 };
@@ -65,32 +64,32 @@ const collectDeclarations = (
 ): ReadonlyMap<string, SourceRange> => {
 	const declarations = new Map<string, SourceRange>();
 
-	for (const ctx of ast.contexts) {
-		declarations.set(ctx.name, ctx.range);
-		addContextDeclarations(ctx, declarations);
+	for (const context of ast.contexts) {
+		declarations.set(context.name, context.range);
+		addContextDeclarations(context, declarations);
 	}
 
 	return declarations;
 };
 
 const addContextDeclarations = (
-	ctx: ContextAst,
+	context: ContextAst,
 	declarations: Map<string, SourceRange>,
 ): void => {
 	const addAll = (items: readonly NamedDeclaration[]) => {
 		for (const item of items) declarations.set(item.name, item.range);
 	};
 
-	addAll(ctx.entities);
-	addAll(ctx.valueObjects);
-	addAll(ctx.commands);
-	addAll(ctx.queries);
-	addAll(ctx.functions);
-	addAll(ctx.invariants);
-	addAll(ctx.subscribers);
-	addAll(ctx.ports);
-	addAll(ctx.errors);
-	addAll(ctx.types);
+	addAll(context.entities);
+	addAll(context.valueObjects);
+	addAll(context.commands);
+	addAll(context.queries);
+	addAll(context.functions);
+	addAll(context.invariants);
+	addAll(context.subscribers);
+	addAll(context.ports);
+	addAll(context.errors);
+	addAll(context.types);
 };
 
 export const GetDefinitionHandlerLive = Layer.succeed(GetDefinitionHandler, {

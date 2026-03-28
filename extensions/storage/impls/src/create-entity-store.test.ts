@@ -1,7 +1,7 @@
+import type { EntityStoreConfig, StorageTransport } from "@morph/storage-dsl";
+
 import { describe, expect, test } from "bun:test";
 import { Effect } from "effect";
-
-import type { EntityStoreConfig, StorageTransport } from "@morph/storage-dsl";
 
 import { createEntityStore } from "./create-entity-store";
 
@@ -37,10 +37,10 @@ describe("createEntityStore", () => {
 
 	test("delegates get to transport", async () => {
 		const transport = createMemoryTransport();
-		const val = mkEntity("k1", { name: "test" });
-		await run(transport.put("k1", val));
+		const value = mkEntity("k1", { name: "test" });
+		await run(transport.put("k1", value));
 		const store = await run(createEntityStore(baseConfig, transport));
-		expect(await run(store.get("k1"))).toBe(val);
+		expect(await run(store.get("k1"))).toBe(value);
 		expect(await run(store.get("missing"))).toBeUndefined();
 	});
 
@@ -72,8 +72,8 @@ describe("createEntityStore", () => {
 	test("remove deletes data", async () => {
 		const transport = createMemoryTransport();
 		const store = await run(createEntityStore(baseConfig, transport));
-		const val = mkEntity("x", { name: "test" });
-		await run(store.put("x", val));
+		const value = mkEntity("x", { name: "test" });
+		await run(store.put("x", value));
 		await run(store.remove("x"));
 		expect(await run(store.get("x"))).toBeUndefined();
 	});
@@ -104,14 +104,14 @@ describe("createEntityStore", () => {
 		test("put overwrites unique index entry", async () => {
 			const transport = createMemoryTransport();
 			const store = await run(createEntityStore(config, transport));
-			const e1 = mkEntity("u1", { email: "old@b.com" });
-			const e2 = mkEntity("u1", { email: "new@b.com" });
-			await run(store.put("u1", e1));
-			await run(store.put("u1", e2));
+			const entity1 = mkEntity("u1", { email: "old@b.com" });
+			const entity2 = mkEntity("u1", { email: "new@b.com" });
+			await run(store.put("u1", entity1));
+			await run(store.put("u1", entity2));
 			expect(
 				await run(store.findByIndex("email", "old@b.com")),
 			).toBeUndefined();
-			expect(await run(store.findByIndex("email", "new@b.com"))).toBe(e2);
+			expect(await run(store.findByIndex("email", "new@b.com"))).toBe(entity2);
 		});
 
 		test("remove clears unique index", async () => {

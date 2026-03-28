@@ -4,7 +4,7 @@ import {
 	schemaHasAuthRequirement,
 } from "@morph/domain-schema";
 import { buildTokenAuthConfig } from "@morph/builder-test";
-import { indent } from "@morph/utils";
+import { indent, sortImports } from "@morph/utils";
 
 export const generateApiScenarioTest = (
 	schema: DomainSchema,
@@ -16,15 +16,23 @@ export const generateApiScenarioTest = (
 	const opNames = allOperations.map((op) => op.name);
 	const hasAuth = schemaHasAuthRequirement(schema);
 	const schemaExportName = `${schema.name.toLowerCase()}Schema`;
+	const hasOps = opNames.length > 0;
 	const operationsMap = indent(opNames.map((n) => `${n}: ops.${n},`).join("\n"), 2);
 	const authConfig = buildTokenAuthConfig(hasAuth);
+	const coreImports = hasOps ? "ops, prose" : "prose";
 
-	return `import { createApiRunner } from "@morph/scenario-runner-api";
-import { ops, prose } from "${corePackage}";
-import { ${schemaExportName} } from "${dslPackage}";
-import { scenarios } from "${scenariosPackage}";
-import { expect, test } from "bun:test";
-import path from "node:path";
+	const imports = sortImports(
+		[
+			`import { createApiRunner } from "@morph/scenario-runner-api";`,
+			`import { ${coreImports} } from "${corePackage}";`,
+			`import { ${schemaExportName} } from "${dslPackage}";`,
+			`import { scenarios } from "${scenariosPackage}";`,
+			`import { expect, test } from "bun:test";`,
+			`import path from "node:path";`,
+		].join("\n"),
+	);
+
+	return `${imports}
 
 // Resolve to package root (test file is in src/test/)
 const cwd = path.resolve(import.meta.dir, "../..");

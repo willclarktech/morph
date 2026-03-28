@@ -1,14 +1,13 @@
-import type { Database, Statement } from "bun:sqlite";
-import { Effect } from "effect";
-import { jsonParse, jsonStringify } from "@morph/utils";
-
 import type {
 	EntityStore,
 	IndexDescriptor,
 	PaginationParams,
 } from "@morph/storage-dsl";
+import type { Database, Statement } from "bun:sqlite";
 
-import { StorageOperationError, applyPagination } from "@morph/storage-dsl";
+import { applyPagination, StorageOperationError } from "@morph/storage-dsl";
+import { jsonParse, jsonStringify } from "@morph/utils";
+import { Effect } from "effect";
 
 import type {
 	ChildTableDescriptor,
@@ -31,9 +30,13 @@ interface RelationalTableConfig {
 	readonly indexes: readonly IndexDescriptor[];
 }
 
-export type { FieldSpec, FieldType, RelationalTableConfig };
+export type { RelationalTableConfig };
 
 const PARENT_ID_COL = "parent_id";
+
+// SQLite requires null for NULL columns; eslint-disable unavoidable here
+// eslint-disable-next-line unicorn/no-null
+const SQL_NULL = null;
 
 // =============================================================================
 // Schema Reconciliation
@@ -50,7 +53,7 @@ interface ExistingIndex {
 }
 
 const reconcileSchema = (
-	db: Database,
+	database: Database,
 	config: RelationalTableConfig,
 ): readonly string[] => {
 	const { columns, childTables } = flattenFields(
@@ -60,9 +63,9 @@ const reconcileSchema = (
 
 	const warnings: string[] = [];
 
-	db.transaction(() => {
+	database.transaction(() => {
 		const tableExists =
-			db
+			database
 				.query<
 					{ cnt: number },
 					[string]
@@ -70,10 +73,10 @@ const reconcileSchema = (
 				.get(config.tableName)?.cnt ?? 0;
 
 		if (tableExists === 0) {
-			createMainTable(db, config.tableName, columns, config.indexes);
+			createMainTable(database, config.tableName, columns, config.indexes);
 		} else {
 			reconcileMainTable(
-				db,
+				database,
 				config.tableName,
 				columns,
 				config.indexes,
@@ -83,7 +86,7 @@ const reconcileSchema = (
 
 		for (const ct of childTables) {
 			const ctExists =
-				db
+				database
 					.query<
 						{ cnt: number },
 						[string]
@@ -91,7 +94,7 @@ const reconcileSchema = (
 					.get(ct.childTable)?.cnt ?? 0;
 
 			if (ctExists === 0) {
-				createChildTable(db, ct);
+				createChildTable(database, ct);
 			}
 		}
 	})();
@@ -100,7 +103,7 @@ const reconcileSchema = (
 };
 
 const createMainTable = (
-	db: Database,
+	database: Database,
 	tableName: string,
 	columns: readonly ColumnDescriptor[],
 	indexes: readonly IndexDescriptor[],
@@ -113,38 +116,43 @@ const createMainTable = (
 		colDefs.push(def);
 	}
 
-	db.run(`CREATE TABLE ${quoteId(tableName)} (${colDefs.join(", ")}) STRICT`);
+	database.run(
+		`CREATE TABLE ${quoteId(tableName)} (${colDefs.join(", ")}) STRICT`,
+	);
 
-	for (const idx of indexes) {
-		const colName = toSnakeCase(idx.field);
-		const idxName = `idx_${tableName}_${colName}`;
-		const unique = idx.kind === "unique" ? "UNIQUE " : "";
-		db.run(
-			`CREATE ${unique}INDEX ${quoteId(idxName)} ON ${quoteId(tableName)}(${quoteId(colName)})`,
+	for (const index of indexes) {
+		const colName = toSnakeCase(index.field);
+		const indexName = `idx_${tableName}_${colName}`;
+		const unique = index.kind === "unique" ? "UNIQUE " : "";
+		database.run(
+			`CREATE ${unique}INDEX ${quoteId(indexName)} ON ${quoteId(tableName)}(${quoteId(colName)})`,
 		);
 	}
 };
 
 const sqlDefault = (sqlType: string): string => {
 	switch (sqlType) {
-		case "TEXT":
-			return "''";
 		case "INTEGER":
-		case "REAL":
+		case "REAL": {
 			return "0";
-		default:
+		}
+		case "TEXT": {
 			return "''";
+		}
+		default: {
+			return "''";
+		}
 	}
 };
 
 const reconcileMainTable = (
-	db: Database,
+	database: Database,
 	tableName: string,
 	columns: readonly ColumnDescriptor[],
 	indexes: readonly IndexDescriptor[],
 	warnings: string[],
 ): void => {
-	const existing = db
+	const existing = database
 		.query<ExistingColumn, []>(`PRAGMA table_info(${quoteId(tableName)})`)
 		.all();
 	const existingNames = new Set(existing.map((c) => c.name));
@@ -154,7 +162,7 @@ const reconcileMainTable = (
 			let def = `${quoteId(col.columnName)} ${col.sqlType}`;
 			if (!col.nullable) def += ` NOT NULL DEFAULT ${sqlDefault(col.sqlType)}`;
 			if (col.check) def += ` CHECK(${col.check})`;
-			db.run(`ALTER TABLE ${quoteId(tableName)} ADD COLUMN ${def}`);
+			database.run(`ALTER TABLE ${quoteId(tableName)} ADD COLUMN ${def}`);
 		}
 	}
 
@@ -167,36 +175,41 @@ const reconcileMainTable = (
 		}
 	}
 
-	const existingIndexes = db
+	const existingIndexes = database
 		.query<
 			ExistingIndex,
 			[string]
 		>("SELECT name FROM sqlite_master WHERE type='index' AND tbl_name=? AND name NOT LIKE 'sqlite_%'")
 		.all(tableName);
-	const existingIndexNames = new Set(existingIndexes.map((i) => i.name));
+	const existingIndexNames = new Set(
+		existingIndexes.map((index) => index.name),
+	);
 	const wantedIndexNames = new Set(
-		indexes.map((idx) => `idx_${tableName}_${toSnakeCase(idx.field)}`),
+		indexes.map((index) => `idx_${tableName}_${toSnakeCase(index.field)}`),
 	);
 
-	for (const idx of indexes) {
-		const colName = toSnakeCase(idx.field);
-		const idxName = `idx_${tableName}_${colName}`;
-		if (!existingIndexNames.has(idxName)) {
-			const unique = idx.kind === "unique" ? "UNIQUE " : "";
-			db.run(
-				`CREATE ${unique}INDEX ${quoteId(idxName)} ON ${quoteId(tableName)}(${quoteId(colName)})`,
+	for (const index of indexes) {
+		const colName = toSnakeCase(index.field);
+		const indexName = `idx_${tableName}_${colName}`;
+		if (!existingIndexNames.has(indexName)) {
+			const unique = index.kind === "unique" ? "UNIQUE " : "";
+			database.run(
+				`CREATE ${unique}INDEX ${quoteId(indexName)} ON ${quoteId(tableName)}(${quoteId(colName)})`,
 			);
 		}
 	}
 
 	for (const ei of existingIndexes) {
 		if (!wantedIndexNames.has(ei.name)) {
-			db.run(`DROP INDEX ${quoteId(ei.name)}`);
+			database.run(`DROP INDEX ${quoteId(ei.name)}`);
 		}
 	}
 };
 
-const createChildTable = (db: Database, ct: ChildTableDescriptor): void => {
+const createChildTable = (
+	database: Database,
+	ct: ChildTableDescriptor,
+): void => {
 	const colDefs = [
 		`${quoteId(PARENT_ID_COL)} TEXT NOT NULL REFERENCES ${quoteId(ct.parentTable)}(${quoteId("id")}) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED`,
 	];
@@ -208,12 +221,12 @@ const createChildTable = (db: Database, ct: ChildTableDescriptor): void => {
 		colDefs.push(def);
 	}
 
-	db.run(
+	database.run(
 		`CREATE TABLE ${quoteId(ct.childTable)} (${colDefs.join(", ")}) STRICT`,
 	);
-	const idxName = `idx_${ct.childTable}_${PARENT_ID_COL}`;
-	db.run(
-		`CREATE INDEX ${quoteId(idxName)} ON ${quoteId(ct.childTable)}(${quoteId(PARENT_ID_COL)})`,
+	const indexName = `idx_${ct.childTable}_${PARENT_ID_COL}`;
+	database.run(
+		`CREATE INDEX ${quoteId(indexName)} ON ${quoteId(ct.childTable)}(${quoteId(PARENT_ID_COL)})`,
 	);
 };
 
@@ -238,39 +251,21 @@ const jsonToColumns = (
 		}
 
 		switch (field.type.kind) {
-			case "string":
-			case "id":
-			case "union":
-				row[colPrefix] = value;
+			case "array": {
 				break;
-			case "date":
+			}
+			case "boolean": {
+				row[colPrefix] = (value as boolean) ? 1 : 0;
+				break;
+			}
+			case "date": {
 				row[colPrefix] = (value as Date).toISOString().slice(0, 10);
 				break;
-			case "float":
-				row[colPrefix] = value;
-				break;
-			case "integer":
-				row[colPrefix] = Number(value);
-				break;
-			case "datetime":
+			}
+			case "datetime": {
 				row[colPrefix] = (value as Date).toISOString();
 				break;
-			case "boolean":
-				row[colPrefix] = value ? 1 : 0;
-				break;
-			case "json":
-				row[colPrefix] = JSON.stringify(value);
-				break;
-			case "object":
-				Object.assign(
-					row,
-					jsonToColumns(
-						value as Record<string, unknown>,
-						field.type.fields,
-						colPrefix,
-					),
-				);
-				break;
+			}
 			case "discriminated": {
 				const disc = (value as Record<string, unknown>)[
 					field.type.discriminator
@@ -301,8 +296,35 @@ const jsonToColumns = (
 				}
 				break;
 			}
-			case "array":
+			case "float": {
+				row[colPrefix] = value;
 				break;
+			}
+			case "id":
+			case "string":
+			case "union": {
+				row[colPrefix] = value;
+				break;
+			}
+			case "integer": {
+				row[colPrefix] = Number(value);
+				break;
+			}
+			case "json": {
+				row[colPrefix] = JSON.stringify(value);
+				break;
+			}
+			case "object": {
+				Object.assign(
+					row,
+					jsonToColumns(
+						value as Record<string, unknown>,
+						field.type.fields,
+						colPrefix,
+					),
+				);
+				break;
+			}
 		}
 	}
 
@@ -315,25 +337,21 @@ const setNullColumns = (
 	prefix: string,
 ): void => {
 	switch (type.kind) {
-		case "string":
-		case "float":
-		case "integer":
+		case "array":
+		case "boolean":
 		case "date":
 		case "datetime":
-		case "boolean":
+		case "float":
 		case "id":
-		case "union":
+		case "integer":
 		case "json":
-		case "array":
-			row[prefix] = null;
+		case "string":
+		case "union": {
+			// Don't set the key — the SQL boundary converts undefined to NULL
 			break;
-		case "object":
-			for (const f of type.fields) {
-				setNullColumns(row, f.type, toColumnName(prefix, f.name));
-			}
-			break;
-		case "discriminated":
-			row[toColumnName(prefix, type.discriminator)] = null;
+		}
+		case "discriminated": {
+			// Don't set the key — the SQL boundary converts undefined to NULL
 			for (const [variantName, variantFields] of Object.entries(
 				type.variants,
 			)) {
@@ -343,6 +361,13 @@ const setNullColumns = (
 				}
 			}
 			break;
+		}
+		case "object": {
+			for (const f of type.fields) {
+				setNullColumns(row, f.type, toColumnName(prefix, f.name));
+			}
+			break;
+		}
 	}
 };
 
@@ -357,55 +382,32 @@ const columnsToJson = (
 		const colPrefix = toColumnName(prefix, field.name);
 
 		switch (field.type.kind) {
-			case "string":
-			case "id":
-			case "union":
-				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
-					result[field.name] = row[colPrefix];
-				}
+			case "array": {
 				break;
-			case "date":
-				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
-					result[field.name] = new Date(row[colPrefix] as string);
-				}
-				break;
-			case "float":
-				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
-					result[field.name] = row[colPrefix];
-				}
-				break;
-			case "integer":
-				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
-					result[field.name] = BigInt(row[colPrefix] as number);
-				}
-				break;
-			case "datetime":
-				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
-					result[field.name] = new Date(row[colPrefix] as string);
-				}
-				break;
-			case "boolean":
+			}
+			case "boolean": {
 				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
 					result[field.name] = row[colPrefix] === 1;
 				}
 				break;
-			case "json":
+			}
+			case "date": {
 				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
-					result[field.name] = JSON.parse(row[colPrefix] as string);
+					result[field.name] = new Date(row[colPrefix] as string);
 				}
 				break;
-			case "object": {
-				const obj = columnsToJson(row, field.type.fields, colPrefix);
-				if (Object.keys(obj).length > 0) {
-					result[field.name] = obj;
+			}
+			case "datetime": {
+				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
+					result[field.name] = new Date(row[colPrefix] as string);
 				}
 				break;
 			}
 			case "discriminated": {
 				const disc = row[toColumnName(colPrefix, field.type.discriminator)] as
 					| string
-					| null;
-				if (disc !== null && disc !== undefined) {
+					| undefined;
+				if (disc !== undefined) {
 					const variant: Record<string, unknown> = {
 						[field.type.discriminator]: disc,
 					};
@@ -424,8 +426,39 @@ const columnsToJson = (
 				}
 				break;
 			}
-			case "array":
+			case "float": {
+				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
+					result[field.name] = row[colPrefix];
+				}
 				break;
+			}
+			case "id":
+			case "string":
+			case "union": {
+				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
+					result[field.name] = row[colPrefix];
+				}
+				break;
+			}
+			case "integer": {
+				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
+					result[field.name] = BigInt(row[colPrefix] as number);
+				}
+				break;
+			}
+			case "json": {
+				if (row[colPrefix] !== null && row[colPrefix] !== undefined) {
+					result[field.name] = JSON.parse(row[colPrefix] as string);
+				}
+				break;
+			}
+			case "object": {
+				const object = columnsToJson(row, field.type.fields, colPrefix);
+				if (Object.keys(object).length > 0) {
+					result[field.name] = object;
+				}
+				break;
+			}
 		}
 	}
 
@@ -438,11 +471,11 @@ const columnsToJson = (
 
 const extractArrayFields = (
 	fields: readonly FieldSpec[],
-): Array<{ fieldName: string; arrayType: FieldType & { kind: "array" } }> => {
-	const result: Array<{
-		fieldName: string;
+): { arrayType: FieldType & { kind: "array" }; fieldName: string }[] => {
+	const result: {
 		arrayType: FieldType & { kind: "array" };
-	}> = [];
+		fieldName: string;
+	}[] = [];
 	for (const field of fields) {
 		if (field.type.kind === "array") {
 			result.push({
@@ -466,11 +499,11 @@ interface ChildTableOps {
 }
 
 const createChildTableOps = (
-	db: Database,
-	arrayFields: Array<{
-		fieldName: string;
+	database: Database,
+	arrayFields: {
 		arrayType: FieldType & { kind: "array" };
-	}>,
+		fieldName: string;
+	}[],
 ): ChildTableOps[] =>
 	arrayFields.map(({ fieldName, arrayType }) => {
 		const childTable = arrayType.childTable;
@@ -478,10 +511,10 @@ const createChildTableOps = (
 		const colNames = elementColumns.map((c) => c.columnName);
 
 		const quotedCols = colNames.map(quoteId).join(", ");
-		const selectStmt = db.query<Record<string, unknown>, [string]>(
+		const selectStmt = database.query<Record<string, unknown>, [string]>(
 			`SELECT ${quotedCols} FROM ${quoteId(childTable)} WHERE ${quoteId(PARENT_ID_COL)} = ? ORDER BY rowid`,
 		);
-		const deleteStmt = db.query(
+		const deleteStmt = database.query(
 			`DELETE FROM ${quoteId(childTable)} WHERE ${quoteId(PARENT_ID_COL)} = ?`,
 		);
 		const placeholders = colNames.map(() => "?").join(", ");
@@ -498,7 +531,7 @@ const createChildTableOps = (
 				const result = new Map<string, unknown[]>();
 				if (parentIds.length === 0) return result;
 				const placeholders = parentIds.map(() => "?").join(", ");
-				const rows = db
+				const rows = database
 					.query<
 						Record<string, unknown>,
 						string[]
@@ -506,9 +539,9 @@ const createChildTableOps = (
 					.all(...(parentIds as string[]));
 				for (const row of rows) {
 					const pid = row[PARENT_ID_COL] as string;
-					const arr = result.get(pid) ?? [];
-					arr.push(childRowToValue(row, arrayType.element));
-					result.set(pid, arr);
+					const array = result.get(pid) ?? [];
+					array.push(childRowToValue(row, arrayType.element));
+					result.set(pid, array);
 				}
 				return result;
 			},
@@ -518,7 +551,7 @@ const createChildTableOps = (
 			insertChild: (parentId: string, value: unknown) => {
 				const vals = childValueToRow(value, arrayType.element);
 				// bun:sqlite types don't include null but SQLite accepts it for nullable columns
-				db.run(insertSql, [parentId, ...vals] as unknown as string[]);
+				database.run(insertSql, [parentId, ...vals] as unknown as string[]);
 			},
 		};
 	});
@@ -528,23 +561,18 @@ const childRowToValue = (
 	element: FieldType,
 ): unknown => {
 	switch (element.kind) {
-		case "string":
-		case "id":
-		case "union":
-		case "float":
-			return row["value"];
-		case "date":
-			return new Date(row["value"] as string);
-		case "integer":
-			return BigInt(row["value"] as number);
-		case "datetime":
-			return new Date(row["value"] as string);
-		case "boolean":
-			return row["value"] === 1;
-		case "json":
+		case "array": {
 			return JSON.parse(row["value"] as string);
-		case "object":
-			return columnsToJson(row, element.fields);
+		}
+		case "boolean": {
+			return row["value"] === 1;
+		}
+		case "date": {
+			return new Date(row["value"] as string);
+		}
+		case "datetime": {
+			return new Date(row["value"] as string);
+		}
 		case "discriminated": {
 			const disc = row[toSnakeCase(element.discriminator)] as string;
 			const variant: Record<string, unknown> = {
@@ -559,36 +587,37 @@ const childRowToValue = (
 			}
 			return variant;
 		}
-		case "array":
+		case "float":
+		case "id":
+		case "string":
+		case "union": {
+			return row["value"];
+		}
+		case "integer": {
+			return BigInt(row["value"] as number);
+		}
+		case "json": {
 			return JSON.parse(row["value"] as string);
+		}
+		case "object": {
+			return columnsToJson(row, element.fields);
+		}
 	}
 };
 
 const childValueToRow = (value: unknown, element: FieldType): unknown[] => {
 	switch (element.kind) {
-		case "string":
-		case "id":
-		case "union":
-		case "float":
-			return [value];
-		case "date":
-			return [(value as Date).toISOString().slice(0, 10)];
-		case "integer":
-			return [Number(value)];
-		case "datetime":
-			return [(value as Date).toISOString()];
-		case "boolean":
-			return [value ? 1 : 0];
-		case "json":
+		case "array": {
 			return [JSON.stringify(value)];
-		case "object": {
-			const cols = jsonToColumns(
-				value as Record<string, unknown>,
-				element.fields,
-			);
-			return flattenArrayElement(element).map(
-				(c) => cols[c.columnName] ?? null,
-			);
+		}
+		case "boolean": {
+			return [value ? 1 : 0];
+		}
+		case "date": {
+			return [(value as Date).toISOString().slice(0, 10)];
+		}
+		case "datetime": {
+			return [(value as Date).toISOString()];
 		}
 		case "discriminated": {
 			const disc = (value as Record<string, unknown>)[
@@ -606,18 +635,37 @@ const childValueToRow = (value: unknown, element: FieldType): unknown[] => {
 						snakedVariant,
 					);
 					for (const vf of variantFields) {
-						cols.push(mapped[toColumnName(snakedVariant, vf.name)] ?? null);
+						cols.push(mapped[toColumnName(snakedVariant, vf.name)] ?? SQL_NULL);
 					}
 				} else {
 					for (const _vf of variantFields) {
-						cols.push(null);
+						cols.push(SQL_NULL);
 					}
 				}
 			}
 			return cols;
 		}
-		case "array":
+		case "float":
+		case "id":
+		case "string":
+		case "union": {
+			return [value];
+		}
+		case "integer": {
+			return [Number(value)];
+		}
+		case "json": {
 			return [JSON.stringify(value)];
+		}
+		case "object": {
+			const cols = jsonToColumns(
+				value as Record<string, unknown>,
+				element.fields,
+			);
+			return flattenArrayElement(element).map(
+				(c) => cols[c.columnName] ?? SQL_NULL,
+			);
+		}
 	}
 };
 
@@ -626,30 +674,30 @@ const childValueToRow = (value: unknown, element: FieldType): unknown[] => {
 // =============================================================================
 
 const createRelationalSqliteStore = (
-	db: Database,
+	database: Database,
 	config: RelationalTableConfig,
 ): EntityStore => {
-	db.run("PRAGMA foreign_keys = ON");
-	db.run("PRAGMA journal_mode = WAL");
-	const warnings = reconcileSchema(db, config);
+	database.run("PRAGMA foreign_keys = ON");
+	database.run("PRAGMA journal_mode = WAL");
+	const warnings = reconcileSchema(database, config);
 	for (const w of warnings) {
 		Effect.runSync(Effect.logWarning(w));
 	}
 
 	const { columns } = flattenFields(config.fields, config.tableName);
 	const arrayFields = extractArrayFields(config.fields);
-	const childOps = createChildTableOps(db, arrayFields);
+	const childOps = createChildTableOps(database, arrayFields);
 	const colNames = columns.map((c) => c.columnName);
 
 	const quotedTable = quoteId(config.tableName);
 	const quotedCols = colNames.map(quoteId).join(", ");
-	const selectById = db.query<Record<string, unknown>, [string]>(
+	const selectById = database.query<Record<string, unknown>, [string]>(
 		`SELECT ${quoteId("id")}, ${quotedCols} FROM ${quotedTable} WHERE ${quoteId("id")} = ?`,
 	);
-	const selectAll = db.query<Record<string, unknown>, []>(
+	const selectAll = database.query<Record<string, unknown>, []>(
 		`SELECT ${quoteId("id")}, ${quotedCols} FROM ${quotedTable}`,
 	);
-	const deleteById = db.query(
+	const deleteById = database.query(
 		`DELETE FROM ${quotedTable} WHERE ${quoteId("id")} = ?`,
 	);
 
@@ -659,45 +707,45 @@ const createRelationalSqliteStore = (
 		row: Record<string, unknown>,
 		childData: Record<string, unknown[]>,
 	): string => {
-		const obj = columnsToJson(row, config.fields);
-		obj["id"] = row["id"];
+		const object = columnsToJson(row, config.fields);
+		object["id"] = row["id"];
 		for (const cop of childOps) {
-			obj[cop.fieldName] = childData[cop.fieldName] ?? [];
+			object[cop.fieldName] = childData[cop.fieldName] ?? [];
 		}
-		return jsonStringify(obj);
+		return jsonStringify(object);
 	};
 
 	const findByUniqueIndex = (
 		field: string,
 	): Statement<Record<string, unknown>, [string]> =>
-		db.query<Record<string, unknown>, [string]>(
+		database.query<Record<string, unknown>, [string]>(
 			`SELECT ${quoteId("id")}, ${quotedCols} FROM ${quotedTable} WHERE ${quoteId(field)} = ? LIMIT 1`,
 		);
 
 	const findByNonUniqueIndex = (
 		field: string,
 	): Statement<Record<string, unknown>, [string]> =>
-		db.query<Record<string, unknown>, [string]>(
+		database.query<Record<string, unknown>, [string]>(
 			`SELECT ${quoteId("id")}, ${quotedCols} FROM ${quotedTable} WHERE ${quoteId(field)} = ?`,
 		);
 
 	const uniqueFields = new Set(
 		config.indexes
-			.filter((idx) => idx.kind === "unique")
-			.map((idx) => idx.field),
+			.filter((index) => index.kind === "unique")
+			.map((index) => index.field),
 	);
 
 	const indexStatements = new Map<
 		string,
 		Statement<Record<string, unknown>, [string]>
 	>();
-	for (const idx of config.indexes) {
-		const colName = toSnakeCase(idx.field);
+	for (const index of config.indexes) {
+		const colName = toSnakeCase(index.field);
 		const stmt =
-			idx.kind === "unique"
+			index.kind === "unique"
 				? findByUniqueIndex(colName)
 				: findByNonUniqueIndex(colName);
-		indexStatements.set(idx.field, stmt);
+		indexStatements.set(index.field, stmt);
 	}
 
 	const getChildData = (id: string): Record<string, unknown[]> => {
@@ -741,7 +789,7 @@ const createRelationalSqliteStore = (
 					}),
 			}),
 
-		getAll: (pagination?: PaginationParams | undefined) =>
+		getAll: (pagination?: PaginationParams) =>
 			Effect.try({
 				try: () => {
 					const rows = selectAll.all();
@@ -765,19 +813,19 @@ const createRelationalSqliteStore = (
 					const parsed = jsonParse(data) as Record<string, unknown>;
 					const colValues = jsonToColumns(parsed, config.fields);
 
-					db.transaction(() => {
+					database.transaction(() => {
 						// bun:sqlite types don't include null but SQLite accepts it for nullable columns
 						const values = [
 							id,
-							...colNames.map((c) => colValues[c] ?? null),
+							...colNames.map((c) => colValues[c] ?? SQL_NULL),
 						] as unknown as string[];
-						db.run(upsertSql, values);
+						database.run(upsertSql, values);
 
 						for (const cop of childOps) {
 							cop.deleteChildren(id);
-							const arr = parsed[cop.fieldName] as unknown[] | undefined;
-							if (arr) {
-								for (const item of arr) {
+							const array = parsed[cop.fieldName] as unknown[] | undefined;
+							if (array) {
+								for (const item of array) {
 									cop.insertChild(id, item);
 								}
 							}
@@ -816,8 +864,8 @@ const createRelationalSqliteStore = (
 						return rowToJson(row, getChildData(row["id"] as string));
 					}
 					const rows = stmt.all(value);
-					if (rows.length === 0) return undefined;
-					const row = rows[0]!;
+					const row = rows[0];
+					if (!row) return undefined;
 					return rowToJson(row, getChildData(row["id"] as string));
 				},
 				catch: (error) =>
@@ -826,7 +874,7 @@ const createRelationalSqliteStore = (
 					}),
 			}),
 
-		findAllByIndex: (field, value, pagination?: PaginationParams | undefined) =>
+		findAllByIndex: (field, value, pagination?: PaginationParams) =>
 			Effect.try({
 				try: () => {
 					const stmt = indexStatements.get(field);
@@ -865,4 +913,10 @@ const buildUpsertSql = (
 	return `INSERT INTO ${quoteId(tableName)} (${quotedAllCols}) VALUES (${placeholders}) ON CONFLICT(${quoteId("id")}) DO UPDATE SET ${updateSet}`;
 };
 
-export { createRelationalSqliteStore, flattenFields, reconcileSchema };
+export { createRelationalSqliteStore, reconcileSchema };
+
+export {
+	type FieldSpec,
+	type FieldType,
+	flattenFields,
+} from "./field-flattening";

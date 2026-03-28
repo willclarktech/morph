@@ -3,9 +3,9 @@ import type {
 	AttributeDef,
 	CommandDef,
 	ConditionExpr,
-	ContractDef,
 	ContextDef,
 	ContextErrorDef,
+	ContractDef,
 	DomainSchema,
 	EntityDef,
 	ErrorDef,
@@ -734,10 +734,10 @@ const decompileProfiles = (
 	const lines: string[] = [];
 	lines.push("profiles {");
 	for (const [name, tags] of sorted(profiles)) {
-		const tagStr = tags
+		const tagString = tags
 			.map((t) => (t.startsWith("@") ? t : `@${t}`).replaceAll("-", "_"))
 			.join(" ");
-		lines.push(`\t${name}: ${tagStr}`);
+		lines.push(`\t${name}: ${tagString}`);
 	}
 	lines.push("}");
 	return lines;

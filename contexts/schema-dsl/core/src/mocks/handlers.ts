@@ -1,7 +1,6 @@
 // Generated mock handlers layer
 // Combines all mock handler implementations for testing
 // Do not edit - regenerate from schema
-
 import { Layer } from "effect";
 
 import { DecompileSchemaHandlerMock } from "../operations/decompile-schema/mock-impl";

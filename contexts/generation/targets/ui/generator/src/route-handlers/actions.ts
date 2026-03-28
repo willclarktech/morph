@@ -51,17 +51,17 @@ export const generateActionRoutes = (
 		return [
 			{
 				comment: `${toTitleCase(action)} ${entityName}`,
-				handler: `async (req: Request & { params: { id: string } }) => {
-				const authState = getAuthState(req);
+				handler: `async (request: Request & { params: { id: string } }) => {
+				const authState = getAuthState(request);
 				if (!authState.isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/login" } });
+					return new Response(undefined, { status: 303, headers: { Location: "/login" } });
 				}
-				const client = createClientForRequest(req);
-				const id = req.params.id as ${idType};
+				const client = createClientForRequest(request);
+				const id = request.params.id as ${idType};
 				try {
 					await Effect.runPromise(client.${cmd.name}({ ${entityName.toLowerCase()}Id: id }));
 					// Return appropriate page based on referring URL (list vs detail)
-					const referer = req.headers.get("HX-Current-URL") ?? "";
+					const referer = request.headers.get("HX-Current-URL") ?? "";
 					const isFromList = referer.endsWith("/${pluralName}") || referer.endsWith("/${pluralName}/");
 					if (isFromList) {
 						const items = await Effect.runPromise(client.${listOp?.name ?? `list${pluralName.charAt(0).toUpperCase() + pluralName.slice(1)}`}({})) as readonly ${entityName}[];
@@ -89,12 +89,12 @@ export const generateActionRoutes = (
 	return [
 		{
 			comment: `${toTitleCase(action)} ${entityName}`,
-			handler: `async (req: Request & { params: { id: string } }) => {
-				const id = req.params.id as ${idType};
+			handler: `async (request: Request & { params: { id: string } }) => {
+				const id = request.params.id as ${idType};
 				try {
 					await Effect.runPromise(client.${cmd.name}({ ${entityName.toLowerCase()}Id: id }));
 					// Return appropriate page based on referring URL (list vs detail)
-					const referer = req.headers.get("HX-Current-URL") ?? "";
+					const referer = request.headers.get("HX-Current-URL") ?? "";
 					const isFromList = referer.endsWith("/${pluralName}") || referer.endsWith("/${pluralName}/");
 					if (isFromList) {
 						const items = await Effect.runPromise(client.${listOp?.name ?? `list${pluralName.charAt(0).toUpperCase() + pluralName.slice(1)}`}({})) as readonly ${entityName}[];

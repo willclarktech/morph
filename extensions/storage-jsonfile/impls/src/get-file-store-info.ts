@@ -1,13 +1,13 @@
-import { Context, Effect, Layer } from "effect";
-
-import type { FileStoreInfo } from "@morph/storage-jsonfile-dsl";
 import type {
 	FileAccessError,
 	FileCorruptedError,
+	FileStoreInfo,
 } from "@morph/storage-jsonfile-dsl";
 
+import { Context, Effect, Layer } from "effect";
+
 import { getFileStorePath } from "./file-store-state";
-import { getFileInfo, readStoreFile } from "./file-store-utils";
+import { getFileInfo, readStoreFile } from "./file-store-utilities";
 
 export interface GetFileStoreInfoHandler {
 	readonly handle: (

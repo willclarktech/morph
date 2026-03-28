@@ -1,9 +1,14 @@
 import type { OperationPropertySuite } from "@morph/property";
-import type { PropertyResult, PropertyRunOptions } from "@morph/property-runner";
+import type {
+	PropertyResult,
+	PropertyRunOptions,
+} from "@morph/property-runner";
+import type { Runtime } from "effect";
+
+import { Effect, Layer } from "effect";
+import * as fc from "fast-check";
 
 import type { OperationFunction } from "./index";
-import { Effect, Layer, Runtime } from "effect";
-import * as fc from "fast-check";
 
 export const runOperationSuite = <R>(
 	suite: OperationPropertySuite<unknown, unknown, unknown>,

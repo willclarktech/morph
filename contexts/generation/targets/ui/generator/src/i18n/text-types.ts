@@ -3,7 +3,7 @@
  */
 import type { I18nConfig } from "@morph/domain-schema";
 
-import { sep } from "@morph/utils";
+import { separator } from "@morph/utils";
 
 /**
  * Generate the text-types.ts file with Language and TextKey union types.
@@ -13,7 +13,9 @@ export const generateTextTypesModule = (
 	allKeys: readonly string[],
 ): string => {
 	const languageUnion = i18nConfig.languages.map((l) => `"${l}"`).join(" | ");
-	const textKeyUnion = allKeys.map((k) => `"${k}"`).join(sep(1, "", "| "));
+	const textKeyUnion = allKeys
+		.map((k) => `"${k}"`)
+		.join(separator(1, "", "| "));
 
 	return `/**
  * Generated i18n type definitions.
@@ -34,6 +36,6 @@ export type TextKey =
 /**
  * A translation entry with all required languages.
  */
-export type TranslationEntry = { readonly [L in Language]: string };
+export type TranslationEntry = Readonly<Record<Language, string>>;
 `;
 };

@@ -1,8 +1,7 @@
-import { Effect, Ref } from "effect";
-
 import type { PaginationParams, StorageTransport } from "@morph/storage-dsl";
 
 import { applyPagination } from "@morph/storage-dsl";
+import { Effect, Ref } from "effect";
 
 /**
  * Create an in-memory StorageTransport backed by a Ref<Map>.
@@ -14,7 +13,7 @@ export const createMemoryTransport = (): Effect.Effect<StorageTransport> =>
 
 		return {
 			get: (id) => Ref.get(store).pipe(Effect.map((m) => m.get(id))),
-			getAll: (pagination?: PaginationParams | undefined) =>
+			getAll: (pagination?: PaginationParams) =>
 				Ref.get(store).pipe(
 					Effect.map((m) => applyPagination([...m.values()], pagination)),
 				),

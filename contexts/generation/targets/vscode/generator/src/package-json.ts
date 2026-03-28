@@ -27,7 +27,7 @@ export interface VsCodePackageJsonOptions {
 
 const toTitleCase = (camelCase: string): string =>
 	camelCase
-		.replace(/([A-Z])/g, " $1")
+		.replaceAll(/([A-Z])/g, " $1")
 		.replace(/^./, (c) => c.toUpperCase())
 		.trim();
 
@@ -37,8 +37,8 @@ export const generateVsCodePackageJson = (
 	const { name, displayName, contexts, commandOps } = options;
 
 	const contextDeps: Record<string, string> = {};
-	for (const ctx of contexts) {
-		contextDeps[ctx.corePackage] = "workspace:*";
+	for (const context of contexts) {
+		contextDeps[context.corePackage] = "workspace:*";
 	}
 
 	const lowerName = name.toLowerCase();

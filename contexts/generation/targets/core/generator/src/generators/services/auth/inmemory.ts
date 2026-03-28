@@ -5,9 +5,9 @@ export const generateAuthServiceInMemory = (): GeneratedFile => {
 // Do not edit - regenerate from schema
 
 export {
+	AuthServiceInMemory,
 	AuthState,
 	AuthStateInMemory,
-	AuthServiceInMemory,
 	setCurrentUser,
 } from "@morph/testing";
 `;

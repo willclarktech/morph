@@ -1,5 +1,7 @@
+import type { Layer } from "effect";
+
 import { describe, expect, test } from "bun:test";
-import { Effect, Layer } from "effect";
+import { Effect } from "effect";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
@@ -8,13 +10,13 @@ import {
 	GetCompletionsHandlerLive,
 } from "./get-completions";
 import {
-	GetDiagnosticsHandler,
-	GetDiagnosticsHandlerLive,
-} from "./get-diagnostics";
-import {
 	GetDefinitionHandler,
 	GetDefinitionHandlerLive,
 } from "./get-definition";
+import {
+	GetDiagnosticsHandler,
+	GetDiagnosticsHandlerLive,
+} from "./get-diagnostics";
 import {
 	GetFoldingRangesHandler,
 	GetFoldingRangesHandlerLive,
@@ -27,7 +29,7 @@ const VALID_SOURCE = readFileSync(
 		import.meta.dir,
 		"../../../../examples/fixtures/todo-app/schema.morph",
 	),
-	"utf-8",
+	"utf8",
 );
 
 const INVALID_SOURCE = `domain Broken
@@ -39,7 +41,6 @@ context stuff {
 }
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- test helper erases service type
 const run = <A>(
 	effect: Effect.Effect<A, unknown, any>,
 	layer: Layer.Layer<any>,

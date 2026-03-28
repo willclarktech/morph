@@ -90,12 +90,14 @@ export const extractResult = async (
 
 			for (let index = 0; index < dts.length && index < dds.length; index++) {
 				const key = await dts[index]?.textContent();
-				const dd = dds[index]!;
+				const dd = dds[index];
+				if (!dd) continue;
 				// Check for checkbox toggle inside dd
 				const checkbox = dd.locator('input[type="checkbox"]');
 				const hasCheckbox = (await checkbox.count()) > 0;
 				if (hasCheckbox) {
-					const camelKey = key!
+					if (!key) continue;
+					const camelKey = key
 						.replaceAll(/\s+(.)/g, (_, c: string) => c.toUpperCase())
 						.replace(/^./, (c) => c.toLowerCase());
 					result[camelKey] = await checkbox.isChecked();

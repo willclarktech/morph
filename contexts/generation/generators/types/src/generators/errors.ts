@@ -14,8 +14,6 @@ import type { ContextErrorEntry, DomainSchema } from "@morph/domain-schema";
 import {
 	getAllContextErrors,
 	getAllErrors,
-	getAllFunctions,
-	getAllOperations,
 	getContextErrorsForContext,
 	getFunctionsForContext,
 	getOperationsForContext,
@@ -31,8 +29,8 @@ const generateContextError = (entry: ContextErrorEntry): string => {
 	const fields = Object.entries(def.fields)
 		.map(([fieldName, fieldDef]) => {
 			const optionalMark = fieldDef.optional ? "?" : "";
-			const typeStr = typeRefToTypeScript(fieldDef.type);
-			return `\treadonly ${fieldName}${optionalMark}: ${typeStr};`;
+			const typeString = typeRefToTypeScript(fieldDef.type);
+			return `\treadonly ${fieldName}${optionalMark}: ${typeString};`;
 		})
 		.join("\n");
 
@@ -51,9 +49,9 @@ ${fields}
 const getErrorsForContext = (
 	schema: DomainSchema,
 	contextName: string,
-): readonly { name: string; description: string; when: string }[] => {
+): readonly { description: string; name: string; when: string }[] => {
 	const seen = new Set<string>();
-	const errors: { name: string; description: string; when: string }[] = [];
+	const errors: { description: string; name: string; when: string }[] = [];
 
 	for (const entry of getOperationsForContext(schema, contextName)) {
 		for (const error of entry.def.errors) {

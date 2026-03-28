@@ -43,9 +43,9 @@ export const request = <T>(
 					cause: error,
 				});
 			}
-			const err = error as { message?: string };
+			const error_ = error as { message?: string };
 			return new HttpClientError({
-				message: err.message ?? "Request failed",
+				message: error_.message ?? "Request failed",
 				cause: error,
 			});
 		},

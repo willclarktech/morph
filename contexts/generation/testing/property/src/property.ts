@@ -53,8 +53,9 @@ export interface ValidatorPropertySuite<
  * Property suite for testing algebraic contract laws on port interfaces.
  * Each law is an effectful predicate that runs against a fresh port instance.
  */
-export interface ContractPropertySuite<Input = unknown>
-	extends PropertySuite<Input> {
+export interface ContractPropertySuite<
+	Input = unknown,
+> extends PropertySuite<Input> {
 	readonly law: (input: Input) => Promise<boolean>;
 	readonly port: string;
 	readonly suiteType: "contract";
@@ -64,7 +65,7 @@ export interface ContractPropertySuite<Input = unknown>
  * Union type for all property suite types.
  */
 export type AnyPropertySuite =
-	| ContractPropertySuite<unknown>
+	| ContractPropertySuite
 	| OperationPropertySuite<unknown, unknown, unknown>
 	| ValidatorPropertySuite<unknown, unknown>;
 
@@ -163,4 +164,4 @@ export const contractProperty = <Input>(config: {
 
 export const isContractSuite = (
 	suite: AnyPropertySuite,
-): suite is ContractPropertySuite<unknown> => suite.suiteType === "contract";
+): suite is ContractPropertySuite => suite.suiteType === "contract";

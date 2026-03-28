@@ -55,7 +55,7 @@ export const createCliRunner = (config: CliRunnerConfig): Runner => {
 
 	return createRunner(
 		{
-			execute: async (name, params) => {
+			execute: (name, params) => {
 				const rawCommand = toKebabCase(name);
 				const command = resolveOperationName(
 					rawCommand,
@@ -133,7 +133,7 @@ export const createCliRunner = (config: CliRunnerConfig): Runner => {
 					},
 				);
 
-				return { result: jsonParse(result) as unknown };
+				return Promise.resolve({ result: jsonParse(result) });
 			},
 			prose: config.prose,
 		},

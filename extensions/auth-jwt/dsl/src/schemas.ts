@@ -24,7 +24,7 @@ export const encodeJwtPayload = S.encodeSync(JwtPayloadSchema);
 
 // Function Schemas (pure transformations)
 
-import { TokenExpiredError, TokenInvalidError } from "./errors";
+import type { TokenExpiredError, TokenInvalidError } from "./errors";
 
 // Sign a JWT token with a secret
 export const SignTokenInputSchema = S.Struct({

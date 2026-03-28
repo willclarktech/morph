@@ -19,7 +19,7 @@ import { typeRefToTypeScript } from "../mappers/type-reference";
 const collectPortErrors = (entry: PortEntry): string[] => {
 	const errors = new Set<string>();
 	for (const methodDef of Object.values(entry.def.methods)) {
-		for (const error of methodDef.errors ?? []) {
+		for (const error of methodDef.errors) {
 			errors.add(error);
 		}
 	}
@@ -34,7 +34,7 @@ const generatePort = (entry: PortEntry, packageScope: string): string => {
 
 	// Generate type parameters
 	const typeParams = def.typeParameters ?? [];
-	const typeParamStr =
+	const typeParamString =
 		typeParams.length > 0
 			? `<${typeParams
 					.map((tp) => {
@@ -56,25 +56,27 @@ const generatePort = (entry: PortEntry, packageScope: string): string => {
 			// Generate parameters
 			const params = Object.entries(methodDef.params)
 				.map(([paramName, paramDef]) => {
-					const typeStr = typeRefToTypeScript(paramDef.type);
-					return `${paramName}: ${typeStr}`;
+					const typeString = typeRefToTypeScript(paramDef.type);
+					return `${paramName}: ${typeString}`;
 				})
 				.join(", ");
 
-			// Generate error union
-			const errors = methodDef.errors ?? [];
+			// Generate error union (omit if no errors — `never` is the default)
 			const errorUnion =
-				errors.length > 0
-					? errors.map((e) => `${e}Error`).join(" | ")
-					: "never";
+				methodDef.errors.length > 0
+					? methodDef.errors.map((error) => `${error}Error`).join(" | ")
+					: undefined;
 
 			// Generate return type
 			const returnType = typeRefToTypeScript(methodDef.returns);
+			const effectType = errorUnion
+				? `Effect.Effect<${returnType}, ${errorUnion}>`
+				: `Effect.Effect<${returnType}>`;
 
 			return `\t/**
 \t * ${methodDef.description}
 \t */
-\treadonly ${methodName}: (${params}) => Effect.Effect<${returnType}, ${errorUnion}>;`;
+\treadonly ${methodName}: (${params}) => ${effectType};`;
 		})
 		.join("\n\n");
 
@@ -82,19 +84,19 @@ const generatePort = (entry: PortEntry, packageScope: string): string => {
 	const interfaceCode = `/**
  * ${def.description}
  */
-export interface ${name}${typeParamStr} {
+export interface ${name}${typeParamString} {
 ${methods}
 }`;
 
 	// Generate Context tag - for generic ports, fill type params with `unknown`
-	const tagTypeArgs =
+	const tagTypeArguments =
 		typeParams.length > 0
 			? `<${typeParams.map(() => "unknown").join(", ")}>`
 			: "";
 	const tagCode = `/**
  * Context tag for ${name} dependency injection.
  */
-export const ${name} = Context.GenericTag<${name}${tagTypeArgs}>("@${packageScope}/${name}");`;
+export const ${name} = Context.GenericTag<${name}${tagTypeArguments}>("@${packageScope}/${name}");`;
 
 	return `${interfaceCode}\n\n${tagCode}`;
 };
@@ -140,7 +142,7 @@ export const generatePorts = (
 	const errorsImportPath = options.errorsImportPath ?? "./errors";
 	const errorImports =
 		allErrors.size > 0
-			? `import type { ${[...allErrors].map((e) => `${e}Error`).join(", ")} } from "${errorsImportPath}";\n\n`
+			? `import type { ${[...allErrors].map((error) => `${error}Error`).join(", ")} } from "${errorsImportPath}";\n\n`
 			: "";
 
 	return `// Port (DI contract) definitions

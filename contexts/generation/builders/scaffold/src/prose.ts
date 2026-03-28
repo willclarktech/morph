@@ -2,23 +2,23 @@ import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
 
 const inferVerb = (opName: string): string => {
 	if (/^create/i.test(opName)) return "creates";
-	if (/^(get|find|list|search|fetch)/i.test(opName)) return "retrieves";
-	if (/^(update|edit|modify)/i.test(opName)) return "updates";
-	if (/^(delete|remove)/i.test(opName)) return "deletes";
+	if (/^(?:get|find|list|search|fetch)/i.test(opName)) return "retrieves";
+	if (/^(?:update|edit|modify)/i.test(opName)) return "updates";
+	if (/^(?:delete|remove)/i.test(opName)) return "deletes";
 	if (/^publish/i.test(opName)) return "publishes";
 	if (/^unpublish/i.test(opName)) return "unpublishes";
-	if (/^(complete|finish)/i.test(opName)) return "completes";
+	if (/^(?:complete|finish)/i.test(opName)) return "completes";
 	return "invokes";
 };
 
 const inferNoun = (opName: string): string => {
 	const stripped = opName.replace(
-		/^(create|get|find|list|search|fetch|update|edit|modify|delete|remove|publish|unpublish|complete|finish|set)/i,
+		/^(?:create|get|find|list|search|fetch|update|edit|modify|delete|remove|publish|unpublish|complete|finish|set)/i,
 		"",
 	);
 	if (!stripped) return opName;
 	const words = stripped
-		.replace(/([A-Z])/g, " $1")
+		.replaceAll(/([A-Z])/g, " $1")
 		.trim()
 		.toLowerCase();
 	return words;
@@ -30,10 +30,8 @@ const buildTemplate = (
 ): string => {
 	const verb = inferVerb(opName);
 	const noun = inferNoun(opName);
-	const stringFields = inputFields.filter(
-		(f) => f !== "id" && !f.endsWith("Id"),
-	);
-	const firstString = stringFields[0];
+	const stringField = inputFields.find((f) => f !== "id" && !f.endsWith("Id"));
+	const firstString = stringField;
 
 	if (verb === "invokes") {
 		return firstString
@@ -55,10 +53,10 @@ export const generateDefaultProse = (
 		const entries: string[] = [];
 		const allOps: Record<string, readonly string[]> = {};
 
-		for (const [name, cmd] of Object.entries(context.commands ?? {})) {
+		for (const [name, cmd] of Object.entries(context.commands)) {
 			allOps[name] = Object.keys(cmd.input);
 		}
-		for (const [name, query] of Object.entries(context.queries ?? {})) {
+		for (const [name, query] of Object.entries(context.queries)) {
 			allOps[name] = Object.keys(query.input);
 		}
 

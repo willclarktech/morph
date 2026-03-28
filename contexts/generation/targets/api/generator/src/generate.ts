@@ -7,6 +7,8 @@ import type {
 	GenerationResult,
 } from "@morph/domain-schema";
 
+import { configProperties, indent, separator, sortImports } from "@morph/utils";
+
 import {
 	buildAuthImports,
 	buildAuthSetup,
@@ -22,8 +24,6 @@ import {
 	buildSseSetup,
 	buildStorageLayerSetup,
 } from "./code-snippets";
-import { configProps, indent, sep, sortImports } from "@morph/utils";
-
 import { detectFeatures } from "./feature-detection";
 import { generateApiReadme } from "./readme";
 
@@ -73,7 +73,7 @@ export const generate = (options: GenerateApiAppOptions): GenerationResult => {
 	const dslPath = options.dslPackagePath ?? corePath.replace("-core", "-dsl");
 
 	// Build code snippets
-	const coreImports = buildCoreImports(features).join(sep(1, ","));
+	const coreImports = buildCoreImports(features).join(separator(1, ","));
 	const layerSetup = buildLayerSetup(features);
 	const eventStoreSetup = buildEventStoreSetup(features, envPrefix);
 	const storageLayerSetup = buildStorageLayerSetup(features, envPrefix);
@@ -91,7 +91,7 @@ export const generate = (options: GenerateApiAppOptions): GenerationResult => {
 	const encodingSetup = buildEncodingSetup(features);
 
 	// Build createApi config properties
-	const apiConfigProps = configProps([
+	const apiConfigProperties = configProperties([
 		features.hasAuth && "auth: authStrategy,",
 		features.hasAuth && "authServiceTag: AuthService,",
 		`basePath: "/api",`,
@@ -143,7 +143,7 @@ const main = Effect.gen(function* () {
 	${layerSetup}
 ${sseSetup}${sseRuntimeSetup}${authSetup}${loginRouteSetup}${encodingSetup}
 	const api = createApi(ops, AppLayer, {
-${indent(apiConfigProps.join("\n"), 2)}
+${indent(apiConfigProperties.join("\n"), 2)}
 	});
 ${sseEventWiring}
 	const { stop } = yield* api.start();

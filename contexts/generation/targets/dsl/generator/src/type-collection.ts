@@ -74,6 +74,13 @@ export const collectTypesFromRef = (
 			types.add(`${reference.entity}Id`);
 			break;
 		}
+		case "function": {
+			for (const parameter of reference.params) {
+				collectTypesFromRef(parameter.type, types);
+			}
+			collectTypesFromRef(reference.returns, types);
+			break;
+		}
 		case "generic": {
 			// Collect the generic type name and recurse into args
 			types.add(reference.name);

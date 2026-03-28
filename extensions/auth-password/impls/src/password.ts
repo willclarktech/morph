@@ -1,12 +1,11 @@
-/**
- * Password hashing utilities using Bun's built-in bcrypt.
- */
-import { Effect } from "effect";
-
 import {
 	PasswordHashError,
 	PasswordVerifyError,
 } from "@morph/auth-password-dsl";
+/**
+ * Password hashing utilities using Bun's built-in bcrypt.
+ */
+import { Effect } from "effect";
 
 /**
  * Hash a plain text password using bcrypt.

@@ -9,8 +9,8 @@ import { Data } from "effect";
 export class ConnectionFailedError extends Data.TaggedError(
 	"ConnectionFailedError",
 )<{
-	readonly url: string;
 	readonly message: string;
+	readonly url: string;
 }> {}
 
 /**
@@ -19,8 +19,8 @@ export class ConnectionFailedError extends Data.TaggedError(
 export class ConnectionTimeoutError extends Data.TaggedError(
 	"ConnectionTimeoutError",
 )<{
-	readonly url: string;
 	readonly timeoutMs: number;
+	readonly url: string;
 }> {}
 
 /**

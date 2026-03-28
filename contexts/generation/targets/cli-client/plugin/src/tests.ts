@@ -9,7 +9,7 @@ import {
 	getParamNames,
 	getSensitiveNames,
 } from "@morph/builder-test";
-import { indent, toEnvironmentPrefix, toKebabCase } from "@morph/utils";
+import { indent, sortImports, toEnvironmentPrefix, toKebabCase } from "@morph/utils";
 
 export const generateClientCliScenarioTest = (
 	schema: DomainSchema,
@@ -71,11 +71,15 @@ export const generateClientCliScenarioTest = (
 		? `\n\tsensitiveParams: {\n${sensitiveParametersEntries}\n\t},`
 		: "";
 
-	return `import { createClientCliRunner } from "@morph/scenario-runner-cli-client";
-import { prose } from "${corePackage}";
-import { scenarios } from "${scenariosPackage}";
-import { expect, test } from "bun:test";
-import path from "node:path";
+	const imports = sortImports([
+		`import { createClientCliRunner } from "@morph/scenario-runner-cli-client";`,
+		`import { prose } from "${corePackage}";`,
+		`import { scenarios } from "${scenariosPackage}";`,
+		`import { expect, test } from "bun:test";`,
+		`import path from "node:path";`,
+	].join("\n"));
+
+	return `${imports}
 
 // Resolve paths relative to test file location
 const cliClientCwd = path.resolve(import.meta.dir, "../..");

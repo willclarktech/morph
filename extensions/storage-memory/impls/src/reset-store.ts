@@ -6,7 +6,7 @@ export interface ResetStoreHandler {
 	readonly handle: (
 		params: Record<string, never>,
 		options: Record<string, never>,
-	) => Effect.Effect<void, never>;
+	) => Effect.Effect<void>;
 }
 
 export const ResetStoreHandler = Context.GenericTag<ResetStoreHandler>(

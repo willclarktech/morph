@@ -17,15 +17,15 @@ export const buildEncodingImport = (features: DetectedFeatures): string => {
 				);
 				break;
 			}
-			case "yaml": {
-				codecImports.push(
-					`import { createYamlCodec } from "@morph/codec-yaml-impls";`,
-				);
-				break;
-			}
 			case "protobuf": {
 				codecImports.push(
 					`import { createProtobufCodec } from "@morph/codec-protobuf-impls";`,
+				);
+				break;
+			}
+			case "yaml": {
+				codecImports.push(
+					`import { createYamlCodec } from "@morph/codec-yaml-impls";`,
 				);
 				break;
 			}
@@ -51,12 +51,12 @@ export const buildEncodingSetup = (features: DetectedFeatures): string => {
 				codecs.push("createJsonCodec()");
 				break;
 			}
-			case "yaml": {
-				codecs.push("createYamlCodec()");
-				break;
-			}
 			case "protobuf": {
 				codecs.push("createProtobufCodec()");
+				break;
+			}
+			case "yaml": {
+				codecs.push("createYamlCodec()");
 				break;
 			}
 		}

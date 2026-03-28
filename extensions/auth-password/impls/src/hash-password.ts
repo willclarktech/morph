@@ -1,8 +1,9 @@
 import type { PasswordHashError } from "@morph/auth-password-dsl";
 import type { Effect } from "effect";
 
-import { hashPassword } from "./password";
 import { Context, Layer } from "effect";
+
+import { hashPassword } from "./password";
 
 export interface HashPasswordHandler {
 	readonly handle: (

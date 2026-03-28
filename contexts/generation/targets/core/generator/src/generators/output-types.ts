@@ -15,6 +15,9 @@ export const describeOutput = (operation: OperationDef): string => {
 		case "entityId": {
 			return `${output.entity}Id`;
 		}
+		case "function": {
+			return "Function";
+		}
 		case "generic": {
 			const argsString = output.args
 				.map((a) => describeOutput({ output: a } as OperationDef))
@@ -44,9 +47,6 @@ export const describeOutput = (operation: OperationDef): string => {
 		}
 		case "valueObject": {
 			return output.name;
-		}
-		case "function": {
-			return "Function";
 		}
 		default: {
 			const _exhaustive: never = output;
@@ -106,9 +106,6 @@ export const collectTypesFromTypeRef = (
 		case "entity": {
 			return [reference.name];
 		}
-		case "valueObject": {
-			return [reference.name];
-		}
 		case "entityId":
 		case "function":
 		case "generic":
@@ -120,6 +117,9 @@ export const collectTypesFromTypeRef = (
 		}
 		case "optional": {
 			return collectTypesFromTypeRef(reference.inner);
+		}
+		case "valueObject": {
+			return [reference.name];
 		}
 	}
 };

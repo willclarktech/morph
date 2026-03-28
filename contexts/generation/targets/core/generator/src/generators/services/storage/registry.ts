@@ -12,7 +12,7 @@ import { toPascalCase } from "@morph/utils";
 export const generateStorageRegistry = (
 	aggregateRoots: readonly string[],
 	storageBackends: readonly StorageBackend[],
-	defaultBackend?: StorageBackend | undefined,
+	defaultBackend?: StorageBackend,
 ): GeneratedFile => {
 	const repoTypes = aggregateRoots
 		.map((name) => `${toPascalCase(name)}Repository`)
@@ -66,7 +66,9 @@ export const generateStorageRegistry = (
 	const content = `// Storage registry for runtime layer selection
 // Enables switching between storage backends via CLI flag or env var
 
-import { Data, Effect, Layer } from "effect";
+import type { Layer } from "effect";
+
+import { Data, Effect } from "effect";
 
 import type { IdGenerator } from "./id-generator";
 import type { ${aggregateRoots.map((name) => `${toPascalCase(name)}Repository`).join(", ")} } from "./index";
@@ -103,7 +105,7 @@ ${registryEntries.join("\n")}
 /**
  * Available storage backend names.
  */
-export const availableStorages = [...Object.keys(registry)${hasEventsourced ? ', "eventsourced"' : ""}];
+export const availableStorages = Object.keys(registry)${hasEventsourced ? '.concat("eventsourced")' : ""};
 
 /**
  * Get a storage layer by name.
@@ -133,7 +135,7 @@ export const resolveStorage = (config: {
 	readonly backendName?: string | undefined;
 }) => {
 	const name = config.backendName ?? process.env[\`\${config.envPrefix}_STORAGE\`] ?? "${defaultBackend ?? storageBackends[0] ?? "memory"}";
-	if (name === "memory" && process.env["NODE_ENV"] === "production") {
+	if (name === "memory" && process.env.NODE_ENV === "production") {
 		console.warn("⚠️  WARNING: Using in-memory storage in production. Data will be lost on restart.");
 		console.warn(\`   Set \${config.envPrefix}_STORAGE=jsonfile or redis for persistent storage.\`);
 	}

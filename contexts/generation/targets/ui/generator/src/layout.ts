@@ -1,7 +1,7 @@
 /**
  * HTML layout generation for UI.
  */
-import { configProps, indent, sep } from "@morph/utils";
+import { configProperties, indent, separator } from "@morph/utils";
 
 import type { UiConfig, UiTheme } from "./config";
 
@@ -82,7 +82,7 @@ export const generateThemeStyles = (theme: UiTheme = {}): string => {
 	if (variables.length > 0) {
 		parts.push(`
 	:root {
-		${variables.join(sep(2))}
+		${variables.join(separator(2))}
 	}`);
 	}
 
@@ -119,16 +119,17 @@ export interface AuthState {
 	readonly isAuthenticated: boolean;
 	readonly userName: string | undefined;
 }
+
+const defaultAuthState: AuthState = { isAuthenticated: false, userName: undefined };
 `
 		: "";
 
 	// Build layout function parameters
-	const layoutParams = configProps([
+	const layoutParams = configProperties([
 		"title: string",
 		"content: string",
-		'nav: string = ""',
-		hasAuth &&
-			"authState: AuthState = { isAuthenticated: false, userName: undefined }",
+		'nav = ""',
+		hasAuth && "authState: AuthState = defaultAuthState",
 		"options: LayoutOptions = {}",
 	]);
 
@@ -155,8 +156,8 @@ export const layout = (
 ${indent(layoutParams.join(",\n"), 1)},
 ): string => {
 	const apiUrl = options.apiUrl ?? "${apiUrl}";
-	const sseAttrs = options.enableSse ? \`hx-ext="sse" sse-connect="\${apiUrl}/api/events" sse-swap="event" hx-swap="afterbegin" hx-target="this"\` : "";
-	const activitySection = options.enableSse ? \`<details><summary>\${t("ui.recentActivity")}</summary><ul id="activity-log" \${sseAttrs}></ul></details>\` : "";
+	const sseAttributes = options.enableSse ? \`hx-ext="sse" sse-connect="\${apiUrl}/api/events" sse-swap="event" hx-swap="afterbegin" hx-target="this"\` : "";
+	const activitySection = options.enableSse ? \`<details><summary>\${t("ui.recentActivity")}</summary><ul id="activity-log" \${sseAttributes}></ul></details>\` : "";
 	const languageOptions = getLanguages().map(lang =>
 		\`<option value="\${lang}" \${lang === getLanguage() ? "selected" : ""}>\${getLanguageDisplayName(lang)}</option>\`
 	).join("");

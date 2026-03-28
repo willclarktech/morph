@@ -1,7 +1,8 @@
-import { Context, Layer } from "effect";
-
 import type { SessionStorageError } from "@morph/auth-session-dsl";
 import type { Effect } from "effect";
+
+import { Context, Layer } from "effect";
+
 import { destroySession } from "./session-store";
 
 export interface DestroySessionHandler {

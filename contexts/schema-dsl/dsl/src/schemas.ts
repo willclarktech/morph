@@ -2,7 +2,6 @@
 // Do not edit manually
 
 // Effect/Schema Definitions
-
 import * as S from "effect/Schema";
 
 // Pure Type Schemas (transformation-centric)
@@ -123,7 +122,7 @@ export const encodeDslLocation = S.encodeSync(DslLocationSchema);
 
 // Function Schemas (pure transformations)
 
-import { InvalidSchemaError, ParseFailedError } from "./errors";
+import type { InvalidSchemaError, ParseFailedError } from "./errors";
 
 // Convert a domain schema JSON to .morph DSL text
 export const DecompileSchemaInputSchema = S.Struct({
@@ -220,7 +219,7 @@ export const ValidateDslInputSchema = S.Struct({
 });
 
 export type ValidateDslInput = S.Schema.Type<typeof ValidateDslInputSchema>;
-export type ValidateDslOutput = void;
+export type ValidateDslOutput = undefined;
 export type ValidateDslError = ParseFailedError;
 
 // Get a template .morph schema showing all available DSL features and field types

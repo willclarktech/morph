@@ -21,7 +21,7 @@ export const PublishPostHandlerLive = Layer.effect(
 						.findById(params.postId)
 						.pipe(
 							Effect.mapError(
-								(e) => new PostNotFoundError({ message: e.message }),
+								(error) => new PostNotFoundError({ message: error.message }),
 							),
 						);
 					if (!post) {
@@ -50,7 +50,7 @@ export const PublishPostHandlerLive = Layer.effect(
 						.save(published)
 						.pipe(
 							Effect.mapError(
-								(e) => new PostNotFoundError({ message: e.message }),
+								(error) => new PostNotFoundError({ message: error.message }),
 							),
 						);
 					return published;

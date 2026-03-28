@@ -1,9 +1,14 @@
 import type { ValidatorPropertySuite } from "@morph/property";
-import type { PropertyResult, PropertyRunOptions } from "@morph/property-runner";
+import type {
+	PropertyResult,
+	PropertyRunOptions,
+} from "@morph/property-runner";
+import type { Runtime } from "effect";
+
+import { Effect, Layer } from "effect";
+import * as fc from "fast-check";
 
 import type { ValidatorFunction } from "./index";
-import { Effect, Layer, Runtime } from "effect";
-import * as fc from "fast-check";
 
 export const runValidatorSuite = <R>(
 	suite: ValidatorPropertySuite<unknown, unknown>,

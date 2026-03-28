@@ -2,7 +2,7 @@ import type { GeneratedFile } from "@morph/domain-schema";
 import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
 
 import { contextNameToKebab } from "@morph/domain-schema";
-import { buildConfigFiles } from "@morph/builder-app";
+import { buildCliConfigFiles } from "@morph/builder-app";
 import { generate as generateClientCli } from "@morph/runtime-cli-client";
 
 import { generateClientCliDockerfile } from "./dockerfile";
@@ -63,7 +63,7 @@ export const cliClientPlugin: GeneratorPlugin = {
 			filename: `${packagePath}/package.json`,
 		});
 
-		files.push(...buildConfigFiles(packagePath, name));
+		files.push(...buildCliConfigFiles(packagePath, name));
 
 		const cliCode = generateClientCli({
 			clientPackage,

@@ -32,7 +32,7 @@ export const generate = (
 		clientPackage,
 		cliDescription,
 		cliName,
-		dslPackage,
+		dslPackage: _dslPackage,
 		packageDir,
 		schema,
 		sourceDir = "src",
@@ -83,7 +83,7 @@ const HELP_TEXT = \`${helpText}\`;
 const commands: Record<string, (argv: readonly string[]) => Promise<number>> = {
 	config: async (argv) => {
 		const apiUrlIndex = argv.indexOf("--api-url");
-		const apiUrl = apiUrlIndex >= 0 ? argv[apiUrlIndex + 1] : undefined;
+		const apiUrl = apiUrlIndex === -1 ? undefined : argv[apiUrlIndex + 1];
 
 		if (apiUrl) {
 			const current = config.readConfig();

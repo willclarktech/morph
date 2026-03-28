@@ -5,6 +5,7 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	GenerationResult,
+	InjectableParam,
 } from "@morph/domain-schema";
 
 import {
@@ -18,8 +19,7 @@ import {
 	isDomainService,
 	schemaHasAuthRequirement,
 } from "@morph/domain-schema";
-
-import { indent, sep, sortImports } from "@morph/utils";
+import { indent, separator, sortImports } from "@morph/utils";
 
 import type { ContextPackages } from "./imports";
 
@@ -49,48 +49,56 @@ const inferAuthUserType = (schema: DomainSchema): string => {
 		const cond = condition as Record<string, unknown>;
 		switch (cond["kind"]) {
 			case "and":
-			case "or":
+			case "or": {
 				for (const c of cond["conditions"] as unknown[]) walkCondition(c);
 				break;
-			case "contains":
+			}
+			case "contains": {
 				walkValue(cond["collection"]);
 				walkValue(cond["value"]);
 				break;
+			}
 			case "equals":
 			case "greaterThan":
 			case "greaterThanOrEqual":
 			case "lessThan":
 			case "lessThanOrEqual":
-			case "notEquals":
+			case "notEquals": {
 				walkValue(cond["left"]);
 				walkValue(cond["right"]);
 				break;
+			}
 			case "exists":
-			case "forAll":
+			case "forAll": {
 				walkValue(cond["collection"]);
 				walkCondition(cond["condition"]);
 				break;
-			case "implies":
+			}
+			case "implies": {
 				walkCondition(cond["if"]);
 				walkCondition(cond["then"]);
 				break;
-			case "not":
+			}
+			case "not": {
 				walkCondition(cond["condition"]);
 				break;
+			}
 		}
 	};
 
 	const walkValue = (value: unknown): void => {
-		const val = value as Record<string, unknown>;
-		switch (val["kind"]) {
-			case "call":
-				for (const arg of val["args"] as unknown[]) walkValue(arg);
+		const value_ = value as Record<string, unknown>;
+		switch (value_["kind"]) {
+			case "call": {
+				for (const argument of value_["args"] as unknown[]) walkValue(argument);
 				break;
-			case "count":
-				walkValue(val["collection"]);
+			}
+			case "count": {
+				walkValue(value_["collection"]);
 				break;
+			}
 			case "field": {
-				const parts = (val["path"] as string).split(".");
+				const parts = (value_["path"] as string).split(".");
 				if (parts[0] === "context" && parts[1] === "currentUser" && parts[2]) {
 					props.add(parts[2]);
 				} else if (parts[0] === "currentUser" && parts[1]) {
@@ -116,9 +124,9 @@ const inferAuthUserType = (schema: DomainSchema): string => {
 export interface GenerateMcpAppOptions {
 	/** Context packages for multi-context apps */
 	readonly contexts?: readonly ContextPackages[];
-	/** @deprecated Use contexts instead. Import path to the core package */
+	/** Import path to the core package (legacy single-context) */
 	readonly corePackagePath?: string;
-	/** @deprecated Use contexts instead. DSL package path */
+	/** DSL package path (legacy single-context) */
 	readonly dslPackagePath?: string;
 	/** Env var prefix (e.g., "TODO_APP" -> TODO_APP_STORAGE) */
 	readonly envPrefix?: string;
@@ -172,10 +180,8 @@ export const generate = (options: GenerateMcpAppOptions): GenerationResult => {
 		: false;
 
 	// Compute injectable params from schema
-	const injectableParametersMap: Record<
-		string,
-		readonly import("@morph/domain-schema").InjectableParam[]
-	> = {};
+	const injectableParametersMap: Record<string, readonly InjectableParam[]> =
+		{};
 	if (options.schema) {
 		for (const op of getAllOperations(options.schema)) {
 			const params = getInjectableParams(options.schema, op.name);
@@ -264,7 +270,7 @@ export const generate = (options: GenerateMcpAppOptions): GenerationResult => {
 		...(hasAuth ? ["auth: authStrategy", "authServiceTag: AuthService"] : []),
 		...(hasInjectableParameters ? ["injectableParams"] : []),
 	];
-	const mcpConfig = mcpConfigEntries.join(sep(2, ","));
+	const mcpConfig = mcpConfigEntries.join(separator(2, ","));
 
 	const importBlock = sortImports(
 		[

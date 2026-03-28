@@ -1,11 +1,11 @@
 // Template for implementing the function handler.
 // This file is NOT imported by the core package.
 // Copy to your impls package and implement the logic.
-
 import { InvalidSchemaError } from "@morph/generation-dsl";
 import { Effect, Layer } from "effect";
 
 import { ValidateHandler } from "./handler";
+
 /**
  * Implementation of validate function.
  * Validate a domain schema

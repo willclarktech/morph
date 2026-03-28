@@ -3,10 +3,10 @@ import type {
 	AttributeDef,
 	CommandDef,
 	ConditionExpr,
-	ContractDef,
-	ContractStepDef,
 	ContextDef,
 	ContextErrorDef,
+	ContractDef,
+	ContractStepDef,
 	DomainSchema,
 	EmittedEventDef,
 	EntityDef,
@@ -35,9 +35,9 @@ import type {
 	CallExprAst,
 	CommandAst,
 	ConditionExprAst,
-	ContractAst,
 	ContextAst,
 	ContextErrorAst,
+	ContractAst,
 	DomainAst,
 	EntityAst,
 	ErrorRefAst,
@@ -865,11 +865,11 @@ export const compile = (ast: DomainAst): CompileResult => {
 	}
 
 	if (profiles.size > 0) {
-		const profilesObj: Record<string, readonly string[]> = {};
+		const profilesObject: Record<string, readonly string[]> = {};
 		for (const [name, tags] of profiles) {
-			profilesObj[name] = tags;
+			profilesObject[name] = tags;
 		}
-		schema["profiles"] = profilesObj;
+		schema["profiles"] = profilesObject;
 	}
 
 	schema["contexts"] = contexts;

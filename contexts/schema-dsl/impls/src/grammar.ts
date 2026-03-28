@@ -43,7 +43,7 @@ export const textMateGrammar = {
 					patterns: [
 						{
 							name: "constant.character.escape.morph",
-							match: "\\\\.",
+							match: String.raw`\\.`,
 						},
 					],
 				},
@@ -53,7 +53,7 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "constant.numeric.morph",
-					match: "\\b\\d+(?:\\.\\d+)?\\b",
+					match: String.raw`\b\d+(?:\.\d+)?\b`,
 				},
 			],
 		},
@@ -61,7 +61,7 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "constant.language.morph",
-					match: "\\b(?:true|false)\\b",
+					match: String.raw`\b(?:true|false)\b`,
 				},
 			],
 		},
@@ -69,14 +69,14 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "entity.name.function.decorator.morph",
-					match: "@[a-zA-Z_][\\w-]*",
+					match: String.raw`@[a-zA-Z_][\w-]*`,
 				},
 			],
 		},
 		"domain-declaration": {
 			patterns: [
 				{
-					match: "\\b(domain)\\s+([A-Za-z_]\\w*)",
+					match: String.raw`\b(domain)\s+([A-Za-z_]\w*)`,
 					captures: {
 						"1": { name: "keyword.other.morph" },
 						"2": { name: "entity.name.namespace.morph" },
@@ -87,7 +87,7 @@ export const textMateGrammar = {
 		"context-declaration": {
 			patterns: [
 				{
-					match: "\\b(context)\\s+([A-Za-z_]\\w*)",
+					match: String.raw`\b(context)\s+([A-Za-z_]\w*)`,
 					captures: {
 						"1": { name: "keyword.other.morph" },
 						"2": { name: "entity.name.namespace.morph" },
@@ -98,7 +98,7 @@ export const textMateGrammar = {
 		"entity-declarations": {
 			patterns: [
 				{
-					match: "\\b(entity|value|type|union|alias|error)\\s+([A-Z]\\w*)",
+					match: String.raw`\b(entity|value|type|union|alias|error)\s+([A-Z]\w*)`,
 					captures: {
 						"1": { name: "keyword.other.morph" },
 						"2": { name: "entity.name.type.morph" },
@@ -109,8 +109,7 @@ export const textMateGrammar = {
 		"operation-declarations": {
 			patterns: [
 				{
-					match:
-						"\\b(command|query|function|invariant|subscriber|port)\\s+([A-Za-z_]\\w*)",
+					match: String.raw`\b(command|query|function|invariant|subscriber|port)\s+([A-Za-z_]\w*)`,
 					captures: {
 						"1": { name: "keyword.other.morph" },
 						"2": { name: "entity.name.function.morph" },
@@ -122,16 +121,14 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "keyword.other.morph",
-					match:
-						"\\b(?:domain|context|entity|value|command|query|function|invariant|subscriber|port|type|union|alias|error)\\b",
+					match: String.raw`\b(?:domain|context|entity|value|command|query|function|invariant|subscriber|port|type|union|alias|error)\b`,
 				},
 			],
 		},
 		"property-with-type": {
 			patterns: [
 				{
-					match:
-						"\\b([a-z_]\\w*)(\\??)(:)\\s+([A-Z]\\w*(?:\\.[a-zA-Z_]\\w*)?)(\\[\\])?",
+					match: String.raw`\b([a-z_]\w*)(\??)(:)\s+([A-Z]\w*(?:\.[a-zA-Z_]\w*)?)(\[\])?`,
 					captures: {
 						"1": { name: "variable.other.property.morph" },
 						"2": { name: "keyword.operator.optional.morph" },
@@ -141,8 +138,7 @@ export const textMateGrammar = {
 					},
 				},
 				{
-					match:
-						"\\b([a-z_]\\w*)(\\??)(:)\\s+(string|float|integer|boolean|date|datetime|void)\\b(\\[\\])?",
+					match: String.raw`\b([a-z_]\w*)(\??)(:)\s+(string|float|integer|boolean|date|datetime|void)\b(\[\])?`,
 					captures: {
 						"1": { name: "variable.other.property.morph" },
 						"2": { name: "keyword.operator.optional.morph" },
@@ -156,8 +152,7 @@ export const textMateGrammar = {
 		"clause-with-type-refs": {
 			patterns: [
 				{
-					match:
-						"\\b(reads|writes|emits|output|pre|post|on)\\s+([A-Z]\\w*(?:,\\s*[A-Z]\\w*)*)",
+					match: String.raw`\b(reads|writes|emits|output|pre|post|on)\s+([A-Z]\w*(?:,\s*[A-Z]\w*)*)`,
 					captures: {
 						"1": { name: "keyword.other.clause.morph" },
 						"2": { name: "entity.name.type.morph" },
@@ -169,8 +164,7 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "keyword.other.clause.morph",
-					match:
-						"\\b(?:input|output|reads|writes|emits|errors|pre|post|throws|violation|depends|default|base|by)\\b",
+					match: String.raw`\b(?:input|output|reads|writes|emits|errors|pre|post|throws|violation|depends|default|base|by)\b`,
 				},
 			],
 		},
@@ -178,15 +172,14 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "keyword.control.morph",
-					match:
-						"\\b(?:if|then|where|when|on|in|forall|exists|contains|count|and|or|not)\\b",
+					match: String.raw`\b(?:if|then|where|when|on|in|forall|exists|contains|count|and|or|not)\b`,
 				},
 			],
 		},
 		"relationship-with-target": {
 			patterns: [
 				{
-					match: "\\b(belongs_to|has_many|has_one|references)\\s+([A-Z]\\w*)",
+					match: String.raw`\b(belongs_to|has_many|has_one|references)\s+([A-Z]\w*)`,
 					captures: {
 						"1": { name: "keyword.other.relationship.morph" },
 						"2": { name: "entity.name.type.morph" },
@@ -198,11 +191,11 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "storage.type.morph",
-					match: "\\b(?:extensions)\\b",
+					match: String.raw`\b(?:extensions)\b`,
 				},
 				{
 					name: "support.type.morph",
-					match: "\\b(?:storage|auth|eventStore|sse|i18n)(?=\\s+\\[|\\s+\\w)",
+					match: String.raw`\b(?:storage|auth|eventStore|sse|i18n)(?=\s+\[|\s+\w)`,
 				},
 			],
 		},
@@ -210,7 +203,7 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "keyword.operator.morph",
-					match: "==|!=|&&|\\|\\||>=|<=|=>|\\.\\.",
+					match: String.raw`==|!=|&&|\|\||>=|<=|=>|\.\.`,
 				},
 			],
 		},
@@ -218,7 +211,7 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "entity.name.type.morph",
-					match: "\\b[A-Z]\\w*\\b",
+					match: String.raw`\b[A-Z]\w*\b`,
 				},
 			],
 		},
@@ -230,7 +223,7 @@ export const textMateGrammar = {
 				},
 				{
 					name: "punctuation.definition.bracket.morph",
-					match: "[\\[\\]]",
+					match: String.raw`[\[\]]`,
 				},
 			],
 		},
@@ -260,13 +253,13 @@ export const languageConfiguration = {
 	],
 	folding: {
 		markers: {
-			start: "\\{",
-			end: "\\}",
+			start: String.raw`\{`,
+			end: String.raw`\}`,
 		},
 	},
 	indentationRules: {
-		increaseIndentPattern: "\\{\\s*$",
-		decreaseIndentPattern: "^\\s*\\}",
+		increaseIndentPattern: String.raw`\{\s*$`,
+		decreaseIndentPattern: String.raw`^\s*\}`,
 	},
-	wordPattern: "[a-zA-Z_]\\w*",
+	wordPattern: String.raw`[a-zA-Z_]\w*`,
 };

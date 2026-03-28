@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
-
 import type { ConstraintDef } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import { constraintsToRefinements } from "./constraint";
 

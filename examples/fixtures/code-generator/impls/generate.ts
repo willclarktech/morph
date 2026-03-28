@@ -59,6 +59,11 @@ interface ParamDef {
 
 const typeRefToTS = (ref: TypeRef): string => {
 	switch (ref.kind) {
+		case "array": {
+			return ref.element
+				? `readonly ${typeRefToTS(ref.element)}[]`
+				: "readonly unknown[]";
+		}
 		case "primitive": {
 			const name = ref.name ?? "unknown";
 			const map: Record<string, string> = {
@@ -68,14 +73,12 @@ const typeRefToTS = (ref: TypeRef): string => {
 			};
 			return map[name] ?? name;
 		}
-		case "array":
-			return ref.element
-				? `readonly ${typeRefToTS(ref.element)}[]`
-				: "readonly unknown[]";
-		case "type":
+		case "type": {
 			return ref.name ?? "unknown";
-		default:
+		}
+		default: {
 			return "unknown";
+		}
 	}
 };
 
@@ -174,37 +177,41 @@ export const GenerateHandlerLive = Layer.succeed(GenerateHandler, {
 
 			// Generate types for each context
 			if (schema.contexts) {
-				for (const [ctxName, ctx] of Object.entries(schema.contexts)) {
+				for (const [contextName, context] of Object.entries(schema.contexts)) {
 					const sections: string[] = [
-						`// Generated types for context: ${ctxName}`,
-						`// ${ctx.description ?? ""}`,
+						`// Generated types for context: ${contextName}`,
+						`// ${context.description ?? ""}`,
 						"",
 					];
 
 					// Generate types
-					if (ctx.types) {
-						for (const [typeName, typeDef] of Object.entries(ctx.types)) {
+					if (context.types) {
+						for (const [typeName, typeDef] of Object.entries(context.types)) {
 							switch (typeDef.kind) {
-								case "product":
-									sections.push(generateProductType(typeName, typeDef));
-									break;
-								case "sum":
-									sections.push(generateSumType(typeName, typeDef));
-									break;
-								case "alias":
+								case "alias": {
 									sections.push(generateAliasType(typeName, typeDef));
 									break;
-								default:
+								}
+								case "product": {
+									sections.push(generateProductType(typeName, typeDef));
+									break;
+								}
+								case "sum": {
+									sections.push(generateSumType(typeName, typeDef));
+									break;
+								}
+								default: {
 									warnings.push(`Unknown type kind for ${typeName}`);
+								}
 							}
 							sections.push("");
 						}
 					}
 
 					// Generate function types
-					if (ctx.functions) {
-						for (const [funcName, funcDef] of Object.entries(ctx.functions)) {
-							sections.push(generateFunctionType(funcName, funcDef));
+					if (context.functions) {
+						for (const [functionName, functionDef] of Object.entries(context.functions)) {
+							sections.push(generateFunctionType(functionName, functionDef));
 							sections.push("");
 						}
 					}
@@ -212,7 +219,7 @@ export const GenerateHandlerLive = Layer.succeed(GenerateHandler, {
 					if (sections.length > 3) {
 						// More than just the header
 						files.push({
-							path: `${ctxName}.ts`,
+							path: `${contextName}.ts`,
 							content: sections.join("\n"),
 						});
 					}

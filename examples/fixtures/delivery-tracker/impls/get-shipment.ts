@@ -19,9 +19,9 @@ export const GetShipmentHandlerLive = Layer.effect(
 						.findById(params.shipmentId)
 						.pipe(
 							Effect.mapError(
-								(e) =>
+								(error) =>
 									new ShipmentNotFoundError({
-										message: e.message,
+										message: error.message,
 									}),
 							),
 						);

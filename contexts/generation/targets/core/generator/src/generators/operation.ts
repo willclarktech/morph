@@ -2,6 +2,7 @@ import type { InvariantDef, OperationDef } from "@morph/domain-schema";
 
 import { indent, sortImports, toPascalCase } from "@morph/utils";
 
+import { conditionReferencesCurrentUser } from "./invariants";
 import { extractInputSchemas } from "./output-types";
 import {
 	generateOptionsSchema,
@@ -70,15 +71,22 @@ export const generateOperation = (
 	const handlerName = `${pascalName}Handler`;
 	const handlerImport = `import { ${handlerName} } from "./handler";\n`;
 
-	// Event service imports (if operation emits events)
-	const eventServiceImport = hasEvents
-		? 'import { EventEmitter, EventStore, EventSubscriber } from "../../services";\n'
-		: "";
-
-	// Auth service import (if operation has invariants)
-	const authServiceImport = hasInvariants
-		? 'import { AuthService } from "../../services";\n'
-		: "";
+	// Service imports (auth + event services from ../../services)
+	const allInvariantDefs = [...preInvariants, ...postInvariants];
+	const needsAuthService =
+		hasInvariants &&
+		(allInvariantDefs.some((inv) => inv.scope.kind === "context") ||
+			allInvariantDefs.some((inv) =>
+				conditionReferencesCurrentUser(inv.condition),
+			));
+	const serviceImports: string[] = [];
+	if (needsAuthService) serviceImports.push("AuthService");
+	if (hasEvents)
+		serviceImports.push("EventEmitter", "EventStore", "EventSubscriber");
+	const serviceImport =
+		serviceImports.length > 0
+			? `import { ${serviceImports.join(", ")} } from "../../services";\n`
+			: "";
 
 	// Invariant imports (validators and context type)
 	// Only import context-scoped invariants (entity-scoped get TODO comments)
@@ -105,8 +113,7 @@ export const generateOperation = (
 	// 4. Relative imports (./handler, ../../services)
 	const relativeImports = [
 		...(schemaImports ? [schemaImports.trim()] : []),
-		...(authServiceImport ? [authServiceImport.trim()] : []),
-		...(eventServiceImport ? [eventServiceImport.trim()] : []),
+		...(serviceImport ? [serviceImport.trim()] : []),
 		...(invariantImport ? [invariantImport.trim()] : []),
 		handlerImport.trim(),
 	].filter((line) => line !== "");

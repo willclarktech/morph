@@ -18,7 +18,7 @@ export const UnpublishPostHandlerLive = Layer.effect(
 						.findById(params.postId)
 						.pipe(
 							Effect.mapError(
-								(e) => new PostNotFoundError({ message: e.message }),
+								(error) => new PostNotFoundError({ message: error.message }),
 							),
 						);
 					if (!post) {
@@ -47,7 +47,7 @@ export const UnpublishPostHandlerLive = Layer.effect(
 						.save(unpublished)
 						.pipe(
 							Effect.mapError(
-								(e) => new PostNotFoundError({ message: e.message }),
+								(error) => new PostNotFoundError({ message: error.message }),
 							),
 						);
 					return unpublished;

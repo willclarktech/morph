@@ -3,6 +3,7 @@ import type {
 	QualifiedEntry,
 	TypeRef,
 } from "@morph/domain-schema";
+
 import { contextNameToKebab } from "@morph/domain-schema";
 
 /**
@@ -40,10 +41,9 @@ export const collectErrorImports = (
 	for (const entry of operations) {
 		const context = entry.context;
 		for (const error of entry.def.errors) {
-			if (!errorsByContext.has(context)) {
-				errorsByContext.set(context, new Set());
-			}
-			errorsByContext.get(context)!.add(`${error.name}Error`);
+			const existing = errorsByContext.get(context) ?? new Set<string>();
+			errorsByContext.set(context, existing);
+			existing.add(`${error.name}Error`);
 		}
 	}
 
@@ -57,10 +57,11 @@ const getOrCreateContextSet = (
 	typesByContext: Map<string, Set<string>>,
 	context: string,
 ): Set<string> => {
-	if (!typesByContext.has(context)) {
-		typesByContext.set(context, new Set());
-	}
-	return typesByContext.get(context)!;
+	const existing = typesByContext.get(context);
+	if (existing) return existing;
+	const created = new Set<string>();
+	typesByContext.set(context, created);
+	return created;
 };
 
 /**
@@ -80,7 +81,6 @@ const collectTypesFromRef = (
 			const context = ref.context ?? defaultContext;
 			const types = getOrCreateContextSet(typesByContext, context);
 			types.add(ref.name);
-			types.add(`${ref.name}Id`);
 			break;
 		}
 		case "entityId": {
@@ -89,24 +89,24 @@ const collectTypesFromRef = (
 			types.add(`${ref.entity}Id`);
 			break;
 		}
-		case "generic": {
-			const context = ref.context ?? defaultContext;
-			const types = getOrCreateContextSet(typesByContext, context);
-			types.add(ref.name);
-			for (const arg of ref.args) {
-				collectTypesFromRef(arg, typesByContext, defaultContext);
-			}
-			break;
-		}
-		case "optional": {
-			collectTypesFromRef(ref.inner, typesByContext, defaultContext);
-			break;
-		}
 		case "function":
 		case "primitive":
 		case "typeParam":
 		case "union": {
 			// No import needed
+			break;
+		}
+		case "generic": {
+			const context = ref.context ?? defaultContext;
+			const types = getOrCreateContextSet(typesByContext, context);
+			types.add(ref.name);
+			for (const argument of ref.args) {
+				collectTypesFromRef(argument, typesByContext, defaultContext);
+			}
+			break;
+		}
+		case "optional": {
+			collectTypesFromRef(ref.inner, typesByContext, defaultContext);
 			break;
 		}
 		case "type": {
@@ -134,8 +134,8 @@ export const generateMultiContextTypeImports = (
 ): string => {
 	// Merge types and errors by context
 	const allContexts = new Set([
-		...typesByContext.keys(),
 		...errorsByContext.keys(),
+		...typesByContext.keys(),
 	]);
 
 	if (allContexts.size === 0) return "";

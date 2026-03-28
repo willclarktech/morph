@@ -18,7 +18,7 @@ export const GetPostHandlerLive = Layer.effect(
 						.findById(params.postId)
 						.pipe(
 							Effect.mapError(
-								(e) => new PostNotFoundError({ message: e.message }),
+								(error) => new PostNotFoundError({ message: error.message }),
 							),
 						);
 					if (!post) {

@@ -1,20 +1,19 @@
-import { describe, test, afterEach } from "bun:test";
-import { mkdtempSync, rmSync } from "node:fs";
-import { join } from "node:path";
-import { tmpdir } from "node:os";
-import * as fc from "fast-check";
+import { createJsonFileEventStoreTransport } from "@morph/eventstore-jsonfile-impls";
+import { createMemoryEventStoreTransport } from "@morph/eventstore-memory-impls";
+import { afterEach, describe, test } from "bun:test";
 import { Effect } from "effect";
+import * as fc from "fast-check";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 import { eventStoreTransportContracts } from "./eventStoreTransport.contracts";
-import { createMemoryEventStoreTransport } from "@morph/eventstore-memory-impls";
-import { createJsonFileEventStoreTransport } from "@morph/eventstore-jsonfile-impls";
 
 describe("EventStoreTransport contracts", () => {
 	describe("memory", () => {
 		const suites = eventStoreTransportContracts(() => createMemoryEventStoreTransport());
 		for (const suite of suites) {
 			test(suite.name, async () => {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 				await fc.assert(fc.asyncProperty(suite.arbitrary, async (input: any) => suite.law(input)));
 			});
 		}
@@ -33,7 +32,6 @@ describe("EventStoreTransport contracts", () => {
 		});
 		for (const suite of suites) {
 			test(suite.name, async () => {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 				await fc.assert(fc.asyncProperty(suite.arbitrary, async (input: any) => suite.law(input)));
 			});
 		}

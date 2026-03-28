@@ -2,7 +2,7 @@ import type { AliasTypeDef } from "@morph/domain-schema";
 
 import { typeRefToSchema } from "../mappers/schema-reference";
 import { typeRefToTypeScript } from "../mappers/type-reference";
-import { formatTypeParams, hasTypeParameters } from "./type-utils";
+import { formatTypeParams, hasTypeParameters } from "./type-utilities";
 
 export const generateAliasTypeSchema = (
 	name: string,

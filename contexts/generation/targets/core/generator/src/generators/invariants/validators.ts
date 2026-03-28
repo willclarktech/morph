@@ -45,12 +45,14 @@ const generateEntityInvariantValidatorCode = (
 		"context",
 	);
 
+	const contextParam = contextFields.length > 0 ? "context" : "_context";
+
 	const code = `/**
  * ${invariant.description}
  */
 export const ${functionName} = (
 	${entityVariable}: ${entityName},
-	context: ${contextType},
+	${contextParam}: ${contextType},
 ): Effect.Effect<void, InvariantViolation> =>
 	Effect.gen(function* () {
 		const valid = ${compiledCondition};

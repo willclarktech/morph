@@ -46,8 +46,8 @@ export const generateMcpPackageJson = (
 	// Build dependencies from all contexts
 	const contextDeps: Record<string, string> = {};
 
-	for (const ctx of contexts) {
-		contextDeps[ctx.corePackage] = "workspace:*";
+	for (const context of contexts) {
+		contextDeps[context.corePackage] = "workspace:*";
 	}
 
 	const package_ = {

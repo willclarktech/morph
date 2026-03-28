@@ -1,8 +1,8 @@
 import type { Effect, ManagedRuntime as MRT } from "effect";
+import type { Layer } from "effect/Layer";
 
 import { isOperation } from "@morph/operation";
 import { Cause, Exit, ManagedRuntime } from "effect";
-import type { Layer } from "effect/Layer";
 
 interface VsCodeOp {
 	readonly name: string;
@@ -31,18 +31,10 @@ interface VsCode {
 	};
 	readonly languages: {
 		createDiagnosticCollection: (name: string) => DiagnosticCollection;
-		registerDocumentSymbolProvider: (
-			selector: DocumentSelector,
-			provider: DocumentSymbolProvider,
-		) => Disposable;
 		registerCompletionItemProvider: (
 			selector: DocumentSelector,
 			provider: CompletionItemProvider,
 			...triggerChars: string[]
-		) => Disposable;
-		registerHoverProvider: (
-			selector: DocumentSelector,
-			provider: HoverProvider,
 		) => Disposable;
 		registerDefinitionProvider: (
 			selector: DocumentSelector,
@@ -52,9 +44,17 @@ interface VsCode {
 			selector: DocumentSelector,
 			provider: DocumentFormattingEditProvider,
 		) => Disposable;
+		registerDocumentSymbolProvider: (
+			selector: DocumentSelector,
+			provider: DocumentSymbolProvider,
+		) => Disposable;
 		registerFoldingRangeProvider: (
 			selector: DocumentSelector,
 			provider: FoldingRangeProvider,
+		) => Disposable;
+		registerHoverProvider: (
+			selector: DocumentSelector,
+			provider: HoverProvider,
 		) => Disposable;
 	};
 	readonly window: {
@@ -63,10 +63,14 @@ interface VsCode {
 	};
 	readonly workspace: {
 		onDidChangeTextDocument: (
-			listener: (e: TextDocumentChangeEvent) => void,
+			listener: (event: TextDocumentChangeEvent) => void,
 		) => Disposable;
-		onDidOpenTextDocument: (listener: (e: TextDocument) => void) => Disposable;
-		onDidCloseTextDocument: (listener: (e: TextDocument) => void) => Disposable;
+		onDidCloseTextDocument: (
+			listener: (event: TextDocument) => void,
+		) => Disposable;
+		onDidOpenTextDocument: (
+			listener: (event: TextDocument) => void,
+		) => Disposable;
 		openTextDocument: (options: {
 			content: string;
 			language?: string;
@@ -257,13 +261,13 @@ const SYMBOL_KIND_MAP: Record<string, string> = {
 };
 
 const KNOWN_PROVIDERS = new Set([
-	"getDiagnostics",
-	"getSymbols",
-	"getCompletions",
-	"getHover",
-	"getDefinition",
 	"formatDsl",
+	"getCompletions",
+	"getDefinition",
+	"getDiagnostics",
 	"getFoldingRanges",
+	"getHover",
+	"getSymbols",
 ]);
 
 const COMPLETION_KIND_MAP: Record<string, string> = {
@@ -274,21 +278,20 @@ const COMPLETION_KIND_MAP: Record<string, string> = {
 	snippet: "Snippet",
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- runtime R is erased at call boundary
-const runOp = async <T>(
-	runtime: MRT.ManagedRuntime<any, never>,
-	op: VsCodeOp,
-	params: unknown,
-): Promise<T | undefined> => {
-	const exit = await runtime.runPromiseExit(
-		op.execute(params, {}) as Effect.Effect<T, unknown, any>,
-	);
-	if (Exit.isSuccess(exit)) return exit.value;
-	console.error(`[morph] ${op.name} failed:`, Cause.squash(exit.cause));
-	return undefined;
-};
-
 export const createExtension = <R>(config: ExtensionConfig<R>) => {
+	const runOp = async <T>(
+		runtime: MRT.ManagedRuntime<R, never>,
+		op: VsCodeOp,
+		params: unknown,
+	): Promise<T | undefined> => {
+		const exit = await runtime.runPromiseExit(
+			op.execute(params, {}) as Effect.Effect<T, unknown, R>,
+		);
+		if (Exit.isSuccess(exit)) return exit.value;
+		console.error(`[morph] ${op.name} failed:`, Cause.squash(exit.cause));
+		return undefined;
+	};
+
 	const opMap = new Map<string, VsCodeOp>();
 	for (const [, value] of Object.entries(config.ops)) {
 		if (isOperation(value)) {
@@ -314,12 +317,13 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 				if (document.languageId !== config.languageId) return;
 				if (debounceTimer) clearTimeout(debounceTimer);
 				debounceTimer = setTimeout(() => {
-					void runOp<readonly DslDiagnostic[]>(runtime!, getDiagnosticsOp, {
+					if (!runtime) return;
+					void runOp<readonly DslDiagnostic[]>(runtime, getDiagnosticsOp, {
 						source: document.getText(),
 					}).then((result) => {
 						if (!result) {
 							diagnostics.set(document.uri, []);
-							return;
+							return undefined;
 						}
 						diagnostics.set(
 							document.uri,
@@ -339,21 +343,22 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 									),
 							),
 						);
+						return undefined;
 					});
 				}, debounceMs);
 			};
 
 			context.subscriptions.push(
-				vscode.workspace.onDidChangeTextDocument((e) =>
-					updateDiagnostics(e.document),
+				vscode.workspace.onDidChangeTextDocument((event) =>
+					updateDiagnostics(event.document),
 				),
 			);
 			context.subscriptions.push(
 				vscode.workspace.onDidOpenTextDocument(updateDiagnostics),
 			);
 			context.subscriptions.push(
-				vscode.workspace.onDidCloseTextDocument((doc) =>
-					diagnostics.delete(doc.uri),
+				vscode.workspace.onDidCloseTextDocument((document) =>
+					diagnostics.delete(document.uri),
 				),
 			);
 		}
@@ -362,7 +367,7 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 		if (getSymbolsOp) {
 			const mapSymbol = (sym: DslSymbol): DocumentSymbol => {
 				const kindName = SYMBOL_KIND_MAP[sym.kind] ?? "Variable";
-				const kind = (vscode.SymbolKind[kindName] as number | undefined) ?? 12;
+				const kind = vscode.SymbolKind[kindName] ?? 12;
 				const range = new vscode.Range(
 					sym.range.startLine - 1,
 					sym.range.startColumn - 1,
@@ -383,8 +388,9 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 			context.subscriptions.push(
 				vscode.languages.registerDocumentSymbolProvider(selector, {
 					provideDocumentSymbols: async (document) => {
+						if (!runtime) return [];
 						const result = await runOp<readonly DslSymbol[]>(
-							runtime!,
+							runtime,
 							getSymbolsOp,
 							{ source: document.getText() },
 						);
@@ -401,8 +407,9 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 					selector,
 					{
 						provideCompletionItems: async (document, position) => {
+							if (!runtime) return [];
 							const result = await runOp<readonly DslCompletion[]>(
-								runtime!,
+								runtime,
 								getCompletionsOp,
 								{
 									source: document.getText(),
@@ -413,9 +420,7 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 							if (!result) return [];
 							return result.map((c) => {
 								const kindName = COMPLETION_KIND_MAP[c.kind] ?? "Text";
-								const kind =
-									(vscode.CompletionItemKind[kindName] as number | undefined) ??
-									0;
+								const kind = vscode.CompletionItemKind[kindName] ?? 0;
 								const item = new vscode.CompletionItem(c.label, kind);
 								if (c.detail) item.detail = c.detail;
 								return item;
@@ -433,7 +438,8 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 			context.subscriptions.push(
 				vscode.languages.registerHoverProvider(selector, {
 					provideHover: async (document, position) => {
-						const result = await runOp<DslHoverResult>(runtime!, getHoverOp, {
+						if (!runtime) return undefined;
+						const result = await runOp<DslHoverResult>(runtime, getHoverOp, {
 							source: document.getText(),
 							line: position.line + 1,
 							column: position.character + 1,
@@ -462,7 +468,8 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 			context.subscriptions.push(
 				vscode.languages.registerDefinitionProvider(selector, {
 					provideDefinition: async (document, position) => {
-						const result = await runOp<DslLocation>(runtime!, getDefinitionOp, {
+						if (!runtime) return undefined;
+						const result = await runOp<DslLocation>(runtime, getDefinitionOp, {
 							source: document.getText(),
 							line: position.line + 1,
 							column: position.character + 1,
@@ -491,7 +498,8 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 			context.subscriptions.push(
 				vscode.languages.registerDocumentFormattingEditProvider(selector, {
 					provideDocumentFormattingEdits: async (document) => {
-						const result = await runOp<string>(runtime!, formatDslOp, {
+						if (!runtime) return [];
+						const result = await runOp<string>(runtime, formatDslOp, {
 							source: document.getText(),
 						});
 						if (!result) return [];
@@ -512,8 +520,9 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 			context.subscriptions.push(
 				vscode.languages.registerFoldingRangeProvider(selector, {
 					provideFoldingRanges: async (document) => {
+						if (!runtime) return [];
 						const result = await runOp<readonly DslFoldingRange[]>(
-							runtime!,
+							runtime,
 							getFoldingRangesOp,
 							{ source: document.getText() },
 						);
@@ -531,13 +540,14 @@ export const createExtension = <R>(config: ExtensionConfig<R>) => {
 			const commandId = `morph.${name}`;
 			context.subscriptions.push(
 				vscode.commands.registerCommand(commandId, async () => {
-					const result = await runOp<unknown>(runtime!, op, {});
+					if (!runtime) return;
+					const result = await runOp<unknown>(runtime, op, {});
 					if (typeof result === "string") {
-						const doc = await vscode.workspace.openTextDocument({
+						const document = await vscode.workspace.openTextDocument({
 							content: result,
 							language: config.languageId,
 						});
-						await vscode.window.showTextDocument(doc);
+						await vscode.window.showTextDocument(document);
 					} else {
 						vscode.window.showInformationMessage(`${name} completed`);
 					}

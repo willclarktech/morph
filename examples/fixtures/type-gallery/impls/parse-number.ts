@@ -8,7 +8,7 @@ import { ParseNumberHandler } from "./handler";
 
 export const ParseNumberHandlerLive = Layer.succeed(ParseNumberHandler, {
 	handle: (params, _options) =>
-		Effect.gen(function* () {
+		Effect.sync(() => {
 			const parsed = Number(params.raw);
 			if (Number.isNaN(parsed)) {
 				const result: Result<number, string> = {

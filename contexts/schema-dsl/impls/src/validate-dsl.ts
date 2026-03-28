@@ -1,10 +1,9 @@
 import type { Effect } from "effect";
 
-import { Context, Effect as E, Layer } from "effect";
-
-import { ParseFailedError } from "@morph/schema-dsl-dsl";
 import { compile } from "@morph/schema-dsl-compiler";
+import { ParseFailedError } from "@morph/schema-dsl-dsl";
 import { parse } from "@morph/schema-dsl-parser";
+import { Context, Effect as E, Layer } from "effect";
 
 export interface ValidateDslHandler {
 	readonly handle: (
@@ -27,8 +26,8 @@ export const ValidateDslHandlerLive = Layer.succeed(ValidateDslHandler, {
 					new ParseFailedError({
 						message: parseResult.errors
 							.map(
-								(e) =>
-									`${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+								(error) =>
+									`${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 							)
 							.join("\n"),
 					}),
@@ -43,8 +42,8 @@ export const ValidateDslHandlerLive = Layer.succeed(ValidateDslHandler, {
 					new ParseFailedError({
 						message: compileResult.errors
 							.map(
-								(e) =>
-									`${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+								(error) =>
+									`${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 							)
 							.join("\n"),
 					}),

@@ -1,11 +1,10 @@
-import { Context, Effect, Layer } from "effect";
-
-import type { ConnectionInfo } from "@morph/storage-redis-dsl";
-
-import {
-	ConnectionFailedError,
+import type {
+	ConnectionInfo,
 	ConnectionTimeoutError,
 } from "@morph/storage-redis-dsl";
+
+import { ConnectionFailedError } from "@morph/storage-redis-dsl";
+import { Context, Effect, Layer } from "effect";
 
 export interface ConnectHandler {
 	readonly handle: (
@@ -42,17 +41,20 @@ export const ConnectHandlerLive = Layer.succeed(ConnectHandler, {
 
 			const info = yield* Effect.tryPromise({
 				try: async () => {
-					const infoStr = (await client.send("INFO", ["memory"])) as string;
-					const memMatch = /used_memory:(\d+)/.exec(infoStr);
+					const infoString = (await client.send("INFO", ["memory"])) as string;
+					const memMatch = /used_memory:(\d+)/.exec(infoString);
 					const memoryUsageBytes = memMatch ? Number(memMatch[1]) : 0;
 
-					const dbSizeStr = (await client.send("DBSIZE", [])) as number;
+					const databaseSizeString = (await client.send(
+						"DBSIZE",
+						[],
+					)) as number;
 
 					return {
 						url,
 						connected: true,
 						memoryUsageBytes,
-						keyCount: dbSizeStr,
+						keyCount: databaseSizeString,
 					} satisfies ConnectionInfo;
 				},
 				catch: (error) =>

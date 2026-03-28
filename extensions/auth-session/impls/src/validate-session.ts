@@ -1,12 +1,13 @@
-import { Context, Layer } from "effect";
-
-import type { Session } from "@morph/auth-session-dsl";
 import type {
+	Session,
 	SessionExpiredError,
 	SessionNotFoundError,
 	SessionStorageError,
 } from "@morph/auth-session-dsl";
 import type { Effect } from "effect";
+
+import { Context, Layer } from "effect";
+
 import { validateSession } from "./session-store";
 
 export interface ValidateSessionHandler {

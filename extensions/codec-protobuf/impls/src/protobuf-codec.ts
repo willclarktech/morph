@@ -1,8 +1,8 @@
-import { Effect } from "effect";
-import protobuf from "protobufjs";
-
 import type { Codec } from "@morph/codec-dsl";
+import type protobuf from "protobufjs";
+
 import { CodecDecodeError, CodecEncodeError } from "@morph/codec-dsl";
+import { Effect } from "effect";
 
 const PROTOBUF_MIME = "application/x-protobuf";
 
@@ -15,8 +15,8 @@ export interface ProtobufCodecConfig {
 }
 
 const timestampToDate = (ts: {
-	seconds?: number | bigint;
 	nanos?: number;
+	seconds?: number | bigint;
 }): Date => {
 	const seconds =
 		typeof ts.seconds === "bigint" ? Number(ts.seconds) : (ts.seconds ?? 0);
@@ -24,7 +24,7 @@ const timestampToDate = (ts: {
 	return new Date(seconds * 1000 + nanos / 1e6);
 };
 
-const dateToTimestamp = (date: Date): { seconds: bigint; nanos: number } => {
+const dateToTimestamp = (date: Date): { nanos: number; seconds: bigint } => {
 	const ms = date.getTime();
 	const seconds = BigInt(Math.floor(ms / 1000));
 	const nanos = (ms % 1000) * 1e6;
@@ -32,17 +32,17 @@ const dateToTimestamp = (date: Date): { seconds: bigint; nanos: number } => {
 };
 
 const coerceDateFields = (
-	obj: Record<string, unknown>,
+	object: Record<string, unknown>,
 	dateFieldNames: readonly string[],
 	toDate: boolean,
 ): Record<string, unknown> => {
-	const result = { ...obj };
+	const result = { ...object };
 	for (const field of dateFieldNames) {
 		const value = result[field];
 		if (value === undefined || value === null) continue;
 		if (toDate && typeof value === "object") {
 			result[field] = timestampToDate(
-				value as { seconds?: number | bigint; nanos?: number },
+				value as { nanos?: number; seconds?: number | bigint },
 			);
 		} else if (!toDate && value instanceof Date) {
 			result[field] = dateToTimestamp(value);
@@ -62,11 +62,11 @@ export const createProtobufCodec = (config: ProtobufCodecConfig): Codec => ({
 		Effect.try({
 			try: () => {
 				const mapping = config.messageMapping[messageName];
-				const msgTypeName = mapping?.output ?? messageName;
-				const MessageType = config.root.lookupType(msgTypeName);
+				const messageTypeName = mapping?.output ?? messageName;
+				const MessageType = config.root.lookupType(messageTypeName);
 
 				let payload = value as Record<string, unknown>;
-				const dateFieldNames = config.dateFields?.[msgTypeName] ?? [];
+				const dateFieldNames = config.dateFields?.[messageTypeName] ?? [];
 				if (dateFieldNames.length > 0) {
 					payload = coerceDateFields(payload, dateFieldNames, false);
 				}
@@ -78,16 +78,16 @@ export const createProtobufCodec = (config: ProtobufCodecConfig): Codec => ({
 					contentType: PROTOBUF_MIME,
 				};
 			},
-			catch: (e) =>
-				new CodecEncodeError({ format: "protobuf", message: String(e) }),
+			catch: (error) =>
+				new CodecEncodeError({ format: "protobuf", message: String(error) }),
 		}),
 
 	decode: (body, messageName) =>
 		Effect.try({
 			try: () => {
 				const mapping = config.messageMapping[messageName];
-				const msgTypeName = mapping?.input ?? messageName;
-				const MessageType = config.root.lookupType(msgTypeName);
+				const messageTypeName = mapping?.input ?? messageName;
+				const MessageType = config.root.lookupType(messageTypeName);
 
 				const bytes =
 					body instanceof Uint8Array
@@ -102,14 +102,14 @@ export const createProtobufCodec = (config: ProtobufCodecConfig): Codec => ({
 					defaults: true,
 				}) as Record<string, unknown>;
 
-				const dateFieldNames = config.dateFields?.[msgTypeName] ?? [];
+				const dateFieldNames = config.dateFields?.[messageTypeName] ?? [];
 				if (dateFieldNames.length > 0) {
 					result = coerceDateFields(result, dateFieldNames, true);
 				}
 
 				return result;
 			},
-			catch: (e) =>
-				new CodecDecodeError({ format: "protobuf", message: String(e) }),
+			catch: (error) =>
+				new CodecDecodeError({ format: "protobuf", message: String(error) }),
 		}),
 });

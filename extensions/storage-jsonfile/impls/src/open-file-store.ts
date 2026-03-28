@@ -1,10 +1,9 @@
-import { Context, Effect, Layer } from "effect";
-import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import path from "node:path";
-
 import type { FileStoreInfo } from "@morph/storage-jsonfile-dsl";
 
 import { FileAccessError } from "@morph/storage-jsonfile-dsl";
+import { Context, Effect, Layer } from "effect";
+import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import path from "node:path";
 
 export interface OpenFileStoreHandler {
 	readonly handle: (

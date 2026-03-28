@@ -2,8 +2,8 @@
  * CLI help text formatting.
  */
 import type { CodecRegistry } from "@morph/codec-dsl";
-import type * as S from "effect/Schema";
 import type { Effect } from "effect/Effect";
+import type * as S from "effect/Schema";
 
 import { getFieldNames } from "@morph/operation";
 import { toKebabCase } from "@morph/utils";

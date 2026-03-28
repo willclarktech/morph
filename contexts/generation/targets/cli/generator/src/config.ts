@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 import * as os from "node:os";
-import * as path from "node:path";
+import path from "node:path";
 
 interface Config {
 	readonly apiUrl?: string;
@@ -35,6 +35,7 @@ export const createConfigManager = (appName: string, envPrefix: string) => {
 		console.error(
 			`API URL not configured. Run: ${appName} config --api-url <url>`,
 		);
+		// eslint-disable-next-line unicorn/no-process-exit -- CLI runtime requires process.exit
 		process.exit(1);
 	};
 

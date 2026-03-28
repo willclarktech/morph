@@ -24,13 +24,13 @@ export const generateListRoutes = (
 		return [
 			{
 				comment: `List ${entityName}`,
-				handler: `async (req: Request) => {
-				initLanguage(req);
-				const authState = getAuthState(req);
+				handler: `async (request: Request) => {
+				initLanguage(request);
+				const authState = getAuthState(request);
 				if (!authState.isAuthenticated) {
-					return new Response(null, { status: 303, headers: { Location: "/login" } });
+					return new Response(undefined, { status: 303, headers: { Location: "/login" } });
 				}
-				const client = createClientForRequest(req);
+				const client = createClientForRequest(request);
 				try {
 					const items = await Effect.runPromise(client.${op.name}${callArguments}) as readonly ${entityName}[];
 					return html(list${entityName}Page(items));
@@ -47,8 +47,8 @@ export const generateListRoutes = (
 	return [
 		{
 			comment: `List ${entityName}`,
-			handler: `async (req: Request) => {
-				initLanguage(req);
+			handler: `async (request: Request) => {
+				initLanguage(request);
 				try {
 					const items = await Effect.runPromise(client.${op.name}${callArguments}) as readonly ${entityName}[];
 					return html(list${entityName}Page(items));

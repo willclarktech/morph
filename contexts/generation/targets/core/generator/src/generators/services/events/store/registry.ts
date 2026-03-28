@@ -9,7 +9,7 @@ import type { EventStoreBackend, GeneratedFile } from "@morph/domain-schema";
  */
 export const generateEventStoreRegistry = (
 	eventStoreBackends: readonly EventStoreBackend[],
-	defaultBackend?: EventStoreBackend | undefined,
+	defaultBackend?: EventStoreBackend,
 ): GeneratedFile => {
 	const hasMemory = eventStoreBackends.includes("memory");
 	const hasJsonFile = eventStoreBackends.includes("jsonfile");

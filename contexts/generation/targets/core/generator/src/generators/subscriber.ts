@@ -44,7 +44,9 @@ export const generateSubscriber = (
 	const header = [
 		"// Generated subscriber interface - do not edit",
 		"",
-		'import { Context, Effect } from "effect";',
+		'import type { Effect } from "effect";',
+		"",
+		'import { Context } from "effect";',
 		"",
 		eventImports,
 	].join("\n");

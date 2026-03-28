@@ -46,7 +46,7 @@ export const encodeApiKeyWithSecret = S.encodeSync(ApiKeyWithSecretSchema);
 
 // Function Schemas (pure transformations)
 
-import {
+import type {
 	ApiKeyExpiredError,
 	ApiKeyInvalidError,
 	ApiKeyStorageError,
@@ -80,5 +80,5 @@ export const RevokeApiKeyInputSchema = S.Struct({
 });
 
 export type RevokeApiKeyInput = S.Schema.Type<typeof RevokeApiKeyInputSchema>;
-export type RevokeApiKeyOutput = void;
+export type RevokeApiKeyOutput = undefined;
 export type RevokeApiKeyError = ApiKeyStorageError;

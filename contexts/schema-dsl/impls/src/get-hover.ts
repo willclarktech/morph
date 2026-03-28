@@ -11,16 +11,15 @@ import type {
 } from "@morph/schema-dsl-parser";
 import type { Effect } from "effect";
 
-import { Context, Effect as E, Layer } from "effect";
-
 import { parse } from "@morph/schema-dsl-parser";
+import { Context, Effect as E, Layer } from "effect";
 
 export interface GetHoverHandler {
 	readonly handle: (
 		params: {
-			readonly source: string;
-			readonly line: number;
 			readonly column: number;
+			readonly line: number;
+			readonly source: string;
 		},
 		options: Record<string, never>,
 	) => Effect.Effect<DslHoverResult>;
@@ -71,7 +70,7 @@ const commandHover = (cmd: CommandAst): string => {
 	if (cmd.input.length > 0)
 		lines.push(`Input: ${cmd.input.map((p) => p.name).join(", ")}`);
 	if (cmd.emits.length > 0)
-		lines.push(`Emits: ${cmd.emits.map((e) => e.name).join(", ")}`);
+		lines.push(`Emits: ${cmd.emits.map((event) => event.name).join(", ")}`);
 	return lines.join("\n\n");
 };
 
@@ -83,45 +82,48 @@ const queryHover = (query: QueryAst): string => {
 	return lines.join("\n\n");
 };
 
-const functionHover = (fn: FunctionDeclAst): string => {
-	const lines = [`**function** \`${fn.name}\``];
-	if (fn.description) lines.push(fn.description);
-	if (fn.input.length > 0)
-		lines.push(`Input: ${fn.input.map((p) => p.name).join(", ")}`);
+const functionHover = (function_: FunctionDeclAst): string => {
+	const lines = [`**function** \`${function_.name}\``];
+	if (function_.description) lines.push(function_.description);
+	if (function_.input.length > 0)
+		lines.push(`Input: ${function_.input.map((p) => p.name).join(", ")}`);
 	return lines.join("\n\n");
 };
 
 const findHoverInContext = (
-	ctx: ContextAst,
+	context: ContextAst,
 	line: number,
 	column: number,
 ): DslHoverResult | undefined => {
-	for (const entity of ctx.entities) {
+	for (const entity of context.entities) {
 		if (positionInRange(line, column, entity.range)) {
 			return { content: entityHover(entity), range: rangeToDto(entity.range) };
 		}
 	}
-	for (const vo of ctx.valueObjects) {
+	for (const vo of context.valueObjects) {
 		if (positionInRange(line, column, vo.range)) {
 			return { content: valueObjectHover(vo), range: rangeToDto(vo.range) };
 		}
 	}
-	for (const cmd of ctx.commands) {
+	for (const cmd of context.commands) {
 		if (positionInRange(line, column, cmd.range)) {
 			return { content: commandHover(cmd), range: rangeToDto(cmd.range) };
 		}
 	}
-	for (const query of ctx.queries) {
+	for (const query of context.queries) {
 		if (positionInRange(line, column, query.range)) {
 			return { content: queryHover(query), range: rangeToDto(query.range) };
 		}
 	}
-	for (const fn of ctx.functions) {
-		if (positionInRange(line, column, fn.range)) {
-			return { content: functionHover(fn), range: rangeToDto(fn.range) };
+	for (const function_ of context.functions) {
+		if (positionInRange(line, column, function_.range)) {
+			return {
+				content: functionHover(function_),
+				range: rangeToDto(function_.range),
+			};
 		}
 	}
-	for (const inv of ctx.invariants) {
+	for (const inv of context.invariants) {
 		if (positionInRange(line, column, inv.range)) {
 			const lines = [`**invariant** \`${inv.name}\``];
 			if (inv.description) lines.push(inv.description);
@@ -136,14 +138,14 @@ const findHoverInAst = (
 	line: number,
 	column: number,
 ): DslHoverResult | undefined => {
-	for (const ctx of ast.contexts) {
-		if (positionInRange(line, column, ctx.range)) {
-			const inner = findHoverInContext(ctx, line, column);
+	for (const context of ast.contexts) {
+		if (positionInRange(line, column, context.range)) {
+			const inner = findHoverInContext(context, line, column);
 			if (inner) return inner;
-			const description = ctx.description
-				? `**context** \`${ctx.name}\`\n\n${ctx.description}`
-				: `**context** \`${ctx.name}\``;
-			return { content: description, range: rangeToDto(ctx.range) };
+			const description = context.description
+				? `**context** \`${context.name}\`\n\n${context.description}`
+				: `**context** \`${context.name}\``;
+			return { content: description, range: rangeToDto(context.range) };
 		}
 	}
 

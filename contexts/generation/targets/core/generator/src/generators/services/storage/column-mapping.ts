@@ -31,16 +31,16 @@ type FieldType =
 	| { readonly kind: "id" }
 	| { readonly kind: "union"; readonly values: readonly string[] }
 	| { readonly kind: "json" }
-	| { readonly kind: "object"; readonly fields: readonly FieldSpec[] }
+	| { readonly fields: readonly FieldSpec[]; readonly kind: "object" }
 	| {
-			readonly kind: "discriminated";
 			readonly discriminator: string;
+			readonly kind: "discriminated";
 			readonly variants: Record<string, readonly FieldSpec[]>;
 	  }
 	| {
-			readonly kind: "array";
-			readonly element: FieldType;
 			readonly childTable: string;
+			readonly element: FieldType;
+			readonly kind: "array";
 	  };
 
 interface FieldSpec {
@@ -67,25 +67,25 @@ export const entityToFieldSpecs = (
 	return Object.entries(entry.def.attributes)
 		.filter(([name]) => name !== "id")
 		.sort(([a], [b]) => a.localeCompare(b))
-		.map(([name, attr]) =>
-			attributeToFieldSpec(name, attr, entityLower, context, schema),
+		.map(([name, attribute]) =>
+			attributeToFieldSpec(name, attribute, entityLower, context, schema),
 		);
 };
 
 const attributeToFieldSpec = (
 	name: string,
-	attr: AttributeDef,
+	attribute: AttributeDef,
 	entityLower: string,
 	context: ContextDef,
 	schema: DomainSchema,
 ): FieldSpec => {
-	const nullable = attr.optional === true;
+	const nullable = attribute.optional === true;
 
-	if (attr.type.kind === "optional") {
+	if (attribute.type.kind === "optional") {
 		return {
 			name,
 			type: typeRefToFieldType(
-				attr.type.inner,
+				attribute.type.inner,
 				name,
 				entityLower,
 				context,
@@ -97,7 +97,13 @@ const attributeToFieldSpec = (
 
 	return {
 		name,
-		type: typeRefToFieldType(attr.type, name, entityLower, context, schema),
+		type: typeRefToFieldType(
+			attribute.type,
+			name,
+			entityLower,
+			context,
+			schema,
+		),
 		nullable,
 	};
 };
@@ -110,68 +116,6 @@ const typeRefToFieldType = (
 	schema: DomainSchema,
 ): FieldType => {
 	switch (typeRef.kind) {
-		case "primitive":
-			switch (typeRef.name) {
-				case "string":
-					return { kind: "string" };
-				case "float":
-					return { kind: "float" };
-				case "integer":
-					return { kind: "integer" };
-				case "date":
-					return { kind: "date" };
-				case "datetime":
-					return { kind: "datetime" };
-				case "boolean":
-					return { kind: "boolean" };
-				default:
-					return { kind: "json" };
-			}
-
-		case "entityId":
-			return { kind: "id" };
-
-		case "union":
-			return { kind: "union", values: typeRef.values };
-
-		case "valueObject": {
-			const voDef = resolveValueObject(typeRef.name, context, schema);
-			if (!voDef) return { kind: "json" };
-			return {
-				kind: "object",
-				fields: valueObjectToFieldSpecs(voDef, entityLower, context, schema),
-			};
-		}
-
-		case "type": {
-			const typeDef = resolveType(typeRef.name, context, schema);
-			if (!typeDef) return { kind: "json" };
-
-			switch (typeDef.kind) {
-				case "product":
-					return {
-						kind: "object",
-						fields: productTypeToFieldSpecs(
-							typeDef.fields,
-							entityLower,
-							context,
-							schema,
-						),
-					};
-				case "sum":
-					return sumTypeToFieldType(typeDef, entityLower, context, schema);
-				case "alias":
-					return typeRefToFieldType(
-						typeDef.type,
-						fieldName,
-						entityLower,
-						context,
-						schema,
-					);
-			}
-			return { kind: "json" };
-		}
-
 		case "array": {
 			const elementType = typeRefToFieldType(
 				typeRef.element,
@@ -187,7 +131,18 @@ const typeRefToFieldType = (
 			};
 		}
 
-		case "optional":
+		case "entity":
+		case "function":
+		case "generic":
+		case "typeParam": {
+			return { kind: "json" };
+		}
+
+		case "entityId": {
+			return { kind: "id" };
+		}
+
+		case "optional": {
 			return typeRefToFieldType(
 				typeRef.inner,
 				fieldName,
@@ -195,9 +150,77 @@ const typeRefToFieldType = (
 				context,
 				schema,
 			);
+		}
 
-		default:
+		case "primitive": {
+			switch (typeRef.name) {
+				case "boolean": {
+					return { kind: "boolean" };
+				}
+				case "date": {
+					return { kind: "date" };
+				}
+				case "datetime": {
+					return { kind: "datetime" };
+				}
+				case "float": {
+					return { kind: "float" };
+				}
+				case "integer": {
+					return { kind: "integer" };
+				}
+				case "string": {
+					return { kind: "string" };
+				}
+				case "unknown":
+				case "void": {
+					return { kind: "json" };
+				}
+			}
 			return { kind: "json" };
+		}
+		case "type": {
+			const typeDef = resolveType(typeRef.name, context, schema);
+			if (!typeDef) return { kind: "json" };
+
+			switch (typeDef.kind) {
+				case "alias": {
+					return typeRefToFieldType(
+						typeDef.type,
+						fieldName,
+						entityLower,
+						context,
+						schema,
+					);
+				}
+				case "product": {
+					return {
+						kind: "object",
+						fields: productTypeToFieldSpecs(
+							typeDef.fields,
+							entityLower,
+							context,
+							schema,
+						),
+					};
+				}
+				case "sum": {
+					return sumTypeToFieldType(typeDef, entityLower, context, schema);
+				}
+			}
+			return { kind: "json" };
+		}
+		case "union": {
+			return { kind: "union", values: typeRef.values };
+		}
+		case "valueObject": {
+			const voDef = resolveValueObject(typeRef.name, context, schema);
+			if (!voDef) return { kind: "json" };
+			return {
+				kind: "object",
+				fields: valueObjectToFieldSpecs(voDef, entityLower, context, schema),
+			};
+		}
 	}
 };
 
@@ -209,10 +232,16 @@ const valueObjectToFieldSpecs = (
 ): readonly FieldSpec[] =>
 	Object.entries(voDef.attributes)
 		.sort(([a], [b]) => a.localeCompare(b))
-		.map(([name, attr]) => ({
+		.map(([name, attribute]) => ({
 			name,
-			type: typeRefToFieldType(attr.type, name, entityLower, context, schema),
-			nullable: attr.optional === true,
+			type: typeRefToFieldType(
+				attribute.type,
+				name,
+				entityLower,
+				context,
+				schema,
+			),
+			nullable: attribute.optional === true,
 		}));
 
 const productTypeToFieldSpecs = (
@@ -260,6 +289,8 @@ const findContextForEntity = (
 	for (const context of Object.values(schema.contexts)) {
 		if (entityName in context.entities) return context;
 	}
+	// Schema always has at least one context when this is called
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- guaranteed by caller
 	return Object.values(schema.contexts)[0]!;
 };
 
@@ -270,8 +301,8 @@ const resolveValueObject = (
 ): ValueObjectDef | undefined => {
 	const local = context.valueObjects?.[name];
 	if (local) return local;
-	for (const ctx of Object.values(schema.contexts)) {
-		const found = ctx.valueObjects?.[name];
+	for (const context_ of Object.values(schema.contexts)) {
+		const found = context_.valueObjects?.[name];
 		if (found) return found;
 	}
 	return undefined;
@@ -284,8 +315,8 @@ const resolveType = (
 ): TypeDef | undefined => {
 	const local = context.types?.[name];
 	if (local) return local;
-	for (const ctx of Object.values(schema.contexts)) {
-		const found = ctx.types?.[name];
+	for (const context_ of Object.values(schema.contexts)) {
+		const found = context_.types?.[name];
 		if (found) return found;
 	}
 	return undefined;
@@ -309,42 +340,27 @@ export const fieldSpecsToCodeString = (
 
 const fieldSpecToCode = (spec: FieldSpec, indent: string): string => {
 	const inner = indent + "\t";
-	const parts: string[] = [
-		`${inner}{ name: "${spec.name}", type: ${fieldTypeToCode(spec.type, inner)}`,
-	];
+	let line = `${inner}{ name: "${spec.name}", type: ${fieldTypeToCode(spec.type, inner)}`;
 	if (spec.nullable) {
-		parts[0] += ", nullable: true";
+		line += ", nullable: true";
 	}
-	parts[0] += " }";
-	return parts.join("");
+	line += " }";
+	return line;
 };
 
 const fieldTypeToCode = (ft: FieldType, indent: string): string => {
 	switch (ft.kind) {
-		case "string":
-			return '{ kind: "string" }';
-		case "float":
-			return '{ kind: "float" }';
-		case "integer":
-			return '{ kind: "integer" }';
-		case "date":
-			return '{ kind: "date" }';
-		case "datetime":
-			return '{ kind: "datetime" }';
-		case "boolean":
+		case "array": {
+			return `{ kind: "array", element: ${fieldTypeToCode(ft.element, indent)}, childTable: "${ft.childTable}" }`;
+		}
+		case "boolean": {
 			return '{ kind: "boolean" }';
-		case "id":
-			return '{ kind: "id" }';
-		case "json":
-			return '{ kind: "json" }';
-		case "union":
-			return `{ kind: "union", values: [${ft.values.map((v) => `"${v}"`).join(", ")}] }`;
-		case "object": {
-			const inner = indent + "\t";
-			const fieldsCode = ft.fields
-				.map((f) => fieldSpecToCode(f, inner))
-				.join(",\n");
-			return `{ kind: "object", fields: [\n${fieldsCode},\n${indent}\t] }`;
+		}
+		case "date": {
+			return '{ kind: "date" }';
+		}
+		case "datetime": {
+			return '{ kind: "datetime" }';
 		}
 		case "discriminated": {
 			const inner = indent + "\t";
@@ -358,8 +374,31 @@ const fieldTypeToCode = (ft: FieldType, indent: string): string => {
 				.join(",\n");
 			return `{ kind: "discriminated", discriminator: "${ft.discriminator}", variants: {\n${variantEntries},\n${inner}} }`;
 		}
-		case "array":
-			return `{ kind: "array", element: ${fieldTypeToCode(ft.element, indent)}, childTable: "${ft.childTable}" }`;
+		case "float": {
+			return '{ kind: "float" }';
+		}
+		case "id": {
+			return '{ kind: "id" }';
+		}
+		case "integer": {
+			return '{ kind: "integer" }';
+		}
+		case "json": {
+			return '{ kind: "json" }';
+		}
+		case "object": {
+			const inner = indent + "\t";
+			const fieldsCode = ft.fields
+				.map((f) => fieldSpecToCode(f, inner))
+				.join(",\n");
+			return `{ kind: "object", fields: [\n${fieldsCode},\n${indent}\t] }`;
+		}
+		case "string": {
+			return '{ kind: "string" }';
+		}
+		case "union": {
+			return `{ kind: "union", values: [${ft.values.map((v) => `"${v}"`).join(", ")}] }`;
+		}
 	}
 };
 
@@ -368,17 +407,18 @@ const fieldTypeToCode = (ft: FieldType, indent: string): string => {
  */
 export const entityToIndexSpecs = (
 	entry: AggregateRootEntry,
-): readonly { kind: "unique" | "nonUnique"; field: string }[] => {
-	const uniqueAttrs = Object.entries(entry.def.attributes)
+): readonly { field: string; kind: "unique" | "nonUnique" }[] => {
+	const uniqueAttributes = Object.entries(entry.def.attributes)
 		.filter(
-			([, attr]) => attr.constraints?.some((c) => c.kind === "unique") ?? false,
+			([, attribute]) =>
+				attribute.constraints?.some((c) => c.kind === "unique") ?? false,
 		)
 		.map(([name]) => ({ kind: "unique" as const, field: name }));
 
-	const fkAttrs = getForeignKeyAttributes(entry.def).map((fk) => ({
+	const fkAttributes = getForeignKeyAttributes(entry.def).map((fk) => ({
 		kind: "nonUnique" as const,
 		field: fk.name,
 	}));
 
-	return [...uniqueAttrs, ...fkAttrs];
+	return [...uniqueAttributes, ...fkAttributes];
 };

@@ -1,9 +1,9 @@
+import type { SchemaFeatures } from "@morph/builder-app";
 import type {
 	DomainSchema,
 	GeneratedFile,
 	TextConfig,
 } from "@morph/domain-schema";
-import type { SchemaFeatures } from "@morph/builder-app";
 
 export type PluginKind = "lib" | "app" | "test-support" | "doc" | "infra";
 
@@ -47,7 +47,7 @@ export interface GeneratorPlugin {
 	dependencies?: readonly string[];
 	metadata?: PluginMetadata;
 
-	generate(ctx: PluginContext): GeneratedFile[];
+	generate(context: PluginContext): GeneratedFile[];
 }
 
 export interface PluginResult {

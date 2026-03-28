@@ -19,8 +19,8 @@ export const GetOrderHandlerLive = Layer.effect(
 						.findById(params.orderId)
 						.pipe(
 							Effect.mapError(
-								(e) =>
-									new OrderNotFoundError({ message: e.message }),
+								(error) =>
+									new OrderNotFoundError({ message: error.message }),
 							),
 						);
 					if (!order) {

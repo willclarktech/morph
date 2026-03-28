@@ -1,6 +1,5 @@
 // Effect TaggedError definitions
 // Do not edit - regenerate from schema
-
 import { Data } from "effect";
 
 /**

@@ -29,8 +29,8 @@ export {
 	generateSessionId,
 	isSessionExpired,
 	resetSessionStore,
-	setSessionStore,
 	type SessionStore,
+	setSessionStore,
 	validateSession,
 } from "./session-store";
 

@@ -57,7 +57,7 @@ export const generateFunctionHandlerImplTemplate = (
 	const typeParams = function_.typeParameters ?? [];
 	const outputType =
 		typeParams.length > 0
-			? describeFunctionOutput(function_).replace(
+			? describeFunctionOutput(function_).replaceAll(
 					/<[^>]+>/g,
 					`<${typeParams.map(() => "unknown").join(", ")}>`,
 				)

@@ -11,10 +11,10 @@ import type {
 	CommandAst,
 	ConditionExprAst,
 	ConstraintAst,
-	ContractAst,
-	ContractBindingAst,
 	ContextAst,
 	ContextErrorAst,
+	ContractAst,
+	ContractBindingAst,
 	DomainAst,
 	EmittedEventAst,
 	EntityAst,
@@ -28,10 +28,10 @@ import type {
 	ParamAst,
 	PortAst,
 	PortMethodAst,
-	ProfileEntryAst,
-	ProfilesAst,
 	PrimitiveTypeAst,
 	ProductTypeAst,
+	ProfileEntryAst,
+	ProfilesAst,
 	QueryAst,
 	RelationshipAst,
 	SubscriberAst,
@@ -209,12 +209,12 @@ class MorphCstVisitor extends BaseCstVisitor {
 					commands.push(result);
 					break;
 				}
-				case "contract": {
-					contracts.push(result);
-					break;
-				}
 				case "contextError": {
 					errors.push(result);
+					break;
+				}
+				case "contract": {
+					contracts.push(result);
 					break;
 				}
 				case "depends": {
@@ -352,10 +352,10 @@ class MorphCstVisitor extends BaseCstVisitor {
 
 	tagList(context: Record<string, (CstNode | IToken)[]>): TagAst[] {
 		const tags = (context["tag"] ?? []).map((t) => this.visit(t as CstNode));
-		const profileRefs = (context["profileRef"] ?? []).map((t) =>
+		const profileReferences = (context["profileRef"] ?? []).map((t) =>
 			this.visit(t as CstNode),
 		);
-		return [...tags, ...profileRefs];
+		return [...tags, ...profileReferences];
 	}
 
 	tag(context: Record<string, (CstNode | IToken)[]>): TagAst {
@@ -1399,7 +1399,7 @@ class MorphCstVisitor extends BaseCstVisitor {
 			};
 		}
 		if (context["Question"]) {
-			const lastToken = context["Question"]![0] as IToken;
+			const lastToken = context["Question"][0] as IToken;
 			result = {
 				kind: "optional",
 				inner: result,

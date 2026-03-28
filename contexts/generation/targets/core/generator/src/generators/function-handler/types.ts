@@ -66,6 +66,9 @@ export const describeFunctionOutput = (function_: FunctionDef): string => {
 		case "entityId": {
 			return `${output.entity}Id`;
 		}
+		case "function": {
+			return "Function";
+		}
 		case "generic": {
 			const argsString = output.args
 				.map((a) => describeFunctionOutput({ output: a } as FunctionDef))
@@ -95,9 +98,6 @@ export const describeFunctionOutput = (function_: FunctionDef): string => {
 		}
 		case "valueObject": {
 			return output.name;
-		}
-		case "function": {
-			return "Function";
 		}
 		default: {
 			const _exhaustive: never = output;

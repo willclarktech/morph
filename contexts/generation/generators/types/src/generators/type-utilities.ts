@@ -8,6 +8,7 @@ import type {
 } from "@morph/domain-schema";
 
 import type { SchemaContext } from "../mappers/schema-reference";
+
 import { typeRefToTypeScript } from "../mappers/type-reference";
 
 export const formatTypeParam = (param: TypeParameterDef): string => {
@@ -40,16 +41,27 @@ export const hasTypeParameters = (
 
 export const containsFunctionType = (ref: TypeRef): boolean => {
 	switch (ref.kind) {
-		case "function":
-			return true;
-		case "array":
+		case "array": {
 			return containsFunctionType(ref.element);
-		case "optional":
-			return containsFunctionType(ref.inner);
-		case "generic":
-			return ref.args.some(containsFunctionType);
-		default:
+		}
+		case "entity":
+		case "entityId":
+		case "primitive":
+		case "type":
+		case "typeParam":
+		case "union":
+		case "valueObject": {
 			return false;
+		}
+		case "function": {
+			return true;
+		}
+		case "generic": {
+			return ref.args.some(containsFunctionType);
+		}
+		case "optional": {
+			return containsFunctionType(ref.inner);
+		}
 	}
 };
 
@@ -61,11 +73,13 @@ export const hasFunctionFields = (
 	);
 };
 
+const schemaParamName = (name: string): string => `schema${name}`;
+
 export const buildSchemaContext = (
 	typeParams: readonly TypeParameterDef[],
 ): SchemaContext => ({
 	typeParams: Object.fromEntries(
-		typeParams.map((p) => [p.name, `${p.name.toLowerCase()}Schema`]),
+		typeParams.map((p) => [p.name, schemaParamName(p.name)]),
 	),
 });
 
@@ -74,7 +88,7 @@ export const formatSchemaParams = (
 ): string => {
 	return typeParams
 		.map((p) => {
-			const paramName = `${p.name.toLowerCase()}Schema`;
+			const paramName = schemaParamName(p.name);
 			return `${paramName}: S.Schema<${p.name}, ${p.name}>`;
 		})
 		.join(", ");

@@ -8,11 +8,8 @@ import { MakePairHandler } from "./handler";
 
 export const MakePairHandlerLive = Layer.succeed(MakePairHandler, {
 	handle: (params, _options) =>
-		Effect.gen(function* () {
-			const pair: Pair<string, string> = {
-				first: params.first,
-				second: params.second,
-			};
-			return pair;
-		}),
+		Effect.succeed({
+			first: params.first,
+			second: params.second,
+		} satisfies Pair<string, string>),
 });

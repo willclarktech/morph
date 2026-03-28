@@ -41,7 +41,7 @@ export const generateArbitraries = (
 		...entities.map((name) => `${name}Schema`),
 		...entities.map((name) => `${name}IdSchema`),
 		...valueObjects.map((name) => `${name}Schema`),
-	];
+	].sort();
 
 	const header = [
 		"// Generated Arbitraries for property-based testing",

@@ -101,9 +101,6 @@ const generateContractSuiteFactory = (
 	lines.push('import { Effect } from "effect";');
 	lines.push("");
 	lines.push(
-		`// eslint-disable-next-line @typescript-eslint/no-explicit-any`,
-	);
-	lines.push(
 		`export const ${portCamel}Contracts = (createTransport: () => Effect.Effect<any, any>) => [`,
 	);
 
@@ -401,9 +398,6 @@ const generateTestHarness = (
 		);
 		lines.push(`\t\tfor (const suite of suites) {`);
 		lines.push(`\t\t\ttest(suite.name, async () => {`);
-		lines.push(
-			`\t\t\t\t// eslint-disable-next-line @typescript-eslint/no-unsafe-argument`,
-		);
 		lines.push(
 			`\t\t\t\tawait fc.assert(fc.asyncProperty(suite.arbitrary, async (input: any) => suite.law(input)));`,
 		);

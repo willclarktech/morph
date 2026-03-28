@@ -1,8 +1,7 @@
 import { contractProperty } from "@morph/property";
-import * as fc from "fast-check";
 import { Effect } from "effect";
+import * as fc from "fast-check";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const storageTransportContracts = (createTransport: () => Effect.Effect<any, any>) => [
 	contractProperty({
 		name: "PutGetRoundtrip",

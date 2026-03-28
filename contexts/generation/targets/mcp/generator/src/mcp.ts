@@ -4,6 +4,7 @@
 import type { InjectableParam } from "@morph/domain-schema";
 import type { Context } from "effect";
 import type { Layer } from "effect/Layer";
+import type * as S from "effect/Schema";
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -13,8 +14,6 @@ import { Cause, Effect, Exit, ManagedRuntime } from "effect";
 import { z } from "zod";
 
 import type { AuthService, McpAuthStrategy, McpExtra } from "./auth";
-
-import type * as S from "effect/Schema";
 
 import { AuthServiceTag, createRequestAuthService } from "./auth";
 import { injectParameters } from "./params";

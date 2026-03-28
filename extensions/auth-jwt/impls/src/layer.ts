@@ -1,8 +1,8 @@
 import { Layer } from "effect";
 
+import { RefreshTokenHandlerLive } from "./refresh-token";
 import { SignTokenHandlerLive } from "./sign-token";
 import { VerifyTokenHandlerLive } from "./verify-token";
-import { RefreshTokenHandlerLive } from "./refresh-token";
 
 /**
  * Combined layer for all auth-jwt handlers.

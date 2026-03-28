@@ -67,20 +67,42 @@ export const errorAlert = (message: string): string =>
 	\`<p role="alert" aria-invalid="true">\${message}</p>\`;
 `;
 
+const allFormatters = [
+	"formatArray",
+	"formatBoolean",
+	"formatDate",
+	"formatValue",
+] as const;
+
 /**
  * Generate import statements for the pages module.
+ * Only imports formatters and entity types that are actually used in the generated pages.
  */
 const generateImports = (
 	entityImports: readonly string[],
 	hasAuth: boolean,
+	pagesContent: string,
 ): string => {
-	const layoutImports = hasAuth ? "layout, AuthState" : "layout";
+	const layoutImports = "layout";
+	const layoutTypeImport = hasAuth
+		? `import type { AuthState } from "./layout";\n`
+		: "";
+	const usedFormatters = allFormatters.filter((f) => pagesContent.includes(f));
+	const usedEntities = entityImports.filter(
+		(name) =>
+			pagesContent.includes(`: ${name}`) ||
+			pagesContent.includes(`: readonly ${name}[]`),
+	);
 
-	return `import { formatArray, formatBoolean, formatDate, formatValue } from "./formatters";
-import { ${layoutImports} } from "./layout";
+	const formatterImport =
+		usedFormatters.length > 0
+			? `import { ${usedFormatters.join(", ")} } from "./formatters";\n`
+			: "";
+
+	return `${formatterImport}${layoutTypeImport}import { ${layoutImports} } from "./layout";
 import { nav } from "./nav";
 import { t } from "./text";
-${entityImports.length > 0 ? `import type { ${entityImports.join(", ")} } from "@PLACEHOLDER_DSL";` : ""}`;
+${usedEntities.length > 0 ? `import type { ${usedEntities.join(", ")} } from "@PLACEHOLDER_DSL";` : ""}`;
 };
 
 /**
@@ -140,8 +162,10 @@ export const generatePages = (
 		? `\n// API URL for SSE connections (from environment or default)\nconst apiUrl = process.env["@PLACEHOLDER_APP_NAME_API_URL"] ?? "http://localhost:3000";\n`
 		: "";
 
-	return `${generateImports(entityImports, hasAuth)}
+	const pagesContent = pages.join("\n");
+
+	return `${generateImports(entityImports, hasAuth, pagesContent)}
 ${apiUrlConstant}
-${pages.join("\n")}
+${pagesContent}
 `;
 };

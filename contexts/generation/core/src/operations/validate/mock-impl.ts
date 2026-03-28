@@ -1,11 +1,11 @@
 // Generated mock handler implementation for function
 // Returns deterministic random data using fast-check arbitraries
 // Do not edit - regenerate from schema
-
 import { Effect, Layer } from "effect";
 import * as fc from "fast-check";
 
 import { ValidateHandler } from "./handler";
+
 const MOCK_SEED = 42;
 
 export const ValidateHandlerMock = Layer.succeed(ValidateHandler, {

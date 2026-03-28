@@ -1,6 +1,6 @@
-import { Context, Effect, Layer, Ref } from "effect";
-
 import type { MemoryStoreInfo } from "@morph/storage-memory-dsl";
+
+import { Context, Effect, Layer, Ref } from "effect";
 
 import { getStoreRegistry } from "./store-registry";
 
@@ -8,7 +8,7 @@ export interface GetStoreInfoHandler {
 	readonly handle: (
 		params: Record<string, never>,
 		options: Record<string, never>,
-	) => Effect.Effect<MemoryStoreInfo, never>;
+	) => Effect.Effect<MemoryStoreInfo>;
 }
 
 export const GetStoreInfoHandler = Context.GenericTag<GetStoreInfoHandler>(

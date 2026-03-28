@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
-
 import type { DomainSchema } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import { getSchemaDescription, jsonToYaml } from "./format";
 

@@ -23,7 +23,7 @@ export interface EntityStore {
 	 * Get all entity JSON values, with optional pagination
 	 */
 	readonly getAll: (
-		pagination?: PaginationParams | undefined,
+		pagination?: PaginationParams,
 	) => Effect.Effect<PaginatedResult, StorageOperationError>;
 
 	/**
@@ -53,7 +53,7 @@ export interface EntityStore {
 	readonly findAllByIndex: (
 		field: string,
 		value: string,
-		pagination?: PaginationParams | undefined,
+		pagination?: PaginationParams,
 	) => Effect.Effect<PaginatedResult, StorageOperationError>;
 }
 
@@ -78,7 +78,7 @@ export interface StorageTransport {
 	 * Get all values, with optional pagination
 	 */
 	readonly getAll: (
-		pagination?: PaginationParams | undefined,
+		pagination?: PaginationParams,
 	) => Effect.Effect<PaginatedResult, StorageOperationError>;
 
 	/**

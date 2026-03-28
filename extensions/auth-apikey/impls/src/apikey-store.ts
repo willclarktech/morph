@@ -1,3 +1,10 @@
+import type {
+	ApiKey,
+	ApiKeyStorageError,
+	ApiKeyWithSecret,
+} from "@morph/auth-apikey-dsl";
+
+import { ApiKeyExpiredError, ApiKeyInvalidError } from "@morph/auth-apikey-dsl";
 /**
  * API key storage with pluggable strategies.
  *
@@ -5,13 +12,6 @@
  * For production, use setApiKeyStore() to configure a persistent backend.
  */
 import { Effect } from "effect";
-
-import type { ApiKey, ApiKeyWithSecret } from "@morph/auth-apikey-dsl";
-import {
-	ApiKeyExpiredError,
-	ApiKeyInvalidError,
-	ApiKeyStorageError,
-} from "@morph/auth-apikey-dsl";
 
 /**
  * API key store interface - pluggable storage backend.
@@ -77,9 +77,9 @@ export const resetApiKeyStore = (): void => {
 export const generateApiKey = (prefix = "sk"): string => {
 	const bytes = new Uint8Array(24);
 	crypto.getRandomValues(bytes);
-	const base64 = btoa(String.fromCharCode(...bytes))
-		.replace(/\+/g, "-")
-		.replace(/\//g, "_")
+	const base64 = btoa(String.fromCodePoint(...bytes))
+		.replaceAll("+", "-")
+		.replaceAll("/", "_")
 		.replace(/=+$/, "");
 	return `${prefix}_${base64}`;
 };
@@ -92,9 +92,9 @@ export const hashApiKey = async (key: string): Promise<string> => {
 	const data = encoder.encode(key);
 	const hashBuffer = await crypto.subtle.digest("SHA-256", data);
 	const hashArray = new Uint8Array(hashBuffer);
-	return btoa(String.fromCharCode(...hashArray))
-		.replace(/\+/g, "-")
-		.replace(/\//g, "_")
+	return btoa(String.fromCodePoint(...hashArray))
+		.replaceAll("+", "-")
+		.replaceAll("/", "_")
 		.replace(/=+$/, "");
 };
 
@@ -124,9 +124,9 @@ export const createApiKey = (
 		const now = new Date();
 
 		const expiresAt =
-			expiresInSeconds !== undefined
-				? new Date(now.getTime() + expiresInSeconds * 1000).toISOString()
-				: undefined;
+			expiresInSeconds === undefined
+				? undefined
+				: new Date(now.getTime() + expiresInSeconds * 1000).toISOString();
 
 		const apiKey: ApiKey = {
 			id,

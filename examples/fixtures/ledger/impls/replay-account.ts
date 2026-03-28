@@ -34,32 +34,36 @@ export const ReplayAccountHandlerLive = Layer.effect(
 
 					let balance = 0;
 					const steps: ReplayStep[] = events.map(
-						(e: DomainEvent, i: number) => {
-							const p = e.params as Record<string, unknown>;
-							const r = e.result as Record<string, unknown>;
-							balance = (r["balance"] as number) ?? balance;
+						(domainEvent: DomainEvent, index: number) => {
+							const p = domainEvent.params as Record<string, unknown>;
+							const r = domainEvent.result as Record<string, unknown>;
+							balance = (r["balance"] as number | undefined) ?? balance;
 
 							let description: string;
-							switch (e._tag) {
-								case "AccountOpened":
+							switch (domainEvent._tag) {
+								case "AccountOpened": {
 									description = `Account opened "${p["name"] as string}" with initial deposit of ${p["initialDeposit"] as number}`;
 									break;
-								case "FundsDeposited":
+								}
+								case "FundsDeposited": {
 									description = `Deposited ${p["amount"] as number}: ${p["description"] as string}`;
 									break;
-								case "FundsWithdrawn":
+								}
+								case "FundsWithdrawn": {
 									description = `Withdrew ${p["amount"] as number}: ${p["description"] as string}`;
 									break;
-								default:
-									description = e._tag;
+								}
+								default: {
+									description = domainEvent._tag;
+								}
 							}
 
 							return {
-								step: BigInt(i + 1),
-								event: e._tag,
+								step: BigInt(index + 1),
+								event: domainEvent._tag,
 								description,
 								balanceAfter: balance,
-								timestamp: e.occurredAt,
+								timestamp: domainEvent.occurredAt,
 							};
 						},
 					);

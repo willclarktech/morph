@@ -1,13 +1,13 @@
-import { describe, expect, test } from "bun:test";
-
 import type { ContextDef, DomainSchema, EntityDef } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import { entityToFieldSpecs, entityToIndexSpecs } from "./column-mapping";
 
-const makeEntity = (attrs: EntityDef["attributes"]): EntityDef =>
+const makeEntity = (attributes: EntityDef["attributes"]): EntityDef =>
 	({
 		description: "Test",
-		attributes: attrs,
+		attributes: attributes,
 		relationships: [],
 	}) as EntityDef;
 
@@ -17,15 +17,15 @@ const makeSchema = (
 	valueObjects?: Record<
 		string,
 		{
-			description: string;
 			attributes: Record<
 				string,
 				{
 					description: string;
-					type: { kind: string; name?: string };
 					optional?: boolean;
+					type: { kind: string; name?: string };
 				}
 			>;
+			description: string;
 		}
 	>,
 ): DomainSchema => ({

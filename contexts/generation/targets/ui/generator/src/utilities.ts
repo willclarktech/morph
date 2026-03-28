@@ -213,19 +213,19 @@ export const detectBooleanToggles = (
 	entity: QualifiedEntry<EntityDef>,
 	actionCommands: readonly QualifiedEntry<CommandDef>[],
 ): readonly BooleanToggle[] => {
-	const booleanAttrs = Object.entries(entity.def.attributes).filter(
-		([, attr]) => {
-			const resolved = resolveType(attr.type);
+	const booleanAttributes = Object.entries(entity.def.attributes).filter(
+		([, attribute]) => {
+			const resolved = resolveType(attribute.type);
 			return resolved.kind === "primitive" && resolved.name === "boolean";
 		},
 	);
 
 	const toggles: BooleanToggle[] = [];
-	for (const [attrName] of booleanAttrs) {
-		const attrLower = attrName.toLowerCase();
+	for (const [attributeName] of booleanAttributes) {
+		const attributeLower = attributeName.toLowerCase();
 		const match = actionCommands.find((cmd) => {
 			const verb = extractActionVerb(cmd.name, entity.name).toLowerCase();
-			return attrLower.startsWith(verb);
+			return attributeLower.startsWith(verb);
 		});
 		if (match) {
 			const verb = extractActionVerb(match.name, entity.name).toLowerCase();
@@ -233,7 +233,7 @@ export const detectBooleanToggles = (
 				const v = extractActionVerb(cmd.name, entity.name).toLowerCase();
 				return v === `un${verb}` && cmd !== match;
 			});
-			toggles.push({ attribute: attrName, command: match, hasReverse });
+			toggles.push({ attribute: attributeName, command: match, hasReverse });
 		}
 	}
 	return toggles;

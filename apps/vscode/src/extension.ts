@@ -1,6 +1,10 @@
 import { createExtension } from "@morph/generator-vscode";
-import { HandlersLayer, ops } from "@morph/schema-dsl-core";
-import { textMateGrammar, languageConfiguration } from "@morph/schema-dsl-core";
+import {
+	HandlersLayer,
+	languageConfiguration,
+	ops,
+	textMateGrammar,
+} from "@morph/schema-dsl-core";
 import * as vscode from "vscode";
 
 const extension = createExtension({
@@ -12,8 +16,9 @@ const extension = createExtension({
 	layer: HandlersLayer,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- vscode types are structurally richer than runtime stubs
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument -- vscode types are structurally richer than runtime stubs */
 export const activate = (context: vscode.ExtensionContext) =>
 	extension.activate(context as any, vscode as any);
+/* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
 
 export const deactivate = () => extension.deactivate();

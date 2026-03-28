@@ -1,3 +1,7 @@
 import { configs } from "@morph/eslint-config";
 
-export default configs.generated;
+export default [
+	{ ignores: ["**/*.template.ts"] },
+	...configs.generated,
+	...configs.cli,
+];

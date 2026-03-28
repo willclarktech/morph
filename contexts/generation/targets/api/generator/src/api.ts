@@ -1,3 +1,4 @@
+import type { CodecRegistry } from "@morph/codec-dsl";
 /**
  * API server creation and runtime handler management.
  */
@@ -7,8 +8,6 @@ import type { Layer } from "effect/Layer";
 
 import { isOperation } from "@morph/operation";
 import { Data, Effect, ManagedRuntime } from "effect";
-
-import type { CodecRegistry } from "@morph/codec-dsl";
 
 import type { AuthStrategy } from "./auth";
 import type { RouteHandler } from "./handler";
@@ -23,9 +22,9 @@ import { addSseRoute } from "./sse-routes";
 export type { RouteHandler } from "./handler";
 
 export class StartupError extends Data.TaggedError("StartupError")<{
+	readonly cause?: unknown;
 	readonly message: string;
 	readonly port: number;
-	readonly cause?: unknown;
 }> {}
 
 /**

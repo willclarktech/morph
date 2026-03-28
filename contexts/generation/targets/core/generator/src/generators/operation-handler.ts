@@ -50,7 +50,7 @@ export const generateHandler = (
 	// Generate return type
 	const outputType = describeOutput(operation);
 	// Error union type - all errors this operation can return
-	const errorType = hasErrors ? errorNames.join(" | ") : "never";
+	const errorType = hasErrors ? errorNames.join(" | ") : undefined;
 
 	// Build imports in correct order for perfectionist/sort-imports:
 	// 1. Type imports first (sorted by source: @scoped packages, then external, then relative)
@@ -85,7 +85,10 @@ export const generateHandler = (
 		indent(`readonly handle: (`, 1),
 		indent(`params: ${paramsType},`, 2),
 		indent(`options: ${optionsType},`, 2),
-		indent(`) => Effect.Effect<${outputType}, ${errorType}>;`, 1),
+		indent(
+			`) => Effect.Effect<${outputType}${errorType ? `, ${errorType}` : ""}>;`,
+			1,
+		),
 		`}`,
 		"",
 		`/**`,

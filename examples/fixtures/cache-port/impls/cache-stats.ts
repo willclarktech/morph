@@ -8,12 +8,9 @@ import { CacheStatsHandler } from "./handler";
 
 export const CacheStatsHandlerLive = Layer.succeed(CacheStatsHandler, {
 	handle: (_params, _options) =>
-		Effect.gen(function* () {
-			const stats: CacheStatistics = {
-				hits: 0n,
-				misses: 0n,
-				size: 0n,
-			};
-			return stats;
-		}),
+		Effect.succeed({
+			hits: 0n,
+			misses: 0n,
+			size: 0n,
+		} satisfies CacheStatistics),
 });

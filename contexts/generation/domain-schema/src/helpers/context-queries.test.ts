@@ -27,7 +27,7 @@ const emptyContext = (overrides?: Partial<ContextDef>): ContextDef =>
 
 describe("getContextOperationsWithTag", () => {
 	test("returns commands with matching tag", () => {
-		const ctx = emptyContext({
+		const context = emptyContext({
 			commands: {
 				createTodo: {
 					description: "Create",
@@ -40,11 +40,13 @@ describe("getContextOperationsWithTag", () => {
 				},
 			},
 		} as Partial<ContextDef>);
-		expect(getContextOperationsWithTag(ctx, "@api")).toEqual(["createTodo"]);
+		expect(getContextOperationsWithTag(context, "@api")).toEqual([
+			"createTodo",
+		]);
 	});
 
 	test("returns queries with matching tag", () => {
-		const ctx = emptyContext({
+		const context = emptyContext({
 			queries: {
 				listTodos: {
 					description: "List",
@@ -56,11 +58,11 @@ describe("getContextOperationsWithTag", () => {
 				},
 			},
 		} as Partial<ContextDef>);
-		expect(getContextOperationsWithTag(ctx, "@cli")).toEqual(["listTodos"]);
+		expect(getContextOperationsWithTag(context, "@cli")).toEqual(["listTodos"]);
 	});
 
 	test("returns functions with matching tag", () => {
-		const ctx = emptyContext({
+		const context = emptyContext({
 			functions: {
 				transform: {
 					description: "Transform",
@@ -71,11 +73,11 @@ describe("getContextOperationsWithTag", () => {
 				},
 			},
 		} as Partial<ContextDef>);
-		expect(getContextOperationsWithTag(ctx, "@api")).toEqual(["transform"]);
+		expect(getContextOperationsWithTag(context, "@api")).toEqual(["transform"]);
 	});
 
 	test("returns empty array when no operations match", () => {
-		const ctx = emptyContext({
+		const context = emptyContext({
 			commands: {
 				createTodo: {
 					description: "Create",
@@ -88,7 +90,7 @@ describe("getContextOperationsWithTag", () => {
 				},
 			},
 		} as Partial<ContextDef>);
-		expect(getContextOperationsWithTag(ctx, "@api")).toEqual([]);
+		expect(getContextOperationsWithTag(context, "@api")).toEqual([]);
 	});
 
 	test("returns empty array for context with no operations", () => {

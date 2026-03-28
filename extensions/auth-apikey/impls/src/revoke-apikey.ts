@@ -1,6 +1,8 @@
-import { Context, Effect, Layer } from "effect";
-
 import type { ApiKeyStorageError } from "@morph/auth-apikey-dsl";
+import type { Effect } from "effect";
+
+import { Context, Layer } from "effect";
+
 import { revokeApiKey } from "./apikey-store";
 
 export interface RevokeApiKeyHandler {

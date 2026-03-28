@@ -1,8 +1,14 @@
 export const generateScenariosScaffold = (
 	dslPackage: string,
-): string => `/* eslint-disable @typescript-eslint/no-unused-vars -- Scaffold imports for convenience */
-import { assert, given, scenario, then, when } from "@morph/scenario";
-import * as ops from "${dslPackage}";
+): string => {
+	const imports = [
+		`import * as ops from "${dslPackage}";`,
+		`import { assert, given, scenario, then, when } from "@morph/scenario";`,
+	]
+		.sort()
+		.join("\n");
+	return `/* eslint-disable @typescript-eslint/no-unused-vars -- Scaffold imports for convenience */
+${imports}
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 /**
@@ -18,3 +24,4 @@ export const scenarios = [
 	// ),
 ];
 `;
+};

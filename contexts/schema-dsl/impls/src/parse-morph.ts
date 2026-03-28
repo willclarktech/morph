@@ -1,11 +1,10 @@
 import type { ParseResult } from "@morph/schema-dsl-dsl";
 import type { Effect } from "effect";
 
-import { Context, Effect as E, Layer } from "effect";
-
-import { ParseFailedError } from "@morph/schema-dsl-dsl";
 import { compile } from "@morph/schema-dsl-compiler";
+import { ParseFailedError } from "@morph/schema-dsl-dsl";
 import { parse } from "@morph/schema-dsl-parser";
+import { Context, Effect as E, Layer } from "effect";
 
 export interface ParseMorphHandler {
 	readonly handle: (
@@ -28,8 +27,8 @@ export const ParseMorphHandlerLive = Layer.succeed(ParseMorphHandler, {
 					new ParseFailedError({
 						message: parseResult.errors
 							.map(
-								(e) =>
-									`${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+								(error) =>
+									`${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 							)
 							.join("\n"),
 					}),
@@ -40,21 +39,21 @@ export const ParseMorphHandlerLive = Layer.succeed(ParseMorphHandler, {
 			const compileResult = compile(parseResult.ast!);
 
 			const diagnostics = [
-				...parseResult.errors.map((e) => ({
-					message: e.message,
-					severity: e.severity as "error" | "warning",
-					line: e.range.start.line,
-					column: e.range.start.column,
-					endLine: e.range.end.line,
-					endColumn: e.range.end.column,
+				...parseResult.errors.map((error) => ({
+					message: error.message,
+					severity: error.severity as "error" | "warning",
+					line: error.range.start.line,
+					column: error.range.start.column,
+					endLine: error.range.end.line,
+					endColumn: error.range.end.column,
 				})),
-				...compileResult.errors.map((e) => ({
-					message: e.message,
+				...compileResult.errors.map((error) => ({
+					message: error.message,
 					severity: "error" as const,
-					line: e.range.start.line,
-					column: e.range.start.column,
-					endLine: e.range.end.line,
-					endColumn: e.range.end.column,
+					line: error.range.start.line,
+					column: error.range.start.column,
+					endLine: error.range.end.line,
+					endColumn: error.range.end.column,
 				})),
 			];
 
@@ -63,8 +62,8 @@ export const ParseMorphHandlerLive = Layer.succeed(ParseMorphHandler, {
 					new ParseFailedError({
 						message: compileResult.errors
 							.map(
-								(e) =>
-									`${e.range.start.line}:${e.range.start.column}: ${e.message}`,
+								(error) =>
+									`${error.range.start.line}:${error.range.start.column}: ${error.message}`,
 							)
 							.join("\n"),
 					}),

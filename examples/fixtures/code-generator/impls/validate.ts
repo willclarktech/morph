@@ -69,22 +69,22 @@ export const ValidateHandlerLive = Layer.succeed(ValidateHandler, {
 				const contextNames = Object.keys(schema.contexts);
 				info.push(`Contexts: ${contextNames.join(", ") || "(none)"}`);
 
-				for (const [ctxName, ctx] of Object.entries(schema.contexts)) {
+				for (const [contextName, context] of Object.entries(schema.contexts)) {
 					const counts: string[] = [];
-					if (ctx.entities)
-						counts.push(`${Object.keys(ctx.entities).length} entities`);
-					if (ctx.types) counts.push(`${Object.keys(ctx.types).length} types`);
-					if (ctx.functions)
-						counts.push(`${Object.keys(ctx.functions).length} functions`);
-					if (ctx.commands)
-						counts.push(`${Object.keys(ctx.commands).length} commands`);
-					if (ctx.queries)
-						counts.push(`${Object.keys(ctx.queries).length} queries`);
+					if (context.entities)
+						counts.push(`${Object.keys(context.entities).length} entities`);
+					if (context.types) counts.push(`${Object.keys(context.types).length} types`);
+					if (context.functions)
+						counts.push(`${Object.keys(context.functions).length} functions`);
+					if (context.commands)
+						counts.push(`${Object.keys(context.commands).length} commands`);
+					if (context.queries)
+						counts.push(`${Object.keys(context.queries).length} queries`);
 
 					if (counts.length > 0) {
-						info.push(`  ${ctxName}: ${counts.join(", ")}`);
+						info.push(`  ${contextName}: ${counts.join(", ")}`);
 					} else {
-						warnings.push(`Context '${ctxName}' has no definitions`);
+						warnings.push(`Context '${contextName}' has no definitions`);
 					}
 				}
 			}

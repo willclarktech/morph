@@ -1,14 +1,13 @@
-import { Effect } from "effect";
-import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import path from "node:path";
-import { jsonParse, jsonStringify } from "@morph/utils";
-
 import type { FileStoreInfo } from "@morph/storage-jsonfile-dsl";
 
 import {
 	FileAccessError,
 	FileCorruptedError,
 } from "@morph/storage-jsonfile-dsl";
+import { jsonParse, jsonStringify } from "@morph/utils";
+import { Effect } from "effect";
+import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import path from "node:path";
 
 type StoreData = Record<string, Record<string, string>>;
 

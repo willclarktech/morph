@@ -46,8 +46,8 @@ export const buildLoginRouteSetup = (features: DetectedFeatures): string => {
 	const appRuntime = ManagedRuntime.make(AppLayer);
 
 	// Build login route handler
-	const loginHandler = async (req: Request): Promise<Response> => {
-		const body = await req.json() as { email: string; password: string };
+	const loginHandler = async (request: Request): Promise<Response> => {
+		const body = await request.json() as { email: string; password: string };
 		const { email, password } = body;
 
 		// Look up user by email using shared runtime

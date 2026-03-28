@@ -1,10 +1,14 @@
 import type { OperationPropertySuite } from "@morph/property";
-import type { PropertyResult, PropertyRunOptions } from "@morph/property-runner";
+import type {
+	PropertyResult,
+	PropertyRunOptions,
+} from "@morph/property-runner";
 
-import type { CliPropertyRunnerConfig } from "./index";
 import * as fc from "fast-check";
 import { execSync } from "node:child_process";
 import { rmSync } from "node:fs";
+
+import type { CliPropertyRunnerConfig } from "./index";
 
 const toKebabCase = (s: string): string =>
 	s.replaceAll(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
@@ -59,7 +63,10 @@ export const runCliOperationSuite = (
 					// Ignore if file doesn't exist
 				}
 
-				const params = suite.toParams(input, context) as Record<string, unknown>;
+				const params = suite.toParams(input, context) as Record<
+					string,
+					unknown
+				>;
 
 				// Build positional args from required params
 				const paramOrder = config.paramOrder[cliCommand] ?? [];
@@ -74,7 +81,9 @@ export const runCliOperationSuite = (
 					.map((key) => `--${toKebabCase(key)} ${JSON.stringify(params[key])}`)
 					.join(" ");
 
-				const allArguments = [positionalArguments, flags].filter(Boolean).join(" ");
+				const allArguments = [positionalArguments, flags]
+					.filter(Boolean)
+					.join(" ");
 
 				const storageEnvironmentVariable = envPrefix
 					? `${envPrefix}_STORAGE`

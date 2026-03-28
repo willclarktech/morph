@@ -4,17 +4,16 @@
 import type { CodecRegistry } from "@morph/codec-dsl";
 import type { InjectableParam } from "@morph/domain-schema";
 import type { AnyOperation } from "@morph/operation";
-import type { ManagedRuntime } from "effect";
+import type { Context, ManagedRuntime } from "effect";
 import type * as EffectType from "effect/Effect";
 
+import { jsonStringify } from "@morph/utils";
 import { Cause, Effect, Exit } from "effect";
 import * as S from "effect/Schema";
-import { jsonStringify } from "@morph/utils";
 
 import type { AuthService, AuthStrategy } from "./auth";
 
 import { AuthServiceTag, createRequestAuthService } from "./auth";
-import type { Context } from "effect";
 import { formatErrorResponse } from "./errors";
 import { extractParameters } from "./params";
 
@@ -41,11 +40,12 @@ export const createHandlerWithRuntime = <R>(
 	authServiceTag?: Context.Tag<any, any>,
 	codecRegistry?: CodecRegistry,
 ): RouteHandler => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Generic type bridging between config and runtime
+	/* eslint-disable @typescript-eslint/no-explicit-any -- generic auth service tag erasure */
 	const authTag = (authServiceTag ?? AuthServiceTag) as Context.Tag<
 		AuthService<any>,
 		AuthService<any>
 	>;
+	/* eslint-enable @typescript-eslint/no-explicit-any */
 	return async (request: Request, pathParameters: Record<string, string>) => {
 		// Extract user from request first (needed for param injection)
 		const user = authStrategy

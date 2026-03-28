@@ -1,8 +1,7 @@
-import { Context, Effect, Layer } from "effect";
-
 import type { ConnectionInfo } from "@morph/storage-redis-dsl";
 
 import { ConnectionFailedError } from "@morph/storage-redis-dsl";
+import { Context, Effect, Layer } from "effect";
 
 import { getRedisState } from "./redis-state";
 
@@ -25,19 +24,22 @@ export const GetConnectionInfoHandlerLive = Layer.succeed(
 			Effect.tryPromise({
 				try: async () => {
 					const state = getRedisState();
-					const infoStr = (await state.client.send("INFO", [
+					const infoString = (await state.client.send("INFO", [
 						"memory",
 					])) as string;
-					const memMatch = /used_memory:(\d+)/.exec(infoStr);
+					const memMatch = /used_memory:(\d+)/.exec(infoString);
 					const memoryUsageBytes = memMatch ? Number(memMatch[1]) : 0;
 
-					const dbSize = (await state.client.send("DBSIZE", [])) as number;
+					const databaseSize = (await state.client.send(
+						"DBSIZE",
+						[],
+					)) as number;
 
 					return {
 						url: state.url,
 						connected: true,
 						memoryUsageBytes,
-						keyCount: dbSize,
+						keyCount: databaseSize,
 					} satisfies ConnectionInfo;
 				},
 				catch: (error) =>

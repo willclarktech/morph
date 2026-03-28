@@ -10,13 +10,17 @@ describe("resolveParameters", () => {
 	});
 
 	test("resolves $binding references", () => {
-		const bindings = new Map<string, unknown>([["user", { id: "u1", name: "Alice" }]]);
+		const bindings = new Map<string, unknown>([
+			["user", { id: "u1", name: "Alice" }],
+		]);
 		const result = resolveParameters({ userId: "$user" }, bindings);
 		expect(result).toEqual({ userId: { id: "u1", name: "Alice" } });
 	});
 
 	test("resolves dot-path bindings", () => {
-		const bindings = new Map<string, unknown>([["user", { id: "u1", name: "Alice" }]]);
+		const bindings = new Map<string, unknown>([
+			["user", { id: "u1", name: "Alice" }],
+		]);
 		const result = resolveParameters({ userId: "$user.id" }, bindings);
 		expect(result).toEqual({ userId: "u1" });
 	});
@@ -39,11 +43,9 @@ describe("resolveParameters", () => {
 
 	test("includes resolved values even for injectable params", () => {
 		const bindings = new Map<string, unknown>([["user", { id: "u1" }]]);
-		const result = resolveParameters(
-			{ userId: "$user.id" },
-			bindings,
-			["userId"],
-		);
+		const result = resolveParameters({ userId: "$user.id" }, bindings, [
+			"userId",
+		]);
 		expect(result).toEqual({ userId: "u1" });
 	});
 
@@ -63,12 +65,16 @@ describe("interpolateBindings", () => {
 
 	test("replaces {$binding.path} with nested value", () => {
 		const bindings = new Map<string, unknown>([["user", { name: "Alice" }]]);
-		expect(interpolateBindings("Hello {$user.name}", bindings)).toBe("Hello Alice");
+		expect(interpolateBindings("Hello {$user.name}", bindings)).toBe(
+			"Hello Alice",
+		);
 	});
 
 	test("keeps original placeholder for unresolved bindings", () => {
 		const bindings = new Map<string, unknown>();
-		expect(interpolateBindings("Hello {$name}", bindings)).toBe("Hello {$name}");
+		expect(interpolateBindings("Hello {$name}", bindings)).toBe(
+			"Hello {$name}",
+		);
 	});
 
 	test("stringifies non-string values", () => {
@@ -81,6 +87,8 @@ describe("interpolateBindings", () => {
 			["first", "Alice"],
 			["last", "Smith"],
 		]);
-		expect(interpolateBindings("{$first} {$last}", bindings)).toBe("Alice Smith");
+		expect(interpolateBindings("{$first} {$last}", bindings)).toBe(
+			"Alice Smith",
+		);
 	});
 });

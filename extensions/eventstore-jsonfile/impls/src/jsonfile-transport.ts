@@ -1,11 +1,9 @@
-import { readFileSync, writeFileSync } from "node:fs";
-
-import { Effect } from "effect";
-
 import type { EventStoreTransport } from "@morph/eventstore-dsl";
 
 import { EventStoreOperationError } from "@morph/eventstore-dsl";
 import { jsonParse, jsonStringify } from "@morph/utils";
+import { Effect } from "effect";
+import { readFileSync, writeFileSync } from "node:fs";
 
 interface StoredEvent {
 	readonly data: string;
@@ -46,8 +44,8 @@ export const createJsonFileEventStoreTransport = (
 				try {
 					const parsed = jsonParse(data) as {
 						_tag?: string;
-						occurredAt?: string;
 						aggregateId?: string;
+						occurredAt?: string;
 					};
 					tag = parsed._tag ?? "";
 					occurredAt = parsed.occurredAt ?? "";
@@ -69,7 +67,7 @@ export const createJsonFileEventStoreTransport = (
 
 	getAll: () =>
 		Effect.try({
-			try: () => readEvents(filePath).map((ev) => ev.data),
+			try: () => readEvents(filePath).map((event) => event.data),
 			catch: (error) =>
 				new EventStoreOperationError({
 					message: `Failed to read events from file: ${String(error)}`,
@@ -80,8 +78,8 @@ export const createJsonFileEventStoreTransport = (
 		Effect.try({
 			try: () =>
 				readEvents(filePath)
-					.filter((ev) => ev.aggregateId === aggregateId)
-					.map((ev) => ev.data),
+					.filter((event) => event.aggregateId === aggregateId)
+					.map((event) => event.data),
 			catch: (error) =>
 				new EventStoreOperationError({
 					message: `Failed to read events from file: ${String(error)}`,
@@ -92,8 +90,8 @@ export const createJsonFileEventStoreTransport = (
 		Effect.try({
 			try: () =>
 				readEvents(filePath)
-					.filter((ev) => ev.tag === tag)
-					.map((ev) => ev.data),
+					.filter((event) => event.tag === tag)
+					.map((event) => event.data),
 			catch: (error) =>
 				new EventStoreOperationError({
 					message: `Failed to read events from file: ${String(error)}`,
@@ -104,8 +102,8 @@ export const createJsonFileEventStoreTransport = (
 		Effect.try({
 			try: () =>
 				readEvents(filePath)
-					.filter((ev) => ev.occurredAt > timestamp)
-					.map((ev) => ev.data),
+					.filter((event) => event.occurredAt > timestamp)
+					.map((event) => event.data),
 			catch: (error) =>
 				new EventStoreOperationError({
 					message: `Failed to read events from file: ${String(error)}`,

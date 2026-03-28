@@ -17,6 +17,18 @@ export const typeRefToTypeScript = (reference: TypeRef): string => {
 			return `${reference.entity}Id`;
 		}
 
+		case "function": {
+			const params = reference.params
+				.map((p) => `${p.name}: ${typeRefToTypeScript(p.type)}`)
+				.join(", ");
+			return `(${params}) => ${typeRefToTypeScript(reference.returns)}`;
+		}
+
+		case "generic": {
+			const args = reference.args.map(typeRefToTypeScript).join(", ");
+			return `${reference.name}<${args}>`;
+		}
+
 		case "optional": {
 			return `${typeRefToTypeScript(reference.inner)} | undefined`;
 		}
@@ -39,28 +51,16 @@ export const typeRefToTypeScript = (reference: TypeRef): string => {
 			return reference.name;
 		}
 
+		case "typeParam": {
+			return reference.name;
+		}
+
 		case "union": {
 			return reference.values.map((v) => `"${v}"`).join(" | ");
 		}
 
 		case "valueObject": {
 			return reference.name;
-		}
-
-		case "generic": {
-			const args = reference.args.map(typeRefToTypeScript).join(", ");
-			return `${reference.name}<${args}>`;
-		}
-
-		case "typeParam": {
-			return reference.name;
-		}
-
-		case "function": {
-			const params = reference.params
-				.map((p) => `${p.name}: ${typeRefToTypeScript(p.type)}`)
-				.join(", ");
-			return `(${params}) => ${typeRefToTypeScript(reference.returns)}`;
 		}
 
 		default: {

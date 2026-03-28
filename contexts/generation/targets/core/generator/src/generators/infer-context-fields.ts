@@ -70,7 +70,7 @@ export const inferContextFields = (
 	const walkValue = (value: ValueExpr): void => {
 		switch (value.kind) {
 			case "call": {
-				for (const arg of value.args) walkValue(arg);
+				for (const argument of value.args) walkValue(argument);
 				break;
 			}
 			case "count": {

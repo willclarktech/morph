@@ -32,7 +32,7 @@ import { AuthService as AuthServiceTag } from "./auth-service";
  * Holds the user from the current request's session.
  */
 interface SessionAuthState {
-	readonly user: unknown | undefined;
+	readonly user: unknown;
 }
 
 let currentRequestState: SessionAuthState = { user: undefined };
@@ -41,7 +41,7 @@ let currentRequestState: SessionAuthState = { user: undefined };
  * Set the current request's authenticated user from session.
  * Called by middleware/handlers before processing.
  */
-export const setSessionUser = (user: unknown | undefined): void => {
+export const setSessionUser = (user: unknown): void => {
 	currentRequestState = { user };
 };
 

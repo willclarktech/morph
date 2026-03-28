@@ -1,12 +1,12 @@
 // Template for implementing the function handler.
 // This file is NOT imported by the core package.
 // Copy to your impls package and implement the logic.
-
 import type { DslLocation } from "@morph/schema-dsl-dsl";
 
 import { Effect, Layer } from "effect";
 
 import { GetDefinitionHandler } from "./handler";
+
 /**
  * Implementation of getDefinition function.
  * Get go-to-definition location for a symbol at a position in a .morph source file

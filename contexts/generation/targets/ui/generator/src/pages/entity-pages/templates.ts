@@ -8,7 +8,7 @@ import type {
 	QualifiedEntry,
 } from "@morph/domain-schema";
 
-import { joinLines, sep, toKebabCase } from "@morph/utils";
+import { joinLines, separator, toKebabCase } from "@morph/utils";
 
 import type { BooleanToggle, ClassifiedAttribute } from "../../utilities";
 import type { EntityPageContext } from "./context";
@@ -35,10 +35,10 @@ const formatToggleCell = (
 	const actionKebab = toKebabCase(
 		extractActionVerb(toggle.command.name, entityName),
 	);
-	const disabledAttr = toggle.hasReverse
+	const disabledAttribute = toggle.hasReverse
 		? ""
 		: `\${item.${attribute.name} ? " disabled" : ""}`;
-	return `<td><input type="checkbox" role="switch" \${item.${attribute.name} ? "checked" : ""} hx-post="/${pluralName}/\${item.id}/${actionKebab}" hx-target="#main-content" hx-select="#main-content" hx-swap="outerHTML"${disabledAttr}></td>`;
+	return `<td><input type="checkbox" role="switch" \${item.${attribute.name} ? "checked" : ""} hx-post="/${pluralName}/\${item.id}/${actionKebab}" hx-target="#main-content" hx-select="#main-content" hx-swap="outerHTML"${disabledAttribute}></td>`;
 };
 
 const formatCell = (attribute: ClassifiedAttribute): string => {
@@ -105,7 +105,7 @@ export const generateListPage = (
 	);
 
 	const actionButtonsHtml = listActionButtons
-		? `${listActionButtons}${sep(6)}`
+		? `${listActionButtons}${separator(6)}`
 		: "";
 
 	return `
@@ -216,10 +216,10 @@ export const generateDetailPage = (
 					const actionKebab = toKebabCase(
 						extractActionVerb(toggle.command.name, entityName),
 					);
-					const disabledAttr = toggle.hasReverse
+					const disabledAttribute = toggle.hasReverse
 						? ""
 						: `\${item.${c.name} ? " disabled" : ""}`;
-					return `<dt>\${t("field.${entityKey}.${c.name}")}</dt><dd><input type="checkbox" role="switch" \${item.${c.name} ? "checked" : ""} hx-post="/${pluralName}/\${item.id}/${actionKebab}" hx-target="#main-content" hx-select="#main-content" hx-swap="outerHTML" hx-push-url="true"${disabledAttr}></dd>`;
+					return `<dt>\${t("field.${entityKey}.${c.name}")}</dt><dd><input type="checkbox" role="switch" \${item.${c.name} ? "checked" : ""} hx-post="/${pluralName}/\${item.id}/${actionKebab}" hx-target="#main-content" hx-select="#main-content" hx-swap="outerHTML" hx-push-url="true"${disabledAttribute}></dd>`;
 				}
 				return `<dt>\${t("field.${entityKey}.${c.name}")}</dt><dd>${formatCell(c)}</dd>`;
 			}),
@@ -268,10 +268,10 @@ export const view${entityName}Page = (item: ${entityName}): string => layout(
 					: `<h2>\${item.${titleField}}</h2>`
 			}
 			<nav>
-				${detailActionButtons ? `${detailActionButtons}${sep(4)}` : ""}${editButton}
+				${detailActionButtons ? `${detailActionButtons}${separator(4)}` : ""}${editButton}
 				<button
 					data-confirm-message="\${t("confirm.deleteEntity", { entity: t("entity.${entityKey}.singular").toLowerCase() })}"
-					onclick="confirmDelete('/${pluralName}/\${item.id}', this.dataset.confirmMessage, null, '/${pluralName}')"
+					onclick="confirmDelete('/${pluralName}/\${item.id}', this.dataset.confirmMessage, undefined, '/${pluralName}')"
 					class="outline contrast"
 				>\${t("action.delete")}</button>
 			</nav>

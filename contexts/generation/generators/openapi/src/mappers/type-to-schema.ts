@@ -42,6 +42,16 @@ export const typeRefToOpenApiSchema = (ref: TypeRef): OpenApiSchema => {
 			return { type: "string" };
 		}
 
+		case "function": {
+			// Functions can't be represented in OpenAPI, use object as fallback
+			return { type: "object" };
+		}
+
+		case "generic": {
+			// Generic types can't be fully represented in OpenAPI, reference the base type
+			return { $ref: `#/components/schemas/${ref.name}` };
+		}
+
 		case "optional": {
 			const inner = typeRefToOpenApiSchema(ref.inner);
 			return { ...inner, nullable: true };
@@ -55,6 +65,11 @@ export const typeRefToOpenApiSchema = (ref: TypeRef): OpenApiSchema => {
 			return { $ref: `#/components/schemas/${ref.name}` };
 		}
 
+		case "typeParam": {
+			// Type params can't be represented in OpenAPI, use object as fallback
+			return { type: "object" };
+		}
+
 		case "union": {
 			return {
 				enum: ref.values,
@@ -64,21 +79,6 @@ export const typeRefToOpenApiSchema = (ref: TypeRef): OpenApiSchema => {
 
 		case "valueObject": {
 			return { $ref: `#/components/schemas/${ref.name}` };
-		}
-
-		case "generic": {
-			// Generic types can't be fully represented in OpenAPI, reference the base type
-			return { $ref: `#/components/schemas/${ref.name}` };
-		}
-
-		case "typeParam": {
-			// Type params can't be represented in OpenAPI, use object as fallback
-			return { type: "object" };
-		}
-
-		case "function": {
-			// Functions can't be represented in OpenAPI, use object as fallback
-			return { type: "object" };
 		}
 
 		default: {

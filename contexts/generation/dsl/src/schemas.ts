@@ -2,7 +2,6 @@
 // Do not edit manually
 
 // Effect/Schema Definitions
-
 import * as S from "effect/Schema";
 
 // Pure Type Schemas (transformation-centric)
@@ -37,7 +36,7 @@ export const encodeGenerationResult = S.encodeSync(GenerationResultSchema);
 
 // Function Schemas (pure transformations)
 
-import { InvalidSchemaError } from "./errors";
+import type { InvalidSchemaError } from "./errors";
 
 // Generate all packages from a domain schema
 export const GenerateInputSchema = S.Struct({
@@ -73,5 +72,5 @@ export const ValidateInputSchema = S.Struct({
 });
 
 export type ValidateInput = S.Schema.Type<typeof ValidateInputSchema>;
-export type ValidateOutput = void;
+export type ValidateOutput = undefined;
 export type ValidateError = InvalidSchemaError;

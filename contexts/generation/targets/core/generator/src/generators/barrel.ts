@@ -84,18 +84,11 @@ export const generateOperationsBarrel = (
 		return `// Generated operations barrel\n\n${exports}\n`;
 	}
 
-	const mockImports = allNames
-		.map(
-			(name) =>
-				`import { ${toPascalCase(name)}HandlerMock } from "./${toKebabCase(name)}/mock-impl";`,
-		)
-		.join("\n");
-
-	const implImports = allNames
-		.map(
-			(name) =>
-				`import { ${toPascalCase(name)}HandlerLive } from "./${toKebabCase(name)}/impl";`,
-		)
+	const allImports = allNames
+		.flatMap((name) => [
+			`import { ${toPascalCase(name)}HandlerLive } from "./${toKebabCase(name)}/impl";`,
+			`import { ${toPascalCase(name)}HandlerMock } from "./${toKebabCase(name)}/mock-impl";`,
+		])
 		.join("\n");
 
 	const mockHandlersLayer = [
@@ -123,9 +116,7 @@ export const generateOperationsBarrel = (
 		"",
 		'import { Layer } from "effect";',
 		"",
-		mockImports,
-		"",
-		implImports,
+		allImports,
 		"",
 		exports,
 		"",

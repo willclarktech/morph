@@ -5,16 +5,16 @@ import type {
 } from "@morph/domain-schema";
 
 import {
-	getAllOperations,
-	getInjectableParams,
-	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
-import {
 	codeBlock,
 	description,
 	heading,
 	joinSections,
 } from "@morph/builder-readme";
+import {
+	getAllOperations,
+	getInjectableParams,
+	schemaHasAuthRequirement,
+} from "@morph/domain-schema";
 import { toEnvironmentPrefix, toKebabCase } from "@morph/utils";
 
 const generateOperationExample = (
@@ -70,13 +70,13 @@ export const generateClientCliReadme = (
 				getInjectableParams(schema, op.name).map((p) => p.paramName),
 			);
 			const example = generateOperationExample(op, injectableNames);
-			const desc = op.def.description ?? "";
+			const desc = op.def.description;
 			return `### ${toKebabCase(op.name)}\n\n${desc}\n\n\`\`\`bash\n${cliName} ${example}\n\`\`\``;
 		}),
 	].join("\n\n");
 
 	return joinSections([
-		heading(1, `${cliName}`),
+		heading(1, cliName),
 		cliDescription ?? description(schema),
 		configSection,
 		envSection,

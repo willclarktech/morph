@@ -1,7 +1,7 @@
-import { Effect } from "effect";
-
 import type { Codec, CodecRegistry } from "@morph/codec-dsl";
+
 import { CodecNegotiationError } from "@morph/codec-dsl";
+import { Effect } from "effect";
 
 import { negotiateMime } from "./negotiation";
 
@@ -55,7 +55,8 @@ export const createCodecRegistry = (
 
 		fromContentType: (contentType) => {
 			// Strip parameters (e.g., "application/json; charset=utf-8" → "application/json")
-			const mime = contentType.split(";")[0]!.trim();
+			const [mimeRaw = ""] = contentType.split(";");
+			const mime = mimeRaw.trim();
 			const codec = mimeMap.get(mime);
 			if (codec) return Effect.succeed(codec);
 			return Effect.fail(

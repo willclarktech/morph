@@ -1,21 +1,20 @@
 import type { DslCompletion } from "@morph/schema-dsl-dsl";
-import type { Effect } from "effect";
-
-import { Context, Effect as E, Layer } from "effect";
-
 import type {
 	ContextAst,
 	DomainAst,
 	SourceRange,
 } from "@morph/schema-dsl-parser";
+import type { Effect } from "effect";
+
 import { parse } from "@morph/schema-dsl-parser";
+import { Context, Effect as E, Layer } from "effect";
 
 export interface GetCompletionsHandler {
 	readonly handle: (
 		params: {
-			readonly source: string;
-			readonly line: number;
 			readonly column: number;
+			readonly line: number;
+			readonly source: string;
 		},
 		options: Record<string, never>,
 	) => Effect.Effect<readonly DslCompletion[]>;
@@ -188,70 +187,70 @@ const detectContext = (
 	ast: DomainAst,
 	line: number,
 	col: number,
-): { context: CursorContext; astContext?: ContextAst } => {
-	for (const ctx of ast.contexts) {
-		if (!containsCursor(ctx.range, line, col)) continue;
+): { astContext?: ContextAst; context: CursorContext } => {
+	for (const context of ast.contexts) {
+		if (!containsCursor(context.range, line, col)) continue;
 
-		for (const entity of ctx.entities) {
+		for (const entity of context.entities) {
 			if (containsCursor(entity.range, line, col)) {
-				return { context: "entity-body", astContext: ctx };
+				return { context: "entity-body", astContext: context };
 			}
 		}
-		for (const vo of ctx.valueObjects) {
+		for (const vo of context.valueObjects) {
 			if (containsCursor(vo.range, line, col)) {
-				return { context: "value-body", astContext: ctx };
+				return { context: "value-body", astContext: context };
 			}
 		}
-		for (const cmd of ctx.commands) {
+		for (const cmd of context.commands) {
 			if (containsCursor(cmd.range, line, col)) {
-				return { context: "operation-body", astContext: ctx };
+				return { context: "operation-body", astContext: context };
 			}
 		}
-		for (const q of ctx.queries) {
+		for (const q of context.queries) {
 			if (containsCursor(q.range, line, col)) {
-				return { context: "operation-body", astContext: ctx };
+				return { context: "operation-body", astContext: context };
 			}
 		}
-		for (const fn of ctx.functions) {
-			if (containsCursor(fn.range, line, col)) {
-				return { context: "function-body", astContext: ctx };
+		for (const function_ of context.functions) {
+			if (containsCursor(function_.range, line, col)) {
+				return { context: "function-body", astContext: context };
 			}
 		}
-		for (const inv of ctx.invariants) {
+		for (const inv of context.invariants) {
 			if (containsCursor(inv.range, line, col)) {
-				return { context: "invariant-body", astContext: ctx };
+				return { context: "invariant-body", astContext: context };
 			}
 		}
-		for (const sub of ctx.subscribers) {
+		for (const sub of context.subscribers) {
 			if (containsCursor(sub.range, line, col)) {
-				return { context: "subscriber-body", astContext: ctx };
+				return { context: "subscriber-body", astContext: context };
 			}
 		}
-		for (const port of ctx.ports) {
+		for (const port of context.ports) {
 			if (containsCursor(port.range, line, col)) {
-				return { context: "port-body", astContext: ctx };
+				return { context: "port-body", astContext: context };
 			}
 		}
-		for (const type of ctx.types) {
+		for (const type of context.types) {
 			if (containsCursor(type.range, line, col)) {
 				if (type.kind === "sum") {
-					return { context: "union-body", astContext: ctx };
+					return { context: "union-body", astContext: context };
 				}
-				return { context: "type-body", astContext: ctx };
+				return { context: "type-body", astContext: context };
 			}
 		}
-		for (const err of ctx.errors) {
-			if (containsCursor(err.range, line, col)) {
-				return { context: "error-body", astContext: ctx };
+		for (const error of context.errors) {
+			if (containsCursor(error.range, line, col)) {
+				return { context: "error-body", astContext: context };
 			}
 		}
-		for (const contract of ctx.contracts) {
+		for (const contract of context.contracts) {
 			if (containsCursor(contract.range, line, col)) {
-				return { context: "operation-body", astContext: ctx };
+				return { context: "operation-body", astContext: context };
 			}
 		}
 
-		return { context: "context-body", astContext: ctx };
+		return { context: "context-body", astContext: context };
 	}
 
 	if (ast.extensions && containsCursor(ast.extensions.range, line, col)) {
@@ -265,22 +264,22 @@ const detectContext = (
 
 const collectTypeNames = (ast: DomainAst): DslCompletion[] => {
 	const completions: DslCompletion[] = [];
-	for (const ctx of ast.contexts) {
-		for (const entity of ctx.entities) {
+	for (const context of ast.contexts) {
+		for (const entity of context.entities) {
 			completions.push({
 				label: entity.name,
 				kind: "entity",
 				detail: entity.description ?? "Entity",
 			});
 		}
-		for (const vo of ctx.valueObjects) {
+		for (const vo of context.valueObjects) {
 			completions.push({
 				label: vo.name,
 				kind: "type",
 				detail: vo.description ?? "Value object",
 			});
 		}
-		for (const type of ctx.types) {
+		for (const type of context.types) {
 			completions.push({
 				label: type.name,
 				kind: "type",
@@ -293,8 +292,8 @@ const collectTypeNames = (ast: DomainAst): DslCompletion[] => {
 
 const collectEntityNames = (ast: DomainAst): DslCompletion[] => {
 	const completions: DslCompletion[] = [];
-	for (const ctx of ast.contexts) {
-		for (const entity of ctx.entities) {
+	for (const context of ast.contexts) {
+		for (const entity of context.entities) {
 			completions.push({
 				label: entity.name,
 				kind: "entity",
@@ -307,8 +306,8 @@ const collectEntityNames = (ast: DomainAst): DslCompletion[] => {
 
 const collectEventNames = (ast: DomainAst): DslCompletion[] => {
 	const completions: DslCompletion[] = [];
-	for (const ctx of ast.contexts) {
-		for (const cmd of ctx.commands) {
+	for (const context of ast.contexts) {
+		for (const cmd of context.commands) {
 			for (const event of cmd.emits) {
 				completions.push({
 					label: event.name,
@@ -321,15 +320,15 @@ const collectEventNames = (ast: DomainAst): DslCompletion[] => {
 	return completions;
 };
 
-const collectInvariantNames = (ctx: ContextAst): DslCompletion[] =>
-	ctx.invariants.map((inv) => ({
+const collectInvariantNames = (context: ContextAst): DslCompletion[] =>
+	context.invariants.map((inv) => ({
 		label: inv.name,
 		kind: "entity",
 		detail: inv.description ?? "Invariant",
 	}));
 
-const collectPortNames = (ctx: ContextAst): DslCompletion[] =>
-	ctx.ports.map((port) => ({
+const collectPortNames = (context: ContextAst): DslCompletion[] =>
+	context.ports.map((port) => ({
 		label: port.name,
 		kind: "entity",
 		detail: port.description ?? "Port",
@@ -401,57 +400,71 @@ export const GetCompletionsHandlerLive = Layer.succeed(GetCompletionsHandler, {
 			// AST-aware structural completions (with indentation fallback)
 			if (!ast) {
 				// Fallback: use indentation heuristics when AST unavailable
-				if (/^\t/.test(prefix) && !/^\t\t/.test(prefix)) {
+				if (prefix.startsWith("\t") && !prefix.startsWith("\t\t")) {
 					return DECLARATION_KEYWORDS;
 				}
-				if (/^\t\t/.test(prefix)) {
+				if (prefix.startsWith("\t\t")) {
 					return OPERATION_CLAUSE_KEYWORDS;
 				}
 				return TOP_LEVEL_KEYWORDS;
 			}
 
-			const { context, astContext } = detectContext(
+			const { context, astContext: _astContext } = detectContext(
 				ast,
 				params.line,
 				params.column,
 			);
 
 			switch (context) {
-				case "top-level":
-					return TOP_LEVEL_KEYWORDS;
-				case "extensions-body":
-					return EXTENSION_TYPES;
-				case "context-body":
+				case "context-body": {
 					return [...DECLARATION_KEYWORDS, ...KNOWN_TAGS];
-				case "entity-body":
+				}
+				case "entity-body": {
 					return [
 						...PRIMITIVE_TYPES,
 						...RELATIONSHIP_KEYWORDS,
-						...(ast ? collectTypeNames(ast) : []),
+						...collectTypeNames(ast),
 					];
-				case "value-body":
-				case "type-body":
+				}
 				case "error-body":
-					return [...PRIMITIVE_TYPES, ...(ast ? collectTypeNames(ast) : [])];
-				case "union-body":
-					return PRIMITIVE_TYPES;
-				case "operation-body":
-					return OPERATION_CLAUSE_KEYWORDS;
-				case "function-body":
+				case "errors-body":
+				case "input-body":
+				case "type-body":
+				case "value-body": {
+					return [...PRIMITIVE_TYPES, ...collectTypeNames(ast)];
+				}
+				case "extensions-body": {
+					return EXTENSION_TYPES;
+				}
+				case "function-body": {
 					return OPERATION_CLAUSE_KEYWORDS.filter(
 						(c) =>
 							c.label === "input" ||
 							c.label === "output" ||
 							c.label === "errors",
 					);
-				case "invariant-body":
+				}
+				case "invariant-body": {
 					return INVARIANT_CLAUSE_KEYWORDS;
-				case "subscriber-body":
-					return SUBSCRIBER_CLAUSE_KEYWORDS;
-				case "port-body":
+				}
+				case "operation-body": {
+					return OPERATION_CLAUSE_KEYWORDS;
+				}
+				case "port-body": {
 					return PRIMITIVE_TYPES;
-				default:
+				}
+				case "subscriber-body": {
+					return SUBSCRIBER_CLAUSE_KEYWORDS;
+				}
+				case "top-level": {
 					return TOP_LEVEL_KEYWORDS;
+				}
+				case "union-body": {
+					return PRIMITIVE_TYPES;
+				}
+				default: {
+					return TOP_LEVEL_KEYWORDS;
+				}
 			}
 		}),
 });

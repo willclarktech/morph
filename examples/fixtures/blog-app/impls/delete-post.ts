@@ -18,7 +18,7 @@ export const DeletePostHandlerLive = Layer.effect(
 						.findById(params.postId)
 						.pipe(
 							Effect.mapError(
-								(e) => new PostNotFoundError({ message: e.message }),
+								(error) => new PostNotFoundError({ message: error.message }),
 							),
 						);
 					if (!post) {
@@ -33,7 +33,7 @@ export const DeletePostHandlerLive = Layer.effect(
 						.delete(params.postId)
 						.pipe(
 							Effect.mapError(
-								(e) => new PostNotFoundError({ message: e.message }),
+								(error) => new PostNotFoundError({ message: error.message }),
 							),
 						);
 					return true;

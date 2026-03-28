@@ -1,6 +1,6 @@
-import { describe, expect, test } from "bun:test";
-
 import type { TypeRef } from "@morph/domain-schema";
+
+import { describe, expect, test } from "bun:test";
 
 import { typeRefToSchema } from "./type-to-schema";
 

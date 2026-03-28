@@ -17,7 +17,7 @@ export const CompleteTodoHandlerLive = Layer.effect(
 					// Find the todo
 					const todo = yield* todoRepo
 						.findById(params.todoId)
-						.pipe(Effect.mapError((e) => new TodoNotFoundError({ message: e.message })));
+						.pipe(Effect.mapError((error) => new TodoNotFoundError({ message: error.message })));
 					if (!todo) {
 						return yield* Effect.fail(
 							new TodoNotFoundError({
@@ -37,7 +37,7 @@ export const CompleteTodoHandlerLive = Layer.effect(
 
 					// Mark as completed
 					const completedTodo = { ...todo, completed: true };
-					yield* todoRepo.save(completedTodo).pipe(Effect.mapError((e) => new TodoNotFoundError({ message: e.message })));
+					yield* todoRepo.save(completedTodo).pipe(Effect.mapError((error) => new TodoNotFoundError({ message: error.message })));
 					return completedTodo;
 				}),
 		};

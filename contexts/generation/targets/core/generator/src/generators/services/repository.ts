@@ -99,7 +99,9 @@ export const generateRepositoryService = (
 	const content = `// Generated ${pascalName} repository service
 // Do not edit - regenerate from schema
 
-import { Context, Effect } from "effect";
+import type { Effect } from "effect";
+
+import { Context } from "effect";
 
 import type { ${typeImports} } from "${typesImportPath}";
 

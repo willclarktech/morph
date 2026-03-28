@@ -2,7 +2,7 @@
  * Entry point generation for UI server.
  */
 import { schemaHasAuthRequirement } from "@morph/domain-schema";
-import { sep, toKebabCase } from "@morph/utils";
+import { separator, toKebabCase } from "@morph/utils";
 
 import type { GenerateUiAppOptions } from "./config";
 
@@ -21,13 +21,13 @@ export const generateEntryPoint = (options: GenerateUiAppOptions): string => {
 
 	// Home page handler
 	const homeHandler = hasAuth
-		? `(req: Request) => {
-				initLanguage(req);
-				const authState = getAuthState(req);
+		? `(request: Request) => {
+				initLanguage(request);
+				const authState = getAuthState(request);
 				return html(homePage(authState));
 			}`
-		: `(req: Request) => {
-				initLanguage(req);
+		: `(request: Request) => {
+				initLanguage(request);
 				return html(homePage());
 			}`;
 
@@ -40,18 +40,18 @@ export const generateEntryPoint = (options: GenerateUiAppOptions): string => {
 		.replaceAll("`", "\\`")
 		.replaceAll("$", String.raw`\$`);
 
-	return `/**
+	return `/* eslint-disable @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-plus-operands -- Effect.runPromise types cannot be resolved across HTTP client boundary */
+/**
  * UI Server Entry Point
  *
  * Bun.serve() with HTMX routes. Uses the typed HTTP client
  * to communicate with the API server.
  */
 import { createClient } from "${clientPackagePath}";
-import type { ${typeImports.join(", ")} } from "${dslPackagePath}";
-import { Effect } from "effect";
+${typeImports.length > 0 ? `import type { ${typeImports.join(", ")} } from "${dslPackagePath}";\n` : ""}import { Effect } from "effect";
 
 import {
-	${pageImports.join(sep(1, ","))},
+	${pageImports.join(separator(1, ","))},
 } from "./pages";
 import { setLanguage, t } from "./text";
 ${sessionCode}
@@ -65,9 +65,9 @@ const client = createClient({
 const LANG_COOKIE = "${storageKey}_lang";
 
 // Extract language from cookie and set it for the current request
-const initLanguage = (req: Request): void => {
-	const cookies = req.headers.get("Cookie") ?? "";
-	const match = cookies.match(new RegExp(LANG_COOKIE + "=([^;]+)"));
+const initLanguage = (request: Request): void => {
+	const cookies = request.headers.get("Cookie") ?? "";
+	const match = new RegExp(LANG_COOKIE + "=([^;]+)").exec(cookies);
 	if (match?.[1]) {
 		setLanguage(match[1]);
 	}

@@ -16,17 +16,17 @@ export const generateFunctionRoutes = (
 	return [
 		{
 			comment: `${toTitleCase(function_.name)} function form`,
-			handler: `(req: Request) => {
-				initLanguage(req);
+			handler: `(request: Request) => {
+				initLanguage(request);
 				return html(${function_.name}Page());
 			}`,
 			method: "GET",
 		},
 		{
 			comment: `Execute ${function_.name} function`,
-			handler: `async (req: Request) => {
+			handler: `async (request: Request) => {
 				// eslint-disable-next-line @typescript-eslint/no-deprecated -- Bun.serve supports formData
-				const formData = await req.formData();
+				const formData = await request.formData();
 				const params = Object.fromEntries(formData) as unknown as Parameters<typeof client.${function_.name}>[0];
 				try {
 					const result = await Effect.runPromise(client.${function_.name}(params));

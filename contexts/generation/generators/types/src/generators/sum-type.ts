@@ -9,7 +9,7 @@ import {
 	formatTypeParam,
 	formatTypeParams,
 	hasTypeParameters,
-} from "./type-utils";
+} from "./type-utilities";
 
 export const generateSumTypeSchema = (
 	name: string,
@@ -19,9 +19,9 @@ export const generateSumTypeSchema = (
 	const typeParamString = formatTypeParams(typeDef.typeParameters);
 
 	// Generic types: generate schema factory, derive type from it
-	if (hasTypeParameters(typeDef)) {
-		const typeParams = typeDef.typeParameters!;
-		const ctx = buildSchemaContext(typeParams);
+	if (hasTypeParameters(typeDef) && typeDef.typeParameters) {
+		const typeParams = typeDef.typeParameters;
+		const context = buildSchemaContext(typeParams);
 
 		const schemaTypeParams = typeParams.map(formatTypeParam).join(", ");
 		const schemaParams = formatSchemaParams(typeParams);
@@ -31,7 +31,7 @@ export const generateSumTypeSchema = (
 			([variantName, variantDef]) => {
 				const fields = Object.entries(variantDef.fields ?? {})
 					.map(([fieldName, fieldDef]) => {
-						const schema = typeRefToSchema(fieldDef.type, ctx);
+						const schema = typeRefToSchema(fieldDef.type, context);
 						const optionalWrapper = fieldDef.optional ? "S.optional(" : "";
 						const optionalClose = fieldDef.optional ? ")" : "";
 						return `${fieldName}: ${optionalWrapper}${schema}${optionalClose},`;

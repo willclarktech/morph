@@ -1,13 +1,15 @@
-import { Context, Effect, Layer } from "effect";
-
 import type { JwtPayload } from "@morph/auth-jwt-dsl";
+import type { Effect } from "effect";
+
+import { Context, Layer } from "effect";
+
 import { signToken } from "./jwt";
 
 export interface SignTokenHandler {
 	readonly handle: (
 		params: { readonly payload: JwtPayload; readonly secret: string },
 		options: object,
-	) => Effect.Effect<string, never>;
+	) => Effect.Effect<string>;
 }
 
 export const SignTokenHandler = Context.GenericTag<SignTokenHandler>(

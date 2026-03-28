@@ -6,9 +6,8 @@ import type {
 } from "@morph/schema-dsl-parser";
 import type { Effect } from "effect";
 
-import { Context, Effect as E, Layer } from "effect";
-
 import { parse } from "@morph/schema-dsl-parser";
+import { Context, Effect as E, Layer } from "effect";
 
 export interface GetSymbolsHandler {
 	readonly handle: (
@@ -28,14 +27,14 @@ const rangeToDto = (range: SourceRange) => ({
 	endColumn: range.end.column,
 });
 
-const buildContextSymbols = (ctx: ContextAst): DslSymbol => {
+const buildContextSymbols = (context: ContextAst): DslSymbol => {
 	const children: DslSymbol[] = [];
 
-	for (const entity of ctx.entities) {
-		const entityChildren: DslSymbol[] = entity.attributes.map((attr) => ({
-			name: attr.name,
+	for (const entity of context.entities) {
+		const entityChildren: DslSymbol[] = entity.attributes.map((attribute) => ({
+			name: attribute.name,
 			kind: "attribute",
-			range: rangeToDto(attr.range),
+			range: rangeToDto(attribute.range),
 			children: [],
 		}));
 		children.push({
@@ -46,21 +45,21 @@ const buildContextSymbols = (ctx: ContextAst): DslSymbol => {
 		});
 	}
 
-	for (const vo of ctx.valueObjects) {
+	for (const vo of context.valueObjects) {
 		children.push({
 			name: vo.name,
 			kind: "value",
 			range: rangeToDto(vo.range),
-			children: vo.attributes.map((attr) => ({
-				name: attr.name,
+			children: vo.attributes.map((attribute) => ({
+				name: attribute.name,
 				kind: "attribute",
-				range: rangeToDto(attr.range),
+				range: rangeToDto(attribute.range),
 				children: [],
 			})),
 		});
 	}
 
-	for (const cmd of ctx.commands) {
+	for (const cmd of context.commands) {
 		children.push({
 			name: cmd.name,
 			kind: "command",
@@ -69,7 +68,7 @@ const buildContextSymbols = (ctx: ContextAst): DslSymbol => {
 		});
 	}
 
-	for (const query of ctx.queries) {
+	for (const query of context.queries) {
 		children.push({
 			name: query.name,
 			kind: "query",
@@ -78,16 +77,16 @@ const buildContextSymbols = (ctx: ContextAst): DslSymbol => {
 		});
 	}
 
-	for (const fn of ctx.functions) {
+	for (const function_ of context.functions) {
 		children.push({
-			name: fn.name,
+			name: function_.name,
 			kind: "function",
-			range: rangeToDto(fn.range),
+			range: rangeToDto(function_.range),
 			children: [],
 		});
 	}
 
-	for (const inv of ctx.invariants) {
+	for (const inv of context.invariants) {
 		children.push({
 			name: inv.name,
 			kind: "invariant",
@@ -96,7 +95,7 @@ const buildContextSymbols = (ctx: ContextAst): DslSymbol => {
 		});
 	}
 
-	for (const sub of ctx.subscribers) {
+	for (const sub of context.subscribers) {
 		children.push({
 			name: sub.name,
 			kind: "subscriber",
@@ -105,7 +104,7 @@ const buildContextSymbols = (ctx: ContextAst): DslSymbol => {
 		});
 	}
 
-	for (const port of ctx.ports) {
+	for (const port of context.ports) {
 		children.push({
 			name: port.name,
 			kind: "port",
@@ -114,16 +113,16 @@ const buildContextSymbols = (ctx: ContextAst): DslSymbol => {
 		});
 	}
 
-	for (const err of ctx.errors) {
+	for (const error of context.errors) {
 		children.push({
-			name: err.name,
+			name: error.name,
 			kind: "error",
-			range: rangeToDto(err.range),
+			range: rangeToDto(error.range),
 			children: [],
 		});
 	}
 
-	for (const type of ctx.types) {
+	for (const type of context.types) {
 		children.push({
 			name: type.name,
 			kind: "type",
@@ -133,9 +132,9 @@ const buildContextSymbols = (ctx: ContextAst): DslSymbol => {
 	}
 
 	return {
-		name: ctx.name,
+		name: context.name,
 		kind: "context",
-		range: rangeToDto(ctx.range),
+		range: rangeToDto(context.range),
 		children,
 	};
 };
@@ -152,8 +151,8 @@ const buildDomainSymbols = (ast: DomainAst): DslSymbol[] => {
 		});
 	}
 
-	for (const ctx of ast.contexts) {
-		children.push(buildContextSymbols(ctx));
+	for (const context of ast.contexts) {
+		children.push(buildContextSymbols(context));
 	}
 
 	return [

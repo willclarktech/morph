@@ -1,10 +1,9 @@
-import { Effect } from "effect";
-import { readFileSync, writeFileSync } from "node:fs";
-
 import type { PaginationParams, StorageTransport } from "@morph/storage-dsl";
 
-import { StorageOperationError, applyPagination } from "@morph/storage-dsl";
+import { applyPagination, StorageOperationError } from "@morph/storage-dsl";
 import { jsonParse, jsonStringify } from "@morph/utils";
+import { Effect } from "effect";
+import { readFileSync, writeFileSync } from "node:fs";
 
 /**
  * Create a JSON file-backed StorageTransport.
@@ -51,7 +50,7 @@ export const createJsonFileTransport = (
 						message: `JsonFile get failed: ${String(error)}`,
 					}),
 			}),
-		getAll: (pagination?: PaginationParams | undefined) =>
+		getAll: (pagination?: PaginationParams) =>
 			Effect.try({
 				try: () => applyPagination(Object.values(readStore()), pagination),
 				catch: (error) =>

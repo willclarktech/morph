@@ -3,11 +3,10 @@
  */
 import type {
 	DomainSchema,
+	EncodingFormat,
 	GeneratedFile,
 	GenerationResult,
 } from "@morph/domain-schema";
-
-import type { EncodingFormat } from "@morph/domain-schema";
 
 import {
 	getAllEntities,
@@ -15,7 +14,7 @@ import {
 	getCommandsWithEvents,
 	schemaHasAuthRequirement,
 } from "@morph/domain-schema";
-import { configProps, indent, sep, sortImports } from "@morph/utils";
+import { configProperties, indent, sortImports } from "@morph/utils";
 
 import type { ContextPackages } from "./imports";
 
@@ -49,9 +48,9 @@ export interface GenerateAppOptions {
 	readonly cliName?: string;
 	/** Context packages for multi-context apps */
 	readonly contexts?: readonly ContextPackages[];
-	/** @deprecated Use contexts instead. Import path to the core package (e.g., "@myapp/core" or "../core") */
+	/** Import path to the core package (legacy single-context) */
 	readonly corePackagePath?: string;
-	/** @deprecated Use contexts instead. Import path to the DSL package (e.g., "@myapp/dsl") */
+	/** Import path to the DSL package (legacy single-context) */
 	readonly dslPackagePath?: string;
 	/** Env var prefix (e.g., "TODO_APP" -> TODO_APP_STORAGE). Defaults to CLI name in uppercase with hyphens replaced by underscores. */
 	readonly envPrefix?: string;
@@ -132,7 +131,7 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 	// Argv filter code
 	const argvFilterCode =
 		hasEntities || hasEvents
-			? `const argv = ${hasEvents ? `filterBackendArg(filterBackendArg(process.argv.slice(2), "--storage"), "--event-store")` : `filterBackendArg(process.argv.slice(2), "--storage")`};`
+			? `const argv = ${hasEvents ? `filterBackendArgument(filterBackendArgument(process.argv.slice(2), "--storage"), "--event-store")` : `filterBackendArgument(process.argv.slice(2), "--storage")`};`
 			: `const argv = process.argv.slice(2);`;
 
 	// Auth code - get User type from the first context that depends on auth
@@ -190,15 +189,15 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 					);
 					break;
 				}
-				case "yaml": {
-					codecFactories.push(
-						`import { createYamlCodec } from "@morph/codec-yaml-impls";`,
-					);
-					break;
-				}
 				case "protobuf": {
 					codecFactories.push(
 						`import { createProtobufCodec } from "@morph/codec-protobuf-impls";`,
+					);
+					break;
+				}
+				case "yaml": {
+					codecFactories.push(
+						`import { createYamlCodec } from "@morph/codec-yaml-impls";`,
 					);
 					break;
 				}
@@ -211,11 +210,13 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 	}
 
 	// Build imports in alphabetical order for lint compliance
+	const needsBackendArguments = hasEntities || hasEvents;
 	const generatorCliImports = [
 		"createCli",
 		"createRepl",
-		"filterBackendArg",
-		"parseBackendArg",
+		...(needsBackendArguments
+			? ["filterBackendArgument", "parseBackendArgument"]
+			: []),
 		...(hasAuth ? ["promptInput", "promptSecure"] : []),
 		...(hasSqlite ? ["runMigrateCli"] : []),
 	];
@@ -232,7 +233,7 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 			`import { Effect, Layer, Logger${hasAuth ? ", Ref" : ""}${hasInjectableParameters ? ", Schema as S" : ""} } from "effect";`,
 			...(userTypeImport ? [userTypeImport] : []),
 			...(hasEntities
-				? [`import { parseSeedArgs, runSeed } from "./seed";`]
+				? [`import { parseSeedArguments, runSeed } from "./seed";`]
 				: []),
 		].join("\n"),
 	);
@@ -243,12 +244,15 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 				const codecs = encodingFormats
 					.map((f) => {
 						switch (f) {
-							case "json":
+							case "json": {
 								return "createJsonCodec()";
-							case "yaml":
-								return "createYamlCodec()";
-							case "protobuf":
+							}
+							case "protobuf": {
 								return "createProtobufCodec()";
+							}
+							case "yaml": {
+								return "createYamlCodec()";
+							}
 						}
 					})
 					.join(", ");
@@ -257,7 +261,7 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 		: "";
 
 	// Build createCli config properties
-	const cliConfigProps = configProps([
+	const cliConfigProperties = configProperties([
 		aggregateScopeConfig && `aggregateScope: ${aggregateScopeConfig},`,
 		hasEncoding && "codecRegistry,",
 		`description: "${options.cliDescription ?? ""}",`,
@@ -273,14 +277,14 @@ const main = Effect.gen(function* () {
 	${eventStoreLayerCode}${storageLayerCode}${authLayerCode}
 	${appLayerCode}${operationWrapperCode}${encodingSetupCode}
 	const cli = createCli(${hasInjectableParameters ? "wrappedOps" : "ops"}, AppLayer, {
-${indent(cliConfigProps.join("\n"), 2)}
+${indent(cliConfigProperties.join("\n"), 2)}
 	});
 
 	${argvFilterCode}${
 		hasEntities
 			? `
 	if (argv[0] === "seed") {
-		const args = parseSeedArgs(argv.slice(1));
+		const args = parseSeedArguments(argv.slice(1));
 		yield* runSeed(args.count, args.seedValue).pipe(Effect.provide(AppLayer));
 		return 0;
 	}

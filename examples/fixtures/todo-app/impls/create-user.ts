@@ -16,7 +16,7 @@ export const CreateUserHandlerLive = Layer.effect(
 			handle: (params) =>
 				Effect.gen(function* () {
 					// Check if email already exists
-					const result = yield* userRepo.findAll().pipe(Effect.mapError((e) => new EmailAlreadyExistsError({ message: e.message })));
+					const result = yield* userRepo.findAll().pipe(Effect.mapError((error) => new EmailAlreadyExistsError({ message: error.message })));
 					const existingUser = result.items.find(
 						(user) => user.email === params.email,
 					);
@@ -37,7 +37,7 @@ export const CreateUserHandlerLive = Layer.effect(
 								algorithm: "bcrypt",
 								cost: 10,
 							}),
-					}).pipe(Effect.mapError((e) => new EmailAlreadyExistsError({ message: e.message })));
+					}).pipe(Effect.mapError((error) => new EmailAlreadyExistsError({ message: error.message })));
 
 					// Generate ID and create user
 					const id = yield* idGen.generate();
@@ -48,7 +48,7 @@ export const CreateUserHandlerLive = Layer.effect(
 						passwordHash,
 					};
 
-					yield* userRepo.save(user).pipe(Effect.mapError((e) => new EmailAlreadyExistsError({ message: e.message })));
+					yield* userRepo.save(user).pipe(Effect.mapError((error) => new EmailAlreadyExistsError({ message: error.message })));
 					return user;
 				}),
 		};

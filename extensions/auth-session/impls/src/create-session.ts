@@ -1,13 +1,15 @@
-import { Context, Effect, Layer } from "effect";
-
 import type { Session, SessionStorageError } from "@morph/auth-session-dsl";
+import type { Effect } from "effect";
+
+import { Context, Layer } from "effect";
+
 import { createSession } from "./session-store";
 
 export interface CreateSessionHandler {
 	readonly handle: (
 		params: { readonly userId: string },
 		options: {
-			readonly data?: unknown | undefined;
+			readonly data?: unknown;
 			readonly expiresInSeconds?: number | undefined;
 		},
 	) => Effect.Effect<Session, SessionStorageError>;

@@ -8,7 +8,7 @@ export const quoteId = (name: string): string => {
 	return `"${name}"`;
 };
 
-export const escapeLiteral = (v: string): string => v.replace(/'/g, "''");
+export const escapeLiteral = (v: string): string => v.replaceAll("'", "''");
 
 // =============================================================================
 // FieldSpec Type System
@@ -25,18 +25,18 @@ type FieldType =
 	| { readonly kind: "union"; readonly values: readonly string[] }
 	| { readonly kind: "json" }
 	| {
-			readonly kind: "object";
 			readonly fields: readonly FieldSpec[];
+			readonly kind: "object";
 	  }
 	| {
-			readonly kind: "discriminated";
 			readonly discriminator: string;
+			readonly kind: "discriminated";
 			readonly variants: Record<string, readonly FieldSpec[]>;
 	  }
 	| {
-			readonly kind: "array";
-			readonly element: FieldType;
 			readonly childTable: string;
+			readonly element: FieldType;
+			readonly kind: "array";
 	  };
 
 interface FieldSpec {
@@ -88,24 +88,30 @@ export interface ChildTableDescriptor {
 
 const fieldTypeToSqlType = (ft: FieldType): string => {
 	switch (ft.kind) {
-		case "string":
-		case "id":
-		case "union":
+		case "array":
+		case "discriminated":
+		case "object": {
+			return "TEXT";
+		}
+		case "boolean": {
+			return "INTEGER";
+		}
 		case "date":
 		case "datetime":
+		case "id":
+		case "string":
+		case "union": {
 			return "TEXT";
-		case "float":
+		}
+		case "float": {
 			return "REAL";
-		case "integer":
+		}
+		case "integer": {
 			return "INTEGER";
-		case "boolean":
-			return "INTEGER";
-		case "json":
+		}
+		case "json": {
 			return "TEXT";
-		case "object":
-		case "discriminated":
-		case "array":
-			return "TEXT";
+		}
 	}
 };
 
@@ -114,48 +120,37 @@ export const flattenFields = (
 	tableName: string,
 	prefix?: string,
 	parentNullable?: boolean,
-): { columns: ColumnDescriptor[]; childTables: ChildTableDescriptor[] } => {
+): { childTables: ChildTableDescriptor[]; columns: ColumnDescriptor[] } => {
 	const columns: ColumnDescriptor[] = [];
 	const childTables: ChildTableDescriptor[] = [];
 
 	for (const field of fields) {
 		const colPrefix = toColumnName(prefix, field.name);
-		const nullable = !!(field.nullable || parentNullable);
+		const nullable = !!(field.nullable ?? parentNullable);
 
 		switch (field.type.kind) {
-			case "string":
-			case "float":
-			case "integer":
+			case "array": {
+				const elementColumns = flattenArrayElement(field.type.element);
+				childTables.push({
+					childTable: field.type.childTable,
+					parentTable: tableName,
+					columns: elementColumns,
+				});
+				break;
+			}
+			case "boolean":
 			case "date":
 			case "datetime":
-			case "boolean":
+			case "float":
 			case "id":
+			case "integer":
 			case "json":
+			case "string": {
 				columns.push({
 					columnName: colPrefix,
 					sqlType: fieldTypeToSqlType(field.type),
 					nullable,
 				});
-				break;
-
-			case "union":
-				columns.push({
-					columnName: colPrefix,
-					sqlType: "TEXT",
-					check: `${quoteId(colPrefix)} IN (${field.type.values.map((v) => `'${escapeLiteral(v)}'`).join(", ")})`,
-					nullable,
-				});
-				break;
-
-			case "object": {
-				const sub = flattenFields(
-					field.type.fields,
-					tableName,
-					colPrefix,
-					nullable,
-				);
-				columns.push(...sub.columns);
-				childTables.push(...sub.childTables);
 				break;
 			}
 
@@ -186,12 +181,24 @@ export const flattenFields = (
 				break;
 			}
 
-			case "array": {
-				const elementColumns = flattenArrayElement(field.type.element);
-				childTables.push({
-					childTable: field.type.childTable,
-					parentTable: tableName,
-					columns: elementColumns,
+			case "object": {
+				const sub = flattenFields(
+					field.type.fields,
+					tableName,
+					colPrefix,
+					nullable,
+				);
+				columns.push(...sub.columns);
+				childTables.push(...sub.childTables);
+				break;
+			}
+
+			case "union": {
+				columns.push({
+					columnName: colPrefix,
+					sqlType: "TEXT",
+					check: `${quoteId(colPrefix)} IN (${field.type.values.map((v) => `'${escapeLiteral(v)}'`).join(", ")})`,
+					nullable,
 				});
 				break;
 			}
@@ -203,14 +210,23 @@ export const flattenFields = (
 
 export const flattenArrayElement = (element: FieldType): ColumnDescriptor[] => {
 	switch (element.kind) {
-		case "string":
-		case "float":
-		case "integer":
+		case "array": {
+			return [
+				{
+					columnName: "value",
+					sqlType: "TEXT",
+					nullable: false,
+				},
+			];
+		}
+		case "boolean":
 		case "date":
 		case "datetime":
-		case "boolean":
+		case "float":
 		case "id":
+		case "integer":
 		case "json":
+		case "string": {
 			return [
 				{
 					columnName: "value",
@@ -218,18 +234,6 @@ export const flattenArrayElement = (element: FieldType): ColumnDescriptor[] => {
 					nullable: false,
 				},
 			];
-		case "union":
-			return [
-				{
-					columnName: "value",
-					sqlType: "TEXT",
-					check: `"value" IN (${element.values.map((v) => `'${escapeLiteral(v)}'`).join(", ")})`,
-					nullable: false,
-				},
-			];
-		case "object": {
-			const sub = flattenFields(element.fields, "");
-			return sub.columns.map((c) => ({ ...c, nullable: false }));
 		}
 		case "discriminated": {
 			const discColName = toSnakeCase(element.discriminator);
@@ -250,13 +254,19 @@ export const flattenArrayElement = (element: FieldType): ColumnDescriptor[] => {
 			}
 			return [discCol, ...variantCols];
 		}
-		case "array":
+		case "object": {
+			const sub = flattenFields(element.fields, "");
+			return sub.columns.map((c) => ({ ...c, nullable: false }));
+		}
+		case "union": {
 			return [
 				{
 					columnName: "value",
 					sqlType: "TEXT",
+					check: `"value" IN (${element.values.map((v) => `'${escapeLiteral(v)}'`).join(", ")})`,
 					nullable: false,
 				},
 			];
+		}
 	}
 };

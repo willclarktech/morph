@@ -24,7 +24,7 @@ export const encodeConnectionInfo = S.encodeSync(ConnectionInfoSchema);
 
 // Function Schemas (pure transformations)
 
-import { ConnectionFailedError, ConnectionTimeoutError } from "./errors";
+import type { ConnectionFailedError, ConnectionTimeoutError } from "./errors";
 
 // Establish a connection to a Redis server
 export const ConnectInputSchema = S.Struct({

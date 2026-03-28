@@ -24,7 +24,7 @@ export const encodeSession = S.encodeSync(SessionSchema);
 
 // Function Schemas (pure transformations)
 
-import {
+import type {
 	SessionExpiredError,
 	SessionNotFoundError,
 	SessionStorageError,
@@ -60,5 +60,5 @@ export const DestroySessionInputSchema = S.Struct({
 export type DestroySessionInput = S.Schema.Type<
 	typeof DestroySessionInputSchema
 >;
-export type DestroySessionOutput = void;
+export type DestroySessionOutput = undefined;
 export type DestroySessionError = SessionStorageError;

@@ -14,7 +14,7 @@ interface MediaRange {
 
 export const parseAcceptHeader = (accept: string): readonly MediaRange[] => {
 	if (!accept || accept.trim() === "") {
-		return [{ type: "*/*", quality: 1.0 }];
+		return [{ type: "*/*", quality: 1 }];
 	}
 
 	const ranges: MediaRange[] = [];
@@ -23,15 +23,15 @@ export const parseAcceptHeader = (accept: string): readonly MediaRange[] => {
 		const trimmed = part.trim();
 		if (!trimmed) continue;
 
-		const semicolonIdx = trimmed.indexOf(";");
-		if (semicolonIdx === -1) {
-			ranges.push({ type: trimmed, quality: 1.0 });
+		const semicolonIndex = trimmed.indexOf(";");
+		if (semicolonIndex === -1) {
+			ranges.push({ type: trimmed, quality: 1 });
 			continue;
 		}
 
-		const type = trimmed.slice(0, semicolonIdx).trim();
-		const params = trimmed.slice(semicolonIdx + 1);
-		let quality = 1.0;
+		const type = trimmed.slice(0, semicolonIndex).trim();
+		const params = trimmed.slice(semicolonIndex + 1);
+		let quality = 1;
 
 		for (const param of params.split(";")) {
 			const [key, value] = param.split("=").map((s) => s.trim());

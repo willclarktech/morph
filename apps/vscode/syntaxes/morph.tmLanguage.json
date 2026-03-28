@@ -2,75 +2,32 @@
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
 	"name": "Morph DSL",
 	"scopeName": "source.morph",
-	"fileTypes": [
-		"morph"
-	],
+	"fileTypes": ["morph"],
 	"patterns": [
-		{
-			"include": "#comments"
-		},
-		{
-			"include": "#strings"
-		},
-		{
-			"include": "#numbers"
-		},
-		{
-			"include": "#constants"
-		},
-		{
-			"include": "#tags"
-		},
-		{
-			"include": "#entity-declarations"
-		},
-		{
-			"include": "#operation-declarations"
-		},
-		{
-			"include": "#context-declaration"
-		},
-		{
-			"include": "#domain-declaration"
-		},
-		{
-			"include": "#other-declarations"
-		},
-		{
-			"include": "#property-with-type"
-		},
-		{
-			"include": "#clause-with-type-refs"
-		},
-		{
-			"include": "#clause-keywords"
-		},
-		{
-			"include": "#control-keywords"
-		},
-		{
-			"include": "#relationship-with-target"
-		},
-		{
-			"include": "#extension-keywords"
-		},
-		{
-			"include": "#operators"
-		},
-		{
-			"include": "#type-reference"
-		},
-		{
-			"include": "#punctuation"
-		}
+		{ "include": "#comments" },
+		{ "include": "#strings" },
+		{ "include": "#numbers" },
+		{ "include": "#constants" },
+		{ "include": "#tags" },
+		{ "include": "#entity-declarations" },
+		{ "include": "#operation-declarations" },
+		{ "include": "#context-declaration" },
+		{ "include": "#domain-declaration" },
+		{ "include": "#other-declarations" },
+		{ "include": "#property-with-type" },
+		{ "include": "#clause-with-type-refs" },
+		{ "include": "#clause-keywords" },
+		{ "include": "#control-keywords" },
+		{ "include": "#relationship-with-target" },
+		{ "include": "#extension-keywords" },
+		{ "include": "#operators" },
+		{ "include": "#type-reference" },
+		{ "include": "#punctuation" }
 	],
 	"repository": {
 		"comments": {
 			"patterns": [
-				{
-					"name": "comment.line.double-slash.morph",
-					"match": "//.*$"
-				}
+				{ "name": "comment.line.double-slash.morph", "match": "//.*$" }
 			]
 		},
 		"strings": {
@@ -80,28 +37,19 @@
 					"begin": "\"",
 					"end": "\"",
 					"patterns": [
-						{
-							"name": "constant.character.escape.morph",
-							"match": "\\\\."
-						}
+						{ "name": "constant.character.escape.morph", "match": "\\\\." }
 					]
 				}
 			]
 		},
 		"numbers": {
 			"patterns": [
-				{
-					"name": "constant.numeric.morph",
-					"match": "\\b\\d+(?:\\.\\d+)?\\b"
-				}
+				{ "name": "constant.numeric.morph", "match": "\\b\\d+(?:\\.\\d+)?\\b" }
 			]
 		},
 		"constants": {
 			"patterns": [
-				{
-					"name": "constant.language.morph",
-					"match": "\\b(?:true|false)\\b"
-				}
+				{ "name": "constant.language.morph", "match": "\\b(?:true|false)\\b" }
 			]
 		},
 		"tags": {
@@ -117,12 +65,8 @@
 				{
 					"match": "\\b(domain)\\s+([A-Za-z_]\\w*)",
 					"captures": {
-						"1": {
-							"name": "keyword.other.morph"
-						},
-						"2": {
-							"name": "entity.name.namespace.morph"
-						}
+						"1": { "name": "keyword.other.morph" },
+						"2": { "name": "entity.name.namespace.morph" }
 					}
 				}
 			]
@@ -132,12 +76,8 @@
 				{
 					"match": "\\b(context)\\s+([A-Za-z_]\\w*)",
 					"captures": {
-						"1": {
-							"name": "keyword.other.morph"
-						},
-						"2": {
-							"name": "entity.name.namespace.morph"
-						}
+						"1": { "name": "keyword.other.morph" },
+						"2": { "name": "entity.name.namespace.morph" }
 					}
 				}
 			]
@@ -147,12 +87,8 @@
 				{
 					"match": "\\b(entity|value|type|union|alias|error)\\s+([A-Z]\\w*)",
 					"captures": {
-						"1": {
-							"name": "keyword.other.morph"
-						},
-						"2": {
-							"name": "entity.name.type.morph"
-						}
+						"1": { "name": "keyword.other.morph" },
+						"2": { "name": "entity.name.type.morph" }
 					}
 				}
 			]
@@ -162,12 +98,8 @@
 				{
 					"match": "\\b(command|query|function|invariant|subscriber|port)\\s+([A-Za-z_]\\w*)",
 					"captures": {
-						"1": {
-							"name": "keyword.other.morph"
-						},
-						"2": {
-							"name": "entity.name.function.morph"
-						}
+						"1": { "name": "keyword.other.morph" },
+						"2": { "name": "entity.name.function.morph" }
 					}
 				}
 			]
@@ -185,41 +117,21 @@
 				{
 					"match": "\\b([a-z_]\\w*)(\\??)(:)\\s+([A-Z]\\w*(?:\\.[a-zA-Z_]\\w*)?)(\\[\\])?",
 					"captures": {
-						"1": {
-							"name": "variable.other.property.morph"
-						},
-						"2": {
-							"name": "keyword.operator.optional.morph"
-						},
-						"3": {
-							"name": "punctuation.separator.type.morph"
-						},
-						"4": {
-							"name": "entity.name.type.morph"
-						},
-						"5": {
-							"name": "punctuation.definition.bracket.morph"
-						}
+						"1": { "name": "variable.other.property.morph" },
+						"2": { "name": "keyword.operator.optional.morph" },
+						"3": { "name": "punctuation.separator.type.morph" },
+						"4": { "name": "entity.name.type.morph" },
+						"5": { "name": "punctuation.definition.bracket.morph" }
 					}
 				},
 				{
 					"match": "\\b([a-z_]\\w*)(\\??)(:)\\s+(string|float|integer|boolean|date|datetime|void)\\b(\\[\\])?",
 					"captures": {
-						"1": {
-							"name": "variable.other.property.morph"
-						},
-						"2": {
-							"name": "keyword.operator.optional.morph"
-						},
-						"3": {
-							"name": "punctuation.separator.type.morph"
-						},
-						"4": {
-							"name": "support.type.primitive.morph"
-						},
-						"5": {
-							"name": "punctuation.definition.bracket.morph"
-						}
+						"1": { "name": "variable.other.property.morph" },
+						"2": { "name": "keyword.operator.optional.morph" },
+						"3": { "name": "punctuation.separator.type.morph" },
+						"4": { "name": "support.type.primitive.morph" },
+						"5": { "name": "punctuation.definition.bracket.morph" }
 					}
 				}
 			]
@@ -229,12 +141,8 @@
 				{
 					"match": "\\b(reads|writes|emits|output|pre|post|on)\\s+([A-Z]\\w*(?:,\\s*[A-Z]\\w*)*)",
 					"captures": {
-						"1": {
-							"name": "keyword.other.clause.morph"
-						},
-						"2": {
-							"name": "entity.name.type.morph"
-						}
+						"1": { "name": "keyword.other.clause.morph" },
+						"2": { "name": "entity.name.type.morph" }
 					}
 				}
 			]
@@ -260,22 +168,15 @@
 				{
 					"match": "\\b(belongs_to|has_many|has_one|references)\\s+([A-Z]\\w*)",
 					"captures": {
-						"1": {
-							"name": "keyword.other.relationship.morph"
-						},
-						"2": {
-							"name": "entity.name.type.morph"
-						}
+						"1": { "name": "keyword.other.relationship.morph" },
+						"2": { "name": "entity.name.type.morph" }
 					}
 				}
 			]
 		},
 		"extension-keywords": {
 			"patterns": [
-				{
-					"name": "storage.type.morph",
-					"match": "\\b(?:extensions)\\b"
-				},
+				{ "name": "storage.type.morph", "match": "\\b(?:extensions)\\b" },
 				{
 					"name": "support.type.morph",
 					"match": "\\b(?:storage|auth|eventStore|sse|i18n)(?=\\s+\\[|\\s+\\w)"
@@ -292,22 +193,13 @@
 		},
 		"type-reference": {
 			"patterns": [
-				{
-					"name": "entity.name.type.morph",
-					"match": "\\b[A-Z]\\w*\\b"
-				}
+				{ "name": "entity.name.type.morph", "match": "\\b[A-Z]\\w*\\b" }
 			]
 		},
 		"punctuation": {
 			"patterns": [
-				{
-					"name": "punctuation.definition.block.morph",
-					"match": "[{}]"
-				},
-				{
-					"name": "punctuation.definition.bracket.morph",
-					"match": "[\\[\\]]"
-				}
+				{ "name": "punctuation.definition.block.morph", "match": "[{}]" },
+				{ "name": "punctuation.definition.bracket.morph", "match": "[\\[\\]]" }
 			]
 		}
 	}

@@ -12,10 +12,9 @@ import {
 	getPrimaryWriteAggregate,
 	isDomainService,
 } from "@morph/domain-schema";
+import { indent } from "@morph/utils";
 
 import type { DomainServiceContext } from "../routes";
-
-import { indent } from "@morph/utils";
 
 import { typeRefToTypeScript } from "../mappers";
 import { buildRoute } from "../routes";
@@ -23,16 +22,73 @@ import { buildRoute } from "../routes";
 /**
  * Generate client factory function.
  */
+/**
+ * Check if any operation needs JSON body headers.
+ */
+const operationsNeedJsonHeaders = (
+	operations: readonly QualifiedEntry<OperationDef>[],
+	schema: DomainSchema,
+	basePath: string,
+): boolean => {
+	for (const entry of operations) {
+		const op = entry.def;
+		const injectableParameters = getInjectableParams(schema, entry.name);
+		const injectableParamNames = injectableParameters.map((p) => p.paramName);
+		const injectableNames = new Set(injectableParamNames);
+
+		let domainServiceContext: DomainServiceContext | undefined;
+		if (isDomainService(schema, entry.name)) {
+			const primaryAggregate = getPrimaryWriteAggregate(schema, entry.name);
+			if (primaryAggregate) {
+				domainServiceContext = {
+					action: getDomainServiceAction(entry.name, primaryAggregate),
+					primaryAggregate,
+				};
+			}
+		}
+
+		const route = buildRoute(
+			entry.name,
+			op,
+			basePath,
+			injectableParamNames,
+			domainServiceContext,
+		);
+		const pathParameters = route.pathParams;
+		const visibleParameters = Object.entries(op.input).filter(
+			([name]) => !injectableNames.has(name),
+		);
+		const nonPathParameters = visibleParameters.filter(
+			([name]) => !pathParameters.includes(name),
+		);
+		const needsBody =
+			route.method !== "GET" &&
+			route.method !== "DELETE" &&
+			nonPathParameters.length > 0;
+		if (needsBody) return true;
+	}
+	return false;
+};
+
+export interface ClientFactoryResult {
+	readonly code: string;
+	readonly needsJsonHeaders: boolean;
+}
+
 export const generateClientFactory = (
 	operations: readonly QualifiedEntry<OperationDef>[],
 	schema: DomainSchema,
 	basePath: string,
 	hasAuth: boolean,
 	authEntityName?: string,
-): string => {
+): ClientFactoryResult => {
 	const methods = operations.map((entry) =>
 		generateMethodImplementation(entry, schema, basePath, hasAuth),
 	);
+
+	const needsJsonHeaders =
+		authEntityName !== undefined ||
+		operationsNeedJsonHeaders(operations, schema, basePath);
 
 	// Add login method if password auth is detected
 	if (authEntityName) {
@@ -49,16 +105,21 @@ export const generateClientFactory = (
 		);
 	}
 
-	return `/**
+	const formatDestructure = needsJsonHeaders ? ", format" : "";
+
+	return {
+		code: `/**
  * Create a typed HTTP client.
  */
 export const createClient = (config: ClientConfig): Client => {
-	const { baseUrl${hasAuth ? ", token" : ""}, format } = config;
+	const { baseUrl${hasAuth ? ", token" : ""}${formatDestructure} } = config;
 
 	return {
 ${methods.join(",\n\n")}
 	};
-};`;
+};`,
+		needsJsonHeaders,
+	};
 };
 
 /**
@@ -133,10 +194,18 @@ const generateMethodImplementation = (
 		nonPathParameters.length > 0;
 
 	if (needsQueryString) {
-		const queryParamNames = nonPathParameters.map(([name]) => name);
+		const querySetLines = nonPathParameters.map(([name, paramDef]) => {
+			const isOptional = paramDef.optional === true;
+			const isString =
+				paramDef.type.kind === "primitive" && paramDef.type.name === "string";
+			const valueExpr = isString ? `params.${name}` : `String(params.${name})`;
+			return isOptional
+				? `if (params.${name} !== undefined) url.searchParams.set("${name}", ${valueExpr});`
+				: `url.searchParams.set("${name}", ${valueExpr});`;
+		});
 		urlExpr = `(() => {
 			const url = new URL(${urlExpr});
-			${queryParamNames.map((name) => `if (params.${name} !== undefined) url.searchParams.set("${name}", String(params.${name}));`).join("\n\t\t\t")}
+			${querySetLines.join("\n\t\t\t")}
 			return url.toString();
 		})()`;
 	}
@@ -158,15 +227,15 @@ const generateMethodImplementation = (
 	}
 
 	// Build request init properties
-	const initProps: string[] = [`method: "${route.method}"`];
-	if (headersExpr) initProps.push(`headers: ${headersExpr}`);
+	const initProperties: string[] = [`method: "${route.method}"`];
+	if (headersExpr) initProperties.push(`headers: ${headersExpr}`);
 	if (needsBody) {
 		const bodyParameters = nonPathParameters.map(([name]) => name);
 		const allParamsAreBody = bodyParameters.length === visibleParameters.length;
-		const bodyStr = allParamsAreBody
+		const bodyString = allParamsAreBody
 			? "params"
 			: `{ ${bodyParameters.map((p) => `${p}: params.${p}`).join(", ")} }`;
-		initProps.push(`body: JSON.stringify(${bodyStr})`);
+		initProperties.push(`body: JSON.stringify(${bodyString})`);
 	}
 
 	const outputType = typeRefToTypeScript(op.output);
@@ -174,7 +243,7 @@ const generateMethodImplementation = (
 	return indent(
 		`${entry.name}: (${paramSignature}) =>
 	request<${outputType}>(${urlExpr}, {
-		${initProps.join(",\n\t\t")},
+		${initProperties.join(",\n\t\t")},
 	})`,
 		2,
 	);
