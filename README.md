@@ -83,17 +83,19 @@ From this, Morph generates:
 
 | Package | What it produces |
 |---------|-----------------|
-| `dsl` | Branded IDs, Effect schemas, operation descriptors |
-| `core` | Handler interfaces, repository ports, dependency injection layers |
-| `api` | REST routes, OpenAPI spec, SSE event streams, auth middleware |
-| `cli` | Interactive REPL and one-off commands |
-| `mcp` | MCP server exposing operations as LLM tools |
-| `ui` | Server-rendered web UI (Pico CSS) |
-| `vscode` | VS Code extension with DSL language support |
-| `client` | Type-safe HTTP client library |
-| `cli-client` | CLI that calls the API instead of running locally |
-| `proto` | Protocol buffer definitions |
-| `verification` | SMT-LIB2 formal verification of invariants (Z3) |
+| [dsl](contexts/generation/targets/dsl/README.md) | Branded IDs, Effect schemas, operation descriptors |
+| [core](contexts/generation/targets/core/README.md) | Handler interfaces, repository ports, dependency injection layers |
+| [api](contexts/generation/targets/api/README.md) | REST routes, OpenAPI spec, SSE event streams, auth middleware |
+| [cli](contexts/generation/targets/cli/README.md) | Interactive REPL and one-off commands |
+| [mcp](contexts/generation/targets/mcp/README.md) | MCP server exposing operations as LLM tools |
+| [ui](contexts/generation/targets/ui/README.md) | Server-rendered web UI (Pico CSS) |
+| [vscode](contexts/generation/targets/vscode/README.md) | VS Code extension with DSL language support |
+| [client](contexts/generation/targets/client/README.md) | Type-safe HTTP client library |
+| [cli-client](contexts/generation/targets/cli-client/README.md) | CLI that calls the API instead of running locally |
+| [proto](contexts/generation/targets/proto/README.md) | Protocol buffer definitions |
+| [verification](contexts/generation/targets/verification/README.md) | SMT-LIB2 formal verification of invariants (Z3) |
+| [monorepo](contexts/generation/targets/monorepo/README.md) | Root configs, Procfile, workspace setup |
+| [impls](contexts/generation/targets/impls/README.md) | Handler scaffolds — the only generated files you edit |
 
 You write only the handler implementations — the business logic. Everything else is derived.
 
@@ -109,7 +111,7 @@ Morph is built on [Lawvere's functorial semantics](https://en.wikipedia.org/wiki
 | Natural transformations | App packages | API routes, CLI commands, MCP tools — structural adapters |
 | Equations | Invariants + scenarios | Property tests, formal verification, BDD scenarios |
 
-Scenarios run against multiple targets (@core, @api, @cli). If core passes but API fails, the natural transformation has a bug — the diagram doesn't commute.
+Scenarios run against multiple targets (@core, @api, @cli). If core passes but API fails, the natural transformation has a bug — the diagram doesn't commute. See the [testing architecture](contexts/generation/testing/README.md) for details.
 
 Morph generates its own CLI, MCP server, and VS Code extension from [`schema.morph`](schema.morph). See [Algebraic Foundations](docs/algebraic-foundations.md) for the full treatment.
 
