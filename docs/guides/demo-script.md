@@ -5,7 +5,7 @@ A guided demo of morph's algebraic foundations, building a real app from a domai
 **Duration:** ~60 minutes
 **Prerequisites:** Morph repo with `bun install` done, Claude Code ready, VS Code with Mermaid preview
 
-**See also:** [Algebraic Foundations](./algebraic-foundations.md) for the conceptual diagram
+**See also:** [Algebraic Foundations](../concepts/algebraic-foundations.md) for the conceptual diagram
 
 ---
 

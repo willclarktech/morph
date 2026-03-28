@@ -6,7 +6,7 @@ A formal schema format for the domain algebra, enabling structural derivation of
 
 This formalizes the **domain language itself** as an algebra with multiple interpreters (pure library, CLI, API, MCP).
 
-**Category theory framing** (see [Algebraic Foundations](./algebraic-foundations.md)):
+**Category theory framing** (see [Algebraic Foundations](../concepts/algebraic-foundations.md)):
 
 - **Theory T** = domain schema (sorts + operations + equations)
 - **Free algebra** F_dsl = DSL (initial object, operations as data)
@@ -38,13 +38,13 @@ interface DomainSchema {
 }
 ```
 
-The `profiles` field maps profile names to arrays of tag strings. In the `.morph` DSL, profiles are defined in a `profiles {}` block and referenced with `#name` on operations (see [DSL Reference](./dsl-reference.md#profiles)).
+The `profiles` field maps profile names to arrays of tag strings. In the `.morph` DSL, profiles are defined in a `profiles {}` block and referenced with `#name` on operations (see [DSL Reference](../guides/dsl-reference.md#profiles)).
 
 ---
 
 ## Extensions (Infrastructure Configuration)
 
-The `extensions` field declares which infrastructure extensions a project uses. See [Extensions](./extensions.md) for runtime config and available backends.
+The `extensions` field declares which infrastructure extensions a project uses. See [Extensions](../concepts/extensions.md) for runtime config and available backends.
 
 ```typescript
 interface ExtensionsDef {

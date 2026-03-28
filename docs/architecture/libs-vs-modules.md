@@ -166,5 +166,5 @@ Create generation infrastructure (under `contexts/generation/`) when:
 
 ## Related Documentation
 
-- [Architecture Overview](../architecture.md) - High-level morph architecture
-- [Domain Schema](../domain-schema.md) - Schema definition format
+- [Architecture Overview](./overview.md) - High-level morph architecture
+- [Domain Schema](./domain-schema.md) - Schema definition format

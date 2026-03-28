@@ -203,6 +203,6 @@ Each example lives in `examples/fixtures/<name>/schema.morph` (source) and `exam
 Reference docs:
 
 - **[DSL Reference](./dsl-reference.md)** — Full `.morph` syntax (invariants, events, relationships, generics)
-- **[Extensions](./extensions.md)** — Configure auth, event stores, i18n
-- **[Architecture](./architecture.md)** — Understand how generation works
-- **[Testing Philosophy](./testing-philosophy.md)** — Scenarios as algebraic laws
+- **[Extensions](../concepts/extensions.md)** — Configure auth, event stores, i18n
+- **[Architecture](../architecture/overview.md)** — Understand how generation works
+- **[Testing Philosophy](../testing/testing-philosophy.md)** — Scenarios as algebraic laws

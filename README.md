@@ -128,7 +128,7 @@ Morph is built on [Lawvere's functorial semantics](https://en.wikipedia.org/wiki
 
 Scenarios run against multiple targets (@core, @api, @cli). If core passes but API fails, the natural transformation has a bug — the diagram doesn't commute. See the [testing architecture](contexts/generation/testing/README.md) for details.
 
-Morph generates its own CLI, MCP server, and VS Code extension from [`schema.morph`](schema.morph). See [Algebraic Foundations](docs/algebraic-foundations.md) for the full treatment.
+Morph generates its own CLI, MCP server, and VS Code extension from [`schema.morph`](schema.morph). See [Algebraic Foundations](docs/concepts/algebraic-foundations.md) for the full treatment.
 
 ## Examples
 
@@ -158,7 +158,7 @@ Extensions are declared in the schema and selected at runtime via environment va
 - **Events**: memory, jsonfile, redis
 - **i18n**: configurable language list with base language
 
-See [Extensions](docs/extensions.md) for details.
+See [Extensions](docs/concepts/extensions.md) for details.
 
 ## Project structure
 
@@ -196,7 +196,7 @@ bun run --filter @morph/mcp start             # MCP server
 cd apps/vscode && bun run build               # VS Code extension
 ```
 
-See [Getting Started](docs/getting-started.md) for the full walkthrough.
+See [Getting Started](docs/guides/getting-started.md) for the full walkthrough.
 
 ## Status
 
@@ -211,44 +211,44 @@ No backward compatibility guarantees. Breaking changes happen freely.
 ## Documentation
 
 ### Getting Started
-- **[Getting Started](docs/getting-started.md)** — Write a schema, generate a project, run it
-- **[DSL Reference](docs/dsl-reference.md)** — Full `.morph` syntax
-- **[Demo Script](docs/demo-script.md)** — Live demo walkthrough
+- **[Getting Started](docs/guides/getting-started.md)** — Write a schema, generate a project, run it
+- **[DSL Reference](docs/guides/dsl-reference.md)** — Full `.morph` syntax
+- **[Demo Script](docs/guides/demo-script.md)** — Live demo walkthrough
 
 ### Concepts
-- **[Algebraic Foundations](docs/algebraic-foundations.md)** — Functorial semantics model
-- **[CQRS](docs/cqrs.md)** — Command/query separation
-- **[Domain Events](docs/domain-events.md)** — Event sourcing and subscribers
-- **[Extensions](docs/extensions.md)** — Storage, auth, codec, events
-- **[Transformation Domains](docs/transformation-domains.md)** — Non-CRUD pure-function schemas
-- **[Modeling by Example](docs/modeling-by-example.md)** — Example-driven schema design
-- **[Features and Bugs](docs/features-and-bugs.md)** — Defining correctness
+- **[Algebraic Foundations](docs/concepts/algebraic-foundations.md)** — Functorial semantics model
+- **[CQRS](docs/concepts/cqrs.md)** — Command/query separation
+- **[Domain Events](docs/concepts/domain-events.md)** — Event sourcing and subscribers
+- **[Extensions](docs/concepts/extensions.md)** — Storage, auth, codec, events
+- **[Transformation Domains](docs/concepts/transformation-domains.md)** — Non-CRUD pure-function schemas
+- **[Modeling by Example](docs/concepts/modeling-by-example.md)** — Example-driven schema design
+- **[Features and Bugs](docs/concepts/features-and-bugs.md)** — Defining correctness
 
 ### Architecture
-- **[Monorepo Architecture](docs/architecture.md)** — Workspace structure and packages
-- **[Source Tour](docs/tour.md)** — Guided walkthrough of key source files
-- **[Contexts Structure](docs/contexts-structure.md)** — Context-centric package organization
+- **[Monorepo Architecture](docs/architecture/overview.md)** — Workspace structure and packages
+- **[Source Tour](docs/architecture/tour.md)** — Guided walkthrough of key source files
+- **[Contexts Structure](docs/architecture/contexts-structure.md)** — Context-centric package organization
 - **[Libs vs Contexts](docs/architecture/libs-vs-modules.md)** — When to use each
-- **[Domain Schema](docs/domain-schema.md)** — Canonical intermediate representation
-- **[Domain Model](docs/domain-model.md)** — Visual documentation from schema
-- **[12-Factor Conformance](docs/12-factor.md)** — Generated apps follow 12-factor
+- **[Domain Schema](docs/architecture/domain-schema.md)** — Canonical intermediate representation
+- **[Domain Model](docs/architecture/domain-model.md)** — Visual documentation from schema
+- **[12-Factor Conformance](docs/architecture/12-factor.md)** — Generated apps follow 12-factor
 
 ### Design
-- **[Design Decisions](docs/design-decisions.md)** — Settled decisions with rationale
+- **[Design Decisions](docs/design/design-decisions.md)** — Settled decisions with rationale
 - **[Authorization](docs/design/authorization.md)** — Auth as domain invariants
 - **[Execution Context](docs/design/context.md)** — How context flows
 - **[Schema Model](docs/design/schema-model.md)** — Schema model design
-- **[UI Authentication](docs/ui-auth.md)** — Auth in generated web UIs
-- **[Prose Design](docs/prose-design.md)** — Human-readable BDD templates
+- **[UI Authentication](docs/design/ui-auth.md)** — Auth in generated web UIs
+- **[Prose Design](docs/design/prose-design.md)** — Human-readable BDD templates
 
 ### Testing & Verification
-- **[Testing Philosophy](docs/testing-philosophy.md)** — Scenarios as algebraic laws
-- **[Formal Verification](docs/formal-verification.md)** — SMT-LIB2 invariant checking
-- **[Manual Test Plan](docs/manual-test-plan.md)** — Verification procedures
+- **[Testing Philosophy](docs/testing/testing-philosophy.md)** — Scenarios as algebraic laws
+- **[Formal Verification](docs/testing/formal-verification.md)** — SMT-LIB2 invariant checking
+- **[Manual Test Plan](docs/testing/manual-test-plan.md)** — Verification procedures
 
 ### Project History
-- **[Discovery](docs/discovery.md)** — Founding document
-- **[Dogfooding Learnings](docs/dogfooding-learnings.md)** — Insights from self-hosting
+- **[Discovery](docs/history/discovery.md)** — Founding document
+- **[Dogfooding Learnings](docs/history/dogfooding-learnings.md)** — Insights from self-hosting
 
 ## Contributing
 

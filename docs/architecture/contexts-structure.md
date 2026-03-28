@@ -223,6 +223,6 @@ During `bun run generate:examples`:
 
 ## Related Documentation
 
-- [Libs vs Contexts Architecture](./architecture/libs-vs-modules.md) - When to use libs vs contexts
+- [Libs vs Contexts Architecture](./libs-vs-modules.md) - When to use libs vs contexts
 - [Domain Schema](./domain-schema.md) - Schema definition format
-- [Architecture Overview](./architecture.md) - High-level morph architecture
+- [Architecture Overview](./overview.md) - High-level morph architecture

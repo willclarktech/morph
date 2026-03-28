@@ -25,7 +25,7 @@ The typical contribution loop:
 3. Implement handlers in `contexts/generation/impls/` or `contexts/schema-dsl/impls/`
 4. Verify: `bun run build:check && bun run lint:fix && bun run format:fix && bun run test`
 
-See [Dogfooding Learnings](docs/dogfooding-learnings.md) for background on what can and can't be generated.
+See [Dogfooding Learnings](docs/history/dogfooding-learnings.md) for background on what can and can't be generated.
 
 ## Key commands
 
@@ -119,7 +119,7 @@ Run all tests: `bun run test`
 
 ## Further reading
 
-- **[Source Tour](docs/tour.md)** — Guided walkthrough of key source files, from schema to generated output
-- **[Dogfooding Learnings](docs/dogfooding-learnings.md)** — Insights and constraints from self-hosting
-- **[Architecture](docs/architecture.md)** — Monorepo structure and package organization
+- **[Source Tour](docs/architecture/tour.md)** — Guided walkthrough of key source files, from schema to generated output
+- **[Dogfooding Learnings](docs/history/dogfooding-learnings.md)** — Insights and constraints from self-hosting
+- **[Architecture](docs/architecture/overview.md)** — Monorepo structure and package organization
 - **[CLAUDE.md](CLAUDE.md)** — Coding conventions, programming principles, tooling preferences

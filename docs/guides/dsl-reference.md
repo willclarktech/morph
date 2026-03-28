@@ -41,7 +41,7 @@ extensions {
 }
 ```
 
-Each line declares an extension type with available options and a default. The `base` keyword is used for i18n's base language. The `eventsourced` storage backend derives entity state from the event store (see [Domain Events](./domain-events.md#event-sourcing)).
+Each line declares an extension type with available options and a default. The `base` keyword is used for i18n's base language. The `eventsourced` storage backend derives entity state from the event store (see [Domain Events](../concepts/domain-events.md#event-sourcing)).
 
 ## Profiles
 

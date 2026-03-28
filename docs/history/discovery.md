@@ -8,7 +8,7 @@ Morph is a schema-driven code generation framework. Given a domain schema, it ge
 
 **Solution:** Define the domain once in a formal schema, then derive everything structurally.
 
-**Category Theory Framing** (see [Algebraic Foundations](./algebraic-foundations.md)):
+**Category Theory Framing** (see [Algebraic Foundations](../concepts/algebraic-foundations.md)):
 
 - **Theory T** = DomainSchema (sorts + operations + equations)
 - **Algebras** = enriched functors T → Eff (DSL, core, API, CLI, MCP)
@@ -16,11 +16,11 @@ Morph is a schema-driven code generation framework. Given a domain schema, it ge
 
 ## Discovery Artifacts
 
-> **Note:** These are founding documents from the initial design phase. They capture the original vision and domain model that guided early development. The current implementation has evolved significantly — refer to the [DSL Reference](./dsl-reference.md) and [Domain Schema](./domain-schema.md) for current specifications.
+> **Note:** These are founding documents from the initial design phase. They capture the original vision and domain model that guided early development. The current implementation has evolved significantly — refer to the [DSL Reference](../guides/dsl-reference.md) and [Domain Schema](../architecture/domain-schema.md) for current specifications.
 
-- [Domain Model](./artifacts/discovery/domain-model.md) — Ubiquitous language, entities, bounded contexts
-- [Personas](./artifacts/discovery/personas.md) — Sam, Taylor, Morgan, Jordan
-- [Examples](./artifacts/discovery/examples.md) — Concrete Given/When/Then scenarios
+- [Domain Model](../artifacts/discovery/domain-model.md) — Ubiquitous language, entities, bounded contexts
+- [Personas](../artifacts/discovery/personas.md) — Sam, Taylor, Morgan, Jordan
+- [Examples](../artifacts/discovery/examples.md) — Concrete Given/When/Then scenarios
 
 ## Package Dependency Graph
 

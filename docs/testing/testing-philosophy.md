@@ -18,7 +18,7 @@ Similarly, Gherkin scenarios define what it means to correctly implement the dom
 | Step definition | How to verify the law for a specific interpretation | Component of natural transformation η applied to equation |
 | Passing tests   | Evidence that the interpretation satisfies the laws | η preserves equations (naturality holds)                  |
 
-See [Algebraic Foundations](./algebraic-foundations.md) for the full functorial semantics model.
+See [Algebraic Foundations](../concepts/algebraic-foundations.md) for the full functorial semantics model.
 
 ### Same Scenarios, Different Step Definitions
 
@@ -156,7 +156,7 @@ Functions have:
 - **No execution context** — functions don't depend on `R` (environment), so there's nothing to swap between interpretations
 - **Identical behavior everywhere** — the same pure computation in every interpretation, so running scenarios against @core vs @api vs @cli would just repeat the same test
 
-Since scenarios are equations in theory T (see [Algebraic Foundations](./algebraic-foundations.md): "functions — Pure morphisms (no state, no effects)"), and functions don't participate in the stateful theory, scenarios add no verification value.
+Since scenarios are equations in theory T (see [Algebraic Foundations](../concepts/algebraic-foundations.md): "functions — Pure morphisms (no state, no effects)"), and functions don't participate in the stateful theory, scenarios add no verification value.
 
 Pure functions are better tested with:
 

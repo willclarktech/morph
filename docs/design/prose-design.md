@@ -37,7 +37,7 @@ The operation algebra defines **what** can happen. Prose defines **how we talk a
 
 ## Algebraic Role
 
-In the categorical model (see [algebraic-foundations.md](algebraic-foundations.md)), the schema defines a free algebra F_dsl — the initial object in the category of T-algebras. Every concrete interpretation (handlers, API routes, CLI commands, tests) is a unique homomorphism from F_dsl.
+In the categorical model (see [algebraic-foundations.md](../concepts/algebraic-foundations.md)), the schema defines a free algebra F_dsl — the initial object in the category of T-algebras. Every concrete interpretation (handlers, API routes, CLI commands, tests) is a unique homomorphism from F_dsl.
 
 Prose is one such interpretation: a projection from F_dsl to natural language. Initiality guarantees that a mechanical projection **exists** — you can always derive `"{actor} calls {opName} with {params}"`. But initiality says nothing about the **quality** of that projection. Hand-written prose is a semantically rich interpretation that preserves domain meaning where a mechanical one would lose it.
 
