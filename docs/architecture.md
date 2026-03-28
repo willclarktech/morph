@@ -43,14 +43,26 @@ Reusable infrastructure that generated projects opt into via the `extensions` fi
 
 ```
 extensions/
-├── auth-password/           # Password hashing (dsl + impls)
-├── auth-jwt/                # JWT auth (dsl + impls)
-├── auth-session/            # Session auth (dsl + impls)
+├── auth/                    # Auth interface
 ├── auth-apikey/             # API key auth (dsl + impls)
-├── storage-memory/          # In-memory storage (dsl + impls)
+├── auth-jwt/                # JWT auth (dsl + impls)
+├── auth-none/               # No-op auth (dsl + impls)
+├── auth-password/           # Password hashing (dsl + impls)
+├── auth-session/            # Session auth (dsl + impls)
+├── codec/                   # Codec interface
+├── codec-json/              # JSON codec (dsl + impls)
+├── codec-protobuf/          # Protobuf codec (dsl + impls)
+├── codec-yaml/              # YAML codec (dsl + impls)
+├── eventstore/              # Event store interface
+├── eventstore-jsonfile/     # JSON file event store (dsl + impls)
+├── eventstore-memory/       # In-memory event store (dsl + impls)
+├── eventstore-redis/        # Redis event store (dsl + impls)
+├── storage/                 # Storage interface
+├── storage-eventsourced/    # Event-sourced storage (dsl + impls)
 ├── storage-jsonfile/        # JSON file storage (dsl + impls)
-├── storage-sqlite/          # SQLite storage (dsl + impls)
-└── storage-redis/           # Redis storage (dsl + impls)
+├── storage-memory/          # In-memory storage (dsl + impls)
+├── storage-redis/           # Redis storage (dsl + impls)
+└── storage-sqlite/          # SQLite storage (dsl + impls)
 ```
 
 ## Key Packages
@@ -81,7 +93,14 @@ The root `package.json` defines workspace globs:
 {
   "workspaces": [
     "config/*",
-    "contexts/generation/*",
+    "contexts/generation/dsl",
+    "contexts/generation/core",
+    "contexts/generation/impls",
+    "contexts/generation/utils",
+    "contexts/generation/plugin",
+    "contexts/generation/domain-schema",
+    "contexts/generation/operation",
+    "contexts/generation/http-client",
     "contexts/generation/builders/*",
     "contexts/generation/generators/*",
     "contexts/generation/testing/*",
@@ -91,10 +110,18 @@ The root `package.json` defines workspace globs:
     "contexts/generation/targets/*/property-runner",
     "extensions/*/dsl",
     "extensions/*/impls",
+    "examples/*/config/*",
     "examples/*/contexts/*/dsl",
     "examples/*/contexts/*/core",
+    "examples/*/libs/*",
     "examples/*/apps/*",
     "examples/*/tests/*",
+    "contexts/schema-dsl/dsl",
+    "contexts/schema-dsl/core",
+    "contexts/schema-dsl/impls",
+    "contexts/schema-dsl/parser",
+    "contexts/schema-dsl/compiler",
+    "contexts/schema-dsl/decompiler",
     "apps/*",
     "libs/*",
     "tests/*"

@@ -133,7 +133,7 @@ Morph is an auto-generation framework — operations, generators, schema DSL.
 Shared:
 - **config/** - ESLint and TypeScript configs
 - `TODO.md` - Backlog at root
-- `ARCHITECTURE.md` - Monorepo structure at root
+- `docs/architecture.md` - Monorepo structure
 - `docs/` - Morph documentation (DSL reference, domain schema, architecture, extensions, testing philosophy, 12-factor, design decisions)
 
 ## Scripts
@@ -146,7 +146,7 @@ bun run lint              # Lint all packages
 bun run lint:fix          # Fix lint issues
 bun run format            # Check formatting
 bun run format:fix        # Fix formatting
-bun generate:examples     # Regenerate example apps from schemas
+bun run generate:examples # Regenerate example apps from schemas
 ```
 
 **Full verification after significant changes:**
