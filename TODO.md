@@ -22,7 +22,7 @@
 | Task | Effort | Notes |
 |------|--------|-------|
 | Package metadata for publishing | M | Add license, description, repository fields to publishable packages. Remove `"private": true` from packages intended for npm |
-| Formal verification for invariants | L | Generate formal proofs that invariants hold, complementing probabilistic property-based testing with fast-check |
+| ~~Formal verification for invariants~~ | ~~L~~ | ~~Generate formal proofs that invariants hold~~ — DONE: `@morph/generator-verification` + `@morph/plugin-verification` |
 
 ## Post-MVP
 

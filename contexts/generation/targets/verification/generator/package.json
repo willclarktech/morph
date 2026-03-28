@@ -1,0 +1,26 @@
+{
+	"name": "@morph/generator-verification",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix .",
+		"test": "bun test"
+	},
+	"dependencies": {
+		"@morph/domain-schema": "*",
+		"@morph/utils": "*"
+	},
+	"devDependencies": {
+		"@morph/eslint-config": "*",
+		"@morph/tsconfig": "*",
+		"eslint": "^9.39.0"
+	}
+}

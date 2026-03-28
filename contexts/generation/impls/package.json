@@ -25,6 +25,7 @@
 		"@morph/plugin-monorepo-root": "workspace:*",
 		"@morph/plugin-proto": "workspace:*",
 		"@morph/plugin-ui": "workspace:*",
+		"@morph/plugin-verification": "workspace:*",
 		"@morph/plugin-vscode": "workspace:*",
 		"@morph/schema-dsl-parser": "workspace:*",
 		"@morph/schema-dsl-compiler": "workspace:*",

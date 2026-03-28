@@ -19,6 +19,7 @@ import { mcpPlugin } from "@morph/plugin-mcp";
 import { monorepoRootPlugin } from "@morph/plugin-monorepo-root";
 import { protoPlugin } from "@morph/plugin-proto";
 import { uiPlugin } from "@morph/plugin-ui";
+import { verificationPlugin } from "@morph/plugin-verification";
 import { vsCodePlugin } from "@morph/plugin-vscode";
 import { Context, Effect as E, Layer } from "effect";
 
@@ -55,6 +56,7 @@ const plugins = [
 	uiPlugin,
 	vsCodePlugin,
 	monorepoRootPlugin,
+	verificationPlugin,
 ];
 
 export const executeGenerate = (
