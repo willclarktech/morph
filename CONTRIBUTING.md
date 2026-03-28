@@ -1,6 +1,6 @@
 # Contributing to Morph
 
-Practical guide to working on the Morph codebase.
+Morph dogfoods itself — its own CLI, MCP server, and VS Code extension are generated from [`schema.morph`](schema.morph). Most contribution workflows start with editing that root schema and regenerating.
 
 ## Prerequisites
 
@@ -14,23 +14,18 @@ bun install
 bun run build:check   # verify the build works
 ```
 
-## Worktree workflow
+## The dogfooding model
 
-All non-trivial work happens in worktrees to keep `main` clean:
+Morph's root `schema.morph` defines two contexts — `generation` (the code generation operations) and `schema-dsl` (the parser and language services). Running `bun run regenerate:morph` produces Morph's own DSL types, core handlers, CLI, MCP server, and VS Code extension from this schema.
 
-```sh
-bun run worktree:new <feature-name>     # creates .worktrees/<name>/ on branch worktree/<name>
-cd .worktrees/<feature-name>            # work entirely here
-# ... make changes, commit frequently ...
-bun run build:check                     # verify before landing
-```
+The typical contribution loop:
 
-To land work, from the main worktree:
+1. Edit `schema.morph` (add operations, types, contexts)
+2. Regenerate: `bun run regenerate:morph`
+3. Implement handlers in `contexts/generation/impls/` or `contexts/schema-dsl/impls/`
+4. Verify: `bun run build:check && bun run lint:fix && bun run format:fix && bun run test`
 
-```sh
-git merge --ff-only worktree/<feature-name>
-bun run worktree:remove <feature-name>
-```
+See [Dogfooding Learnings](docs/dogfooding-learnings.md) for background on what can and can't be generated.
 
 ## Key commands
 
@@ -46,10 +41,31 @@ bun run worktree:remove <feature-name>
 Full verification after significant changes:
 
 ```sh
-bun install && bun run regenerate:morph && bun run regenerate:morph && bun run generate:examples && bun run test
+bun run regenerate:morph && bun run regenerate:morph && bun run generate:examples && bun run format:fix && bun run lint:fix && bun run build:check && bun run test && bun install
 ```
 
-Regenerate twice to confirm idempotency.
+Regenerate twice to confirm idempotency. The final `bun install` ensures the workspace is consistent after any generated package.json changes.
+
+## Generated vs hand-written
+
+Most code in this repo is generated. Do not edit generated code — fix the generator or schema instead.
+
+**Generated (do not edit):**
+- `examples/` — regenerate with `bun run generate:examples`
+- `contexts/generation/{dsl,core}/` — regenerate with `bun run regenerate:morph`
+- `contexts/schema-dsl/{dsl,core}/` — regenerate with `bun run regenerate:morph`
+- `apps/cli/`, `apps/mcp/`, `apps/vscode/` — generated app scaffolds
+- `tests/scenarios/` — generated test scenarios
+- `extensions/*/dsl/` — generated extension types
+
+**Hand-written:**
+- `schema.morph` — the root schema that drives everything
+- `contexts/generation/impls/` — Morph's own operation implementations
+- `contexts/schema-dsl/impls/` — DSL parser and language service implementations
+- `contexts/schema-dsl/parser/`, `compiler/`, `decompiler/` — DSL toolchain
+- `extensions/*/impls/` — extension backend implementations
+- `extensions/auth-password/` — password hashing library
+- `examples/fixtures/*/impls/` — example app business logic
 
 ## How to add a generation target
 
@@ -101,24 +117,9 @@ Morph uses several testing strategies:
 
 Run all tests: `bun run test`
 
-## Generated vs hand-written
-
-Most code in this repo is generated. Do not edit generated code — fix the generator instead.
-
-**Generated (do not edit):**
-- `examples/` — regenerate with `bun run generate:examples`
-- `contexts/generation/*/` (except `impls/`) — regenerate with `bun run regenerate:morph`
-- `apps/cli/`, `apps/mcp/`, `apps/vscode/` — generated app scaffolds
-- `tests/scenarios/` — generated test scenarios
-
-**Hand-written:**
-- `contexts/generation/impls/` — Morph's own operation implementations
-- `examples/fixtures/*/impls/` — example app business logic
-- `extensions/auth-password/` — password hashing library
-- `extensions/*/impls/` — extension backend implementations
-
 ## Further reading
 
 - **[Source Tour](docs/tour.md)** — Guided walkthrough of key source files, from schema to generated output
+- **[Dogfooding Learnings](docs/dogfooding-learnings.md)** — Insights and constraints from self-hosting
 - **[Architecture](docs/architecture.md)** — Monorepo structure and package organization
 - **[CLAUDE.md](CLAUDE.md)** — Coding conventions, programming principles, tooling preferences
