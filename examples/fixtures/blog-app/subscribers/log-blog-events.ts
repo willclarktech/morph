@@ -18,14 +18,14 @@ export const LogBlogEventsSubscriberLive = Layer.succeed(
 						);
 						break;
 					}
+					case "PostDeleted": {
+						yield* Effect.logDebug(`Post deleted`);
+						break;
+					}
 					case "PostPublished": {
 						yield* Effect.logDebug(
 							`Post published: ${event.result.id}`,
 						);
-						break;
-					}
-					case "PostDeleted": {
-						yield* Effect.logDebug(`Post deleted`);
 						break;
 					}
 				}

@@ -31,10 +31,10 @@ export const EditPostHandlerLive = Layer.effect(
 
 					const updated = {
 						...post,
-						...(options.title !== undefined ? { title: options.title } : {}),
-						...(options.content !== undefined
-							? { content: options.content }
-							: {}),
+						...(options.title === undefined ? {} : { title: options.title }),
+						...(options.content === undefined
+							? {}
+							: { content: options.content }),
 					};
 
 					yield* postRepo

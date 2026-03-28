@@ -40,10 +40,10 @@ export const ${function_.name}Page = (result?: unknown, error?: string): string 
 			${formFields}
 			<button type="submit">\${t("function.execute")}</button>
 		</form>
-		\${result !== undefined ? \`<section>
+		\${result === undefined ? "" : \`<section>
 			<h3>\${t("function.result")}</h3>
 			${generateResultDisplay(function_.def.output)}
-		</section>\` : ""}
+		</section>\`}
 	</article>\`,
 	nav("/functions/${toKebabCase(function_.name)}")${sseOptions},
 );`;

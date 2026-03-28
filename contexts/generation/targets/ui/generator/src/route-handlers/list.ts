@@ -32,7 +32,7 @@ export const generateListRoutes = (
 				}
 				const client = createClientForRequest(request);
 				try {
-					const items = await Effect.runPromise(client.${op.name}${callArguments}) as readonly ${entityName}[];
+					const items = await Effect.runPromise(client.${op.name}${callArguments});
 					return html(list${entityName}Page(items));
 				} catch (error) {
 					const message = error instanceof Error ? error.message : t("error.loadFailed", { entity: t("entity.${entityName.toLowerCase()}.plural").toLowerCase() });
@@ -50,7 +50,7 @@ export const generateListRoutes = (
 			handler: `async (request: Request) => {
 				initLanguage(request);
 				try {
-					const items = await Effect.runPromise(client.${op.name}${callArguments}) as readonly ${entityName}[];
+					const items = await Effect.runPromise(client.${op.name}${callArguments});
 					return html(list${entityName}Page(items));
 				} catch (error) {
 					const message = error instanceof Error ? error.message : t("error.loadFailed", { entity: t("entity.${entityName.toLowerCase()}.plural").toLowerCase() });

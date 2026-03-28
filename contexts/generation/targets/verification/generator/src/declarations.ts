@@ -1,5 +1,7 @@
 import type { EntityDef, TypeRef } from "@morph/domain-schema";
 
+import type { SmtCollector } from "./smt-compiler";
+
 const COLLECTION_BOUND = 5;
 
 export const typeRefToSmtSort = (typeRef: TypeRef): string => {
@@ -120,3 +122,22 @@ export const declareFunction = (
 	paramSorts: readonly string[],
 	returnSort: string,
 ): string => `(declare-fun ${name} (${paramSorts.join(" ")}) ${returnSort})`;
+
+export const renderCollectorDeclarations = (
+	collector: SmtCollector,
+): string => {
+	const lines: string[] = [];
+	for (const [id, sort] of collector.contextIds) {
+		lines.push(`(declare-const ${id} ${sort})`);
+	}
+	for (const [id, sort] of collector.inputIds) {
+		lines.push(`(declare-const ${id} ${sort})`);
+	}
+	for (const [id, sort] of collector.literalIds) {
+		lines.push(`(declare-const ${id} ${sort})`);
+	}
+	for (const [base, bound] of collector.collectionBounds) {
+		lines.push(`(assert (and (>= ${base}_len 0) (<= ${base}_len ${bound})))`);
+	}
+	return lines.join("\n");
+};

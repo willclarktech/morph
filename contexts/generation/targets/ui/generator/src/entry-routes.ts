@@ -64,6 +64,7 @@ export const buildEntryRoutes = (
 	// Collect route handlers by path (to merge methods on same path)
 	const routesByPath = new Map<string, RouteHandler[]>();
 	const entitiesNeedingIdImport = new Set<string>();
+	const entitiesNeedingTypeImport = new Set<string>();
 	const hasEntities = entityOps.size > 0;
 	const pageImports: string[] = hasEntities
 		? ["homePage", "errorAlert"]
@@ -120,6 +121,7 @@ export const buildEntryRoutes = (
 				}
 				case "edit": {
 					entitiesNeedingIdImport.add(entityName);
+					entitiesNeedingTypeImport.add(entityName);
 					pageImports.push(`edit${entityName}Page`);
 					addRoutes(`/${pluralName}/:id/edit`, generateEditRoutes(context));
 					break;
@@ -194,10 +196,10 @@ export const buildEntryRoutes = (
 		},`);
 	}
 
-	// Type imports from DSL (entity names for type casts + IDs for :id routes)
+	// Type imports from DSL (IDs for :id routes + entity names only for edit catch fallbacks)
 	const typeImportsSet = new Set([
 		...[...entitiesNeedingIdImport].map((entityName) => `${entityName}Id`),
-		...entityOps.keys(),
+		...entitiesNeedingTypeImport,
 	]);
 
 	const typeImports = [...typeImportsSet];

@@ -38,7 +38,9 @@ const generatedIgnoreConfig: Linter.Config = {
 
 const generatedRuleOverridesConfig: Linter.Config = {
 	rules: {
+		"@typescript-eslint/no-unnecessary-condition": "off",
 		"@typescript-eslint/require-await": "off",
+		"unicorn/no-useless-spread": "off",
 	},
 };
 

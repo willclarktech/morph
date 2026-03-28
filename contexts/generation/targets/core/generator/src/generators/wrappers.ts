@@ -20,9 +20,7 @@ const generateInvariantCall = (inv: InvariantDef): string => {
 };
 
 const generateEventBlock = (eventName: string): string => stripIndent`
-	/* eslint-disable @typescript-eslint/no-unnecessary-condition -- defensive check for generic result type */
 	const aggregateId${eventName} = typeof result === "object" && result !== null && "id" in (result as Record<string, unknown>) ? String((result as Record<string, unknown>)["id"]) : "";
-	/* eslint-enable @typescript-eslint/no-unnecessary-condition */
 	const version${eventName} = aggregateId${eventName} ? (yield* eventStore.getByAggregateId(aggregateId${eventName})).length + 1 : 1;
 	const event${eventName} = {
 		_tag: "${eventName}",
@@ -167,9 +165,7 @@ export const generateExecuteWithEvents = (
 	const eventBlocks = eventNames
 		.map(
 			(eventName) => stripIndent`
-			/* eslint-disable @typescript-eslint/no-unnecessary-condition -- defensive check for generic result type */
 	const aggregateId${eventName} = typeof result === "object" && result !== null && "id" in (result as Record<string, unknown>) ? String((result as Record<string, unknown>)["id"]) : "";
-			/* eslint-enable @typescript-eslint/no-unnecessary-condition */
 			const version${eventName} = aggregateId${eventName} ? (yield* eventStore.getByAggregateId(aggregateId${eventName})).length + 1 : 1;
 			const event${eventName} = {
 				_tag: "${eventName}",

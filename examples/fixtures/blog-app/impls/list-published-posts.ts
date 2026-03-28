@@ -14,7 +14,7 @@ export const ListPublishedPostsHandlerLive = Layer.effect(
 			handle: () =>
 				Effect.gen(function* () {
 					const result = yield* postRepo.findAll().pipe(Effect.orDie);
-					return [...result.items.filter((post) => post.status === "published")];
+					return result.items.filter((post) => post.status === "published");
 				}),
 		};
 	}),

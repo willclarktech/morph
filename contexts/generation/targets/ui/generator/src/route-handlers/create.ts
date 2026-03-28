@@ -48,7 +48,7 @@ export const generateCreateRoutes = (
 				const formData = await request.formData();
 				const params = Object.fromEntries(formData) as unknown as Parameters<typeof client.${op.name}>[0];
 				try {
-					const result = await Effect.runPromise(client.${op.name}(params)) as ${entityName};
+					const result = await Effect.runPromise(client.${op.name}(params));
 					// Return view page with HX-Push-Url for SPA navigation (preserves SSE connection)
 					return new Response(view${entityName}Page(result), {
 						status: 200,
@@ -83,7 +83,7 @@ export const generateCreateRoutes = (
 				const formData = await request.formData();
 				const params = Object.fromEntries(formData) as unknown as Parameters<typeof client.${op.name}>[0];
 				try {
-					const result = await Effect.runPromise(client.${op.name}(params)) as ${entityName};
+					const result = await Effect.runPromise(client.${op.name}(params));
 					// Return view page with HX-Push-Url for SPA navigation (preserves SSE connection)
 					return new Response(view${entityName}Page(result), {
 						status: 200,

@@ -5,8 +5,10 @@ import { describe, expect, test } from "bun:test";
 import {
 	declareCollectionBound,
 	declareEntityFields,
+	renderCollectorDeclarations,
 	typeRefToSmtSort,
 } from "./declarations";
+import { createSmtCollector } from "./smt-compiler";
 
 describe("typeRefToSmtSort", () => {
 	test("integer → Int", () => {
@@ -179,5 +181,27 @@ describe("declareCollectionBound", () => {
 		expect(lines).toContain("(declare-const items_1 Int)");
 		expect(lines).toContain("(declare-const items_2 Int)");
 		expect(lines).toHaveLength(5);
+	});
+});
+
+describe("renderCollectorDeclarations", () => {
+	test("renders context, input, literal, and collection bound declarations", () => {
+		const collector = createSmtCollector();
+		collector.contextIds.set("ctx_currentUser_id", "StringId");
+		collector.inputIds.set("input_userId", "StringId");
+		collector.literalIds.set("|str_admin|", "StringId");
+		collector.collectionBounds.set("ctx_users", 5);
+		const result = renderCollectorDeclarations(collector);
+		expect(result).toContain("(declare-const ctx_currentUser_id StringId)");
+		expect(result).toContain("(declare-const input_userId StringId)");
+		expect(result).toContain("(declare-const |str_admin| StringId)");
+		expect(result).toContain(
+			"(assert (and (>= ctx_users_len 0) (<= ctx_users_len 5)))",
+		);
+	});
+
+	test("returns empty string for empty collector", () => {
+		const collector = createSmtCollector();
+		expect(renderCollectorDeclarations(collector)).toBe("");
 	});
 });

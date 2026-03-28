@@ -105,7 +105,7 @@ ${registryEntries.join("\n")}
 /**
  * Available storage backend names.
  */
-export const availableStorages = Object.keys(registry)${hasEventsourced ? '.concat("eventsourced")' : ""};
+export const availableStorages = ${hasEventsourced ? '[...Object.keys(registry), "eventsourced"]' : "Object.keys(registry)"};
 
 /**
  * Get a storage layer by name.

@@ -31,7 +31,7 @@ export const generateDetailRoutes = (
 				const client = createClientForRequest(request);
 				const id = request.params.id as ${idType};
 				try {
-					const item = await Effect.runPromise(client.${op.name}({ ${entityName.toLowerCase()}Id: id })) as ${entityName};
+					const item = await Effect.runPromise(client.${op.name}({ ${entityName.toLowerCase()}Id: id }));
 					return html(view${entityName}Page(item));
 				} catch (error) {
 					const message = error instanceof Error ? error.message : t("error.notFound", { entity: t("entity.${entityName.toLowerCase()}.singular") });
@@ -50,7 +50,7 @@ export const generateDetailRoutes = (
 				initLanguage(request);
 				const id = request.params.id as ${idType};
 				try {
-					const item = await Effect.runPromise(client.${op.name}({ ${entityName.toLowerCase()}Id: id })) as ${entityName};
+					const item = await Effect.runPromise(client.${op.name}({ ${entityName.toLowerCase()}Id: id }));
 					return html(view${entityName}Page(item));
 				} catch (error) {
 					const message = error instanceof Error ? error.message : t("error.notFound", { entity: t("entity.${entityName.toLowerCase()}.singular") });

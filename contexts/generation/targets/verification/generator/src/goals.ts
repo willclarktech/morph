@@ -7,8 +7,12 @@ import {
 	getOperationPreInvariantDefs,
 } from "@morph/domain-schema";
 
-import { declareEntityFields, declareUninterpretedSorts } from "./declarations";
-import { compileSmtCondition } from "./smt-compiler";
+import {
+	declareEntityFields,
+	declareUninterpretedSorts,
+	renderCollectorDeclarations,
+} from "./declarations";
+import { compileSmtCondition, createSmtCollector } from "./smt-compiler";
 
 const smtHeader = (logic: string): string =>
 	`(set-logic ${logic})\n${declareUninterpretedSorts()}`;
@@ -46,21 +50,28 @@ export const generateConsistencyCheck = (
 		const invariants = getEntityInvariants(schema, entityName);
 		const entityVariable = entityName.toLowerCase();
 
-		lines.push(`; --- Entity: ${entityName} ---`);
-		lines.push("(push 1)");
-		lines.push(`(echo "consistency:${entityName}")`);
-		lines.push(declareEntityFields(entityName, entity, entityVariable));
-		lines.push("");
+		const collector = createSmtCollector();
+		const assertionLines: string[] = [];
 
 		for (const inv of invariants) {
-			lines.push(`; Invariant: ${inv.name} — ${inv.description}`);
+			assertionLines.push(`; Invariant: ${inv.name} — ${inv.description}`);
 			const compiled = compileSmtCondition(
 				inv.condition,
 				entityVariable,
 				"ctx",
+				collector,
 			);
-			lines.push(`(assert ${compiled})`);
+			assertionLines.push(`(assert ${compiled})`);
 		}
+
+		lines.push(`; --- Entity: ${entityName} ---`);
+		lines.push("(push 1)");
+		lines.push(`(echo "consistency:${entityName}")`);
+		lines.push(declareEntityFields(entityName, entity, entityVariable));
+		const collectorDecls = renderCollectorDeclarations(collector);
+		if (collectorDecls) lines.push(collectorDecls);
+		lines.push("");
+		lines.push(...assertionLines);
 
 		lines.push("");
 		lines.push("(check-sat)");
@@ -92,6 +103,22 @@ export const generateSatisfiabilityCheck = (
 		const contextDef = schema.contexts[op.context];
 		if (!contextDef) continue;
 
+		const collector = createSmtCollector();
+		const assertionLines: string[] = [];
+
+		for (const inv of preInvariants) {
+			assertionLines.push(`; Pre-invariant: ${inv.name}`);
+			const entityVariable =
+				inv.scope.kind === "entity" ? inv.scope.entity.toLowerCase() : "entity";
+			const compiled = compileSmtCondition(
+				inv.condition,
+				entityVariable,
+				"ctx",
+				collector,
+			);
+			assertionLines.push(`(assert ${compiled})`);
+		}
+
 		lines.push(`; --- Operation: ${op.name} ---`);
 		lines.push("(push 1)");
 		lines.push(`(echo "satisfiability:${op.name}")`);
@@ -100,19 +127,11 @@ export const generateSatisfiabilityCheck = (
 			const entityVariable = entityName.toLowerCase();
 			lines.push(declareEntityFields(entityName, entity, entityVariable));
 		}
+		const collectorDecls = renderCollectorDeclarations(collector);
+		if (collectorDecls) lines.push(collectorDecls);
 		lines.push("");
 
-		for (const inv of preInvariants) {
-			lines.push(`; Pre-invariant: ${inv.name}`);
-			const entityVariable =
-				inv.scope.kind === "entity" ? inv.scope.entity.toLowerCase() : "entity";
-			const compiled = compileSmtCondition(
-				inv.condition,
-				entityVariable,
-				"ctx",
-			);
-			lines.push(`(assert ${compiled})`);
-		}
+		lines.push(...assertionLines);
 
 		lines.push("");
 		lines.push("(check-sat)");
@@ -161,18 +180,13 @@ export const generatePreservationCheck = (
 
 			const entityVariable = entityName.toLowerCase();
 			const postEntityVariable = `${entityVariable}_post`;
+			const postMapping = { [entityVariable]: postEntityVariable };
 
-			lines.push("(push 1)");
-			lines.push(`(echo "preservation:${op.name}:${entityName}")`);
-
-			lines.push(`; Pre-state for ${entityName}`);
-			lines.push(declareEntityFields(entityName, entity, entityVariable));
-			lines.push(`; Post-state for ${entityName}`);
-			lines.push(declareEntityFields(entityName, entity, postEntityVariable));
-			lines.push("");
+			const collector = createSmtCollector();
+			const assertionLines: string[] = [];
 
 			for (const inv of preInvariants) {
-				lines.push(`; Assert pre-invariant: ${inv.name}`);
+				assertionLines.push(`; Assert pre-invariant: ${inv.name}`);
 				const preEntityVariable =
 					inv.scope.kind === "entity"
 						? inv.scope.entity.toLowerCase()
@@ -181,30 +195,52 @@ export const generatePreservationCheck = (
 					inv.condition,
 					preEntityVariable,
 					"ctx",
+					collector,
 				);
-				lines.push(`(assert ${compiled})`);
+				assertionLines.push(`(assert ${compiled})`);
 			}
 
 			for (const inv of postInvariants) {
-				lines.push(`; Assert post-invariant: ${inv.name}`);
+				assertionLines.push(`; Assert post-invariant: ${inv.name}`);
 				const compiled = compileSmtCondition(
 					inv.condition,
-					postEntityVariable,
+					entityVariable,
 					"ctx",
+					collector,
+					postMapping,
 				);
-				lines.push(`(assert ${compiled})`);
+				assertionLines.push(`(assert ${compiled})`);
 			}
 
-			lines.push("");
-			lines.push(`; Negate entity invariant — unsat means preserved`);
+			assertionLines.push("");
+			assertionLines.push(`; Negate entity invariant — unsat means preserved`);
 			const entityInvariantParts = entityInvariants.map((inv) =>
-				compileSmtCondition(inv.condition, postEntityVariable, "ctx"),
+				compileSmtCondition(
+					inv.condition,
+					entityVariable,
+					"ctx",
+					collector,
+					postMapping,
+				),
 			);
 			const combined =
 				entityInvariantParts.length === 1
 					? (entityInvariantParts[0] ?? "true")
 					: `(and ${entityInvariantParts.join(" ")})`;
-			lines.push(`(assert (not ${combined}))`);
+			assertionLines.push(`(assert (not ${combined}))`);
+
+			lines.push("(push 1)");
+			lines.push(`(echo "preservation:${op.name}:${entityName}")`);
+
+			lines.push(`; Pre-state for ${entityName}`);
+			lines.push(declareEntityFields(entityName, entity, entityVariable));
+			lines.push(`; Post-state for ${entityName}`);
+			lines.push(declareEntityFields(entityName, entity, postEntityVariable));
+			const collectorDecls = renderCollectorDeclarations(collector);
+			if (collectorDecls) lines.push(collectorDecls);
+			lines.push("");
+
+			lines.push(...assertionLines);
 
 			lines.push("");
 			lines.push("(check-sat)");

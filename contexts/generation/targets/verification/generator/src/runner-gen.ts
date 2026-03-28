@@ -7,11 +7,14 @@ export const generateRunner = (
 	content: generateRunnerContent(smt2Files),
 });
 
+const stripVerificationPrefix = (path: string): string =>
+	path.replace("tests/verification/", "");
+
 const generateRunnerContent = (smt2Files: readonly string[]): string => {
 	const fileChecks = smt2Files
 		.map(
 			(f) =>
-				`\t{ file: "${f}", name: "${f.replace("tests/verification/src/checks/", "").replace(".smt2", "")}" },`,
+				`\t{ file: "${stripVerificationPrefix(f)}", name: "${f.replace("tests/verification/src/checks/", "").replace(".smt2", "")}" },`,
 		)
 		.join("\n");
 
@@ -49,6 +52,10 @@ const parseResults = (
 \t\t}
 
 \t\tconst trimmed = line.trim();
+\t\tif (trimmed.startsWith("(error")) {
+\t\t\tresults.push({ name: currentLabel, file: checkName, status: "error", details: \`Z3 error: \${trimmed}\` });
+\t\t\tcontinue;
+\t\t}
 \t\tif (trimmed === "sat" || trimmed === "unsat" || trimmed === "unknown" || trimmed === "timeout") {
 \t\t\tconst expected = getExpected(checkName, currentLabel);
 \t\t\tconst pass = trimmed === expected;

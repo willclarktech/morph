@@ -198,6 +198,7 @@ describe("generateConsistencyCheck", () => {
 		expect(content).toContain('(echo "consistency:Todo")');
 		expect(content).toContain("(declare-const todo_title StringId)");
 		expect(content).toContain("(declare-const todo_priority Int)");
+		expect(content).toContain("(declare-const |str_| StringId)");
 		expect(content).toContain("(assert (distinct todo_title |str_|))");
 		expect(content).toContain("(assert (> todo_priority 0))");
 		expect(content).toContain("(check-sat)");
@@ -221,6 +222,8 @@ describe("generateSatisfiabilityCheck", () => {
 		const content = result!.content;
 		expect(content).toContain("(set-logic QF_UFLIA)");
 		expect(content).toContain('(echo "satisfiability:createTodo")');
+		expect(content).toContain("(declare-const input_title StringId)");
+		expect(content).toContain("(declare-const |str_| StringId)");
 		expect(content).toContain("(assert (distinct input_title |str_|))");
 		expect(content).toContain("(check-sat)");
 	});
@@ -245,8 +248,12 @@ describe("generatePreservationCheck", () => {
 		expect(content).toContain("(declare-const todo_title StringId)");
 		// Post-state declarations
 		expect(content).toContain("(declare-const todo_post_title StringId)");
-		// Negated entity invariant
-		expect(content).toContain("(assert (not");
+		// Post-invariant references post-state variables
+		expect(content).toContain("(assert (distinct todo_post_title |str_|))");
+		// Negated entity invariant references post-state
+		expect(content).toContain(
+			"(assert (not (distinct todo_post_title |str_|)))",
+		);
 		expect(content).toContain("(check-sat)");
 	});
 });

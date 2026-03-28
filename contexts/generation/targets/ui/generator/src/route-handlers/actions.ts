@@ -64,13 +64,13 @@ export const generateActionRoutes = (
 					const referer = request.headers.get("HX-Current-URL") ?? "";
 					const isFromList = referer.endsWith("/${pluralName}") || referer.endsWith("/${pluralName}/");
 					if (isFromList) {
-						const items = await Effect.runPromise(client.${listOp?.name ?? `list${pluralName.charAt(0).toUpperCase() + pluralName.slice(1)}`}({})) as readonly ${entityName}[];
+						const items = await Effect.runPromise(client.${listOp?.name ?? `list${pluralName.charAt(0).toUpperCase() + pluralName.slice(1)}`}({}));
 						return new Response(list${entityName}Page(items), {
 							status: 200,
 							headers: { "Content-Type": "text/html" },
 						});
 					} else {
-						const item = await Effect.runPromise(client.${getOp?.name ?? `get${entityName}`}({ ${entityName.toLowerCase()}Id: id })) as ${entityName};
+						const item = await Effect.runPromise(client.${getOp?.name ?? `get${entityName}`}({ ${entityName.toLowerCase()}Id: id }));
 						return new Response(view${entityName}Page(item), {
 							status: 200,
 							headers: { "Content-Type": "text/html" },
@@ -97,13 +97,13 @@ export const generateActionRoutes = (
 					const referer = request.headers.get("HX-Current-URL") ?? "";
 					const isFromList = referer.endsWith("/${pluralName}") || referer.endsWith("/${pluralName}/");
 					if (isFromList) {
-						const items = await Effect.runPromise(client.${listOp?.name ?? `list${pluralName.charAt(0).toUpperCase() + pluralName.slice(1)}`}({})) as readonly ${entityName}[];
+						const items = await Effect.runPromise(client.${listOp?.name ?? `list${pluralName.charAt(0).toUpperCase() + pluralName.slice(1)}`}({}));
 						return new Response(list${entityName}Page(items), {
 							status: 200,
 							headers: { "Content-Type": "text/html" },
 						});
 					} else {
-						const item = await Effect.runPromise(client.${getOp?.name ?? `get${entityName}`}({ ${entityName.toLowerCase()}Id: id })) as ${entityName};
+						const item = await Effect.runPromise(client.${getOp?.name ?? `get${entityName}`}({ ${entityName.toLowerCase()}Id: id }));
 						return new Response(view${entityName}Page(item), {
 							status: 200,
 							headers: { "Content-Type": "text/html" },

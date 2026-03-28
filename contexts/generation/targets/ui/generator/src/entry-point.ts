@@ -40,8 +40,7 @@ export const generateEntryPoint = (options: GenerateUiAppOptions): string => {
 		.replaceAll("`", "\\`")
 		.replaceAll("$", String.raw`\$`);
 
-	return `/* eslint-disable @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/restrict-plus-operands -- Effect.runPromise types cannot be resolved across HTTP client boundary */
-/**
+	return `/**
  * UI Server Entry Point
  *
  * Bun.serve() with HTMX routes. Uses the typed HTTP client

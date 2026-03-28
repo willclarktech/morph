@@ -79,7 +79,6 @@ export const validatorProperties = [];
 	arbitrary: ${entityName}Arbitrary,
 	contextArbitrary: ${contextArbitrary},
 	validatorName: "validate${name}",
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- generated from schema invariant
 	predicate: (${entityVariable}, ${predicateExpr.includes("context") ? "context" : "_context"}) => ${predicateExpr},
 });`;
 		} else {
@@ -95,7 +94,6 @@ export const validatorProperties = [];
 	validatorName: "validate${name}",
 	predicate: (currentUser) => {
 		const context = { currentUser };
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- generated from schema invariant
 		return ${predicateExpr};
 	},
 });`;

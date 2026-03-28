@@ -84,4 +84,5 @@
 | Task | Notes |
 |------|-------|
 | Formal verification for invariants | `@morph/generator-verification` + `@morph/plugin-verification` — compiles ConditionExpr AST to SMT-LIB2 for Z3 |
+| Fix SMT-LIB2 verification soundness | Fixed 6 bugs: missing context/input/literal declarations, broken exists/forAll substitution, preservation post-state variable resolution, Z3 error detection |
 | Fix UI postinstall browser install on CI | Removed postinstall from generated UI packages, Playwright browsers installed once in CI |

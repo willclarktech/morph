@@ -2,7 +2,11 @@ import type { ConditionExpr, ValueExpr } from "@morph/domain-schema";
 
 import { describe, expect, test } from "bun:test";
 
-import { compileSmtCondition, compileSmtValue } from "./smt-compiler";
+import {
+	compileSmtCondition,
+	compileSmtValue,
+	createSmtCollector,
+} from "./smt-compiler";
 
 describe("compileSmtValue", () => {
 	test("field with entity variable", () => {
@@ -307,5 +311,117 @@ describe("compileSmtCondition", () => {
 		expect(result).toStartWith("(or ");
 		expect(result).toContain("(and (>= todo_items_len 1) (= todo_items_0 0))");
 		expect(result).toContain("(and (>= todo_items_len 5) (= todo_items_4 0))");
+	});
+
+	test("exists with field access on bound variable does not corrupt other identifiers", () => {
+		const expr: ConditionExpr = {
+			kind: "exists",
+			collection: { kind: "field", path: "users" },
+			variable: "user",
+			condition: {
+				kind: "equals",
+				left: { kind: "field", path: "user.id" },
+				right: { kind: "field", path: "todo.userId" },
+			},
+		};
+		const result = compileSmtCondition(expr, "todo", "ctx");
+		expect(result).toContain("(= ctx_users_0_id todo_userId)");
+		expect(result).not.toContain("todo_ctx_users_0Id");
+	});
+
+	test("variable mapping resolves variable expressions", () => {
+		const expr: ConditionExpr = {
+			kind: "greaterThan",
+			left: { kind: "variable", name: "item" },
+			right: { kind: "literal", value: 0 },
+		};
+		const result = compileSmtCondition(expr, "todo", "ctx", undefined, {
+			item: "todo_items_0",
+		});
+		expect(result).toBe("(> todo_items_0 0)");
+	});
+
+	test("variable mapping resolves field paths", () => {
+		const expr: ConditionExpr = {
+			kind: "equals",
+			left: { kind: "field", path: "user.name" },
+			right: { kind: "literal", value: "test" },
+		};
+		const result = compileSmtCondition(expr, "todo", "ctx", undefined, {
+			user: "ctx_users_0",
+		});
+		expect(result).toBe("(= ctx_users_0_name |str_test|)");
+	});
+});
+
+describe("collector", () => {
+	test("collects context variable declarations", () => {
+		const collector = createSmtCollector();
+		const expr: ConditionExpr = {
+			kind: "equals",
+			left: { kind: "field", path: "context.currentUser.id" },
+			right: { kind: "field", path: "todo.userId" },
+		};
+		compileSmtCondition(expr, "todo", "ctx", collector);
+		expect(collector.contextIds.get("ctx_currentUser_id")).toBe("StringId");
+	});
+
+	test("collects input variable declarations", () => {
+		const collector = createSmtCollector();
+		const expr: ConditionExpr = {
+			kind: "equals",
+			left: { kind: "field", path: "input.userId" },
+			right: { kind: "field", path: "todo.userId" },
+		};
+		compileSmtCondition(expr, "todo", "ctx", collector);
+		expect(collector.inputIds.get("input_userId")).toBe("StringId");
+	});
+
+	test("collects string literal declarations", () => {
+		const collector = createSmtCollector();
+		const expr: ConditionExpr = {
+			kind: "notEquals",
+			left: { kind: "field", path: "todo.title" },
+			right: { kind: "literal", value: "" },
+		};
+		compileSmtCondition(expr, "todo", "ctx", collector);
+		expect(collector.literalIds.get("|str_|")).toBe("StringId");
+	});
+
+	test("collects context collection declarations from exists", () => {
+		const collector = createSmtCollector();
+		const expr: ConditionExpr = {
+			kind: "exists",
+			collection: { kind: "field", path: "users" },
+			variable: "user",
+			condition: {
+				kind: "equals",
+				left: { kind: "field", path: "user.id" },
+				right: { kind: "field", path: "todo.userId" },
+			},
+		};
+		compileSmtCondition(expr, "todo", "ctx", collector);
+		expect(collector.contextIds.get("ctx_users_len")).toBe("Int");
+		expect(collector.contextIds.get("ctx_users_0")).toBe("StringId");
+		expect(collector.contextIds.get("ctx_users_4")).toBe("StringId");
+		expect(collector.collectionBounds.get("ctx_users")).toBe(5);
+		expect(collector.contextIds.get("ctx_users_0_id")).toBe("StringId");
+	});
+
+	test("skips collection declarations for entity field arrays", () => {
+		const collector = createSmtCollector();
+		const expr: ConditionExpr = {
+			kind: "forAll",
+			collection: { kind: "field", path: "todo.items" },
+			variable: "item",
+			condition: {
+				kind: "greaterThan",
+				left: { kind: "variable", name: "item" },
+				right: { kind: "literal", value: 0 },
+			},
+		};
+		compileSmtCondition(expr, "todo", "ctx", collector);
+		expect(collector.contextIds.size).toBe(0);
+		expect(collector.collectionBounds.size).toBe(0);
 	});
 });

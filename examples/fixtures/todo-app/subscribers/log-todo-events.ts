@@ -12,12 +12,12 @@ export const LogTodoEventsSubscriberLive = Layer.succeed(
 				yield* Effect.logInfo(`[Audit] ${event._tag} at ${event.occurredAt}`);
 
 				switch (event._tag) {
-					case "TodoCreated": {
-						yield* Effect.logDebug(`Todo created: "${event.result.title}"`);
-						break;
-					}
 					case "TodoCompleted": {
 						yield* Effect.logDebug(`Todo completed: ${event.result.id}`);
+						break;
+					}
+					case "TodoCreated": {
+						yield* Effect.logDebug(`Todo created: "${event.result.title}"`);
 						break;
 					}
 					case "TodoDeleted": {
