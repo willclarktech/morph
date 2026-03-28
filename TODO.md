@@ -47,6 +47,7 @@
 | Native backend indexing | M | SQLite json_extract indexes, Redis secondary hashes. Less relevant if relational schema generation is done first |
 | Modular services (package-based) | M | Services as separate packages for reuse across generated apps |
 | UI visual regression testing | M | Playwright component tests, visual regression snapshots |
+| Client-side MCP generation | M | MCP server backed by HTTP client lib instead of direct operations. Lower priority — adds indirection (MCP → HTTP → API) with marginal benefit over server-side MCP |
 | Full Pico CSS variable support | M | Expand UiTheme to cover all 130+ Pico CSS variables |
 | UI config overrides | S | Custom labels, hidden columns, field order overrides in ui.config.ts |
 | Types-only generation mode | S | Generate types without parse/encode functions for lightweight consumers |
