@@ -36,6 +36,12 @@ const generatedIgnoreConfig: Linter.Config = {
 	ignores: ["cucumber.js", "steps/**"],
 };
 
+const generatedRuleOverridesConfig: Linter.Config = {
+	rules: {
+		"@typescript-eslint/require-await": "off",
+	},
+};
+
 const linterOptionsConfig: Linter.Config = {
 	linterOptions: {
 		reportUnusedDisableDirectives: "error",
@@ -277,6 +283,7 @@ export const configs: Record<Preset, ConfigArray> = {
 		jsFunctionalDisableTypeCheckedConfig,
 		jsDisableTypeCheckedConfig,
 		ruleOverridesConfig,
+		generatedRuleOverridesConfig,
 		testFileConfig,
 		schemaFileConfig,
 		effectConfig,

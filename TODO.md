@@ -22,7 +22,6 @@
 | Task | Effort | Notes |
 |------|--------|-------|
 | Package metadata for publishing | M | Add license, description, repository fields to publishable packages. Remove `"private": true` from packages intended for npm |
-| ~~Formal verification for invariants~~ | ~~L~~ | ~~Generate formal proofs that invariants hold~~ — DONE: `@morph/generator-verification` + `@morph/plugin-verification` |
 
 ## Post-MVP
 
@@ -84,4 +83,5 @@
 
 | Task | Notes |
 |------|-------|
+| Formal verification for invariants | `@morph/generator-verification` + `@morph/plugin-verification` — compiles ConditionExpr AST to SMT-LIB2 for Z3 |
 | Fix UI postinstall browser install on CI | Removed postinstall from generated UI packages, Playwright browsers installed once in CI |

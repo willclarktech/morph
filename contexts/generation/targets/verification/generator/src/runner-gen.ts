@@ -18,10 +18,10 @@ const generateRunnerContent = (smt2Files: readonly string[]): string => {
 	return `import { $ } from "bun";
 
 interface CheckResult {
-\tname: string;
-\tfile: string;
-\tstatus: "pass" | "fail" | "unknown" | "error";
-\tdetails: string;
+\treadonly name: string;
+\treadonly file: string;
+\treadonly status: "pass" | "fail" | "unknown" | "error";
+\treadonly details: string;
 }
 
 const checks = [
@@ -36,15 +36,15 @@ const getExpected = (checkName: string, _label: string): "sat" | "unsat" => {
 const parseResults = (
 \tcheckName: string,
 \toutput: string,
-): CheckResult[] => {
+): readonly CheckResult[] => {
 \tconst lines = output.split("\\n").filter((l) => l.trim().length > 0);
 \tconst results: CheckResult[] = [];
 \tlet currentLabel = checkName;
 
 \tfor (const line of lines) {
-\t\tconst echoMatch = line.match(/^"(.+)"$/);
-\t\tif (echoMatch) {
-\t\t\tcurrentLabel = echoMatch[1]!;
+\t\tconst echoMatch = /^"(.+)"$/.exec(line);
+\t\tif (echoMatch?.[1]) {
+\t\t\tcurrentLabel = echoMatch[1];
 \t\t\tcontinue;
 \t\t}
 
@@ -67,7 +67,7 @@ const parseResults = (
 \treturn results;
 };
 
-const run = async () => {
+const run = async (): Promise<void> => {
 \tconst allResults: CheckResult[] = [];
 \tlet hasFailure = false;
 
@@ -89,11 +89,11 @@ const run = async () => {
 \t\t}
 \t}
 
-\tconsole.log("\\n=== Formal Verification Results ===\\n");
+\tconsole.info("\\n=== Formal Verification Results ===\\n");
 
 \tfor (const r of allResults) {
 \t\tconst icon = r.status === "pass" ? "OK" : r.status === "fail" ? "FAIL" : "??";
-\t\tconsole.log(\`[\${icon}] \${r.name}: \${r.details}\`);
+\t\tconsole.info(\`[\${icon}] \${r.name}: \${r.details}\`);
 \t\tif (r.status === "fail" || r.status === "error") hasFailure = true;
 \t}
 
@@ -101,16 +101,18 @@ const run = async () => {
 \tconst failed = allResults.filter((r) => r.status === "fail" || r.status === "error").length;
 \tconst unknown = allResults.filter((r) => r.status === "unknown").length;
 
-\tconsole.log(\`\\n\${passed} passed, \${failed} failed, \${unknown} unknown\\n\`);
+\tconsole.info(\`\\n\${passed} passed, \${failed} failed, \${unknown} unknown\\n\`);
 
-\tif (hasFailure) process.exit(1);
+\tif (hasFailure) {
+\t\tthrow new Error("Formal verification failed");
+\t}
 };
 
-run();
+void run();
 `;
 };
 
 export const generateVerificationIndex = (): GeneratedFile => ({
 	filename: "tests/verification/src/index.ts",
-	content: `export { };\n`,
+	content: `export const VERIFICATION_VERSION = "0.0.0";\n`,
 });

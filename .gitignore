@@ -29,4 +29,9 @@ bun.lock
 # IDE
 .idea/
 .vscode/
+
+# Claude Code
+.claude/
+
+# Worktrees
 .worktrees/
