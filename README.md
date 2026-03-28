@@ -213,7 +213,7 @@ No backward compatibility guarantees. Breaking changes happen freely.
 - **[Getting Started](docs/getting-started.md)** — Write a schema, generate a project, run it
 - **[DSL Reference](docs/dsl-reference.md)** — Full `.morph` syntax
 - **[Algebraic Foundations](docs/algebraic-foundations.md)** — Functorial semantics model
-- **[Architecture](docs/architecture.md)** | **[Source Tour](docs/TOUR.md)** — How the codebase is organized
+- **[Architecture](docs/architecture.md)** | **[Source Tour](docs/tour.md)** — How the codebase is organized
 - **[Extensions](docs/extensions.md)** — Storage, auth, events, i18n
 - **[Testing Philosophy](docs/testing-philosophy.md)** — Scenarios as algebraic laws
 - **[Domain Events](docs/domain-events.md)** — Event sourcing and subscribers
