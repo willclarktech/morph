@@ -210,16 +210,49 @@ No backward compatibility guarantees. Breaking changes happen freely.
 
 ## Documentation
 
+### Getting Started
 - **[Getting Started](docs/getting-started.md)** — Write a schema, generate a project, run it
 - **[DSL Reference](docs/dsl-reference.md)** — Full `.morph` syntax
+- **[Demo Script](docs/demo-script.md)** — Live demo walkthrough
+
+### Concepts
 - **[Algebraic Foundations](docs/algebraic-foundations.md)** — Functorial semantics model
-- **[Architecture](docs/architecture.md)** | **[Source Tour](docs/tour.md)** — How the codebase is organized
-- **[Extensions](docs/extensions.md)** — Storage, auth, events, i18n
-- **[Testing Philosophy](docs/testing-philosophy.md)** — Scenarios as algebraic laws
+- **[CQRS](docs/cqrs.md)** — Command/query separation
 - **[Domain Events](docs/domain-events.md)** — Event sourcing and subscribers
+- **[Extensions](docs/extensions.md)** — Storage, auth, codec, events
+- **[Transformation Domains](docs/transformation-domains.md)** — Non-CRUD pure-function schemas
+- **[Modeling by Example](docs/modeling-by-example.md)** — Example-driven schema design
+- **[Features and Bugs](docs/features-and-bugs.md)** — Defining correctness
+
+### Architecture
+- **[Monorepo Architecture](docs/architecture.md)** — Workspace structure and packages
+- **[Source Tour](docs/tour.md)** — Guided walkthrough of key source files
+- **[Contexts Structure](docs/contexts-structure.md)** — Context-centric package organization
+- **[Libs vs Contexts](docs/architecture/libs-vs-modules.md)** — When to use each
+- **[Domain Schema](docs/domain-schema.md)** — Canonical intermediate representation
+- **[Domain Model](docs/domain-model.md)** — Visual documentation from schema
+- **[12-Factor Conformance](docs/12-factor.md)** — Generated apps follow 12-factor
+
+### Design
+- **[Design Decisions](docs/design-decisions.md)** — Settled decisions with rationale
+- **[Authorization](docs/design/authorization.md)** — Auth as domain invariants
+- **[Execution Context](docs/design/context.md)** — How context flows
+- **[Schema Model](docs/design/schema-model.md)** — Schema model design
+- **[UI Authentication](docs/ui-auth.md)** — Auth in generated web UIs
+- **[Prose Design](docs/prose-design.md)** — Human-readable BDD templates
+
+### Testing & Verification
+- **[Testing Philosophy](docs/testing-philosophy.md)** — Scenarios as algebraic laws
 - **[Formal Verification](docs/formal-verification.md)** — SMT-LIB2 invariant checking
-- **[Design Decisions](docs/design-decisions.md)** — Why things are the way they are
+- **[Manual Test Plan](docs/manual-test-plan.md)** — Verification procedures
+
+### Project History
 - **[Discovery](docs/discovery.md)** — Founding document
+- **[Dogfooding Learnings](docs/dogfooding-learnings.md)** — Insights from self-hosting
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contributor setup, worktree workflow, and guides for adding targets and extensions.
 
 ## Development
 
