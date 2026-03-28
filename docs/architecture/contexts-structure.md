@@ -121,39 +121,47 @@ A generated project follows this layout:
 
 ## Morph's Own Structure
 
-Morph dogfoods itself. Its schema defines a single context (`generation`) with 4 operations. Auth and storage are not contexts -- they are extensions that live in a separate directory.
+Morph dogfoods itself. Its schema defines two contexts: `generation` (code generation operations) and `schema-dsl` (schema parsing, compilation, and decompilation). Auth and storage are not contexts -- they are extensions that live in a separate directory.
 
 ```
 morph/
 ├── contexts/
-│   └── generation/              # The only morph context
-│       ├── dsl/                 # @morph/generation-dsl
-│       ├── core/                # @morph/generation-core
-│       ├── impls/               # Hand-written generation implementations
-│       │
-│       ├── targets/             # Generation targets
-│       │   ├── api/
-│       │   ├── cli/
-│       │   ├── mcp/
-│       │   ├── ui/
-│       │   ├── dsl/
-│       │   ├── core/
-│       │   ├── client/
-│       │   └── monorepo/
-│       │
-│       ├── builders/            # Code builders
-│       │   ├── app/
-│       │   ├── readme/
-│       │   ├── test/
-│       │   └── scaffold/
-│       │
-│       ├── generators/          # Cross-cutting generators
-│       │   ├── types/
-│       │   ├── openapi/
-│       │   ├── diagrams/
-│       │   └── ...
-│       │
-│       └── plugin/              # Plugin system
+│   ├── generation/              # Code generation context
+│   │   ├── dsl/                 # @morph/generation-dsl
+│   │   ├── core/                # @morph/generation-core
+│   │   ├── impls/               # Hand-written generation implementations
+│   │   │
+│   │   ├── targets/             # Generation targets
+│   │   │   ├── api/
+│   │   │   ├── cli/
+│   │   │   ├── mcp/
+│   │   │   ├── ui/
+│   │   │   ├── dsl/
+│   │   │   ├── core/
+│   │   │   ├── client/
+│   │   │   └── monorepo/
+│   │   │
+│   │   ├── builders/            # Code builders
+│   │   │   ├── app/
+│   │   │   ├── readme/
+│   │   │   ├── test/
+│   │   │   └── scaffold/
+│   │   │
+│   │   ├── generators/          # Cross-cutting generators
+│   │   │   ├── types/
+│   │   │   ├── openapi/
+│   │   │   ├── diagrams/
+│   │   │   └── ...
+│   │   │
+│   │   └── plugin/              # Plugin system
+│   │
+│   └── schema-dsl/              # Schema DSL context
+│       ├── dsl/                 # @morph/schema-dsl-dsl
+│       ├── core/                # @morph/schema-dsl-core
+│       ├── impls/               # Hand-written schema-dsl implementations
+│       ├── compiler/            # Schema compiler
+│       ├── decompiler/          # Schema decompiler
+│       └── parser/              # Schema parser
 │
 └── extensions/                  # Infrastructure extensions
     ├── auth-password/           # Password hashing
@@ -171,55 +179,9 @@ The `generation` context is special because it contains both:
 1. Generated packages (`dsl/`, `core/`) from morph's own schema
 2. Generation infrastructure (`targets/`, `builders/`, `generators/`, `plugin/`)
 
+The `schema-dsl` context handles parsing `.morph` schema files, compiling them to the internal representation, and decompiling back. It also contains generated packages (`dsl/`, `core/`) plus domain-specific tooling (`compiler/`, `decompiler/`, `parser/`).
+
 Extensions are not contexts -- they provide reusable infrastructure (auth providers, storage backends) that generated projects can opt into via the `extensions` field in their domain schema. Extension packages use `@morph/{name}-dsl` and `@morph/{name}-impls` naming (not `-core`).
-
-## Plugin Generation Flow
-
-Plugins generate code into context directories:
-
-1. **DSL Plugin** → `contexts/{context}/dsl/`
-2. **Core Plugin** → `contexts/{context}/core/`
-3. **API Plugin** → `apps/api/`
-4. **CLI Plugin** → `apps/cli/`
-5. **MCP Plugin** → `apps/mcp/`
-6. **UI Plugin** → `apps/ui/`
-7. **Client Plugin** → `libs/client/`
-
-## Fixture Workflow
-
-For examples and testing, fixtures provide hand-written implementations:
-
-```
-examples/fixtures/{name}/
-├── schema.morph             # Domain schema (.morph DSL format)
-├── impls/                   # Operation implementations
-│   ├── create-{entity}.ts
-│   └── ...
-├── dsl/                     # DSL fixtures
-│   └── prose.ts
-├── scenarios/               # Test scenarios
-│   └── scenarios.ts
-└── ui.config.ts             # UI configuration
-```
-
-During `bun run generate:examples`:
-1. Full project generated from schema
-2. Fixture files copied to appropriate locations
-3. `impls/*.ts` → `contexts/*/core/src/operations/*/impl.ts`
-
-## Package Naming Conventions
-
-| Type | Pattern | Example |
-|------|---------|---------|
-| DSL | `@{scope}/{context}-dsl` | `@todo-app/tasks-dsl` |
-| Core | `@{scope}/{context}-core` | `@todo-app/tasks-core` |
-| API | `@{scope}/api` | `@todo-app/api` |
-| CLI | `@{scope}/cli` | `@todo-app/cli` |
-| MCP | `@{scope}/mcp` | `@todo-app/mcp` |
-| UI | `@{scope}/ui` | `@todo-app/ui` |
-| Client | `@{scope}/client` | `@todo-app/client` |
-| Scenarios | `@{scope}/scenarios` | `@todo-app/scenarios` |
-| Properties | `@{scope}/properties` | `@todo-app/properties` |
 
 ## Related Documentation
 
