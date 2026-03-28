@@ -1,82 +1,214 @@
 # Morph
 
-Code generation from domain schemas
+Algebraic code generation from domain schemas.
 
-Parse, compile, and decompile .morph DSL files
+Software contains enormous amounts of mechanical duplication — types echoed across layers, routes that mirror operations, CLI commands that mirror routes, client methods that mirror endpoints. Morph treats this as a factorization problem. A `.morph` schema defines an algebraic theory; each generated package is a structure-preserving functor from that theory. If the core is correct, derived apps are correct by construction.
 
-## Quick Start
+In practice: write a schema once, generate branded types, Effect-based operations, a REST API, CLI, MCP server, VS Code extension, web UI, HTTP client, protocol buffers, property-based tests, and SMT-LIB2 formal verification. You implement only the business logic handlers.
 
-Install dependencies:
+## Example
 
-```bash
+A `.morph` file defines your domain:
+
+```morph
+domain Pastebin
+
+extensions {
+	storage [memory, jsonfile, sqlite, redis] default memory
+	auth [none, inmemory, test] default none
+}
+
+context pastes "Simple pastebin for sharing text snippets." {
+
+	@root
+	entity Paste "A text snippet shared via URL." {
+		content: string "The paste content"
+		createdAt: string "When the paste was created (ISO date)"
+		title: string "Optional title for the paste"
+	}
+
+	@cli @api @ui
+	command createPaste "Create a new paste."
+		writes Paste
+		input {
+			content: string "The paste content"
+			title?: string "Optional title"
+		}
+		output Paste
+		emits PasteCreated "Emitted when a new paste is created"
+
+	@cli @api @ui
+	command deletePaste "Delete a paste."
+		writes Paste
+		input {
+			pasteId: Paste.id "The paste to delete"
+		}
+		output boolean
+		emits PasteDeleted "Emitted when a paste is deleted"
+		errors {
+			PasteNotFound "The specified paste does not exist" when "pasteId is invalid"
+		}
+
+	@cli @api @ui
+	query getPaste "Get a paste by ID."
+		reads Paste
+		input {
+			pasteId: Paste.id "The paste to retrieve"
+		}
+		output Paste
+		errors {
+			PasteNotFound "The specified paste does not exist" when "pasteId is invalid"
+		}
+
+	@cli @api @ui
+	query listPastes "List all pastes."
+		reads Paste
+		input {}
+		output Paste[]
+
+	subscriber logPasteEvents "Log paste events for auditing"
+		on PasteCreated, PasteDeleted
+}
+```
+
+Key constructs:
+- **`domain`** — names the project, used for package scoping
+- **`extensions`** — declares infrastructure backends with selectable options
+- **`context`** — groups related entities and operations (bounded context)
+- **`@root entity`** — the aggregate root, gets a branded ID type and repository
+- **`@cli @api @ui`** — tags control which apps expose each operation
+- **`command`** / **`query`** — commands mutate state and emit events; queries are read-only
+
+From this, Morph generates:
+
+| Package | What it produces |
+|---------|-----------------|
+| `dsl` | Branded IDs, Effect schemas, operation descriptors |
+| `core` | Handler interfaces, repository ports, dependency injection layers |
+| `api` | REST routes, OpenAPI spec, SSE event streams, auth middleware |
+| `cli` | Interactive REPL and one-off commands |
+| `mcp` | MCP server exposing operations as LLM tools |
+| `ui` | Server-rendered web UI (Pico CSS) |
+| `vscode` | VS Code extension with DSL language support |
+| `client` | Type-safe HTTP client library |
+| `cli-client` | CLI that calls the API instead of running locally |
+| `proto` | Protocol buffer definitions |
+| `verification` | SMT-LIB2 formal verification of invariants (Z3) |
+
+You write only the handler implementations — the business logic. Everything else is derived.
+
+## How it works
+
+Morph is built on [Lawvere's functorial semantics](https://en.wikipedia.org/wiki/Lawvere_theory). A `.morph` schema defines a theory T (sorts = types, operations = morphisms, invariants = equations). Each generator is a functor T → **Eff** that preserves structure.
+
+| Algebraic concept | In Morph | What gets generated |
+|---|---|---|
+| Theory T | `.morph` schema | DomainSchema (canonical JSON) |
+| Free algebra | DSL package | Types, schemas, operation descriptors — pure data, no implementation choices |
+| Concrete algebra | Core package | Handlers, services, repositories — where business logic lives |
+| Natural transformations | App packages | API routes, CLI commands, MCP tools — structural adapters |
+| Equations | Invariants + scenarios | Property tests, formal verification, BDD scenarios |
+
+Scenarios run against multiple targets (@core, @api, @cli). If core passes but API fails, the natural transformation has a bug — the diagram doesn't commute.
+
+Morph generates its own CLI, MCP server, and VS Code extension from [`schema.morph`](schema.morph). See [Algebraic Foundations](docs/algebraic-foundations.md) for the full treatment.
+
+## Examples
+
+10 example projects from minimal to full-featured, each in `examples/fixtures/<name>/schema.morph`:
+
+| Example | What it demonstrates |
+|---------|---------------------|
+| `pastebin-app` | Minimal — single entity, no auth |
+| `cache-port` | Abstract ports, property-based contracts |
+| `type-gallery` | Generics, unions, aliases, pure functions |
+| `address-book` | Value objects, `@sensitive` fields |
+| `code-generator` | Transformation domain — no CRUD, pure functions |
+| `marketplace` | Multiple contexts, cross-context references, profiles |
+| `delivery-tracker` | Entity relationships, post conditions |
+| `blog-app` | Role-based auth, domain events, subscribers |
+| `ledger` | Event-sourced storage, event store queries |
+| `todo-app` | Full-featured — auth, invariants, events, i18n, all app targets |
+
+Regenerate all examples: `bun run generate:examples`
+
+## Extensions
+
+Extensions are declared in the schema and selected at runtime via environment variables.
+
+- **Storage**: memory, jsonfile, sqlite, redis, event-sourced
+- **Auth**: none, JWT, session, API key, password
+- **Events**: memory, jsonfile, redis
+- **i18n**: configurable language list with base language
+
+See [Extensions](docs/extensions.md) for details.
+
+## Project structure
+
+```
+morph/
+  contexts/
+    generation/        # Code generators, plugins, builders
+      targets/         # 13 generation targets (api, cli, core, dsl, ...)
+      builders/        # Shared scaffolding (package.json, Dockerfile, ...)
+      generators/      # Cross-cutting generators (types, schemas, routes, ...)
+    schema-dsl/        # .morph parser, compiler, decompiler
+  extensions/          # Pluggable backends (auth, storage, events)
+  examples/
+    fixtures/          # Source schemas + hand-written handler impls
+  apps/                # Morph's own CLI, MCP server, VS Code extension
+  docs/                # Documentation
+  scripts/             # Build and generation scripts
+```
+
+## Quick start
+
+Prerequisites: [Bun](https://bun.sh/) v1.0+
+
+```sh
 bun install
+bun run generate:examples
+cd examples/pastebin-app && bun run apps/api/src/index.ts
 ```
 
-Run the CLI:
+See [Getting Started](docs/getting-started.md) for the full walkthrough.
 
-```bash
-bun run --filter @Morph/cli start -- --help
+## Status
+
+Morph is pre-release (v0.0.0). Nothing has been published to npm.
+
+What works: DSL parser with error recovery, all 11 generation targets, 10 example apps, 5 storage backends, auth providers, property-based testing, formal verification via Z3.
+
+What's next: see [TODO.md](TODO.md).
+
+No backward compatibility guarantees. Breaking changes happen freely.
+
+## Documentation
+
+- **[Getting Started](docs/getting-started.md)** — Write a schema, generate a project, run it
+- **[DSL Reference](docs/dsl-reference.md)** — Full `.morph` syntax
+- **[Algebraic Foundations](docs/algebraic-foundations.md)** — Functorial semantics model
+- **[Architecture](docs/architecture.md)** | **[Source Tour](docs/TOUR.md)** — How the codebase is organized
+- **[Extensions](docs/extensions.md)** — Storage, auth, events, i18n
+- **[Testing Philosophy](docs/testing-philosophy.md)** — Scenarios as algebraic laws
+- **[Domain Events](docs/domain-events.md)** — Event sourcing and subscribers
+- **[Formal Verification](docs/formal-verification.md)** — SMT-LIB2 invariant checking
+- **[Design Decisions](docs/design-decisions.md)** — Why things are the way they are
+- **[Discovery](docs/discovery.md)** — Founding document
+
+## Development
+
+```sh
+bun run build:check       # Type check all packages
+bun run test              # Run all tests
+bun run lint:fix          # Fix lint issues
+bun run format:fix        # Fix formatting
 ```
 
-Start the MCP server:
+Full verification after significant changes:
 
-```bash
-bun run --filter @Morph/mcp start
+```sh
+bun install && bun run regenerate:morph && bun run regenerate:morph && bun run generate:examples && bun run test
 ```
 
-Build the extension:
-
-```bash
-cd apps/vscode && bun run build
-```
-
-Package as .vsix:
-
-```bash
-cd apps/vscode && bun run package
-```
-
-## Scripts
-
-Run from the monorepo root:
-
-```bash
-bun run build:check  # Type-check all packages
-bun run lint  # Lint all packages
-bun run lint:fix  # Fix lint issues
-bun run format  # Check formatting
-bun run format:fix  # Fix formatting
-bun run test  # Run all tests
-```
-
-## Project Structure
-
-```
-.
-├── config/
-│   ├── eslint/           # Shared ESLint config
-│   └── tsconfig/         # Shared TypeScript config
-├── libs/
-│   ├── proto           # Protobuf message definitions and field mappings
-├── apps/
-│   ├── cli             # CLI
-│   ├── mcp             # MCP server
-│   └── vscode          # VSCode extension
-├── tests/
-│   └── scenarios/        # Behavior scenarios (Given/When/Then)
-├── schema.json           # Domain schema + extensions
-└── package.json          # Monorepo root
-```
-
-## Configuration
-
-### Storage Backends
-
-The `extensions.storage` field in `schema.json` defines available storage backends. Set the `MORPH_STORAGE` environment variable to select one at runtime:
-
-```bash
-MORPH_STORAGE=memory    # In-memory (default, data lost on restart)
-MORPH_STORAGE=jsonfile  # JSON file persistence
-MORPH_STORAGE=sqlite    # SQLite database
-MORPH_STORAGE=redis     # Redis
-```
+Generated code (`examples/`, `apps/`, `contexts/generation/*/` except `impls/`) should never be edited directly — fix the generator instead.
