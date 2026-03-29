@@ -148,10 +148,13 @@ export const vsCodePlugin: GeneratorPlugin = {
 			if (f.filename.endsWith("eslint.config.ts")) {
 				files.push({
 					...f,
-					content: f.content.replace(
-						'ignores: ["**/*.template.ts"]',
-						'ignores: ["**/*.template.ts", "dist/**"]',
-					),
+					content: `import { configs } from "@${scope}/eslint-config";
+
+export default [
+\t{ ignores: ["**/*.template.ts", "dist/**"] },
+\t...configs.generated,
+];
+`,
 				});
 			} else {
 				files.push(f);
@@ -178,6 +181,11 @@ export const vsCodePlugin: GeneratorPlugin = {
 		files.push({
 			content: generateVsCodeIgnore(),
 			filename: `${packagePath}/.vscodeignore`,
+		});
+
+		files.push({
+			content: "dist\n",
+			filename: `${packagePath}/.prettierignore`,
 		});
 
 		return files;
