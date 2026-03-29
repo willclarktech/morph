@@ -861,11 +861,11 @@ export const compile = (ast: DomainAst): CompileResult => {
 	};
 
 	const METADATA_KEYS = new Set([
-		"license",
 		"author",
 		"description",
-		"repository",
+		"license",
 		"npmScope",
+		"repository",
 	]);
 	for (const entry of ast.metadata) {
 		if (METADATA_KEYS.has(entry.key)) {

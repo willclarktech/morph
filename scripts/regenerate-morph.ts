@@ -405,8 +405,8 @@ const fixVsCodeApp = async (): Promise<void> => {
  */
 const cliPackageDirectories = new Set(["apps/cli"]);
 const customEslintDirectories = new Set([
-	"contexts/schema-dsl/core",
 	"apps/vscode",
+	"contexts/schema-dsl/core",
 ]);
 
 const fixEslintConfigFiles = (): void => {

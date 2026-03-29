@@ -5,8 +5,9 @@ export interface AuthState<TUser> {
 	readonly ref: Ref.Ref<TUser | undefined>;
 }
 
-export const AuthState =
-	Context.GenericTag<AuthState<unknown>>("@morphdsl/AuthState");
+export const AuthState = Context.GenericTag<AuthState<unknown>>(
+	"@morphdsl/AuthState",
+);
 
 export const AuthStateInMemory: Layer.Layer<AuthState<unknown>> = Layer.effect(
 	AuthState,
