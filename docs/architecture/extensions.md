@@ -2,8 +2,6 @@
 
 Infrastructure concerns like storage backends and auth providers are configured via the `extensions` field in the domain schema.
 
-See [Domain Schema](../architecture/domain-schema.md) for the schema-level documentation.
-
 ## Extensions in the Domain Schema
 
 Declare extensions directly in `schema.json`:

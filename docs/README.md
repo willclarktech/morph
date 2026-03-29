@@ -11,18 +11,15 @@
 - [Algebraic Foundations](concepts/algebraic-foundations.md) — Lawvere's functorial semantics as morph's theoretical basis
 - [CQRS](concepts/cqrs.md) — Command/query separation in the domain schema
 - [Domain Events](concepts/domain-events.md) — Event system design and how it differs from operation replay
-- [Extensions](concepts/extensions.md) — Schema extensions for storage, auth, and infrastructure
+- [Extensions](architecture/extensions.md) — Schema extensions for storage, auth, and infrastructure
 - [Transformation Domains](concepts/transformation-domains.md) — Non-CRUD, transformation-centric schemas
 - [Modeling by Example](concepts/modeling-by-example.md) — Example-driven domain modeling
 - [Features and Bugs](concepts/features-and-bugs.md) — How morph defines features and bugs via DSL, invariants, and examples
 
 ## Architecture
 
-- [Overview](architecture/overview.md) — Monorepo architecture and code generation framework
 - [Source Tour](architecture/tour.md) — Guided walkthrough of key source files
 - [Contexts Structure](architecture/contexts-structure.md) — Context-centric package organization
-- [Libs vs Contexts](architecture/libs-vs-modules.md) — When to use `libs/` vs `contexts/`
-- [Domain Schema](architecture/domain-schema.md) — Formal schema format for the domain algebra
 - [Domain Model](domain-model.md) — Visual documentation generated from schema
 - [12-Factor](architecture/12-factor.md) — How generated apps follow 12-factor methodology
 

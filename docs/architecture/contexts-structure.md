@@ -183,8 +183,3 @@ The `schema-dsl` context handles parsing `.morph` schema files, compiling them t
 
 Extensions are not contexts -- they provide reusable infrastructure (auth providers, storage backends) that generated projects can opt into via the `extensions` field in their domain schema. Extension packages use `@morphdsl/{name}-dsl` and `@morphdsl/{name}-impls` naming (not `-core`).
 
-## Related Documentation
-
-- [Libs vs Contexts Architecture](./libs-vs-modules.md) - When to use libs vs contexts
-- [Domain Schema](./domain-schema.md) - Schema definition format
-- [Architecture Overview](./overview.md) - High-level morph architecture

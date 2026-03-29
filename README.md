@@ -158,7 +158,7 @@ Extensions are declared in the schema and selected at runtime via environment va
 - **Events**: memory, jsonfile, redis
 - **i18n**: configurable language list with base language
 
-See [Extensions](docs/concepts/extensions.md) for details.
+See [Extensions](docs/architecture/extensions.md) for details.
 
 ## Project structure
 
@@ -219,17 +219,14 @@ No backward compatibility guarantees. Breaking changes happen freely.
 - **[Algebraic Foundations](docs/concepts/algebraic-foundations.md)** — Functorial semantics model
 - **[CQRS](docs/concepts/cqrs.md)** — Command/query separation
 - **[Domain Events](docs/concepts/domain-events.md)** — Event sourcing and subscribers
-- **[Extensions](docs/concepts/extensions.md)** — Storage, auth, codec, events
+- **[Extensions](docs/architecture/extensions.md)** — Storage, auth, codec, events
 - **[Transformation Domains](docs/concepts/transformation-domains.md)** — Non-CRUD pure-function schemas
 - **[Modeling by Example](docs/concepts/modeling-by-example.md)** — Example-driven schema design
 - **[Features and Bugs](docs/concepts/features-and-bugs.md)** — Defining correctness
 
 ### Architecture
-- **[Monorepo Architecture](docs/architecture/overview.md)** — Workspace structure and packages
 - **[Source Tour](docs/architecture/tour.md)** — Guided walkthrough of key source files
 - **[Contexts Structure](docs/architecture/contexts-structure.md)** — Context-centric package organization
-- **[Libs vs Contexts](docs/architecture/libs-vs-modules.md)** — When to use each
-- **[Domain Schema](docs/architecture/domain-schema.md)** — Canonical intermediate representation
 - **[Domain Model](docs/domain-model.md)** — Visual documentation from schema
 - **[12-Factor Conformance](docs/architecture/12-factor.md)** — Generated apps follow 12-factor
 

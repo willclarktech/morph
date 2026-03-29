@@ -35,7 +35,6 @@
 		"contexts/schema-dsl/compiler",
 		"contexts/schema-dsl/decompiler",
 		"apps/*",
-		"libs/*",
 		"tests/*"
 	],
 	"scripts": {

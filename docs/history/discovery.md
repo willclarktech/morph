@@ -16,7 +16,7 @@ Morph is a schema-driven code generation framework. Given a domain schema, it ge
 
 ## Discovery Artifacts
 
-> **Note:** These are founding documents from the initial design phase. They capture the original vision and domain model that guided early development. The current implementation has evolved significantly — refer to the [DSL Reference](../guides/dsl-reference.md) and [Domain Schema](../architecture/domain-schema.md) for current specifications.
+> **Note:** These are founding documents from the initial design phase. They capture the original vision and domain model that guided early development. The current implementation has evolved significantly — refer to the [DSL Reference](../guides/dsl-reference.md) for current specifications.
 
 - [Domain Model](../artifacts/discovery/domain-model.md) — Ubiquitous language, entities, bounded contexts
 - [Personas](../artifacts/discovery/personas.md) — Sam, Taylor, Morgan, Jordan

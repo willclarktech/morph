@@ -83,5 +83,4 @@ Exception: `auth-password/` is a standalone hand-written library without the `ds
 
 ## Related Docs
 
-- [Extensions](../docs/concepts/extensions.md) — runtime behavior, environment variables, selection logic
-- [Architecture](../docs/architecture/overview.md) — where extensions fit in the monorepo
+- [Extensions](../docs/architecture/extensions.md) — runtime behavior, environment variables, selection logic
