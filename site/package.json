@@ -1,0 +1,31 @@
+{
+	"name": "@morphdsl/site",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "bun --hot src/dev.ts",
+		"build": "bun src/build.ts"
+	},
+	"dependencies": {
+		"@morphdsl/codemirror-lang-morph": "workspace:*",
+		"@morphdsl/schema-dsl-parser": "workspace:*",
+		"@morphdsl/schema-dsl-compiler": "workspace:*",
+		"@morphdsl/schema-dsl-decompiler": "workspace:*",
+		"@morphdsl/domain-schema": "workspace:*",
+		"@codemirror/autocomplete": "^6.18.0",
+		"@codemirror/lang-javascript": "^6.2.0",
+		"@codemirror/language": "^6.10.0",
+		"@codemirror/lint": "^6.8.0",
+		"@codemirror/state": "^6.5.0",
+		"@codemirror/view": "^6.35.0",
+		"codemirror": "^6.0.0",
+		"markdown-it": "^14.1.0",
+		"mermaid": "^11.4.0"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/markdown-it": "^14.1.0",
+		"typescript": "^5.9.3"
+	}
+}

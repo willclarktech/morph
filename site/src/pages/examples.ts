@@ -1,0 +1,37 @@
+import { layout } from "../layout";
+
+export interface ExampleSnapshot {
+	readonly name: string;
+	readonly description: string;
+	readonly schema: string;
+}
+
+export const examplesPage = (examples: readonly ExampleSnapshot[]): string =>
+	layout({
+		title: "Examples",
+		currentPath: "/examples",
+		bodyExtra: '<script type="module" src="/examples-browser.js"></script>',
+		content: `
+		<h1>Example Schemas</h1>
+		<p>Browse example <code>.morph</code> schemas demonstrating various features. Click to open in the playground.</p>
+		<div class="grid">
+			${examples
+				.map(
+					(ex) => `<article class="example-card">
+				<h3>${ex.name}</h3>
+				<p>${escapeHtml(ex.description)}</p>
+				<nav>
+					<a href="/playground#${encodeURIComponent(ex.schema)}" role="button" class="outline">Open in Playground</a>
+				</nav>
+			</article>`,
+				)
+				.join("\n\t\t\t")}
+		</div>`,
+	});
+
+const escapeHtml = (s: string): string =>
+	s
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;")
+		.replaceAll('"', "&quot;");

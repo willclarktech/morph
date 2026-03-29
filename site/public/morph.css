@@ -1,0 +1,144 @@
+/* Morph — Pico CSS extension */
+
+/* ── Transitions & Micro-interactions ── */
+
+button, [role="button"] {
+	transition: all 0.15s ease-out;
+}
+
+a {
+	transition: color 0.15s ease;
+}
+
+input, select, textarea {
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Button hover lift */
+button:hover, [role="button"]:hover {
+	transform: translateY(-1px);
+}
+
+/* Button press */
+button:active, [role="button"]:active {
+	transform: translateY(0) scale(0.98);
+}
+
+/* ── Focus states ── */
+
+:focus-visible {
+	outline: 2px solid var(--pico-primary-focus, var(--pico-primary));
+	outline-offset: 2px;
+}
+
+/* ── Typography ── */
+
+h1, h2, h3 {
+	letter-spacing: -0.02em;
+}
+
+/* ── Hero ── */
+
+.hero {
+	text-align: center;
+	padding: 3rem 0 2rem;
+}
+
+.hero h1 {
+	font-size: 2.5rem;
+	max-width: 720px;
+	margin: 0 auto 1rem;
+}
+
+.hero p {
+	font-size: 1.15rem;
+	color: var(--pico-muted-color);
+	max-width: 600px;
+	margin: 0 auto 2rem;
+}
+
+.hero-actions {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+/* ── Features grid ── */
+
+.features-grid .grid {
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.features-grid article {
+	margin-bottom: 0;
+}
+
+/* ── Site logo ── */
+
+.site-logo {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	text-decoration: none;
+}
+
+.site-logo img {
+	height: 32px;
+	width: auto;
+}
+
+/* ── Tables ── */
+
+.overflow-auto {
+	overflow-x: auto;
+}
+
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+table th, table td {
+	border: none;
+}
+
+table thead {
+	border-bottom: 2px solid var(--pico-muted-border-color);
+}
+
+table tbody tr {
+	border-bottom: 1px solid color-mix(in srgb, var(--pico-muted-border-color), transparent 50%);
+}
+
+table tbody tr:last-child {
+	border-bottom: none;
+}
+
+/* ── Code blocks ── */
+
+pre code {
+	font-size: 0.875rem;
+}
+
+/* ── Footer ── */
+
+footer {
+	margin-top: 4rem;
+	padding: 2rem 0;
+	text-align: center;
+	border-top: 1px solid var(--pico-muted-border-color);
+}
+
+/* ── Nav active state ── */
+
+header nav a[aria-current="page"] {
+	font-weight: 700;
+	border-bottom: 2px solid var(--pico-primary);
+}
+
+/* ── Example cards ── */
+
+.example-card nav {
+	margin-top: 1rem;
+}

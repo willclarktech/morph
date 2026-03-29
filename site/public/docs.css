@@ -1,0 +1,93 @@
+/* Docs layout — sidebar + content */
+
+.docs-layout {
+	display: grid;
+	grid-template-columns: 240px 1fr;
+	gap: 2rem;
+	align-items: start;
+}
+
+@media (max-width: 768px) {
+	.docs-layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ── Sidebar ── */
+
+.docs-sidebar {
+	position: sticky;
+	top: 1rem;
+	max-height: calc(100vh - 2rem);
+	overflow-y: auto;
+}
+
+.docs-sidebar nav details {
+	margin-bottom: 0.5rem;
+	border: none;
+}
+
+.docs-sidebar nav details summary {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--pico-muted-color);
+	padding: 0.25rem 0;
+}
+
+.docs-sidebar nav ul {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 0.5rem;
+}
+
+.docs-sidebar nav ul li {
+	margin: 0;
+}
+
+.docs-sidebar nav ul li a {
+	display: block;
+	padding: 0.25rem 0.5rem;
+	font-size: 0.875rem;
+	text-decoration: none;
+	border-radius: 4px;
+}
+
+.docs-sidebar nav ul li a:hover {
+	background: color-mix(in srgb, var(--pico-primary), transparent 92%);
+}
+
+.docs-sidebar nav ul li a[aria-current="page"] {
+	font-weight: 600;
+	color: var(--pico-primary);
+	background: color-mix(in srgb, var(--pico-primary), transparent 92%);
+}
+
+/* ── Content ── */
+
+.docs-content {
+	min-width: 0;
+	padding: 0;
+	box-shadow: none;
+	border: none;
+}
+
+.docs-content h1:first-child {
+	margin-top: 0;
+}
+
+.docs-content img {
+	max-width: 100%;
+	height: auto;
+}
+
+.docs-content pre {
+	overflow-x: auto;
+}
+
+/* Mermaid diagrams */
+.mermaid {
+	text-align: center;
+	margin: 1.5rem 0;
+}

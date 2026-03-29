@@ -35,7 +35,9 @@
 		"contexts/schema-dsl/compiler",
 		"contexts/schema-dsl/decompiler",
 		"apps/*",
-		"tests/*"
+		"tests/*",
+		"site",
+		"site/codemirror-lang-morph"
 	],
 	"scripts": {
 		"build:check": "tsc --noEmit && turbo run build:check --concurrency=25%",
