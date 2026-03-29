@@ -46,8 +46,7 @@ export const decompile = (schema: DomainSchema): string => {
 	for (const key of METADATA_KEYS) {
 		const value = schema[key];
 		if (value !== undefined) {
-			const escaped = value.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
-			lines.push(`\t${key} "${escaped}"`);
+			lines.push(`\t${key} ${JSON.stringify(value)}`);
 		}
 	}
 
