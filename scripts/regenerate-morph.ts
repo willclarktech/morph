@@ -424,7 +424,7 @@ const fixVsCodeApp = async (): Promise<void> => {
  * Fix eslint.config.ts files to use morph config.
  */
 const cliPackageDirectories = new Set(["apps/cli"]);
-const customEslintDirectories = new Set(["contexts/schema-dsl/core"]);
+const customEslintDirectories = new Set(["contexts/schema-dsl/core", "apps/vscode"]);
 
 const fixEslintConfigFiles = (): void => {
 	console.info("Fixing eslint.config.ts files...");
