@@ -424,7 +424,10 @@ const fixVsCodeApp = async (): Promise<void> => {
  * Fix eslint.config.ts files to use morph config.
  */
 const cliPackageDirectories = new Set(["apps/cli"]);
-const customEslintDirectories = new Set(["contexts/schema-dsl/core", "apps/vscode"]);
+const customEslintDirectories = new Set([
+	"contexts/schema-dsl/core",
+	"apps/vscode",
+]);
 
 const fixEslintConfigFiles = (): void => {
 	console.info("Fixing eslint.config.ts files...");
@@ -883,6 +886,24 @@ const fixImports = (): void => {
 	console.info("Fixing imports in TypeScript files...");
 
 	const packageDirectories = getGeneratedPackageDirectories();
+
+	// Fix root-level config files (eslint.config.ts) in each package
+	for (const dir of packageDirectories) {
+		const eslintPath = path.join(MORPH_DIR, dir, "eslint.config.ts");
+		let content: string;
+		try {
+			content = readFileSync(eslintPath, "utf8");
+		} catch {
+			continue;
+		}
+		if (content.includes("@Morph/") || content.includes("@morph/")) {
+			content = content.replaceAll("@Morph/", "@morphdsl/");
+			content = content.replaceAll("@morph/", "@morphdsl/");
+			writeFileSync(eslintPath, content);
+		}
+	}
+
+	// Fix source files
 	const directories = packageDirectories.map((dir) => `${dir}/src`);
 
 	for (const dir of directories) {
