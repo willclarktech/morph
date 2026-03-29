@@ -15,6 +15,7 @@
 		"@morphdsl/domain-schema": "*",
 		"@morphdsl/builder-app": "*",
 		"@morphdsl/generator-diagrams": "*",
+		"@morphdsl/generator-license": "*",
 		"@morphdsl/plugin": "*",
 		"@morphdsl/builder-readme": "*"
 	}

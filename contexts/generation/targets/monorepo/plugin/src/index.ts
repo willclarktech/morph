@@ -9,6 +9,7 @@ import type {
 import { getAllInvariants } from "@morphdsl/domain-schema";
 import { buildDockerignore } from "@morphdsl/builder-app";
 import { generate as generateDiagrams } from "@morphdsl/generator-diagrams";
+import { generateLicense } from "@morphdsl/generator-license";
 import { schemaHasTag } from "@morphdsl/plugin";
 import { buildRootReadme, description } from "@morphdsl/builder-readme";
 
@@ -177,6 +178,14 @@ export const monorepoRootPlugin: GeneratorPlugin = {
 			content: generateRootReadme(schema, name, pluginMetadata, hasPropertyTests),
 			filename: "README.md",
 		});
+
+		// LICENSE file (if license is specified in schema metadata)
+		if (schema.license) {
+			const licenseContent = generateLicense(schema.license);
+			if (licenseContent) {
+				files.push({ content: licenseContent, filename: "LICENSE" });
+			}
+		}
 
 		// Dockerignore (only if apps exist)
 		if (hasAnyApp(schema)) {
