@@ -144,7 +144,19 @@ export const vsCodePlugin: GeneratorPlugin = {
 		});
 
 		const configFiles = buildConfigFiles(packagePath, name);
-		files.push(...configFiles);
+		for (const f of configFiles) {
+			if (f.filename.endsWith("eslint.config.ts")) {
+				files.push({
+					...f,
+					content: f.content.replace(
+						'ignores: ["**/*.template.ts"]',
+						'ignores: ["**/*.template.ts", "dist/**"]',
+					),
+				});
+			} else {
+				files.push(f);
+			}
+		}
 
 		files.push({
 			content: generateTsConfig(name),
