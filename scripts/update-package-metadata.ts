@@ -21,6 +21,7 @@ const PACKAGE_KEY_ORDER = [
 	"$schema",
 	"name",
 	"version",
+	"private",
 	"description",
 	"license",
 	"author",
@@ -32,7 +33,6 @@ const PACKAGE_KEY_ORDER = [
 	"scripts",
 	"dependencies",
 	"devDependencies",
-	"private",
 	"packageManager",
 	"workspaces",
 ];

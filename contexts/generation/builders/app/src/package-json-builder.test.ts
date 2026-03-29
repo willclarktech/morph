@@ -161,10 +161,10 @@ describe("buildPackageJson", () => {
 			"$schema",
 			"name",
 			"version",
+			"private",
 			"type",
 			"scripts",
 			"devDependencies",
-			"private",
 		]);
 	});
 });

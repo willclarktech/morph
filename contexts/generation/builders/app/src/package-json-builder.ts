@@ -86,6 +86,7 @@ const PACKAGE_KEY_ORDER = [
 	"$schema",
 	"name",
 	"version",
+	"private",
 	"description",
 	"license",
 	"author",
@@ -97,7 +98,6 @@ const PACKAGE_KEY_ORDER = [
 	"scripts",
 	"dependencies",
 	"devDependencies",
-	"private",
 ];
 
 /** Order package.json keys in a human-friendly order, with sub-objects sorted alphabetically */
