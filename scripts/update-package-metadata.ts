@@ -6,7 +6,7 @@
  * - Adds license, description, repository, author fields
  * - Reorders keys in human-friendly order
  */
-import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const ROOT_DIR = path.join(import.meta.dir, "..");
@@ -15,7 +15,7 @@ const REPO_URL = "https://github.com/morphdsl/morph";
 const KEEP_PRIVATE = new Set(["@morphdsl/eslint-config", "@morphdsl/tsconfig"]);
 
 // Packages in these directories are always private
-const PRIVATE_DIRS = new Set(["examples", "tests", "fixtures"]);
+const PRIVATE_DIRS = new Set(["examples", "fixtures", "tests"]);
 
 const PACKAGE_KEY_ORDER = [
 	"$schema",
@@ -51,21 +51,21 @@ const sortObjectKeys = <T extends Record<string, unknown>>(input: T): T => {
 };
 
 const orderedPackageJson = (
-	obj: Record<string, unknown>,
+	input: Record<string, unknown>,
 ): Record<string, unknown> => {
 	const result: Record<string, unknown> = {};
 	for (const key of PACKAGE_KEY_ORDER) {
-		if (key in obj) {
-			const value = obj[key];
+		if (key in input) {
+			const value = input[key];
 			result[key] =
 				typeof value === "object" && value !== null && !Array.isArray(value)
 					? sortObjectKeys(value as Record<string, unknown>)
 					: value;
 		}
 	}
-	for (const key of Object.keys(obj).sort()) {
+	for (const key of Object.keys(input).sort()) {
 		if (!(key in result)) {
-			const value = obj[key];
+			const value = input[key];
 			result[key] =
 				typeof value === "object" && value !== null && !Array.isArray(value)
 					? sortObjectKeys(value as Record<string, unknown>)
@@ -76,37 +76,27 @@ const orderedPackageJson = (
 };
 
 const descriptionForPackage = (name: string): string => {
-	// Extract the meaningful part after @morphdsl/
 	const suffix = name.replace("@morphdsl/", "");
 
-	// Runtime packages
 	if (suffix.startsWith("runtime-"))
 		return `Morph ${suffix.replace("runtime-", "")} runtime`;
-	// Builders
 	if (suffix.startsWith("builder-"))
 		return `Morph ${suffix.replace("builder-", "")} builder`;
-	// Generators
 	if (suffix.startsWith("generator-"))
 		return `Morph ${suffix.replace("generator-", "")} generator`;
-	// Plugins
 	if (suffix.startsWith("plugin-"))
 		return `Morph ${suffix.replace("plugin-", "")} plugin`;
-	// Scenario runners
 	if (suffix.startsWith("scenario-runner-"))
 		return `Morph ${suffix.replace("scenario-runner-", "")} scenario runner`;
-	// Property runners
 	if (suffix.startsWith("property-runner-"))
 		return `Morph ${suffix.replace("property-runner-", "")} property runner`;
-	// Schema DSL
 	if (suffix.startsWith("schema-dsl-"))
 		return `Morph schema DSL ${suffix.replace("schema-dsl-", "")}`;
-	// Extensions
 	if (suffix.startsWith("storage-")) return `Morph ${suffix} extension`;
 	if (suffix.startsWith("auth-")) return `Morph ${suffix} extension`;
 	if (suffix.startsWith("codec-")) return `Morph ${suffix} extension`;
 	if (suffix.startsWith("eventstore-")) return `Morph ${suffix} extension`;
 
-	// Known packages
 	const known: Record<string, string> = {
 		"domain-schema": "Morph domain schema types and utilities",
 		"generation-impls": "Morph generation implementations",
@@ -143,42 +133,31 @@ const main = (): void => {
 
 	for (const filePath of packageFiles) {
 		const raw = readFileSync(filePath, "utf8");
-		const pkg = JSON.parse(raw) as Record<string, unknown>;
-		const name = pkg["name"] as string | undefined;
-		if (!name || !name.startsWith("@morphdsl/")) continue;
+		const parsed = JSON.parse(raw) as Record<string, unknown>;
+		const name = parsed.name as string | undefined;
+		if (!name?.startsWith("@morphdsl/")) continue;
 
 		const relativePath = path.relative(ROOT_DIR, path.dirname(filePath));
 
-		// Skip private directories
 		const topDir = relativePath.split("/")[0] ?? "";
 		if (PRIVATE_DIRS.has(topDir)) continue;
 
 		const shouldKeepPrivate = KEEP_PRIVATE.has(name);
 
-		// Add metadata
-		if (!pkg["description"]) {
-			pkg["description"] = descriptionForPackage(name);
-		}
-		if (!pkg["license"]) {
-			pkg["license"] = "MIT";
-		}
-		if (!pkg["author"]) {
-			pkg["author"] = "Morph Contributors";
-		}
-		if (!pkg["repository"]) {
-			pkg["repository"] = {
-				type: "git",
-				url: REPO_URL,
-				directory: relativePath,
-			};
-		}
+		parsed.description ??= descriptionForPackage(name);
+		parsed.license ??= "MIT";
+		parsed.author ??= "Morph Contributors";
+		parsed.repository ??= {
+			type: "git",
+			url: REPO_URL,
+			directory: relativePath,
+		};
 
-		// Remove private unless it should stay private
 		if (!shouldKeepPrivate) {
-			delete pkg["private"];
+			delete parsed.private;
 		}
 
-		const ordered = orderedPackageJson(pkg);
+		const ordered = orderedPackageJson(parsed);
 		const newContent = JSON.stringify(ordered, undefined, "\t") + "\n";
 
 		if (newContent !== raw) {
