@@ -1,6 +1,10 @@
-# Morph
+<p align="center">
+  <img src="docs/images/logo.png" alt="Morph" width="400">
+</p>
 
-Algebraic code generation from domain schemas.
+<h1 align="center">Morph</h1>
+
+<p align="center">Algebraic code generation from domain schemas.</p>
 
 Software contains enormous amounts of mechanical duplication — types echoed across layers, routes that mirror operations, CLI commands that mirror routes, client methods that mirror endpoints. Morph treats this as a factorization problem. A `.morph` schema defines an algebraic theory; each generated package is a structure-preserving functor from that theory. If the core is correct, derived apps are correct by construction.
 

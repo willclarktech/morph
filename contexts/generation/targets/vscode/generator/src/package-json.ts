@@ -78,6 +78,7 @@ export const generateVsCodePackageJson = (
 				}
 			: {}),
 		publisher: lowerName,
+		icon: "icon.png",
 		engines: {
 			vscode: "^1.96.0",
 		},

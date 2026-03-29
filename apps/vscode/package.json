@@ -65,5 +65,6 @@
 	"engines": {
 		"vscode": "^1.96.0"
 	},
+	"icon": "icon.png",
 	"publisher": "morph"
 }
