@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { mkdir, cp, readdir } from "node:fs/promises";
+import { mkdir, cp, readdir, rm } from "node:fs/promises";
 import MarkdownIt from "markdown-it";
 import { landingPage } from "./pages/landing";
 import { docsPage, docsIndex, DOC_ENTRIES } from "./pages/docs";
@@ -24,8 +24,7 @@ const writeFile = async (path: string, content: string) => {
 console.log("Building site...");
 
 // Clean
-const { rmdir } = await import("node:fs/promises");
-try { await rmdir(DIST_DIR, { recursive: true }); } catch { /* ignore */ }
+await rm(DIST_DIR, { recursive: true, force: true });
 await mkdir(DIST_DIR, { recursive: true });
 
 // 1. Copy static assets
@@ -92,7 +91,7 @@ for (const entry of DOC_ENTRIES) {
 	console.log(`  Generated docs/${entry.slug}`);
 }
 
-// 4. Write CNAME and .nojekyll for GitHub Pages
+// 4. Write .nojekyll for GitHub Pages
 await Bun.write(join(DIST_DIR, ".nojekyll"), "");
 
 console.log(`\nSite built to ${DIST_DIR}`);

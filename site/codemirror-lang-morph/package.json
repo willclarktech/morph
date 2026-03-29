@@ -6,6 +6,9 @@
 	"exports": {
 		".": "./src/index.ts"
 	},
+	"scripts": {
+		"build:check": "tsc --noEmit"
+	},
 	"dependencies": {
 		"@morphdsl/schema-dsl-parser": "workspace:*",
 		"@morphdsl/schema-dsl-compiler": "workspace:*",

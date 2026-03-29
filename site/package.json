@@ -5,7 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "bun --hot src/dev.ts",
-		"build": "bun src/build.ts"
+		"build": "bun src/build.ts",
+		"build:check": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@morphdsl/codemirror-lang-morph": "workspace:*",

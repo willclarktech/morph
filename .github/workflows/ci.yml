@@ -34,6 +34,9 @@ jobs:
       - name: Generate examples
         run: bun run generate:examples
 
+      - name: Type check
+        run: bun run build:check
+
       - name: Lint and format
         run: bun run lint:fix && bun run format:fix
 
@@ -51,3 +54,10 @@ jobs:
 
       - name: Test
         run: bun run test
+
+      - name: Build site
+        run: bun site/src/build.ts
+
+      - name: Check changeset
+        if: github.event_name == 'pull_request'
+        run: bunx changeset status

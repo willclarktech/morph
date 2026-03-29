@@ -8,7 +8,7 @@ mermaid.initialize({
 
 const renderMermaidBlocks = async () => {
 	const codeBlocks = document.querySelectorAll("pre code.language-mermaid");
-	for (const block of codeBlocks) {
+	for (const block of Array.from(codeBlocks)) {
 		const pre = block.parentElement;
 		if (!pre) continue;
 		const source = block.textContent ?? "";
