@@ -19,6 +19,15 @@ const BASE_SCRIPTS = {
 	"lint:fix": "eslint . --fix",
 } as const;
 
+/** Package metadata from the domain schema */
+export interface PackageMetadata {
+	description?: string;
+	license?: string;
+	repository?: string;
+	author?: string;
+	npmScope?: string;
+}
+
 /** Configuration for building a package.json */
 export interface PackageJsonConfig {
 	/** Project name (e.g., "todo-app") */
@@ -47,16 +56,22 @@ export interface PackageJsonConfig {
 	includeStartScript?: boolean;
 	/** Include dev script (bun --hot) */
 	includeDevScript?: boolean;
+	/** Whether this package should be private (default: true) */
+	isPrivate?: boolean;
+	/** Package metadata from the domain schema */
+	metadata?: PackageMetadata;
 }
 
-/** Convert project name to lowercase for package scope */
-const toPackageScope = (name: string): string => name.toLowerCase();
+/** Convert project name to npm package scope */
+export const toPackageScope = (name: string, npmScope?: string): string =>
+	npmScope ?? name.toLowerCase();
 
 /** Get standard dev dependencies for a package */
 const getStandardDevDeps = (
 	projectName: string,
+	npmScope?: string,
 ): Record<string, string> => {
-	const scope = toPackageScope(projectName);
+	const scope = toPackageScope(projectName, npmScope);
 	return {
 		[`@${scope}/eslint-config`]: "workspace:*",
 		[`@${scope}/tsconfig`]: "workspace:*",
@@ -64,6 +79,51 @@ const getStandardDevDeps = (
 		prettier: TOOL_VERSIONS.prettier,
 		typescript: TOOL_VERSIONS.typescript,
 	};
+};
+
+/** Human-friendly key ordering for package.json */
+const PACKAGE_KEY_ORDER = [
+	"$schema",
+	"name",
+	"version",
+	"description",
+	"license",
+	"author",
+	"repository",
+	"type",
+	"main",
+	"exports",
+	"bin",
+	"scripts",
+	"dependencies",
+	"devDependencies",
+	"private",
+];
+
+/** Order package.json keys in a human-friendly order, with sub-objects sorted alphabetically */
+export const orderedPackageJson = (
+	obj: Record<string, unknown>,
+): Record<string, unknown> => {
+	const result: Record<string, unknown> = {};
+	for (const key of PACKAGE_KEY_ORDER) {
+		if (key in obj) {
+			const value = obj[key];
+			result[key] =
+				typeof value === "object" && value !== null && !Array.isArray(value)
+					? sortObjectKeys(value as Record<string, unknown>)
+					: value;
+		}
+	}
+	for (const key of Object.keys(obj).sort()) {
+		if (!(key in result)) {
+			const value = obj[key];
+			result[key] =
+				typeof value === "object" && value !== null && !Array.isArray(value)
+					? sortObjectKeys(value as Record<string, unknown>)
+					: value;
+		}
+	}
+	return result;
 };
 
 /** Build a complete package.json string */
@@ -82,6 +142,8 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 		includeTestScript = false,
 		includeStartScript = false,
 		includeDevScript = false,
+		isPrivate = true,
+		metadata,
 	} = config;
 
 	// Build dependencies
@@ -98,7 +160,7 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 
 	// Build devDependencies
 	const finalDevDeps: Record<string, string> = {
-		...getStandardDevDeps(projectName),
+		...getStandardDevDeps(projectName, metadata?.npmScope),
 		...devDependencies,
 	};
 	if (includeFastCheck === "devDependencies") {
@@ -120,21 +182,33 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 	}
 
 	// Build package object
-	const scope = toPackageScope(projectName);
+	const scope = toPackageScope(projectName, metadata?.npmScope);
 	const package_: Record<string, unknown> = {
 		$schema: "https://json.schemastore.org/package.json",
+		name: `@${scope}/${packageSuffix}`,
+		version: "0.0.0",
+		...(metadata?.description ? { description: metadata.description } : {}),
+		...(metadata?.license ? { license: metadata.license } : {}),
+		...(metadata?.author ? { author: metadata.author } : {}),
+		...(metadata?.repository
+			? {
+					repository: {
+						type: "git",
+						url: metadata.repository,
+						directory: `packages/${packageSuffix}`,
+					},
+				}
+			: {}),
+		type: "module",
+		...(packageExports ? { exports: packageExports } : {}),
 		...(bin ? { bin } : {}),
+		scripts: finalScripts,
 		...(Object.keys(finalDeps).length > 0 ? { dependencies: finalDeps } : {}),
 		devDependencies: finalDevDeps,
-		...(packageExports ? { exports: packageExports } : {}),
-		name: `@${scope}/${packageSuffix}`,
-		private: true,
-		scripts: finalScripts,
-		type: "module",
-		version: "0.0.0",
+		...(isPrivate ? { private: true } : {}),
 	};
 
-	return JSON.stringify(sortObjectKeys(package_), undefined, "\t") + "\n";
+	return JSON.stringify(orderedPackageJson(package_), undefined, "\t") + "\n";
 };
 
 /** Re-export tool versions for use in specific generators */

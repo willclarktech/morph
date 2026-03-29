@@ -1,17 +1,8 @@
-import type { ContextPackages } from "./generate";
+import type { PackageMetadata } from "@morphdsl/builder-app";
 
-const sortObjectKeys = <T extends Record<string, unknown>>(input: T): T => {
-	if (Array.isArray(input)) return input as T;
-	const sorted: Record<string, unknown> = {};
-	for (const key of Object.keys(input).sort()) {
-		const value = input[key];
-		sorted[key] =
-			typeof value === "object" && value !== null && !Array.isArray(value)
-				? sortObjectKeys(value as Record<string, unknown>)
-				: value;
-	}
-	return sorted as T;
-};
+import { orderedPackageJson, toPackageScope } from "@morphdsl/builder-app";
+
+import type { ContextPackages } from "./generate";
 
 export interface CommandOp {
 	readonly name: string;
@@ -23,6 +14,7 @@ export interface VsCodePackageJsonOptions {
 	readonly displayName: string;
 	readonly contexts: readonly ContextPackages[];
 	readonly commandOps?: readonly CommandOp[] | undefined;
+	readonly metadata?: PackageMetadata;
 }
 
 const toTitleCase = (camelCase: string): string =>
@@ -34,7 +26,8 @@ const toTitleCase = (camelCase: string): string =>
 export const generateVsCodePackageJson = (
 	options: VsCodePackageJsonOptions,
 ): string => {
-	const { name, displayName, contexts, commandOps } = options;
+	const { name, displayName, contexts, commandOps, metadata } = options;
+	const scope = toPackageScope(name, metadata?.npmScope);
 
 	const contextDeps: Record<string, string> = {};
 	for (const context of contexts) {
@@ -73,8 +66,18 @@ export const generateVsCodePackageJson = (
 		displayName,
 		description: `VSCode language support for ${displayName}`,
 		version: "0.0.0",
+		...(metadata?.license ? { license: metadata.license } : {}),
+		...(metadata?.author ? { author: metadata.author } : {}),
+		...(metadata?.repository
+			? {
+					repository: {
+						type: "git",
+						url: metadata.repository,
+						directory: "apps/vscode",
+					},
+				}
+			: {}),
 		publisher: lowerName,
-		private: true,
 		engines: {
 			vscode: "^1.96.0",
 		},
@@ -98,8 +101,8 @@ export const generateVsCodePackageJson = (
 			effect: "^3.19.13",
 		},
 		devDependencies: {
-			[`@${name}/eslint-config`]: "workspace:*",
-			[`@${name}/tsconfig`]: "workspace:*",
+			[`@${scope}/eslint-config`]: "workspace:*",
+			[`@${scope}/tsconfig`]: "workspace:*",
 			"@types/vscode": "^1.96.0",
 			"@vscode/vsce": "^3.0.0",
 			esbuild: "^0.25.0",
@@ -109,5 +112,5 @@ export const generateVsCodePackageJson = (
 		},
 	};
 
-	return JSON.stringify(sortObjectKeys(package_), undefined, "\t") + "\n";
+	return JSON.stringify(orderedPackageJson(package_), undefined, "\t") + "\n";
 };

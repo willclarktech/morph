@@ -121,7 +121,7 @@ export const uiPlugin: GeneratorPlugin = {
 			name,
 			packagePath,
 			generatePackageJson: () =>
-				generateUiPackageJson(name, clientPackage, dslPackage, corePackage),
+				generateUiPackageJson(name, clientPackage, dslPackage, corePackage, schema),
 			generateConfigFiles: () => [],
 			generateAppEntry: () =>
 				generateUiAppEntry({

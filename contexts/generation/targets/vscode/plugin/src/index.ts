@@ -134,10 +134,11 @@ export const vsCodePlugin: GeneratorPlugin = {
 
 		files.push({
 			content: generateVsCodePackageJson({
-				contexts,
-				name,
-				displayName,
 				commandOps,
+				contexts,
+				displayName,
+				metadata: schema,
+				name,
 			}),
 			filename: `${packagePath}/package.json`,
 		});

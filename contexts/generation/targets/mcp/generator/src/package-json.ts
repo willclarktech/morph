@@ -1,24 +1,9 @@
 /**
  * MCP package.json generation.
  */
+import type { PackageMetadata } from "@morphdsl/builder-app";
 
-/**
- * Recursively sort object keys alphabetically for consistent JSON output.
- */
-const sortObjectKeys = <T extends Record<string, unknown>>(input: T): T => {
-	if (Array.isArray(input)) {
-		return input as T;
-	}
-	const sorted: Record<string, unknown> = {};
-	for (const key of Object.keys(input).sort()) {
-		const value = input[key];
-		sorted[key] =
-			typeof value === "object" && value !== null && !Array.isArray(value)
-				? sortObjectKeys(value as Record<string, unknown>)
-				: value;
-	}
-	return sorted as T;
-};
+import { orderedPackageJson, toPackageScope } from "@morphdsl/builder-app";
 
 /**
  * Context package information for multi-context apps.
@@ -33,6 +18,7 @@ export interface McpPackageJsonOptions {
 	readonly name: string;
 	readonly contexts: readonly ContextPackages[];
 	readonly scenariosPackage: string;
+	readonly metadata?: PackageMetadata;
 }
 
 /**
@@ -41,7 +27,8 @@ export interface McpPackageJsonOptions {
 export const generateMcpPackageJson = (
 	options: McpPackageJsonOptions,
 ): string => {
-	const { name, contexts, scenariosPackage } = options;
+	const { name, contexts, scenariosPackage, metadata } = options;
+	const scope = toPackageScope(name, metadata?.npmScope);
 
 	// Build dependencies from all contexts
 	const contextDeps: Record<string, string> = {};
@@ -52,22 +39,23 @@ export const generateMcpPackageJson = (
 
 	const package_ = {
 		$schema: "https://json.schemastore.org/package.json",
-		dependencies: {
-			"@morphdsl/runtime-mcp": "workspace:*",
-			...contextDeps,
-			effect: "^3.19.13",
-		},
-		devDependencies: {
-			"@morphdsl/scenario-runner-mcp": "workspace:*",
-			[`@${name}/eslint-config`]: "workspace:*",
-			[scenariosPackage]: "workspace:*",
-			[`@${name}/tsconfig`]: "workspace:*",
-			eslint: "^9.39.0",
-			prettier: "^3.4.2",
-			typescript: "^5.7.2",
-		},
-		name: `@${name}/mcp`,
-		private: true,
+		name: `@${scope}/mcp`,
+		version: "0.0.0",
+		...(metadata?.description
+			? { description: `${metadata.description} — MCP server` }
+			: {}),
+		...(metadata?.license ? { license: metadata.license } : {}),
+		...(metadata?.author ? { author: metadata.author } : {}),
+		...(metadata?.repository
+			? {
+					repository: {
+						type: "git",
+						url: metadata.repository,
+						directory: "apps/mcp",
+					},
+				}
+			: {}),
+		type: "module",
 		scripts: {
 			"build:check": "tsc --noEmit",
 			format: "prettier --check .",
@@ -80,8 +68,21 @@ export const generateMcpPackageJson = (
 			"test:coverage":
 				"bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage",
 		},
-		type: "module",
-		version: "0.0.0",
+		dependencies: {
+			"@morphdsl/runtime-mcp": "workspace:*",
+			...contextDeps,
+			effect: "^3.19.13",
+		},
+		devDependencies: {
+			"@morphdsl/scenario-runner-mcp": "workspace:*",
+			[`@${scope}/eslint-config`]: "workspace:*",
+			[scenariosPackage]: "workspace:*",
+			[`@${scope}/tsconfig`]: "workspace:*",
+			eslint: "^9.39.0",
+			prettier: "^3.4.2",
+			typescript: "^5.7.2",
+		},
+		private: true,
 	};
-	return JSON.stringify(sortObjectKeys(package_), undefined, "\t") + "\n";
+	return JSON.stringify(orderedPackageJson(package_), undefined, "\t") + "\n";
 };

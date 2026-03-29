@@ -17,6 +17,7 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"dependencies": {
+		"@morphdsl/builder-app": "*",
 		"@morphdsl/domain-schema": "*",
 		"@morphdsl/operation": "workspace:*",
 		"@morphdsl/utils": "*",

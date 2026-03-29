@@ -18,6 +18,7 @@
 	},
 	"dependencies": {
 		"@morphdsl/auth-password-impls": "workspace:*",
+		"@morphdsl/builder-app": "*",
 		"@morphdsl/domain-schema": "*",
 		"@morphdsl/utils": "*"
 	},

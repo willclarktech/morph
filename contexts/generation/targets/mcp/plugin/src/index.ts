@@ -156,6 +156,7 @@ export const mcpPlugin: GeneratorPlugin = {
 			generatePackageJson: () =>
 				generateMcpPackageJson({
 					contexts,
+					metadata: schema,
 					name,
 					scenariosPackage,
 				}),
