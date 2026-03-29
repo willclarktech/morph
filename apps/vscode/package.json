@@ -64,8 +64,7 @@
 		"format:fix": "prettier --write .",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
-		"package": "bunx @vscode/vsce package --no-dependencies",
-		"vscode:prepublish": "bun esbuild.config.ts"
+		"package": "bun run build && bunx @vscode/vsce package --no-dependencies --skip-license"
 	},
 	"version": "0.0.0"
 }
