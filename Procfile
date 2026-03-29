@@ -1,1 +1,1 @@
-mcp: bun run --filter @morphdsl/mcp start
+mcp: bun run --filter @morph/mcp start

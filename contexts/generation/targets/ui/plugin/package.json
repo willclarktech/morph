@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/plugin-ui",
 	"version": "0.0.0",
+	"description": "Morph ui plugin",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/ui/plugin",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -8,16 +16,16 @@
 	"scripts": {
 		"build:check": "tsc --noEmit"
 	},
-	"devDependencies": {
-		"typescript": "^5.8.3"
-	},
 	"dependencies": {
-		"@morphdsl/domain-schema": "*",
 		"@morphdsl/builder-app": "*",
+		"@morphdsl/domain-schema": "*",
 		"@morphdsl/generator-env": "*",
+		"@morphdsl/generator-ui-mappings": "*",
 		"@morphdsl/plugin": "*",
 		"@morphdsl/runtime-ui": "*",
-		"@morphdsl/generator-ui-mappings": "*",
 		"@morphdsl/utils": "*"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
 	}
 }

@@ -6,7 +6,10 @@
  * executes client methods as Effects.
  */
 import type { Prose, Runner } from "@morphdsl/scenario-runner";
-import type { ServerConfig, ServerInstance } from "@morphdsl/scenario-runner-api";
+import type {
+	ServerConfig,
+	ServerInstance,
+} from "@morphdsl/scenario-runner-api";
 
 import { createRunner, getField } from "@morphdsl/scenario-runner";
 import { startServer } from "@morphdsl/scenario-runner-api";
@@ -107,5 +110,8 @@ export const createClientRunner = <C = any>(
 	);
 };
 
-export type { ServerConfig, ServerInstance } from "@morphdsl/scenario-runner-api";
+export type {
+	ServerConfig,
+	ServerInstance,
+} from "@morphdsl/scenario-runner-api";
 export { startServer } from "@morphdsl/scenario-runner-api";

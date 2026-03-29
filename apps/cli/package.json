@@ -1,7 +1,28 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morphdsl/cli",
+	"version": "0.0.0",
+	"description": "Morph cli",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "apps/cli",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
+	"type": "module",
 	"bin": {
 		"Morph": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"start": "bun src/index.ts",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
 	},
 	"dependencies": {
 		"@morphdsl/generation-core": "workspace:*",
@@ -17,19 +38,5 @@
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"
-	},
-	"name": "@morphdsl/cli",
-	"private": true,
-	"scripts": {
-		"build:check": "tsc --noEmit",
-		"format": "prettier --check .",
-		"format:fix": "prettier --write .",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
-		"start": "bun src/index.ts",
-		"test": "bun test",
-		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
-	},
-	"type": "module",
-	"version": "0.0.0"
+	}
 }

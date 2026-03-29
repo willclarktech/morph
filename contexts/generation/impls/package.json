@@ -2,19 +2,32 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/generation-impls",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph generation implementations",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/impls",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
 	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
 	"dependencies": {
+		"@morphdsl/builder-app": "workspace:*",
+		"@morphdsl/builder-scaffold": "workspace:*",
 		"@morphdsl/domain-schema": "workspace:*",
 		"@morphdsl/generation-dsl": "workspace:*",
-		"@morphdsl/builder-app": "workspace:*",
 		"@morphdsl/generator-env": "workspace:*",
 		"@morphdsl/plugin": "workspace:*",
-		"@morphdsl/builder-scaffold": "workspace:*",
-		"@morphdsl/runtime-ui": "workspace:*",
 		"@morphdsl/plugin-api": "workspace:*",
 		"@morphdsl/plugin-cli": "workspace:*",
 		"@morphdsl/plugin-cli-client": "workspace:*",
@@ -27,8 +40,9 @@
 		"@morphdsl/plugin-ui": "workspace:*",
 		"@morphdsl/plugin-verification": "workspace:*",
 		"@morphdsl/plugin-vscode": "workspace:*",
-		"@morphdsl/schema-dsl-parser": "workspace:*",
+		"@morphdsl/runtime-ui": "workspace:*",
 		"@morphdsl/schema-dsl-compiler": "workspace:*",
+		"@morphdsl/schema-dsl-parser": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {
@@ -37,12 +51,5 @@
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"
-	},
-	"scripts": {
-		"build:check": "tsc --noEmit",
-		"format": "prettier --check .",
-		"format:fix": "prettier --write .",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
 	}
 }

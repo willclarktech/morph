@@ -1,7 +1,14 @@
 {
 	"name": "@morphdsl/scenario-runner-api",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph api scenario runner",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/api/scenario-runner",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -15,9 +22,9 @@
 	},
 	"dependencies": {
 		"@morphdsl/domain-schema": "workspace:*",
+		"@morphdsl/operation": "workspace:*",
 		"@morphdsl/runtime-api": "workspace:*",
-		"@morphdsl/scenario-runner": "workspace:*",
-		"@morphdsl/operation": "workspace:*"
+		"@morphdsl/scenario-runner": "workspace:*"
 	},
 	"devDependencies": {
 		"@morphdsl/eslint-config": "workspace:*",

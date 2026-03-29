@@ -1,22 +1,16 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"dependencies": {
-		"@morphdsl/generation-core": "workspace:*",
-		"@morphdsl/runtime-mcp": "workspace:*",
-		"@morphdsl/schema-dsl-core": "workspace:*",
-		"effect": "^3.19.13"
-	},
-	"devDependencies": {
-		"@morphdsl/eslint-config": "workspace:*",
-		"@morphdsl/tsconfig": "workspace:*",
-		"@morphdsl/scenario-runner-mcp": "workspace:*",
-		"@morphdsl/scenarios": "workspace:*",
-		"eslint": "^9.39.0",
-		"prettier": "^3.4.2",
-		"typescript": "^5.7.2"
-	},
 	"name": "@morphdsl/mcp",
-	"private": true,
+	"version": "0.0.0",
+	"description": "Morph mcp",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "apps/mcp",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
+	"type": "module",
 	"scripts": {
 		"build:check": "tsc --noEmit",
 		"format": "prettier --check .",
@@ -28,6 +22,19 @@
 		"test": "bun test",
 		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
 	},
-	"type": "module",
-	"version": "0.0.0"
+	"dependencies": {
+		"@morphdsl/generation-core": "workspace:*",
+		"@morphdsl/runtime-mcp": "workspace:*",
+		"@morphdsl/schema-dsl-core": "workspace:*",
+		"effect": "^3.19.13"
+	},
+	"devDependencies": {
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/scenario-runner-mcp": "workspace:*",
+		"@morphdsl/scenarios": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
+		"eslint": "^9.39.0",
+		"prettier": "^3.4.2",
+		"typescript": "^5.7.2"
+	}
 }

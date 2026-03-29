@@ -1,4 +1,8 @@
-import type { ExecuteOperation, Prose, Runner } from "@morphdsl/scenario-runner";
+import type {
+	ExecuteOperation,
+	Prose,
+	Runner,
+} from "@morphdsl/scenario-runner";
 
 import { createRunner, resolveOperationName } from "@morphdsl/scenario-runner";
 

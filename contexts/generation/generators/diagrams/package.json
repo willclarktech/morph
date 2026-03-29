@@ -2,7 +2,14 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/generator-diagrams",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph diagrams generator",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/generators/diagrams",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": {

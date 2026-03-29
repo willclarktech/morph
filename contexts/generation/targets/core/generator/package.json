@@ -2,7 +2,14 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/generator-core",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph core generator",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/core/generator",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": {
@@ -24,9 +31,9 @@
 		"common-tags": "^1.8.2"
 	},
 	"devDependencies": {
-		"@types/common-tags": "^1.8.4",
 		"@morphdsl/eslint-config": "*",
 		"@morphdsl/tsconfig": "*",
+		"@types/common-tags": "^1.8.4",
 		"eslint": "^9.39.0"
 	}
 }

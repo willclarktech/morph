@@ -21,7 +21,11 @@
 
 | Task | Effort | Notes |
 |------|--------|-------|
-| Package metadata for publishing | M | Add license, description, repository fields to publishable packages. Remove `"private": true` from packages intended for npm |
+| ~~Package metadata for publishing~~ | ~~M~~ | ~~Done: renamed @morph → @morphdsl, added MIT license, metadata fields, human-friendly key ordering~~ |
+| First npm publish via changesets | S | Run `bunx changeset` + `bunx changeset version` + `bunx changeset publish`. First version 0.1.0 |
+| VSCode Marketplace publisher setup | S | Create publisher at marketplace.visualstudio.com, set PAT, add icon |
+| Register on mcp.so | S | Submit @morphdsl/mcp package for discovery |
+| Thread schema metadata through all `buildPackageJson` callers | M | Core/DSL/CLI/etc plugins should pass `metadata` from schema context |
 
 ## Post-MVP
 

@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/builder-app",
 	"version": "0.0.0",
+	"description": "Morph app builder",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/builders/app",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -10,11 +18,11 @@
 		"test": "bun test",
 		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
 	},
-	"devDependencies": {
-		"typescript": "^5.8.3"
-	},
 	"dependencies": {
 		"@morphdsl/domain-schema": "*",
 		"@morphdsl/utils": "*"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
 	}
 }

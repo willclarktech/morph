@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/plugin-proto",
 	"version": "0.0.0",
+	"description": "Morph proto plugin",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/proto/plugin",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -8,13 +16,13 @@
 	"scripts": {
 		"build:check": "tsc --noEmit"
 	},
+	"dependencies": {
+		"@morphdsl/builder-app": "*",
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/plugin": "*",
+		"@morphdsl/runtime-proto": "*"
+	},
 	"devDependencies": {
 		"typescript": "^5.8.3"
-	},
-	"dependencies": {
-		"@morphdsl/domain-schema": "*",
-		"@morphdsl/runtime-proto": "*",
-		"@morphdsl/builder-app": "*",
-		"@morphdsl/plugin": "*"
 	}
 }

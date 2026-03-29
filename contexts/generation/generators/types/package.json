@@ -2,7 +2,14 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/generator-types",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph types generator",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/generators/types",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": {

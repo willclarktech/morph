@@ -1,11 +1,32 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morphdsl/generation-core",
+	"version": "0.0.0",
+	"description": "Morph generation-core",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/core",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
 	"dependencies": {
 		"@morphdsl/generation-dsl": "workspace:*",
+		"@morphdsl/generation-impls": "workspace:*",
 		"@morphdsl/operation": "workspace:*",
 		"@morphdsl/testing": "workspace:*",
-		"effect": "^3.19.13",
-		"@morphdsl/generation-impls": "workspace:*"
+		"effect": "^3.19.13"
 	},
 	"devDependencies": {
 		"@morphdsl/eslint-config": "workspace:*",
@@ -14,19 +35,5 @@
 		"fast-check": "^3.23.1",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"
-	},
-	"exports": {
-		".": "./src/index.ts"
-	},
-	"name": "@morphdsl/generation-core",
-	"private": true,
-	"scripts": {
-		"build:check": "tsc --noEmit",
-		"format": "prettier --check .",
-		"format:fix": "prettier --write .",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
-	},
-	"type": "module",
-	"version": "0.0.0"
+	}
 }

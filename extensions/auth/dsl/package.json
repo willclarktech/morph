@@ -1,5 +1,26 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morphdsl/auth-dsl",
+	"version": "0.0.0",
+	"description": "Morph auth-dsl extension",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "extensions/auth/dsl",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
 	"dependencies": {
 		"@morphdsl/domain-schema": "workspace:*",
 		"effect": "^3.19.13"
@@ -10,19 +31,5 @@
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"
-	},
-	"exports": {
-		".": "./src/index.ts"
-	},
-	"name": "@morphdsl/auth-dsl",
-	"private": true,
-	"scripts": {
-		"build:check": "tsc --noEmit",
-		"format": "prettier --check .",
-		"format:fix": "prettier --write .",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
-	},
-	"type": "module",
-	"version": "0.0.0"
+	}
 }

@@ -2,7 +2,14 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/eslint-config",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph eslint-config",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "config/eslint",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		"import": "./src/index.ts"
@@ -30,5 +37,6 @@
 	"devDependencies": {
 		"@morphdsl/tsconfig": "*",
 		"typescript": "^5.9.3"
-	}
+	},
+	"private": true
 }

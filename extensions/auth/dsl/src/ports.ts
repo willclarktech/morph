@@ -25,5 +25,6 @@ export interface AuthService<TUser = unknown> {
 /**
  * Context tag for AuthService dependency injection.
  */
-export const AuthService =
-	Context.GenericTag<AuthService>("@morphdsl/AuthService");
+export const AuthService = Context.GenericTag<AuthService>(
+	"@morphdsl/AuthService",
+);

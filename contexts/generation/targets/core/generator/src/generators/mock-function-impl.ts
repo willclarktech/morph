@@ -8,7 +8,12 @@ import type {
 } from "@morphdsl/domain-schema";
 
 import { getFunctionsFlat } from "@morphdsl/domain-schema";
-import { indent, sortImports, toKebabCase, toPascalCase } from "@morphdsl/utils";
+import {
+	indent,
+	sortImports,
+	toKebabCase,
+	toPascalCase,
+} from "@morphdsl/utils";
 
 import type { MockImplOptions } from "./mock-operation-impl";
 

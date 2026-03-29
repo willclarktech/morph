@@ -21,7 +21,8 @@ import { HandlersLayer } from "@morphdsl/generation-core";`;
 
 	const result = sortImports(input);
 
-	expect(result).toBe(`import { HandlersLayer } from "@morphdsl/generation-core";
+	expect(result)
+		.toBe(`import { HandlersLayer } from "@morphdsl/generation-core";
 import { createCli } from "@morphdsl/runtime-cli";
 import { Effect } from "effect";
 import { Data } from "effect/Data";`);

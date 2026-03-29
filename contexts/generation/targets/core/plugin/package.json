@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/plugin-core",
 	"version": "0.0.0",
+	"description": "Morph core plugin",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/core/plugin",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -8,14 +16,14 @@
 	"scripts": {
 		"build:check": "tsc --noEmit"
 	},
+	"dependencies": {
+		"@morphdsl/builder-app": "*",
+		"@morphdsl/builder-readme": "*",
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/generator-core": "*",
+		"@morphdsl/plugin": "*"
+	},
 	"devDependencies": {
 		"typescript": "^5.8.3"
-	},
-	"dependencies": {
-		"@morphdsl/domain-schema": "*",
-		"@morphdsl/builder-app": "*",
-		"@morphdsl/generator-core": "*",
-		"@morphdsl/plugin": "*",
-		"@morphdsl/builder-readme": "*"
 	}
 }

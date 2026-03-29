@@ -40,7 +40,9 @@ export const generateStorageLayers = (
 	const imports: string[] = ['import { Effect, Layer } from "effect";', ""];
 
 	if (needsEntityStore) {
-		imports.push('import { createEntityStore } from "@morphdsl/storage-impls";');
+		imports.push(
+			'import { createEntityStore } from "@morphdsl/storage-impls";',
+		);
 	}
 
 	if (hasMemory) {

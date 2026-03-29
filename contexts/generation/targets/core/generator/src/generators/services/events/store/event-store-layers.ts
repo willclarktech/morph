@@ -40,7 +40,9 @@ export const generateEventStoreLayers = (
 		);
 	}
 
-	imports.push('import { EventStoreTransport } from "@morphdsl/eventstore-dsl";');
+	imports.push(
+		'import { EventStoreTransport } from "@morphdsl/eventstore-dsl";',
+	);
 
 	imports.push("");
 	imports.push(`import type { DomainEvent } from "${typesImportPath}";`);

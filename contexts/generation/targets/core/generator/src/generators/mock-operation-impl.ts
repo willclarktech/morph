@@ -12,7 +12,12 @@ import {
 	getAllValueObjects,
 	getOperationsFlat,
 } from "@morphdsl/domain-schema";
-import { indent, sortImports, toKebabCase, toPascalCase } from "@morphdsl/utils";
+import {
+	indent,
+	sortImports,
+	toKebabCase,
+	toPascalCase,
+} from "@morphdsl/utils";
 
 import {
 	collectArbitraryImports,

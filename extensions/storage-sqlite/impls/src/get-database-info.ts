@@ -14,7 +14,9 @@ export interface GetDatabaseInfoHandler {
 }
 
 export const GetDatabaseInfoHandler =
-	Context.GenericTag<GetDatabaseInfoHandler>("@morphdsl/GetDatabaseInfoHandler");
+	Context.GenericTag<GetDatabaseInfoHandler>(
+		"@morphdsl/GetDatabaseInfoHandler",
+	);
 
 export const GetDatabaseInfoHandlerLive = Layer.succeed(
 	GetDatabaseInfoHandler,

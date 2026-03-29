@@ -17,7 +17,9 @@ export interface GetFileStoreInfoHandler {
 }
 
 export const GetFileStoreInfoHandler =
-	Context.GenericTag<GetFileStoreInfoHandler>("@morphdsl/GetFileStoreInfoHandler");
+	Context.GenericTag<GetFileStoreInfoHandler>(
+		"@morphdsl/GetFileStoreInfoHandler",
+	);
 
 export const GetFileStoreInfoHandlerLive = Layer.succeed(
 	GetFileStoreInfoHandler,

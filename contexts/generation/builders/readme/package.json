@@ -2,7 +2,14 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/builder-readme",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph readme builder",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/builders/readme",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": {

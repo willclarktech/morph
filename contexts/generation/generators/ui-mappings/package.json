@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/generator-ui-mappings",
 	"version": "0.0.0",
+	"description": "Morph ui-mappings generator",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/generators/ui-mappings",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -8,11 +16,11 @@
 	"scripts": {
 		"build:check": "tsc --noEmit"
 	},
-	"devDependencies": {
-		"typescript": "^5.8.3"
-	},
 	"dependencies": {
 		"@morphdsl/domain-schema": "*",
 		"@morphdsl/utils": "*"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
 	}
 }

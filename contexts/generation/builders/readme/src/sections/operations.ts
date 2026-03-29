@@ -8,7 +8,10 @@ import type {
 	TypeRef,
 } from "@morphdsl/domain-schema";
 
-import { getOperationAggregates, isDomainService } from "@morphdsl/domain-schema";
+import {
+	getOperationAggregates,
+	isDomainService,
+} from "@morphdsl/domain-schema";
 
 import { bold, code, codeBlock, heading, table } from "../markdown";
 

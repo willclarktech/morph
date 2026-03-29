@@ -1048,7 +1048,23 @@ const main = async (): Promise<void> => {
 		process.exit(1);
 	}
 
-	// 15. Run format:fix on @morph packages
+	// 15. Re-apply npm metadata to generated packages
+	console.info("\nRe-applying package metadata...");
+	const metadataResult = Bun.spawnSync(
+		["bun", "scripts/update-package-metadata.ts"],
+		{
+			cwd: ROOT_DIR,
+			stderr: "inherit",
+			stdout: "inherit",
+		},
+	);
+
+	if (metadataResult.exitCode !== 0) {
+		console.error("Failed to update package metadata");
+		process.exit(1);
+	}
+
+	// 16. Run format:fix on @morph packages
 	// Prettier handles formatting consistently; skip lint:fix to avoid
 	// issues with non-auto-fixable errors causing inconsistent behavior
 	console.info("\nRunning format:fix...");

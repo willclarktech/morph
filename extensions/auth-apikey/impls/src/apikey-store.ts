@@ -4,7 +4,10 @@ import type {
 	ApiKeyWithSecret,
 } from "@morphdsl/auth-apikey-dsl";
 
-import { ApiKeyExpiredError, ApiKeyInvalidError } from "@morphdsl/auth-apikey-dsl";
+import {
+	ApiKeyExpiredError,
+	ApiKeyInvalidError,
+} from "@morphdsl/auth-apikey-dsl";
 /**
  * API key storage with pluggable strategies.
  *

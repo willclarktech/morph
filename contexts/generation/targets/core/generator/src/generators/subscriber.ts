@@ -4,7 +4,10 @@ import type {
 	SubscriberDef,
 } from "@morphdsl/domain-schema";
 
-import { getAllSubscribers, getCommandsWithEvents } from "@morphdsl/domain-schema";
+import {
+	getAllSubscribers,
+	getCommandsWithEvents,
+} from "@morphdsl/domain-schema";
 import { toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**

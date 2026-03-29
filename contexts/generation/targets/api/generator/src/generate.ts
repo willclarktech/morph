@@ -7,7 +7,12 @@ import type {
 	GenerationResult,
 } from "@morphdsl/domain-schema";
 
-import { configProperties, indent, separator, sortImports } from "@morphdsl/utils";
+import {
+	configProperties,
+	indent,
+	separator,
+	sortImports,
+} from "@morphdsl/utils";
 
 import {
 	buildAuthImports,

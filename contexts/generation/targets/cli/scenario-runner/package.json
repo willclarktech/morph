@@ -1,7 +1,14 @@
 {
 	"name": "@morphdsl/scenario-runner-cli",
 	"version": "0.0.1",
-	"private": true,
+	"description": "Morph cli scenario runner",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/cli/scenario-runner",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"

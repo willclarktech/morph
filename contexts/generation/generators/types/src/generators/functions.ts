@@ -1,4 +1,8 @@
-import type { DomainSchema, FunctionDef, TypeRef } from "@morphdsl/domain-schema";
+import type {
+	DomainSchema,
+	FunctionDef,
+	TypeRef,
+} from "@morphdsl/domain-schema";
 
 import {
 	getAllFunctions,

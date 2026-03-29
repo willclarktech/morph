@@ -1,7 +1,14 @@
 {
 	"name": "@morphdsl/property",
 	"version": "0.0.1",
-	"private": true,
+	"description": "Morph property-based test definitions",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/testing/property",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"

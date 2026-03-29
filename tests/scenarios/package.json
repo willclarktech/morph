@@ -1,5 +1,18 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@morphdsl/scenarios",
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
 	"dependencies": {
 		"@morphdsl/generation-dsl": "workspace:*",
 		"@morphdsl/scenario": "workspace:*"
@@ -11,18 +24,5 @@
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"
 	},
-	"exports": {
-		".": "./src/index.ts"
-	},
-	"name": "@morphdsl/scenarios",
-	"private": true,
-	"scripts": {
-		"build:check": "tsc --noEmit",
-		"format": "prettier --check .",
-		"format:fix": "prettier --write .",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
-	},
-	"type": "module",
-	"version": "0.0.0"
+	"private": true
 }

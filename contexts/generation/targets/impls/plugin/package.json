@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/plugin-impls",
 	"version": "0.0.0",
+	"description": "Morph impls plugin",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/impls/plugin",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -8,13 +16,13 @@
 	"scripts": {
 		"build:check": "tsc --noEmit"
 	},
-	"devDependencies": {
-		"typescript": "^5.8.3"
-	},
 	"dependencies": {
-		"@morphdsl/domain-schema": "*",
 		"@morphdsl/builder-app": "*",
+		"@morphdsl/domain-schema": "*",
 		"@morphdsl/plugin": "*",
 		"@morphdsl/utils": "*"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
 	}
 }

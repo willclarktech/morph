@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/plugin-api",
 	"version": "0.0.0",
+	"description": "Morph api plugin",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/api/plugin",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -8,17 +16,17 @@
 	"scripts": {
 		"build:check": "tsc --noEmit"
 	},
-	"devDependencies": {
-		"typescript": "^5.8.3"
-	},
 	"dependencies": {
-		"@morphdsl/domain-schema": "*",
-		"@morphdsl/runtime-api": "*",
 		"@morphdsl/builder-app": "*",
+		"@morphdsl/builder-test": "*",
+		"@morphdsl/domain-schema": "*",
 		"@morphdsl/generator-env": "*",
 		"@morphdsl/generator-openapi": "*",
 		"@morphdsl/plugin": "*",
-		"@morphdsl/builder-test": "*",
+		"@morphdsl/runtime-api": "*",
 		"@morphdsl/utils": "*"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
 	}
 }

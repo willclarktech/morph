@@ -1,4 +1,4 @@
-# @morphdsl/cli
+# @morph/cli
 
 Code generation from domain schemas
 

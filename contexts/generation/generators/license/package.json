@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/generator-license",
 	"version": "0.0.0",
+	"description": "Morph license generator",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/generators/license",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"

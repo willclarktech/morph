@@ -1,4 +1,32 @@
 {
+	"name": "morph-dsl-vscode",
+	"version": "0.0.0",
+	"description": "VSCode language support for Morph DSL",
+	"main": "./dist/extension.js",
+	"scripts": {
+		"build": "bun esbuild.config.ts",
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"package": "bun run build && bunx @vscode/vsce package --no-dependencies --skip-license"
+	},
+	"dependencies": {
+		"@morphdsl/schema-dsl-core": "workspace:*",
+		"@morphdsl/generator-vscode": "workspace:*",
+		"effect": "^3.19.13"
+	},
+	"devDependencies": {
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
+		"@types/vscode": "^1.96.0",
+		"@vscode/vsce": "^3.0.0",
+		"esbuild": "^0.25.0",
+		"eslint": "^9.39.0",
+		"prettier": "^3.4.2",
+		"typescript": "^5.7.2"
+	},
 	"activationEvents": [
 		"onLanguage:morph"
 	],
@@ -33,38 +61,9 @@
 			}
 		]
 	},
-	"dependencies": {
-		"@morphdsl/generator-vscode": "workspace:*",
-		"@morphdsl/schema-dsl-core": "workspace:*",
-		"effect": "^3.19.13"
-	},
-	"description": "VSCode language support for Morph DSL",
-	"devDependencies": {
-		"@morphdsl/eslint-config": "workspace:*",
-		"@morphdsl/tsconfig": "workspace:*",
-		"@types/vscode": "^1.96.0",
-		"@vscode/vsce": "^3.0.0",
-		"esbuild": "^0.25.0",
-		"eslint": "^9.39.0",
-		"prettier": "^3.4.2",
-		"typescript": "^5.7.2"
-	},
 	"displayName": "Morph DSL",
 	"engines": {
 		"vscode": "^1.96.0"
 	},
-	"main": "./dist/extension.js",
-	"name": "morph-dsl-vscode",
-	"private": true,
-	"publisher": "morph",
-	"scripts": {
-		"build": "bun esbuild.config.ts",
-		"build:check": "tsc --noEmit",
-		"format": "prettier --check .",
-		"format:fix": "prettier --write .",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
-		"package": "bun run build && bunx @vscode/vsce package --no-dependencies --skip-license"
-	},
-	"version": "0.0.0"
+	"publisher": "morph"
 }

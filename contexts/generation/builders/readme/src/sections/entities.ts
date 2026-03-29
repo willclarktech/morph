@@ -1,7 +1,11 @@
 /**
  * Generate entities section.
  */
-import type { EntityDef, QualifiedEntry, TypeRef } from "@morphdsl/domain-schema";
+import type {
+	EntityDef,
+	QualifiedEntry,
+	TypeRef,
+} from "@morphdsl/domain-schema";
 
 import { code, heading, table } from "../markdown";
 

@@ -2,12 +2,20 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/tsconfig",
 	"version": "0.0.0",
-	"private": true,
-	"files": [
-		"*.json"
-	],
+	"description": "Morph tsconfig",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "config/tsconfig",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"scripts": {
 		"format": "prettier --check .",
 		"format:fix": "prettier --write ."
-	}
+	},
+	"private": true,
+	"files": [
+		"*.json"
+	]
 }

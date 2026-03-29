@@ -17,7 +17,12 @@ import {
 	getOperationsFlat,
 	isDomainService,
 } from "@morphdsl/domain-schema";
-import { indent, sortImports, toKebabCase, toPascalCase } from "@morphdsl/utils";
+import {
+	indent,
+	sortImports,
+	toKebabCase,
+	toPascalCase,
+} from "@morphdsl/utils";
 
 import { describeOutput, extractOutputTypes } from "./operation";
 

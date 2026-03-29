@@ -8,7 +8,10 @@ import type {
 	SubscriberDef,
 } from "@morphdsl/domain-schema";
 
-import { getAllSubscribers, getCommandsWithEvents } from "@morphdsl/domain-schema";
+import {
+	getAllSubscribers,
+	getCommandsWithEvents,
+} from "@morphdsl/domain-schema";
 
 import { code, heading, list, table } from "../markdown";
 

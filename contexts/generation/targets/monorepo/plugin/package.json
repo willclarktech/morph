@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/plugin-monorepo-root",
 	"version": "0.0.0",
+	"description": "Morph monorepo-root plugin",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/monorepo/plugin",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -8,15 +16,15 @@
 	"scripts": {
 		"build:check": "tsc --noEmit"
 	},
-	"devDependencies": {
-		"typescript": "^5.8.3"
-	},
 	"dependencies": {
-		"@morphdsl/domain-schema": "*",
 		"@morphdsl/builder-app": "*",
+		"@morphdsl/builder-readme": "*",
+		"@morphdsl/domain-schema": "*",
 		"@morphdsl/generator-diagrams": "*",
 		"@morphdsl/generator-license": "*",
-		"@morphdsl/plugin": "*",
-		"@morphdsl/builder-readme": "*"
+		"@morphdsl/plugin": "*"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.3"
 	}
 }

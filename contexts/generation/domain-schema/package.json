@@ -2,7 +2,14 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/domain-schema",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph domain schema types and utilities",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/domain-schema",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": {
@@ -19,13 +26,13 @@
 		"test": "bun test",
 		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
 	},
+	"dependencies": {
+		"@morphdsl/utils": "*",
+		"effect": "^3.19.13"
+	},
 	"devDependencies": {
 		"@morphdsl/eslint-config": "*",
 		"@morphdsl/tsconfig": "*",
 		"eslint": "^9.39.0"
-	},
-	"dependencies": {
-		"@morphdsl/utils": "*",
-		"effect": "^3.19.13"
 	}
 }

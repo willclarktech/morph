@@ -1,6 +1,14 @@
 {
 	"name": "@morphdsl/builder-test",
 	"version": "0.0.0",
+	"description": "Morph test builder",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/builders/test",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"

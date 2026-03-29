@@ -2,7 +2,14 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/runtime-cli",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph cli runtime",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "contexts/generation/targets/cli/generator",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": {
@@ -17,9 +24,9 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"dependencies": {
+		"@morphdsl/builder-readme": "*",
 		"@morphdsl/codec-dsl": "workspace:*",
 		"@morphdsl/domain-schema": "*",
-		"@morphdsl/builder-readme": "*",
 		"@morphdsl/operation": "workspace:*",
 		"@morphdsl/utils": "*",
 		"effect": "^3.16.0"

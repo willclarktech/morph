@@ -21,7 +21,9 @@ export interface ValidateSessionHandler {
 }
 
 export const ValidateSessionHandler =
-	Context.GenericTag<ValidateSessionHandler>("@morphdsl/ValidateSessionHandler");
+	Context.GenericTag<ValidateSessionHandler>(
+		"@morphdsl/ValidateSessionHandler",
+	);
 
 export const ValidateSessionHandlerLive = Layer.succeed(
 	ValidateSessionHandler,

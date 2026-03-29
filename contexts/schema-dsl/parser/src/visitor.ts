@@ -112,7 +112,7 @@ class MorphCstVisitor extends BaseCstVisitor {
 		const valueToken = context["StringLiteral"]![0] as IToken;
 		return {
 			key: tokenImage(keyToken),
-			value: stripQuotes(valueToken),
+			value: stripQuotes(tokenImage(valueToken)),
 			range: rangeFromTokens(keyToken, valueToken),
 		};
 	}

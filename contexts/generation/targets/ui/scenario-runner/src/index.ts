@@ -5,7 +5,10 @@
  * Uses the same scenario format as library, CLI, and API runners.
  */
 import type { Prose, Runner } from "@morphdsl/scenario-runner";
-import type { ServerConfig, ServerInstance } from "@morphdsl/scenario-runner-api";
+import type {
+	ServerConfig,
+	ServerInstance,
+} from "@morphdsl/scenario-runner-api";
 
 import { createRunner } from "@morphdsl/scenario-runner";
 import { startServer } from "@morphdsl/scenario-runner-api";

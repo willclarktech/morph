@@ -152,11 +152,19 @@ describe("buildPackageJson", () => {
 		expect(result.bin["test-cli"]).toBe("./src/index.ts");
 	});
 
-	test("keys are sorted alphabetically", () => {
+	test("keys are in human-friendly order", () => {
 		const result = JSON.parse(
 			buildPackageJson({ projectName: "test", packageSuffix: "core" }),
 		);
 		const keys = Object.keys(result);
-		expect(keys).toEqual([...keys].sort());
+		expect(keys).toEqual([
+			"$schema",
+			"name",
+			"version",
+			"type",
+			"scripts",
+			"devDependencies",
+			"private",
+		]);
 	});
 });
