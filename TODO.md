@@ -26,6 +26,7 @@
 | VSCode Marketplace publisher setup | S | Create publisher at marketplace.visualstudio.com, set PAT, add icon |
 | Register on mcp.so | S | Submit @morphdsl/mcp package for discovery |
 | Thread schema metadata through all `buildPackageJson` callers | M | Core/DSL/CLI/etc plugins should pass `metadata` from schema context |
+| Project website (GitHub Pages) | M | Static site with docs, getting started guide, DSL playground. Deploy from `docs/` or a dedicated `site/` directory via GitHub Pages |
 
 ## Post-MVP
 
