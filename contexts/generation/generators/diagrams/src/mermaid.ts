@@ -1,4 +1,4 @@
-import type { TypeRef } from "@morph/domain-schema";
+import type { TypeRef } from "@morphdsl/domain-schema";
 
 /**
  * Convert a TypeRef to a Mermaid-compatible type string.

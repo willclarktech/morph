@@ -1,13 +1,13 @@
 /**
  * Route handler creation with runtime and auth injection.
  */
-import type { CodecRegistry } from "@morph/codec-dsl";
-import type { InjectableParam } from "@morph/domain-schema";
-import type { AnyOperation } from "@morph/operation";
+import type { CodecRegistry } from "@morphdsl/codec-dsl";
+import type { InjectableParam } from "@morphdsl/domain-schema";
+import type { AnyOperation } from "@morphdsl/operation";
 import type { Context, ManagedRuntime } from "effect";
 import type * as EffectType from "effect/Effect";
 
-import { jsonStringify } from "@morph/utils";
+import { jsonStringify } from "@morphdsl/utils";
 import { Cause, Effect, Exit } from "effect";
 import * as S from "effect/Schema";
 

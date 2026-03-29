@@ -1,5 +1,5 @@
 {
-	"name": "@morph/plugin-core",
+	"name": "@morphdsl/plugin-core",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {
@@ -12,10 +12,10 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/builder-app": "*",
-		"@morph/generator-core": "*",
-		"@morph/plugin": "*",
-		"@morph/builder-readme": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/builder-app": "*",
+		"@morphdsl/generator-core": "*",
+		"@morphdsl/plugin": "*",
+		"@morphdsl/builder-readme": "*"
 	}
 }

@@ -5,7 +5,7 @@
  * This text is merged with system text when generating UI apps that use auth.
  */
 
-import type { TranslationEntry } from "@morph/domain-schema";
+import type { TranslationEntry } from "@morphdsl/domain-schema";
 
 /**
  * Auth module text with translations for common UI languages.

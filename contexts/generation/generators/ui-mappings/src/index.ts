@@ -2,14 +2,14 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
 	getAllOperations,
 	getInjectableParams,
-} from "@morph/domain-schema";
-import { indent, pluralize } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { indent, pluralize } from "@morphdsl/utils";
 
 /**
  * Generate injectable params config for UI test runner.

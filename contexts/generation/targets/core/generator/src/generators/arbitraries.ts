@@ -1,7 +1,7 @@
 /**
  * Fast-check arbitrary generation for mock data.
  */
-import type { OperationDef } from "@morph/domain-schema";
+import type { OperationDef } from "@morphdsl/domain-schema";
 
 type OutputTypeRef = OperationDef["output"];
 

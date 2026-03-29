@@ -1,13 +1,13 @@
-import type { PluginContext } from "@morph/plugin";
+import type { PluginContext } from "@morphdsl/plugin";
 
-import type { DomainSchema, GeneratedFile, OperationDef, QualifiedEntry } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile, OperationDef, QualifiedEntry } from "@morphdsl/domain-schema";
 import {
 	contextNameToKebab,
 	getEntitiesForContext,
 	getFunctionsForContext,
 	getOperationsForContext,
 	getValueObjectsForContext,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 import {
 	codeBlock,
 	description,
@@ -18,7 +18,7 @@ import {
 	joinSections,
 	operations,
 	valueObjects,
-} from "@morph/builder-readme";
+} from "@morphdsl/builder-readme";
 
 export interface ContextCoreInfo {
 	readonly contextName: string;

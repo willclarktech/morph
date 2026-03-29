@@ -1,4 +1,4 @@
-import type { GeneratedFile, GenerationResult } from "@morph/domain-schema";
+import type { GeneratedFile, GenerationResult } from "@morphdsl/domain-schema";
 
 const isGeneratedFile = (value: unknown): value is GeneratedFile =>
 	value !== null &&

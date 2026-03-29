@@ -4,9 +4,9 @@ import type {
 	DomainSchema,
 	ParamDef,
 	QueryDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getAllEntities, getAllOperations } from "@morph/domain-schema";
+import { getAllEntities, getAllOperations } from "@morphdsl/domain-schema";
 
 import { isTimestampType, typeRefToProto } from "./type-mapping";
 

@@ -5,11 +5,11 @@
  * Starts an API server subprocess, creates a typed Effect client, and
  * executes client methods as Effects.
  */
-import type { Prose, Runner } from "@morph/scenario-runner";
-import type { ServerConfig, ServerInstance } from "@morph/scenario-runner-api";
+import type { Prose, Runner } from "@morphdsl/scenario-runner";
+import type { ServerConfig, ServerInstance } from "@morphdsl/scenario-runner-api";
 
-import { createRunner, getField } from "@morph/scenario-runner";
-import { startServer } from "@morph/scenario-runner-api";
+import { createRunner, getField } from "@morphdsl/scenario-runner";
+import { startServer } from "@morphdsl/scenario-runner-api";
 import { Effect } from "effect";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Client accepts any generated client type
@@ -107,5 +107,5 @@ export const createClientRunner = <C = any>(
 	);
 };
 
-export type { ServerConfig, ServerInstance } from "@morph/scenario-runner-api";
-export { startServer } from "@morph/scenario-runner-api";
+export type { ServerConfig, ServerInstance } from "@morphdsl/scenario-runner-api";
+export { startServer } from "@morphdsl/scenario-runner-api";

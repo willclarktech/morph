@@ -4,25 +4,25 @@ import { sortImports } from "./imports";
 
 test("sorts type imports before external imports", () => {
 	const input = `import { Effect } from "effect";
-import type { Context } from "@morph/core";`;
+import type { Context } from "@morphdsl/core";`;
 
 	const result = sortImports(input);
 
-	expect(result).toBe(`import type { Context } from "@morph/core";
+	expect(result).toBe(`import type { Context } from "@morphdsl/core";
 
 import { Effect } from "effect";`);
 });
 
 test("sorts external imports alphabetically", () => {
 	const input = `import { Effect } from "effect";
-import { createCli } from "@morph/runtime-cli";
+import { createCli } from "@morphdsl/runtime-cli";
 import { Data } from "effect/Data";
-import { HandlersLayer } from "@morph/generation-core";`;
+import { HandlersLayer } from "@morphdsl/generation-core";`;
 
 	const result = sortImports(input);
 
-	expect(result).toBe(`import { HandlersLayer } from "@morph/generation-core";
-import { createCli } from "@morph/runtime-cli";
+	expect(result).toBe(`import { HandlersLayer } from "@morphdsl/generation-core";
+import { createCli } from "@morphdsl/runtime-cli";
 import { Effect } from "effect";
 import { Data } from "effect/Data";`);
 });
@@ -44,7 +44,7 @@ test("handles multi-line imports", () => {
 	const input = `import {
 	createCli,
 	filterBackendArgument,
-} from "@morph/runtime-cli";
+} from "@morphdsl/runtime-cli";
 import { Effect } from "effect";`;
 
 	const result = sortImports(input);
@@ -52,18 +52,18 @@ import { Effect } from "effect";`;
 	expect(result).toBe(`import {
 	createCli,
 	filterBackendArgument,
-} from "@morph/runtime-cli";
+} from "@morphdsl/runtime-cli";
 import { Effect } from "effect";`);
 });
 
 test("preserves all three groups with blank line separators", () => {
 	const input = `import { foo } from "./foo";
 import { Effect } from "effect";
-import type { Bar } from "@morph/core";`;
+import type { Bar } from "@morphdsl/core";`;
 
 	const result = sortImports(input);
 
-	expect(result).toBe(`import type { Bar } from "@morph/core";
+	expect(result).toBe(`import type { Bar } from "@morphdsl/core";
 
 import { Effect } from "effect";
 

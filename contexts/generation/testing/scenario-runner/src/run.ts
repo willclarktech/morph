@@ -1,6 +1,6 @@
-import type { Scenario } from "@morph/scenario";
+import type { Scenario } from "@morphdsl/scenario";
 
-import { isAssertion } from "@morph/scenario";
+import { isAssertion } from "@morphdsl/scenario";
 
 import type {
 	Prose,

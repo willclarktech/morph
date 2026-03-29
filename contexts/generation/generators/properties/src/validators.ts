@@ -1,13 +1,13 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
 import {
 	conditionReferencesCurrentUser,
 	conditionReferencesInput,
 	getAllEntities,
 	getAllInvariants,
-} from "@morph/domain-schema";
-import { compileCondition } from "@morph/generator-core";
-import { sortImports, toCamelCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { compileCondition } from "@morphdsl/generator-core";
+import { sortImports, toCamelCase } from "@morphdsl/utils";
 
 export const generateValidatorProperties = (
 	schema: DomainSchema,
@@ -106,8 +106,8 @@ export const validatorProperties = [];
 
 	const imports = sortImports(
 		[
-			`import type { AnyPropertySuite } from "@morph/property";`,
-			`import { validatorProperty } from "@morph/property";`,
+			`import type { AnyPropertySuite } from "@morphdsl/property";`,
+			`import { validatorProperty } from "@morphdsl/property";`,
 			`import * as fc from "fast-check";`,
 			`import { ${arbitraryImportsStr} } from "${dslPackage}";`,
 		].join("\n"),

@@ -149,7 +149,7 @@ Scenario tests verify behavior across all app targets:
 ```typescript
 // fixtures/scenarios/scenarios.ts
 
-import { assert, given, scenario, then, when } from "@morph/scenario";
+import { assert, given, scenario, then, when } from "@morphdsl/scenario";
 import { createPaste, listPastes } from "@pastebin-app/pastes-dsl";
 
 export const scenarios = [

@@ -1,6 +1,6 @@
-import type { ParamDef } from "@morph/domain-schema";
+import type { ParamDef } from "@morphdsl/domain-schema";
 
-import { indent } from "@morph/utils";
+import { indent } from "@morphdsl/utils";
 
 import { parameterDefToSchema } from "../mappers";
 

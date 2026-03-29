@@ -1,3 +1,3 @@
-// Re-export from @morph/schema-dsl-impls
+// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetHoverHandlerLive } from "@morph/schema-dsl-impls";
+export { GetHoverHandlerLive } from "@morphdsl/schema-dsl-impls";

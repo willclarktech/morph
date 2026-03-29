@@ -6,9 +6,9 @@ import type {
 	DomainSchema,
 	EntityDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { pluralize } from "@morph/utils";
+import { pluralize } from "@morphdsl/utils";
 
 import type {
 	BooleanToggle,

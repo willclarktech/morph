@@ -2,7 +2,7 @@ import type {
 	JwtPayload,
 	TokenExpiredError,
 	TokenInvalidError,
-} from "@morph/auth-jwt-dsl";
+} from "@morphdsl/auth-jwt-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -17,7 +17,7 @@ export interface VerifyTokenHandler {
 }
 
 export const VerifyTokenHandler = Context.GenericTag<VerifyTokenHandler>(
-	"@morph/VerifyTokenHandler",
+	"@morphdsl/VerifyTokenHandler",
 );
 
 export const VerifyTokenHandlerLive = Layer.succeed(VerifyTokenHandler, {

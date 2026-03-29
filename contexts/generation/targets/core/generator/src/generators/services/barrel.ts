@@ -7,9 +7,9 @@ import type {
 	EventStoreBackend,
 	GeneratedFile,
 	StorageBackend,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { toKebabCase } from "@morph/utils";
+import { toKebabCase } from "@morphdsl/utils";
 
 /**
  * Generate the services barrel export file with composed InMemoryLayer.

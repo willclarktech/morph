@@ -1,4 +1,4 @@
-import type { FunctionDef } from "@morph/domain-schema";
+import type { FunctionDef } from "@morphdsl/domain-schema";
 
 import type { OpenApiSchema } from "./mappers";
 import type { Operation } from "./operations";

@@ -1,17 +1,17 @@
-import type { DomainSchema } from "@morph/domain-schema";
-import type { AnyOperation } from "@morph/operation";
-import type { Prose, Runner } from "@morph/scenario-runner";
+import type { DomainSchema } from "@morphdsl/domain-schema";
+import type { AnyOperation } from "@morphdsl/operation";
+import type { Prose, Runner } from "@morphdsl/scenario-runner";
 
 import {
 	getDomainServiceAction,
 	getPrimaryWriteAggregate,
 	isDomainService,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 import {
 	createRunner,
 	getField,
 	resolveOperationName,
-} from "@morph/scenario-runner";
+} from "@morphdsl/scenario-runner";
 
 import type { DomainServiceContext } from "./request";
 import type { ServerConfig, ServerInstance } from "./server";

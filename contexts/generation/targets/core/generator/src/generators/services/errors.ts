@@ -2,7 +2,7 @@
  * Generate the shared errors file for repository services.
  */
 
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 export const generateErrorsFile = (): GeneratedFile => {
 	const content = `// Generated service errors

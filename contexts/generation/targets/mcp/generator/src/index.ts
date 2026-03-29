@@ -2,7 +2,7 @@
  * Morph MCP Generator
  *
  * Generate MCP (Model Context Protocol) servers from domain operations.
- * Follows the same pattern as @morph/runtime-cli and @morph/runtime-api.
+ * Follows the same pattern as @morphdsl/runtime-cli and @morphdsl/runtime-api.
  */
 
 // Re-export runtime

@@ -4,11 +4,11 @@
  * Tests generated HTMX web UIs via Playwright browser automation.
  * Uses the same scenario format as library, CLI, and API runners.
  */
-import type { Prose, Runner } from "@morph/scenario-runner";
-import type { ServerConfig, ServerInstance } from "@morph/scenario-runner-api";
+import type { Prose, Runner } from "@morphdsl/scenario-runner";
+import type { ServerConfig, ServerInstance } from "@morphdsl/scenario-runner-api";
 
-import { createRunner } from "@morph/scenario-runner";
-import { startServer } from "@morph/scenario-runner-api";
+import { createRunner } from "@morphdsl/scenario-runner";
+import { startServer } from "@morphdsl/scenario-runner-api";
 
 import type { BrowserManager } from "./browser";
 import type { UiMappings } from "./interaction";

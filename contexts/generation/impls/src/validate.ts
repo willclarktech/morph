@@ -1,4 +1,4 @@
-import type { InvalidSchemaError } from "@morph/generation-dsl";
+import type { InvalidSchemaError } from "@morphdsl/generation-dsl";
 import type { Effect } from "effect";
 
 import { Context, Effect as E, Layer } from "effect";
@@ -13,7 +13,7 @@ export interface ValidateHandler {
 }
 
 export const ValidateHandler = Context.GenericTag<ValidateHandler>(
-	"@morph/impls/ValidateHandler",
+	"@morphdsl/impls/ValidateHandler",
 );
 
 export const ValidateHandlerLive = Layer.succeed(ValidateHandler, {

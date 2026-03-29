@@ -1,4 +1,4 @@
-import type { OperationDef, QualifiedEntry } from "@morph/domain-schema";
+import type { OperationDef, QualifiedEntry } from "@morphdsl/domain-schema";
 
 import {
 	getAllCommands,
@@ -6,8 +6,8 @@ import {
 	getAllFunctions,
 	getAllOperations,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
-import { pluralize, separator, toKebabCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { pluralize, separator, toKebabCase } from "@morphdsl/utils";
 
 import type { GenerateUiAppOptions } from "./config";
 import type { RouteHandler } from "./route-handlers";

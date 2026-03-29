@@ -1,4 +1,4 @@
-import type { ConstraintDef } from "@morph/domain-schema";
+import type { ConstraintDef } from "@morphdsl/domain-schema";
 
 /**
  * Convert a ConstraintDef to its Effect/Schema refinement string.

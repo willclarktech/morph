@@ -1,1 +1,1 @@
-export { default } from "@morph/eslint-config";
+export { default } from "@morphdsl/eslint-config";

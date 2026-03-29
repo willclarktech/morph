@@ -4,9 +4,9 @@ import type {
 	QualifiedEntry,
 	RelationshipDef,
 	TypeRef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getAllEntities, getAllValueObjects } from "@morph/domain-schema";
+import { getAllEntities, getAllValueObjects } from "@morphdsl/domain-schema";
 
 import type { GenerateOptions } from "./generate";
 

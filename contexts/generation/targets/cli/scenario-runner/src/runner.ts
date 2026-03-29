@@ -1,7 +1,7 @@
-import type { Prose, Runner } from "@morph/scenario-runner";
+import type { Prose, Runner } from "@morphdsl/scenario-runner";
 
-import { createRunner, resolveOperationName } from "@morph/scenario-runner";
-import { jsonParse, jsonStringify } from "@morph/utils";
+import { createRunner, resolveOperationName } from "@morphdsl/scenario-runner";
+import { jsonParse, jsonStringify } from "@morphdsl/utils";
 import { execSync } from "node:child_process";
 import { rmSync } from "node:fs";
 

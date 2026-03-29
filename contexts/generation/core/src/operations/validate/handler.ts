@@ -1,3 +1,3 @@
-// Re-export handler interfaces from @morph/generation-impls
+// Re-export handler interfaces from @morphdsl/generation-impls
 
-export { ValidateHandler } from "@morph/generation-impls";
+export { ValidateHandler } from "@morphdsl/generation-impls";

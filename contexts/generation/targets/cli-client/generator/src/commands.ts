@@ -1,6 +1,6 @@
-import type { OperationDef, QualifiedEntry } from "@morph/domain-schema";
+import type { OperationDef, QualifiedEntry } from "@morphdsl/domain-schema";
 
-import { toKebabCase } from "@morph/utils";
+import { toKebabCase } from "@morphdsl/utils";
 
 export const generateLoginCommand = (hasAuth: boolean): string => {
 	if (!hasAuth) return "";

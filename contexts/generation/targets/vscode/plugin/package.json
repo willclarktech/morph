@@ -1,5 +1,5 @@
 {
-	"name": "@morph/plugin-vscode",
+	"name": "@morphdsl/plugin-vscode",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {
@@ -12,10 +12,10 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/builder-app": "*",
-		"@morph/generator-vscode": "*",
-		"@morph/plugin": "*",
-		"@morph/utils": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/builder-app": "*",
+		"@morphdsl/generator-vscode": "*",
+		"@morphdsl/plugin": "*",
+		"@morphdsl/utils": "*"
 	}
 }

@@ -1,6 +1,6 @@
-import type { ProductTypeDef, TypeRef } from "@morph/domain-schema";
+import type { ProductTypeDef, TypeRef } from "@morphdsl/domain-schema";
 
-import { indent } from "@morph/utils";
+import { indent } from "@morphdsl/utils";
 
 import { typeRefToSchema } from "../mappers/schema-reference";
 import { typeRefToTypeScript } from "../mappers/type-reference";

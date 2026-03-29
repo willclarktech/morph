@@ -24,7 +24,7 @@ Generates a typed HTTP client library with method-per-operation, typed error uni
 
 ```typescript
 import type { Todo, TodoId, User, UserId } from "@todo-app/tasks-dsl";
-import type { HttpClientError } from "@morph/http-client";
+import type { HttpClientError } from "@morphdsl/http-client";
 
 export interface Client {
   readonly completeTodo: (params: {

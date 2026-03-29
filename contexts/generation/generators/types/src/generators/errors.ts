@@ -9,7 +9,7 @@
  * 2. Context-level errors - errors with typed fields
  */
 
-import type { ContextErrorEntry, DomainSchema } from "@morph/domain-schema";
+import type { ContextErrorEntry, DomainSchema } from "@morphdsl/domain-schema";
 
 import {
 	getAllContextErrors,
@@ -17,7 +17,7 @@ import {
 	getContextErrorsForContext,
 	getFunctionsForContext,
 	getOperationsForContext,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import { typeRefToTypeScript } from "../mappers/type-reference";
 

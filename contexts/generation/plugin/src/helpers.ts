@@ -1,6 +1,6 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
-import { getAllFunctions, getAllOperations } from "@morph/domain-schema";
+import { getAllFunctions, getAllOperations } from "@morphdsl/domain-schema";
 
 export const schemaHasTag = (schema: DomainSchema, tag: string): boolean =>
 	getAllOperations(schema).some((entry) => entry.def.tags.includes(tag)) ||

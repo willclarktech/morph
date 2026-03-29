@@ -1,3 +1,3 @@
-// Re-export from @morph/generation-impls
+// Re-export from @morphdsl/generation-impls
 
-export { ValidateHandlerLive } from "@morph/generation-impls";
+export { ValidateHandlerLive } from "@morphdsl/generation-impls";

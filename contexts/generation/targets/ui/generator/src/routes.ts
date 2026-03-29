@@ -1,7 +1,7 @@
 /**
  * Route inference for UI generation.
  */
-import { pluralize, toKebabCase } from "@morph/utils";
+import { pluralize, toKebabCase } from "@morphdsl/utils";
 
 /**
  * UI route definition.

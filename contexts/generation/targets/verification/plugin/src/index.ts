@@ -1,8 +1,8 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
-import { buildConfigFiles, buildPackageJson } from "@morph/builder-app";
-import { generate } from "@morph/generator-verification";
+import { buildConfigFiles, buildPackageJson } from "@morphdsl/builder-app";
+import { generate } from "@morphdsl/generator-verification";
 
 const PACKAGE_PATH = "tests/verification";
 

@@ -1,9 +1,9 @@
 /**
  * Generate errors section.
  */
-import type { DomainSchema, ErrorWithOperation } from "@morph/domain-schema";
+import type { DomainSchema, ErrorWithOperation } from "@morphdsl/domain-schema";
 
-import { getAllErrors } from "@morph/domain-schema";
+import { getAllErrors } from "@morphdsl/domain-schema";
 
 import { code, heading, table } from "../markdown";
 

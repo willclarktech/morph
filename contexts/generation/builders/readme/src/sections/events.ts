@@ -6,9 +6,9 @@ import type {
 	DomainSchema,
 	QualifiedEntry,
 	SubscriberDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getAllSubscribers, getCommandsWithEvents } from "@morph/domain-schema";
+import { getAllSubscribers, getCommandsWithEvents } from "@morphdsl/domain-schema";
 
 import { code, heading, list, table } from "../markdown";
 

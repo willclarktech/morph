@@ -1,8 +1,8 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GenerationResult } from "@morph/generation-dsl";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GenerationResult } from "@morphdsl/generation-dsl";
 import type { Effect } from "effect";
 
-import { init as scaffoldInit } from "@morph/builder-scaffold";
+import { init as scaffoldInit } from "@morphdsl/builder-scaffold";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface InitHandler {
@@ -13,7 +13,7 @@ export interface InitHandler {
 }
 
 export const InitHandler = Context.GenericTag<InitHandler>(
-	"@morph/impls/InitHandler",
+	"@morphdsl/impls/InitHandler",
 );
 
 export const InitHandlerLive = Layer.succeed(InitHandler, {

@@ -1,4 +1,4 @@
-import { buildPackageJson } from "@morph/builder-app";
+import { buildPackageJson } from "@morphdsl/builder-app";
 
 export const generateClientCliPackageJson = (
 	name: string,
@@ -12,11 +12,11 @@ export const generateClientCliPackageJson = (
 		packageSuffix: "cli-client",
 		bin: { [`${name}-client`]: "./src/index.ts" },
 		dependencies: {
-			"@morph/runtime-cli": "workspace:*",
+			"@morphdsl/runtime-cli": "workspace:*",
 			[clientPackage]: "workspace:*",
 		},
 		devDependencies: {
-			"@morph/scenario-runner-cli-client": "workspace:*",
+			"@morphdsl/scenario-runner-cli-client": "workspace:*",
 			[corePackage]: "workspace:*",
 			[scenariosPackage]: "workspace:*",
 		},

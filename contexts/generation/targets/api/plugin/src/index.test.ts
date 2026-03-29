@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 
-import type { ContextDef, DomainSchema } from "@morph/domain-schema";
-import type { PluginContext } from "@morph/plugin";
-import type { SchemaFeatures } from "@morph/builder-app";
+import type { ContextDef, DomainSchema } from "@morphdsl/domain-schema";
+import type { PluginContext } from "@morphdsl/plugin";
+import type { SchemaFeatures } from "@morphdsl/builder-app";
 
 import { apiPlugin } from "./index";
 

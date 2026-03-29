@@ -1,12 +1,12 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
 import {
 	getFunctionsForContext,
 	getOperationsForContext,
-} from "@morph/domain-schema";
-import { buildConfigFiles } from "@morph/builder-app";
-import { toKebabCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { buildConfigFiles } from "@morphdsl/builder-app";
+import { toKebabCase } from "@morphdsl/utils";
 
 import {
 	generateHandlerScaffold,

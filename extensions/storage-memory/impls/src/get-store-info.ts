@@ -1,4 +1,4 @@
-import type { MemoryStoreInfo } from "@morph/storage-memory-dsl";
+import type { MemoryStoreInfo } from "@morphdsl/storage-memory-dsl";
 
 import { Context, Effect, Layer, Ref } from "effect";
 
@@ -12,7 +12,7 @@ export interface GetStoreInfoHandler {
 }
 
 export const GetStoreInfoHandler = Context.GenericTag<GetStoreInfoHandler>(
-	"@morph/GetStoreInfoHandler",
+	"@morphdsl/GetStoreInfoHandler",
 );
 
 export const GetStoreInfoHandlerLive = Layer.succeed(GetStoreInfoHandler, {

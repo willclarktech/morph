@@ -54,17 +54,17 @@ export const buildAuthImports = (
 	sseImport: string;
 } => ({
 	authImport: features.hasAuth
-		? `import { createSimpleBearerStrategy } from "@morph/runtime-api";
+		? `import { createSimpleBearerStrategy } from "@morphdsl/runtime-api";
 `
 		: "",
 	passwordAuthImport:
 		features.authEntity && features.createUserCmd
-			? `import { verifyPassword } from "@morph/auth-password-impls";
+			? `import { verifyPassword } from "@morphdsl/auth-password-impls";
 import type { ${features.authEntity.entityName} } from "${dslPath}";
 `
 			: "",
 	sseImport: features.hasEvents
-		? `import { createSseManager, wireEventsToSse } from "@morph/runtime-api";
+		? `import { createSseManager, wireEventsToSse } from "@morphdsl/runtime-api";
 `
 		: "",
 });

@@ -1,4 +1,4 @@
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 import * as Data from "effect/Data";
 import * as Effect from "effect/Effect";

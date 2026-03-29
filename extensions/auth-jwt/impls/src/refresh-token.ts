@@ -1,4 +1,4 @@
-import type { TokenExpiredError, TokenInvalidError } from "@morph/auth-jwt-dsl";
+import type { TokenExpiredError, TokenInvalidError } from "@morphdsl/auth-jwt-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -13,7 +13,7 @@ export interface RefreshTokenHandler {
 }
 
 export const RefreshTokenHandler = Context.GenericTag<RefreshTokenHandler>(
-	"@morph/RefreshTokenHandler",
+	"@morphdsl/RefreshTokenHandler",
 );
 
 export const RefreshTokenHandlerLive = Layer.succeed(RefreshTokenHandler, {

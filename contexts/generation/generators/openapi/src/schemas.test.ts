@@ -1,4 +1,4 @@
-import type { EntityDef, ValueObjectDef } from "@morph/domain-schema";
+import type { EntityDef, ValueObjectDef } from "@morphdsl/domain-schema";
 
 import { describe, expect, test } from "bun:test";
 

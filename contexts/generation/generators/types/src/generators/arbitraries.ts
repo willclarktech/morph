@@ -1,11 +1,11 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
 	getAllValueObjects,
 	getEntitiesForContext,
 	getValueObjectsForContext,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 /**
  * Generate fast-check Arbitraries from Effect Schemas.

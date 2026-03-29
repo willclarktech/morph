@@ -1,6 +1,6 @@
-import type { ConnectionInfo } from "@morph/storage-redis-dsl";
+import type { ConnectionInfo } from "@morphdsl/storage-redis-dsl";
 
-import { ConnectionFailedError } from "@morph/storage-redis-dsl";
+import { ConnectionFailedError } from "@morphdsl/storage-redis-dsl";
 import { Context, Effect, Layer } from "effect";
 
 import { getRedisState } from "./redis-state";
@@ -14,7 +14,7 @@ export interface GetConnectionInfoHandler {
 
 export const GetConnectionInfoHandler =
 	Context.GenericTag<GetConnectionInfoHandler>(
-		"@morph/GetConnectionInfoHandler",
+		"@morphdsl/GetConnectionInfoHandler",
 	);
 
 export const GetConnectionInfoHandlerLive = Layer.succeed(

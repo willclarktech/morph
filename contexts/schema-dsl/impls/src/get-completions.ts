@@ -1,12 +1,12 @@
-import type { DslCompletion } from "@morph/schema-dsl-dsl";
+import type { DslCompletion } from "@morphdsl/schema-dsl-dsl";
 import type {
 	ContextAst,
 	DomainAst,
 	SourceRange,
-} from "@morph/schema-dsl-parser";
+} from "@morphdsl/schema-dsl-parser";
 import type { Effect } from "effect";
 
-import { parse } from "@morph/schema-dsl-parser";
+import { parse } from "@morphdsl/schema-dsl-parser";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface GetCompletionsHandler {
@@ -21,7 +21,7 @@ export interface GetCompletionsHandler {
 }
 
 export const GetCompletionsHandler = Context.GenericTag<GetCompletionsHandler>(
-	"@morph/impls/GetCompletionsHandler",
+	"@morphdsl/impls/GetCompletionsHandler",
 );
 
 // ── Completion Data ──────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
-import type { JwtPayload } from "@morph/auth-jwt-dsl";
+import type { JwtPayload } from "@morphdsl/auth-jwt-dsl";
 
-import { TokenExpiredError, TokenInvalidError } from "@morph/auth-jwt-dsl";
+import { TokenExpiredError, TokenInvalidError } from "@morphdsl/auth-jwt-dsl";
 /**
  * JWT implementation using Web Crypto API (HS256).
  *

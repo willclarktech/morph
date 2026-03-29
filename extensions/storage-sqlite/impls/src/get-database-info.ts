@@ -1,6 +1,6 @@
-import type { DatabaseInfo } from "@morph/storage-sqlite-dsl";
+import type { DatabaseInfo } from "@morphdsl/storage-sqlite-dsl";
 
-import { DatabaseLockedError } from "@morph/storage-sqlite-dsl";
+import { DatabaseLockedError } from "@morphdsl/storage-sqlite-dsl";
 import { Context, Effect, Layer } from "effect";
 import { statSync } from "node:fs";
 
@@ -14,7 +14,7 @@ export interface GetDatabaseInfoHandler {
 }
 
 export const GetDatabaseInfoHandler =
-	Context.GenericTag<GetDatabaseInfoHandler>("@morph/GetDatabaseInfoHandler");
+	Context.GenericTag<GetDatabaseInfoHandler>("@morphdsl/GetDatabaseInfoHandler");
 
 export const GetDatabaseInfoHandlerLive = Layer.succeed(
 	GetDatabaseInfoHandler,

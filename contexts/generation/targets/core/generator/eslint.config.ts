@@ -1,4 +1,4 @@
-import config, { configs } from "@morph/eslint-config";
+import config, { configs } from "@morphdsl/eslint-config";
 
 export default [
 	...config,

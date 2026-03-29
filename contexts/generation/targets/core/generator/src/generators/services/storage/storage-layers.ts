@@ -7,9 +7,9 @@ import type {
 	EntityDef,
 	GeneratedFile,
 	StorageBackend,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { indent, separator, toKebabCase, toPascalCase } from "@morph/utils";
+import { indent, separator, toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Aggregate root entry with name and entity definition.
@@ -40,35 +40,35 @@ export const generateStorageLayers = (
 	const imports: string[] = ['import { Effect, Layer } from "effect";', ""];
 
 	if (needsEntityStore) {
-		imports.push('import { createEntityStore } from "@morph/storage-impls";');
+		imports.push('import { createEntityStore } from "@morphdsl/storage-impls";');
 	}
 
 	if (hasMemory) {
 		imports.push(
-			'import { createMemoryTransport } from "@morph/storage-memory-impls";',
+			'import { createMemoryTransport } from "@morphdsl/storage-memory-impls";',
 		);
 	}
 	if (hasJsonFile) {
 		imports.push(
-			'import { createJsonFileTransport } from "@morph/storage-jsonfile-impls";',
+			'import { createJsonFileTransport } from "@morphdsl/storage-jsonfile-impls";',
 		);
 	}
 	if (hasSqlite) {
 		imports.push(
-			'import { createRelationalSqliteStore, openSqliteDatabase } from "@morph/storage-sqlite-impls";',
+			'import { createRelationalSqliteStore, openSqliteDatabase } from "@morphdsl/storage-sqlite-impls";',
 		);
 	}
 	if (hasRedis) {
 		imports.push(
-			'import { connectRedis, createRedisTransport } from "@morph/storage-redis-impls";',
+			'import { connectRedis, createRedisTransport } from "@morphdsl/storage-redis-impls";',
 		);
 	}
 	if (hasEventsourced) {
 		imports.push(
-			'import { createEventsourcedTransport } from "@morph/storage-eventsourced-impls";',
+			'import { createEventsourcedTransport } from "@morphdsl/storage-eventsourced-impls";',
 		);
 		imports.push(
-			'import { EventStoreTransport } from "@morph/eventstore-dsl";',
+			'import { EventStoreTransport } from "@morphdsl/eventstore-dsl";',
 		);
 	}
 

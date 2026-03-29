@@ -2,7 +2,7 @@
  * EventEmitter service generators.
  */
 
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the EventEmitter service interface.

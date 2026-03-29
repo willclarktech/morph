@@ -1,7 +1,7 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
-import { getAggregateRoots } from "@morph/domain-schema";
-import { indent, toCamelCase, toPascalCase } from "@morph/utils";
+import { getAggregateRoots } from "@morphdsl/domain-schema";
+import { indent, toCamelCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Generate mock dependencies for DSL testing.
@@ -14,12 +14,12 @@ export const generateMocks = (schema: DomainSchema): string => {
 		`// Generated mocks for ${schema.name} DSL testing`,
 		"// Do not edit - regenerate from schema",
 		"",
-		`import type { MockFunction } from "@morph/testing";`,
+		`import type { MockFunction } from "@morphdsl/testing";`,
 		"",
-		`import { createMockFunction } from "@morph/testing";`,
+		`import { createMockFunction } from "@morphdsl/testing";`,
 		"",
-		`export type { MockFunction } from "@morph/testing";`,
-		`export { createMockFunction } from "@morph/testing";`,
+		`export type { MockFunction } from "@morphdsl/testing";`,
+		`export { createMockFunction } from "@morphdsl/testing";`,
 		"",
 	].join("\n");
 

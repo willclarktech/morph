@@ -1,12 +1,12 @@
 import {
 	HandlersLayer as GenerationHandlersLayer,
 	ops as GenerationOps,
-} from "@morph/generation-core";
-import { createMcp } from "@morph/runtime-mcp";
+} from "@morphdsl/generation-core";
+import { createMcp } from "@morphdsl/runtime-mcp";
 import {
 	HandlersLayer as SchemaDslHandlersLayer,
 	ops as SchemaDslOps,
-} from "@morph/schema-dsl-core";
+} from "@morphdsl/schema-dsl-core";
 import { Effect, Layer, Logger } from "effect";
 
 // Merge operations from all contexts with prefixes

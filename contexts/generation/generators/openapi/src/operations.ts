@@ -1,4 +1,4 @@
-import type { DomainSchema, OperationDef } from "@morph/domain-schema";
+import type { DomainSchema, OperationDef } from "@morphdsl/domain-schema";
 
 import {
 	conditionReferencesCurrentUser,
@@ -6,7 +6,7 @@ import {
 	getOperationPreInvariantDefs,
 	getPrimaryWriteAggregate,
 	isDomainService,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import type { OpenApiSchema } from "./mappers";
 

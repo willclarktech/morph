@@ -1,7 +1,7 @@
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
-import { getFunctionsFlat, getOperationsFlat } from "@morph/domain-schema";
-import { toKebabCase, toPascalCase } from "@morph/utils";
+import { getFunctionsFlat, getOperationsFlat } from "@morphdsl/domain-schema";
+import { toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Generate the MockHandlersLayer file that combines all mock handler layers.

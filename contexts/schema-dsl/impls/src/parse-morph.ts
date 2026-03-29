@@ -1,9 +1,9 @@
-import type { ParseResult } from "@morph/schema-dsl-dsl";
+import type { ParseResult } from "@morphdsl/schema-dsl-dsl";
 import type { Effect } from "effect";
 
-import { compile } from "@morph/schema-dsl-compiler";
-import { ParseFailedError } from "@morph/schema-dsl-dsl";
-import { parse } from "@morph/schema-dsl-parser";
+import { compile } from "@morphdsl/schema-dsl-compiler";
+import { ParseFailedError } from "@morphdsl/schema-dsl-dsl";
+import { parse } from "@morphdsl/schema-dsl-parser";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface ParseMorphHandler {
@@ -14,7 +14,7 @@ export interface ParseMorphHandler {
 }
 
 export const ParseMorphHandler = Context.GenericTag<ParseMorphHandler>(
-	"@morph/impls/ParseMorphHandler",
+	"@morphdsl/impls/ParseMorphHandler",
 );
 
 export const ParseMorphHandlerLive = Layer.succeed(ParseMorphHandler, {

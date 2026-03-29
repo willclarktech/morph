@@ -5,7 +5,7 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import type { UiRoute } from "../routes";
 

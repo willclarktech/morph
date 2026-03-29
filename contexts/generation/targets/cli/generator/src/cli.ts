@@ -3,8 +3,8 @@
  */
 import type * as Layer from "effect/Layer";
 
-import { isOperation } from "@morph/operation";
-import { toKebabCase } from "@morph/utils";
+import { isOperation } from "@morphdsl/operation";
+import { toKebabCase } from "@morphdsl/utils";
 
 import type { CliConfig, CliOperation, OperationEntry } from "./help";
 

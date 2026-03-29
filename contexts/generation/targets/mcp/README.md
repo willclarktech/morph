@@ -35,7 +35,7 @@ command createTodo @api @mcp {
 **src/index.ts** (excerpt):
 
 ```typescript
-import { createAuthInfoStrategy, createMcp } from "@morph/runtime-mcp";
+import { createAuthInfoStrategy, createMcp } from "@morphdsl/runtime-mcp";
 import { HandlersLayer, ops, resolveStorage, resolveEventStore } from "@todo-app/tasks-core";
 import { Effect, Layer, Logger } from "effect";
 

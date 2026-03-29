@@ -5,7 +5,7 @@ export interface GetAnonymousUserHandler {
 }
 
 export const GetAnonymousUserHandler =
-	Context.GenericTag<GetAnonymousUserHandler>("@morph/GetAnonymousUserHandler");
+	Context.GenericTag<GetAnonymousUserHandler>("@morphdsl/GetAnonymousUserHandler");
 
 export const GetAnonymousUserHandlerLive = Layer.succeed(
 	GetAnonymousUserHandler,

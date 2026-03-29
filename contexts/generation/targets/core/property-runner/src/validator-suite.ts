@@ -1,8 +1,8 @@
-import type { ValidatorPropertySuite } from "@morph/property";
+import type { ValidatorPropertySuite } from "@morphdsl/property";
 import type {
 	PropertyResult,
 	PropertyRunOptions,
-} from "@morph/property-runner";
+} from "@morphdsl/property-runner";
 import type { Runtime } from "effect";
 
 import { Effect, Layer } from "effect";

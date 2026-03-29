@@ -1,4 +1,4 @@
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 import type {
 	GeneratorPlugin,

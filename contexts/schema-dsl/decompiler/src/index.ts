@@ -25,7 +25,7 @@ import type {
 	ValueExpr,
 	ValueObjectDef,
 	VariantDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 // =============================================================================
 // Top-level

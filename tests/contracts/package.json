@@ -1,5 +1,5 @@
 {
-	"name": "@morph/contracts",
+	"name": "@morphdsl/contracts",
 	"version": "0.0.0",
 	"type": "module",
 	"private": true,
@@ -11,12 +11,12 @@
 		"test": "bun test"
 	},
 	"dependencies": {
-		"@morph/property": "workspace:*",
-		"@morph/storage-memory-impls": "workspace:*",
-		"@morph/storage-jsonfile-impls": "workspace:*",
-		"@morph/storage-sqlite-impls": "workspace:*",
-		"@morph/eventstore-memory-impls": "workspace:*",
-		"@morph/eventstore-jsonfile-impls": "workspace:*",
+		"@morphdsl/property": "workspace:*",
+		"@morphdsl/storage-memory-impls": "workspace:*",
+		"@morphdsl/storage-jsonfile-impls": "workspace:*",
+		"@morphdsl/storage-sqlite-impls": "workspace:*",
+		"@morphdsl/eventstore-memory-impls": "workspace:*",
+		"@morphdsl/eventstore-jsonfile-impls": "workspace:*",
 		"effect": "^3.12.7",
 		"fast-check": "^3.23.1"
 	},

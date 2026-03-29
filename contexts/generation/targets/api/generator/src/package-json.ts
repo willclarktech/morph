@@ -32,8 +32,8 @@ export const generateApiPackageJson = (
 	const package_ = {
 		$schema: "https://json.schemastore.org/package.json",
 		dependencies: {
-			"@morph/runtime-api": "workspace:*",
-			...(hasPasswordAuth ? { "@morph/auth-password": "workspace:*" } : {}),
+			"@morphdsl/runtime-api": "workspace:*",
+			...(hasPasswordAuth ? { "@morphdsl/auth-password": "workspace:*" } : {}),
 			[corePackage]: "workspace:*",
 			effect: "^3.19.13",
 		},

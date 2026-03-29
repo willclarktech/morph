@@ -1,14 +1,14 @@
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 import type {
 	GenerationResult,
 	InvalidSchemaError,
-} from "@morph/generation-dsl";
+} from "@morphdsl/generation-dsl";
 import type { Effect } from "effect";
 
 import {
 	generateDefaultProse,
 	init as scaffoldInit,
-} from "@morph/builder-scaffold";
+} from "@morphdsl/builder-scaffold";
 import { Context, Effect as E, Layer } from "effect";
 
 import type { GenerateOptions } from "./generate";
@@ -26,7 +26,7 @@ export interface NewProjectHandler {
 }
 
 export const NewProjectHandler = Context.GenericTag<NewProjectHandler>(
-	"@morph/impls/NewProjectHandler",
+	"@morphdsl/impls/NewProjectHandler",
 );
 
 export const NewProjectHandlerLive = Layer.succeed(NewProjectHandler, {

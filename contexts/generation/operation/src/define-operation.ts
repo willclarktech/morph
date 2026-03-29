@@ -3,7 +3,7 @@ import type * as S from "effect/Schema";
 /**
  * Brand symbol for identifying operation definitions.
  */
-export const OPERATION_BRAND = Symbol.for("@morph/operation");
+export const OPERATION_BRAND = Symbol.for("@morphdsl/operation");
 
 /**
  * Full operation definition including Effect Schema for validation.

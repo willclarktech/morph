@@ -8,7 +8,7 @@
  * and domain text (from user's text.config.ts) are layered on top.
  */
 
-import type { TranslationEntry } from "@morph/domain-schema";
+import type { TranslationEntry } from "@morphdsl/domain-schema";
 
 /**
  * System text catalog type - maps keys to translation entries.

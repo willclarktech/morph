@@ -1,7 +1,7 @@
 /**
  * Output type utilities for handler generation (FunctionDef).
  */
-import type { FunctionDef } from "@morph/domain-schema";
+import type { FunctionDef } from "@morphdsl/domain-schema";
 
 /**
  * Describe function output type for TypeScript type annotation.

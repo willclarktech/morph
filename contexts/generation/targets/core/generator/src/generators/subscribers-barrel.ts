@@ -1,7 +1,7 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
-import { getAllSubscribers } from "@morph/domain-schema";
-import { toKebabCase, toPascalCase } from "@morph/utils";
+import { getAllSubscribers } from "@morphdsl/domain-schema";
+import { toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Generate the subscribers barrel file (subscribers/index.ts).

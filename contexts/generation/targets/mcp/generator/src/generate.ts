@@ -6,7 +6,7 @@ import type {
 	GeneratedFile,
 	GenerationResult,
 	InjectableParam,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
@@ -18,8 +18,8 @@ import {
 	getOperationAggregates,
 	isDomainService,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
-import { indent, separator, sortImports } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { indent, separator, sortImports } from "@morphdsl/utils";
 
 import type { ContextPackages } from "./imports";
 
@@ -274,7 +274,7 @@ export const generate = (options: GenerateMcpAppOptions): GenerationResult => {
 
 	const importBlock = sortImports(
 		[
-			`import { ${mcpImports} } from "@morph/runtime-mcp";`,
+			`import { ${mcpImports} } from "@morphdsl/runtime-mcp";`,
 			contextImports,
 			`import { Effect, Layer, Logger } from "effect";`,
 		].join("\n"),

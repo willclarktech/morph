@@ -4,9 +4,9 @@
  * Generate HTMX + Pico CSS web UIs from domain schemas.
  * Uses the typed HTTP client to communicate with the API server.
  */
-import type { GeneratedFile, GenerationResult } from "@morph/domain-schema";
+import type { GeneratedFile, GenerationResult } from "@morphdsl/domain-schema";
 
-import { TEXT } from "@morph/auth-password-impls";
+import { TEXT } from "@morphdsl/auth-password-impls";
 import {
 	deriveRequiredKeys,
 	getAllEntities,
@@ -14,8 +14,8 @@ import {
 	getAllOperations,
 	getCommandsWithEvents,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
-import { toKebabCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { toKebabCase } from "@morphdsl/utils";
 
 import type { GenerateUiAppOptions } from "./config";
 

@@ -1,5 +1,5 @@
 {
-	"name": "@morph/property-runner-cli",
+	"name": "@morphdsl/property-runner-cli",
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
@@ -12,12 +12,12 @@
 		"lint:fix": "eslint . --fix --report-unused-disable-directives"
 	},
 	"dependencies": {
-		"@morph/property": "workspace:*",
-		"@morph/property-runner": "workspace:*",
+		"@morphdsl/property": "workspace:*",
+		"@morphdsl/property-runner": "workspace:*",
 		"fast-check": "^3.23.1"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
 		"typescript": "^5.8.3"
 	}
 }

@@ -1,4 +1,4 @@
-import { AuthenticationError, AuthService } from "@morph/auth-dsl";
+import { AuthenticationError, AuthService } from "@morphdsl/auth-dsl";
 import { Effect, Layer } from "effect";
 
 export const makeAuthServiceTest = <TUser>(

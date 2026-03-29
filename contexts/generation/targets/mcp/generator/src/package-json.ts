@@ -53,12 +53,12 @@ export const generateMcpPackageJson = (
 	const package_ = {
 		$schema: "https://json.schemastore.org/package.json",
 		dependencies: {
-			"@morph/runtime-mcp": "workspace:*",
+			"@morphdsl/runtime-mcp": "workspace:*",
 			...contextDeps,
 			effect: "^3.19.13",
 		},
 		devDependencies: {
-			"@morph/scenario-runner-mcp": "workspace:*",
+			"@morphdsl/scenario-runner-mcp": "workspace:*",
 			[`@${name}/eslint-config`]: "workspace:*",
 			[scenariosPackage]: "workspace:*",
 			[`@${name}/tsconfig`]: "workspace:*",

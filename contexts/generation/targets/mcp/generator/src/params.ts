@@ -4,7 +4,7 @@
  * Injects missing parameters from authentication context based on
  * invariant-derived injectable params.
  */
-import type { InjectableParam } from "@morph/domain-schema";
+import type { InjectableParam } from "@morphdsl/domain-schema";
 
 /**
  * Context for parameter injection.

@@ -1,3 +1,3 @@
-// Re-export from @morph/generation-impls
+// Re-export from @morphdsl/generation-impls
 
-export { NewProjectHandlerLive } from "@morph/generation-impls";
+export { NewProjectHandlerLive } from "@morphdsl/generation-impls";

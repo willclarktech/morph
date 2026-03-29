@@ -13,12 +13,12 @@ import type {
 	TypeDef,
 	TypeRef,
 	ValueObjectDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getForeignKeyAttributes } from "@morph/domain-schema";
-import { toSnakeCase } from "@morph/utils";
+import { getForeignKeyAttributes } from "@morphdsl/domain-schema";
+import { toSnakeCase } from "@morphdsl/utils";
 
-// Mirror of runtime types from @morph/storage-sqlite-impls.
+// Mirror of runtime types from @morphdsl/storage-sqlite-impls.
 // Defined locally so the generator doesn't depend on the runtime package.
 
 type FieldType =

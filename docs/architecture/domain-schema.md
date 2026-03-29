@@ -84,7 +84,7 @@ interface ExtensionsDef {
 }
 ```
 
-Extension source packages live in `extensions/` and are published as `@morph/{name}-dsl` and `@morph/{name}-impls`. Generated projects depend on these packages based on which extensions are declared in the schema.
+Extension source packages live in `extensions/` and are published as `@morphdsl/{name}-dsl` and `@morphdsl/{name}-impls`. Generated projects depend on these packages based on which extensions are declared in the schema.
 
 ---
 

@@ -1,19 +1,19 @@
 /**
  * AuthServiceSession implementation generator.
- * Delegates to @morph/auth-session-impls for session operations.
+ * Delegates to @morphdsl/auth-session-impls for session operations.
  */
 
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the Session AuthService implementation.
- * Uses @morph/auth-session-impls for session operations.
+ * Uses @morphdsl/auth-session-impls for session operations.
  */
 export const generateAuthServiceSession = (
 	_envPrefix: string,
 ): GeneratedFile => {
 	const content = `// Generated AuthServiceSession implementation
-// Delegates to @morph/auth-session-impls for session operations
+// Delegates to @morphdsl/auth-session-impls for session operations
 // Do not edit - regenerate from schema
 
 import { Effect, Layer } from "effect";
@@ -21,7 +21,7 @@ import {
 	createSession as createSessionImpl,
 	destroySession as destroySessionImpl,
 	validateSession as validateSessionImpl,
-} from "@morph/auth-session-impls";
+} from "@morphdsl/auth-session-impls";
 
 import { AuthenticationError } from "./auth-errors";
 import type { AuthService } from "./auth-service";

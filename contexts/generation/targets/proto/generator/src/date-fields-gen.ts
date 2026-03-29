@@ -1,6 +1,6 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
-import { getAllEntities, getAllOperations } from "@morph/domain-schema";
+import { getAllEntities, getAllOperations } from "@morphdsl/domain-schema";
 
 import { isTimestampType } from "./type-mapping";
 

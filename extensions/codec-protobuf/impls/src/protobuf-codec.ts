@@ -1,7 +1,7 @@
-import type { Codec } from "@morph/codec-dsl";
+import type { Codec } from "@morphdsl/codec-dsl";
 import type protobuf from "protobufjs";
 
-import { CodecDecodeError, CodecEncodeError } from "@morph/codec-dsl";
+import { CodecDecodeError, CodecEncodeError } from "@morphdsl/codec-dsl";
 import { Effect } from "effect";
 
 const PROTOBUF_MIME = "application/x-protobuf";

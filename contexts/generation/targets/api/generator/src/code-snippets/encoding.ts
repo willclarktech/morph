@@ -13,19 +13,19 @@ export const buildEncodingImport = (features: DetectedFeatures): string => {
 		switch (format) {
 			case "json": {
 				codecImports.push(
-					`import { createJsonCodec } from "@morph/codec-json-impls";`,
+					`import { createJsonCodec } from "@morphdsl/codec-json-impls";`,
 				);
 				break;
 			}
 			case "protobuf": {
 				codecImports.push(
-					`import { createProtobufCodec } from "@morph/codec-protobuf-impls";`,
+					`import { createProtobufCodec } from "@morphdsl/codec-protobuf-impls";`,
 				);
 				break;
 			}
 			case "yaml": {
 				codecImports.push(
-					`import { createYamlCodec } from "@morph/codec-yaml-impls";`,
+					`import { createYamlCodec } from "@morphdsl/codec-yaml-impls";`,
 				);
 				break;
 			}
@@ -33,7 +33,7 @@ export const buildEncodingImport = (features: DetectedFeatures): string => {
 	}
 
 	return [
-		`import { ${imports.join(", ")} } from "@morph/codec-impls";`,
+		`import { ${imports.join(", ")} } from "@morphdsl/codec-impls";`,
 		...codecImports,
 	].join("\n");
 };

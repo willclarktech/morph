@@ -1,4 +1,4 @@
-import type { ConstraintDef } from "@morph/domain-schema";
+import type { ConstraintDef } from "@morphdsl/domain-schema";
 
 import { describe, expect, test } from "bun:test";
 

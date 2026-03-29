@@ -1,6 +1,6 @@
-import type { EncodingFormat } from "@morph/domain-schema";
+import type { EncodingFormat } from "@morphdsl/domain-schema";
 
-import { buildPackageJson } from "@morph/builder-app";
+import { buildPackageJson } from "@morphdsl/builder-app";
 
 interface ContextPackages {
 	readonly contextName: string;
@@ -34,19 +34,19 @@ export const generateCliPackageJson = (options: CliPackageJsonOptions): string =
 	// Codec dependencies based on encoding formats
 	const codecDeps: Record<string, string> = {};
 	if (encodingFormats.length > 0) {
-		codecDeps["@morph/codec-impls"] = "workspace:*";
+		codecDeps["@morphdsl/codec-impls"] = "workspace:*";
 		for (const format of encodingFormats) {
 			switch (format) {
 				case "json": {
-					codecDeps["@morph/codec-json-impls"] = "workspace:*";
+					codecDeps["@morphdsl/codec-json-impls"] = "workspace:*";
 					break;
 				}
 				case "yaml": {
-					codecDeps["@morph/codec-yaml-impls"] = "workspace:*";
+					codecDeps["@morphdsl/codec-yaml-impls"] = "workspace:*";
 					break;
 				}
 				case "protobuf": {
-					codecDeps["@morph/codec-protobuf-impls"] = "workspace:*";
+					codecDeps["@morphdsl/codec-protobuf-impls"] = "workspace:*";
 					break;
 				}
 			}
@@ -72,20 +72,20 @@ export const generateCliPackageJson = (options: CliPackageJsonOptions): string =
 		dependencies: {
 			...(hasAuth
 				? {
-						"@morph/auth-password-impls": "workspace:*",
+						"@morphdsl/auth-password-impls": "workspace:*",
 						...(primaryDslPackage ? { [primaryDslPackage]: "workspace:*" } : {}),
 					}
 				: {}),
 			...codecDeps,
-			"@morph/runtime-cli": "workspace:*",
+			"@morphdsl/runtime-cli": "workspace:*",
 			...contextDeps,
 			...dslDeps,
 		},
 		devDependencies: {
-			"@morph/scenario-runner-cli": "workspace:*",
+			"@morphdsl/scenario-runner-cli": "workspace:*",
 			...(hasPropertyTests
 				? {
-						"@morph/property-runner-cli": "workspace:*",
+						"@morphdsl/property-runner-cli": "workspace:*",
 						[propertiesPackage]: "workspace:*",
 					}
 				: {}),

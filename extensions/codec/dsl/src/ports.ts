@@ -34,7 +34,7 @@ export interface Codec {
 /**
  * Context tag for Codec dependency injection.
  */
-export const Codec = Context.GenericTag<Codec>("@morph/Codec");
+export const Codec = Context.GenericTag<Codec>("@morphdsl/Codec");
 
 /**
  * Composite registry with content negotiation.
@@ -61,5 +61,5 @@ export interface CodecRegistry {
  * Context tag for CodecRegistry dependency injection.
  */
 export const CodecRegistry = Context.GenericTag<CodecRegistry>(
-	"@morph/CodecRegistry",
+	"@morphdsl/CodecRegistry",
 );

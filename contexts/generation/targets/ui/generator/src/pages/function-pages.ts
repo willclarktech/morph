@@ -5,9 +5,9 @@ import type {
 	FunctionDef,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { toKebabCase, toTitleCase } from "@morph/utils";
+import { toKebabCase, toTitleCase } from "@morphdsl/utils";
 
 import { generateFormFields } from "../forms";
 import { generateResultDisplay } from "../utilities";

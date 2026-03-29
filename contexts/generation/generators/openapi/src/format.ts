@@ -1,4 +1,4 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
 /**
  * Get schema description from first context.

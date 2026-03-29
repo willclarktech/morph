@@ -1,6 +1,6 @@
-import type { InvariantDef } from "@morph/domain-schema";
+import type { InvariantDef } from "@morphdsl/domain-schema";
 
-import { indent, lines, separator } from "@morph/utils";
+import { indent, lines, separator } from "@morphdsl/utils";
 import { stripIndent } from "common-tags";
 
 import {

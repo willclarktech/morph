@@ -1,9 +1,9 @@
 /**
  * Function route handler generation.
  */
-import type { FunctionDef, QualifiedEntry } from "@morph/domain-schema";
+import type { FunctionDef, QualifiedEntry } from "@morphdsl/domain-schema";
 
-import { toTitleCase } from "@morph/utils";
+import { toTitleCase } from "@morphdsl/utils";
 
 import type { RouteHandler } from "./crud";
 

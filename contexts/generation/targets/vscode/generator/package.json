@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/generator-vscode",
+	"name": "@morphdsl/generator-vscode",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -17,14 +17,14 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/operation": "workspace:*",
-		"@morph/utils": "*",
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/operation": "workspace:*",
+		"@morphdsl/utils": "*",
 		"effect": "^3.16.0"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "*",
-		"@morph/tsconfig": "*",
+		"@morphdsl/eslint-config": "*",
+		"@morphdsl/tsconfig": "*",
 		"@types/vscode": "^1.96.0",
 		"eslint": "^9.39.0"
 	}

@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/generator-diagrams",
+	"name": "@morphdsl/generator-diagrams",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -19,11 +19,11 @@
 		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*"
+		"@morphdsl/domain-schema": "*"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "*",
-		"@morph/tsconfig": "*",
+		"@morphdsl/eslint-config": "*",
+		"@morphdsl/tsconfig": "*",
 		"eslint": "^9.39.0"
 	}
 }

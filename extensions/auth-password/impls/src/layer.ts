@@ -1,9 +1,9 @@
 /**
  * Factory for creating password-based AuthService layers.
  *
- * For session management, use @morph/auth-session-impls.
+ * For session management, use @morphdsl/auth-session-impls.
  */
-import { AuthenticationError, AuthService } from "@morph/auth-password-dsl";
+import { AuthenticationError, AuthService } from "@morphdsl/auth-password-dsl";
 import { Effect, Layer } from "effect";
 
 /**

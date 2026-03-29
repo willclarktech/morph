@@ -1,6 +1,6 @@
-import type { FileStoreInfo } from "@morph/storage-jsonfile-dsl";
+import type { FileStoreInfo } from "@morphdsl/storage-jsonfile-dsl";
 
-import { FileAccessError } from "@morph/storage-jsonfile-dsl";
+import { FileAccessError } from "@morphdsl/storage-jsonfile-dsl";
 import { Context, Effect, Layer } from "effect";
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -13,7 +13,7 @@ export interface OpenFileStoreHandler {
 }
 
 export const OpenFileStoreHandler = Context.GenericTag<OpenFileStoreHandler>(
-	"@morph/OpenFileStoreHandler",
+	"@morphdsl/OpenFileStoreHandler",
 );
 
 export const OpenFileStoreHandlerLive = Layer.succeed(OpenFileStoreHandler, {

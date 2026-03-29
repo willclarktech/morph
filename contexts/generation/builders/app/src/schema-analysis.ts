@@ -1,4 +1,4 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
 import {
 	findPrimaryContext,
@@ -6,7 +6,7 @@ import {
 	getCommandsWithEvents,
 	hasPropertyTests,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 export interface SchemaFeatures {
 	readonly hasAuth: boolean;

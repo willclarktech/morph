@@ -2,7 +2,7 @@ import type {
 	FileAccessError,
 	FileCorruptedError,
 	FileStoreInfo,
-} from "@morph/storage-jsonfile-dsl";
+} from "@morphdsl/storage-jsonfile-dsl";
 
 import { Context, Effect, Layer } from "effect";
 
@@ -21,7 +21,7 @@ export interface CompactFileHandler {
 }
 
 export const CompactFileHandler = Context.GenericTag<CompactFileHandler>(
-	"@morph/CompactFileHandler",
+	"@morphdsl/CompactFileHandler",
 );
 
 export const CompactFileHandlerLive = Layer.succeed(CompactFileHandler, {

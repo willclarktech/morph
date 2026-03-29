@@ -4,10 +4,10 @@
  * Generates impl.ts files that re-export from mock-impl.ts.
  * These default implementations are overridden when fixture impls are provided.
  */
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
-import { getFunctionsFlat, getOperationsFlat } from "@morph/domain-schema";
-import { toKebabCase, toPascalCase } from "@morph/utils";
+import { getFunctionsFlat, getOperationsFlat } from "@morphdsl/domain-schema";
+import { toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Generate a default impl.ts that re-exports from mock-impl.ts.

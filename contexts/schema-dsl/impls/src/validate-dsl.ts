@@ -1,8 +1,8 @@
 import type { Effect } from "effect";
 
-import { compile } from "@morph/schema-dsl-compiler";
-import { ParseFailedError } from "@morph/schema-dsl-dsl";
-import { parse } from "@morph/schema-dsl-parser";
+import { compile } from "@morphdsl/schema-dsl-compiler";
+import { ParseFailedError } from "@morphdsl/schema-dsl-dsl";
+import { parse } from "@morphdsl/schema-dsl-parser";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface ValidateDslHandler {
@@ -13,7 +13,7 @@ export interface ValidateDslHandler {
 }
 
 export const ValidateDslHandler = Context.GenericTag<ValidateDslHandler>(
-	"@morph/impls/ValidateDslHandler",
+	"@morphdsl/impls/ValidateDslHandler",
 );
 
 export const ValidateDslHandlerLive = Layer.succeed(ValidateDslHandler, {

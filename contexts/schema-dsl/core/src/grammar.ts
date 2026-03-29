@@ -3,4 +3,4 @@
 export {
 	languageConfiguration,
 	textMateGrammar,
-} from "@morph/schema-dsl-impls";
+} from "@morphdsl/schema-dsl-impls";

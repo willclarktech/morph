@@ -1,4 +1,4 @@
-# @morph/schema-dsl-core
+# @morphdsl/schema-dsl-core
 
 Code generation from domain schemas
 
@@ -7,7 +7,7 @@ Parse, compile, and decompile .morph DSL files
 ## Quick Start
 
 ```typescript
-import { decompileSchema, MockHandlersLayer } from "@morph/schema-dsl-core";
+import { decompileSchema, MockHandlersLayer } from "@morphdsl/schema-dsl-core";
 import { Effect } from "effect";
 
 const result = await Effect.runPromise(

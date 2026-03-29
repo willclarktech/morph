@@ -1,7 +1,7 @@
 /**
  * Auth inference for invariant conditions.
  */
-import type { ConditionExpr, ValueExpr } from "@morph/domain-schema";
+import type { ConditionExpr, ValueExpr } from "@morphdsl/domain-schema";
 
 /**
  * Check if a field path references context.currentUser.

@@ -24,12 +24,12 @@ The core blocker: **almost all hand-written libs use generics**, and the schema 
 
 | Package | Generic Usage |
 |---------|---------------|
-| `@morph/operation` | `OperationDefinition<Params, Options, R>` |
-| `@morph/test` | `StepBuilder<TResult>`, `given<P, R>()` |
-| `@morph/scenario` | `Ref<T>` |
-| `@morph/property` | `OperationPropertySuite<I, O, C>` |
-| `@morph/auth` | `AuthService<TUser>` |
-| `@morph/auth-password` | `createAuthServicePassword<TUser>()` |
+| `@morphdsl/operation` | `OperationDefinition<Params, Options, R>` |
+| `@morphdsl/test` | `StepBuilder<TResult>`, `given<P, R>()` |
+| `@morphdsl/scenario` | `Ref<T>` |
+| `@morphdsl/property` | `OperationPropertySuite<I, O, C>` |
+| `@morphdsl/auth` | `AuthService<TUser>` |
+| `@morphdsl/auth-password` | `createAuthServicePassword<TUser>()` |
 
 Without generics support, we can generate:
 - Concrete types (no type parameters)
@@ -48,10 +48,10 @@ Generating only the non-generic parts creates an awkward split where the archite
 Current behavior puts all contexts into single `libs/dsl/` and `libs/core/` packages. For multi-context dogfooding, per-context packages are preferred:
 
 ```
-libs/auth-dsl/       # @morph/auth-dsl
-libs/auth-core/      # @morph/auth-core
-libs/generation-dsl/ # @morph/generation-dsl (current @morph/dsl)
-libs/generation-core/# @morph/generation-core (current @morph/core)
+libs/auth-dsl/       # @morphdsl/auth-dsl
+libs/auth-core/      # @morphdsl/auth-core
+libs/generation-dsl/ # @morphdsl/generation-dsl (current @morphdsl/dsl)
+libs/generation-core/# @morphdsl/generation-core (current @morphdsl/core)
 ```
 
 Benefits:
@@ -62,9 +62,9 @@ Benefits:
 ### Interface vs Implementation Separation
 
 Auth has a natural interface/implementation split:
-- `@morph/auth` - Generic interface (`AuthService<TUser>`) + error types
-- `@morph/auth-password` - Password-based implementation
-- Future: `@morph/auth-jwt`, `@morph/auth-bearer`, etc.
+- `@morphdsl/auth` - Generic interface (`AuthService<TUser>`) + error types
+- `@morphdsl/auth-password` - Password-based implementation
+- Future: `@morphdsl/auth-jwt`, `@morphdsl/auth-bearer`, etc.
 
 This maps well to schema contexts with dependencies:
 ```
@@ -76,9 +76,9 @@ But this requires generics to express `AuthService<TUser>`.
 ### Some Libs Are Language Primitives
 
 Not all libs are candidates for generation. Some define the DSL itself:
-- `@morph/operation` - defines what an operation IS
-- `@morph/scenario` - defines what a Ref IS
-- `@morph/test` - defines how tests work
+- `@morphdsl/operation` - defines what an operation IS
+- `@morphdsl/scenario` - defines what a Ref IS
+- `@morphdsl/test` - defines how tests work
 
 These are language primitives, not domain data. They arguably SHOULD be hand-written.
 
@@ -112,7 +112,7 @@ Done. Per-context packages (`contexts/{name}/dsl`, `contexts/{name}/core`, `cont
 
 Alternative to the full generics path: accept that some libs stay hand-written.
 
-Argument for: "DSL-defining" libs are language primitives, not domain data. `@morph/operation`, `@morph/scenario`, `@morph/test` define *what morph is*, not *what it operates on*.
+Argument for: "DSL-defining" libs are language primitives, not domain data. `@morphdsl/operation`, `@morphdsl/scenario`, `@morphdsl/test` define *what morph is*, not *what it operates on*.
 
 Argument against: The auth libs ARE domain-driven, and not being able to generate them limits dogfooding value.
 

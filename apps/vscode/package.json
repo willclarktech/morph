@@ -34,14 +34,14 @@
 		]
 	},
 	"dependencies": {
-		"@morph/generator-vscode": "workspace:*",
-		"@morph/schema-dsl-core": "workspace:*",
+		"@morphdsl/generator-vscode": "workspace:*",
+		"@morphdsl/schema-dsl-core": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"description": "VSCode language support for Morph DSL",
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"@types/vscode": "^1.96.0",
 		"@vscode/vsce": "^3.0.0",
 		"esbuild": "^0.25.0",

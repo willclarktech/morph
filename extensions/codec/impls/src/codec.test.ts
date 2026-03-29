@@ -1,5 +1,5 @@
-import { createJsonCodec } from "@morph/codec-json-impls";
-import { createYamlCodec } from "@morph/codec-yaml-impls";
+import { createJsonCodec } from "@morphdsl/codec-json-impls";
+import { createYamlCodec } from "@morphdsl/codec-yaml-impls";
 import { describe, expect, test } from "bun:test";
 import { Effect } from "effect";
 

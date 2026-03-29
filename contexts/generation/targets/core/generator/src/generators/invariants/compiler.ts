@@ -1,7 +1,7 @@
 /**
  * Condition expression compiler for invariants.
  */
-import type { ConditionExpr, ValueExpr } from "@morph/domain-schema";
+import type { ConditionExpr, ValueExpr } from "@morphdsl/domain-schema";
 
 /**
  * Compile a ConditionExpr to a TypeScript boolean expression string.

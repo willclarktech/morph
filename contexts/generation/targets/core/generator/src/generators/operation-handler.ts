@@ -1,9 +1,9 @@
 /**
  * Handler interface generation for operations (commands and queries).
  */
-import type { OperationDef } from "@morph/domain-schema";
+import type { OperationDef } from "@morphdsl/domain-schema";
 
-import { indent, sortImports, toPascalCase } from "@morph/utils";
+import { indent, sortImports, toPascalCase } from "@morphdsl/utils";
 
 import {
 	describeOutput,

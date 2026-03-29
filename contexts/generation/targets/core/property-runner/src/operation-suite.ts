@@ -1,8 +1,8 @@
-import type { OperationPropertySuite } from "@morph/property";
+import type { OperationPropertySuite } from "@morphdsl/property";
 import type {
 	PropertyResult,
 	PropertyRunOptions,
-} from "@morph/property-runner";
+} from "@morphdsl/property-runner";
 import type { Runtime } from "effect";
 
 import { Effect, Layer } from "effect";

@@ -3,13 +3,13 @@
  * Generates config data per entity describing table name and indexes.
  */
 
-import type { EntityDef, GeneratedFile } from "@morph/domain-schema";
+import type { EntityDef, GeneratedFile } from "@morphdsl/domain-schema";
 
 import {
 	getForeignKeyAttributes,
 	getUniqueAttributes,
-} from "@morph/domain-schema";
-import { indent, toKebabCase, toPascalCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { indent, toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Aggregate root entry with name and entity definition.
@@ -53,7 +53,7 @@ export const generateEntityConfigs = (
 	const content = `// Entity store configurations
 // Do not edit - regenerate from schema
 
-import type { EntityStoreConfig } from "@morph/storage-dsl";
+import type { EntityStoreConfig } from "@morphdsl/storage-dsl";
 
 ${configs.join("\n\n")}
 `;
@@ -112,8 +112,8 @@ export const generateRepositoryAdapter = (
 
 import { Effect } from "effect";
 
-import type { EntityStore } from "@morph/storage-dsl";
-import { jsonParse, jsonStringify } from "@morph/utils";
+import type { EntityStore } from "@morphdsl/storage-dsl";
+import { jsonParse, jsonStringify } from "@morphdsl/utils";
 import type { ${typeImports} } from "${typesImportPath}";
 
 import { RepositoryError } from "./errors";

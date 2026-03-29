@@ -1,4 +1,4 @@
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
 const inferVerb = (opName: string): string => {
 	if (/^create/i.test(opName)) return "creates";
@@ -71,7 +71,7 @@ export const generateDefaultProse = (
 
 		const dslModule = contextName;
 		const content = [
-			`import type { Prose } from "@morph/operation";`,
+			`import type { Prose } from "@morphdsl/operation";`,
 			``,
 			`import type * as ops from "./${dslModule}";`,
 			``,

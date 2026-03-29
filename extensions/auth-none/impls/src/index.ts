@@ -1,5 +1,5 @@
 /**
- * @morph/auth-none-impls - No authentication implementations
+ * @morphdsl/auth-none-impls - No authentication implementations
  *
  * Provides passthrough handlers for public APIs or development.
  * - getAnonymousUser: Always returns void (no user)
@@ -20,4 +20,4 @@ export { HandlersLayer } from "./layer";
 export { prose } from "./prose";
 
 // Re-export errors from DSL for convenience
-export { NoAuthEnabledError } from "@morph/auth-none-dsl";
+export { NoAuthEnabledError } from "@morphdsl/auth-none-dsl";

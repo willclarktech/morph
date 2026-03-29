@@ -1,4 +1,4 @@
-import type { TypeRef } from "@morph/domain-schema";
+import type { TypeRef } from "@morphdsl/domain-schema";
 
 /**
  * Context for schema generation with type parameter mappings.

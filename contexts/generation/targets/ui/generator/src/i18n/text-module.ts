@@ -5,10 +5,10 @@ import type {
 	DomainSchema,
 	I18nConfig,
 	TextConfig,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { TEXT } from "@morph/auth-password-impls";
-import { sortObjectKeys } from "@morph/utils";
+import { TEXT } from "@morphdsl/auth-password-impls";
+import { sortObjectKeys } from "@morphdsl/utils";
 
 import type { UiTextConfig } from "../config";
 

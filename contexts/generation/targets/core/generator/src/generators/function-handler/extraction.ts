@@ -1,7 +1,7 @@
 /**
  * Schema and type extraction from function definitions.
  */
-import type { FunctionDef } from "@morph/domain-schema";
+import type { FunctionDef } from "@morphdsl/domain-schema";
 
 /**
  * Extract schema names from function input that need imports.

@@ -1,1 +1,1 @@
-export * from "@morph/codec-dsl";
+export * from "@morphdsl/codec-dsl";

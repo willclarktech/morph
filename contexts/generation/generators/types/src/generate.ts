@@ -2,7 +2,7 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	generateArbitraries,
@@ -118,7 +118,7 @@ export const generateSchemaWrapper = (
 ): GeneratedFile => {
 	const exportName = `${schema.name.toLowerCase()}Schema`;
 	return {
-		content: `import { parseSchema } from "@morph/domain-schema";
+		content: `import { parseSchema } from "@morphdsl/domain-schema";
 
 import schemaJson from "${schemaJsonPath}";
 
@@ -135,4 +135,4 @@ export const ${exportName} = parseSchema(schemaJson);
 export {
 	type GeneratedFile,
 	type GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";

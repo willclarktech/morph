@@ -3,7 +3,7 @@ export const generateScenariosScaffold = (
 ): string => {
 	const imports = [
 		`import * as ops from "${dslPackage}";`,
-		`import { assert, given, scenario, then, when } from "@morph/scenario";`,
+		`import { assert, given, scenario, then, when } from "@morphdsl/scenario";`,
 	]
 		.sort()
 		.join("\n");

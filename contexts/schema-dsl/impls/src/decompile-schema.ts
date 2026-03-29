@@ -1,8 +1,8 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 import type { Effect } from "effect";
 
-import { decompile } from "@morph/schema-dsl-decompiler";
-import { InvalidSchemaError } from "@morph/schema-dsl-dsl";
+import { decompile } from "@morphdsl/schema-dsl-decompiler";
+import { InvalidSchemaError } from "@morphdsl/schema-dsl-dsl";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface DecompileSchemaHandler {
@@ -14,7 +14,7 @@ export interface DecompileSchemaHandler {
 
 export const DecompileSchemaHandler =
 	Context.GenericTag<DecompileSchemaHandler>(
-		"@morph/impls/DecompileSchemaHandler",
+		"@morphdsl/impls/DecompileSchemaHandler",
 	);
 
 export const DecompileSchemaHandlerLive = Layer.succeed(

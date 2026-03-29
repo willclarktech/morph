@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/storage-redis-impls",
+	"name": "@morphdsl/storage-redis-impls",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -8,13 +8,13 @@
 		".": "./src/index.ts"
 	},
 	"dependencies": {
-		"@morph/storage-dsl": "workspace:*",
-		"@morph/storage-redis-dsl": "workspace:*",
+		"@morphdsl/storage-dsl": "workspace:*",
+		"@morphdsl/storage-redis-dsl": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"

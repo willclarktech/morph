@@ -1,4 +1,4 @@
-import { buildLayerComposition } from "@morph/utils";
+import { buildLayerComposition } from "@morphdsl/utils";
 
 import type { DetectedFeatures } from "../feature-detection";
 

@@ -1,7 +1,7 @@
-import type { EventStoreTransport } from "@morph/eventstore-dsl";
+import type { EventStoreTransport } from "@morphdsl/eventstore-dsl";
 
-import { EventStoreOperationError } from "@morph/eventstore-dsl";
-import { jsonParse, jsonStringify } from "@morph/utils";
+import { EventStoreOperationError } from "@morphdsl/eventstore-dsl";
+import { jsonParse, jsonStringify } from "@morphdsl/utils";
 import { Effect } from "effect";
 
 /**

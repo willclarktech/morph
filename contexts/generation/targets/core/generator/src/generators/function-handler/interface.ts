@@ -2,9 +2,9 @@
  * Handler interface generation for functions.
  * Functions are simpler than commands/queries - no events, no invariants.
  */
-import type { FunctionDef } from "@morph/domain-schema";
+import type { FunctionDef } from "@morphdsl/domain-schema";
 
-import { indent, toPascalCase } from "@morph/utils";
+import { indent, toPascalCase } from "@morphdsl/utils";
 
 import {
 	extractFunctionInputSchemas,

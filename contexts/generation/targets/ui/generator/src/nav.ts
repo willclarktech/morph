@@ -6,9 +6,9 @@ import type {
 	FunctionDef,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { pluralize, toKebabCase, toTitleCase } from "@morph/utils";
+import { pluralize, toKebabCase, toTitleCase } from "@morphdsl/utils";
 
 /**
  * Generate navigation items for functions.

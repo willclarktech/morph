@@ -1,4 +1,4 @@
-import type { EntityStoreConfig, StorageTransport } from "@morph/storage-dsl";
+import type { EntityStoreConfig, StorageTransport } from "@morphdsl/storage-dsl";
 
 import { describe, expect, test } from "bun:test";
 import { Effect } from "effect";

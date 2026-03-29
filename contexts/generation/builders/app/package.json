@@ -1,5 +1,5 @@
 {
-	"name": "@morph/builder-app",
+	"name": "@morphdsl/builder-app",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {
@@ -14,7 +14,7 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/utils": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/utils": "*"
 	}
 }

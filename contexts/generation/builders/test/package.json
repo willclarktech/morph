@@ -1,5 +1,5 @@
 {
-	"name": "@morph/builder-test",
+	"name": "@morphdsl/builder-test",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {

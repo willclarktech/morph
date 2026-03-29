@@ -1,15 +1,15 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
 	"dependencies": {
-		"@morph/generation-dsl": "workspace:*",
-		"@morph/operation": "workspace:*",
-		"@morph/testing": "workspace:*",
+		"@morphdsl/generation-dsl": "workspace:*",
+		"@morphdsl/operation": "workspace:*",
+		"@morphdsl/testing": "workspace:*",
 		"effect": "^3.19.13",
-		"@morph/generation-impls": "workspace:*"
+		"@morphdsl/generation-impls": "workspace:*"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"eslint": "^9.39.0",
 		"fast-check": "^3.23.1",
 		"prettier": "^3.4.2",
@@ -18,7 +18,7 @@
 	"exports": {
 		".": "./src/index.ts"
 	},
-	"name": "@morph/generation-core",
+	"name": "@morphdsl/generation-core",
 	"private": true,
 	"scripts": {
 		"build:check": "tsc --noEmit",

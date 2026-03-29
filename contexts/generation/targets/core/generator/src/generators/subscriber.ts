@@ -2,10 +2,10 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	SubscriberDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getAllSubscribers, getCommandsWithEvents } from "@morph/domain-schema";
-import { toKebabCase, toPascalCase } from "@morph/utils";
+import { getAllSubscribers, getCommandsWithEvents } from "@morphdsl/domain-schema";
+import { toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Generate subscriber interface and Context tag for a single subscriber.

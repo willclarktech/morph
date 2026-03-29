@@ -1,4 +1,4 @@
-import type { UiConfig } from "@morph/runtime-ui";
+import type { UiConfig } from "@morphdsl/runtime-ui";
 
 const config: UiConfig = {
 	theme: {

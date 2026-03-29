@@ -7,8 +7,8 @@ Morph is a code generation framework based on algebraic principles.
 ```
 morph/
 ├── config/                  # Shared tooling configuration
-│   ├── eslint/             # @morph/eslint-config
-│   └── tsconfig/           # @morph/tsconfig
+│   ├── eslint/             # @morphdsl/eslint-config
+│   └── tsconfig/           # @morphdsl/tsconfig
 │
 ├── contexts/generation/     # Generation domain (schema, plugins, generators)
 ├── contexts/schema-dsl/     # Schema DSL (parser, compiler, decompiler)
@@ -69,21 +69,21 @@ extensions/
 
 | Package | Purpose |
 |---------|---------|
-| `@morph/domain-schema` | Schema parsing and types |
-| `@morph/plugin` | Plugin system core |
-| `@morph/plugin-*` | Generation plugins by output |
-| `@morph/builder-*` | Reusable code builders |
-| `@morph/scenario-runner-*` | Test runners by app type |
-| `@morph/http-client` | Shared HTTP client for generated API clients |
-| `@morph/scenario-runner` | Shared scenario runner infrastructure |
-| `@morph/runtime-*` | Runtime libraries (api, cli, mcp) imported by generated apps |
+| `@morphdsl/domain-schema` | Schema parsing and types |
+| `@morphdsl/plugin` | Plugin system core |
+| `@morphdsl/plugin-*` | Generation plugins by output |
+| `@morphdsl/builder-*` | Reusable code builders |
+| `@morphdsl/scenario-runner-*` | Test runners by app type |
+| `@morphdsl/http-client` | Shared HTTP client for generated API clients |
+| `@morphdsl/scenario-runner` | Shared scenario runner infrastructure |
+| `@morphdsl/runtime-*` | Runtime libraries (api, cli, mcp) imported by generated apps |
 
 ## Shared Configuration
 
 | Package | Purpose |
 |---------|---------|
-| `@morph/eslint-config` | ESLint configuration |
-| `@morph/tsconfig` | TypeScript configuration |
+| `@morphdsl/eslint-config` | ESLint configuration |
+| `@morphdsl/tsconfig` | TypeScript configuration |
 
 ## Workspace Configuration
 

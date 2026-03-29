@@ -1,4 +1,4 @@
-import type { AliasTypeDef } from "@morph/domain-schema";
+import type { AliasTypeDef } from "@morphdsl/domain-schema";
 
 import { typeRefToSchema } from "../mappers/schema-reference";
 import { typeRefToTypeScript } from "../mappers/type-reference";

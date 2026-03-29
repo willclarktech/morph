@@ -1,11 +1,11 @@
 /**
  * Route inference for HTTP client.
- * Mirrors the server-side route inference in @morph/api-core.
+ * Mirrors the server-side route inference in @morphdsl/api-core.
  */
 
-import type { OperationDef } from "@morph/domain-schema";
+import type { OperationDef } from "@morphdsl/domain-schema";
 
-import { toKebabCase } from "@morph/utils";
+import { toKebabCase } from "@morphdsl/utils";
 
 export type HttpMethod = "DELETE" | "GET" | "PATCH" | "POST" | "PUT";
 

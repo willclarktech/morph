@@ -3,11 +3,11 @@
  * Generates runtime adapter selection using adapter context packages.
  */
 
-import type { AuthProvider, GeneratedFile } from "@morph/domain-schema";
+import type { AuthProvider, GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the auth registry for runtime provider selection.
- * Adapters are provided by @morph/auth-* context packages.
+ * Adapters are provided by @morphdsl/auth-* context packages.
  */
 export const generateAuthRegistry = (
 	authProviders: readonly AuthProvider[],
@@ -66,7 +66,7 @@ export const generateAuthRegistry = (
 	}
 
 	const content = `// Auth registry for runtime adapter selection
-// Adapters are provided by @morph/auth-* context packages
+// Adapters are provided by @morphdsl/auth-* context packages
 // Do not edit - regenerate from schema
 
 import { Data, Effect, Layer } from "effect";

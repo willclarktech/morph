@@ -1,5 +1,5 @@
 {
-	"name": "@morph/plugin-cli-client",
+	"name": "@morphdsl/plugin-cli-client",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {
@@ -12,11 +12,11 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/builder-app": "*",
-		"@morph/builder-test": "*",
-		"@morph/runtime-cli-client": "*",
-		"@morph/plugin": "*",
-		"@morph/utils": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/builder-app": "*",
+		"@morphdsl/builder-test": "*",
+		"@morphdsl/runtime-cli-client": "*",
+		"@morphdsl/plugin": "*",
+		"@morphdsl/utils": "*"
 	}
 }

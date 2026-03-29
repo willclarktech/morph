@@ -1,6 +1,6 @@
-import type { DomainSchema, TypeDef } from "@morph/domain-schema";
+import type { DomainSchema, TypeDef } from "@morphdsl/domain-schema";
 
-import { getAllTypes, getTypesForContext } from "@morph/domain-schema";
+import { getAllTypes, getTypesForContext } from "@morphdsl/domain-schema";
 
 import { generateAliasTypeSchema } from "./alias-type";
 import { generateProductTypeSchema } from "./product-type";

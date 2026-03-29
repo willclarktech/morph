@@ -1,4 +1,4 @@
-import type { OperationDef, TypeRef } from "@morph/domain-schema";
+import type { OperationDef, TypeRef } from "@morphdsl/domain-schema";
 
 /**
  * Describe output type for TypeScript type annotation.

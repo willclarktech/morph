@@ -1,4 +1,4 @@
-import type { Session, SessionStorageError } from "@morph/auth-session-dsl";
+import type { Session, SessionStorageError } from "@morphdsl/auth-session-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -16,7 +16,7 @@ export interface CreateSessionHandler {
 }
 
 export const CreateSessionHandler = Context.GenericTag<CreateSessionHandler>(
-	"@morph/CreateSessionHandler",
+	"@morphdsl/CreateSessionHandler",
 );
 
 export const CreateSessionHandlerLive = Layer.succeed(CreateSessionHandler, {

@@ -1,12 +1,12 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
 import {
 	contextNameToKebab,
 	getContextsWithTag,
-} from "@morph/domain-schema";
-import { buildConfigFiles } from "@morph/builder-app";
-import { generate as generateClient } from "@morph/runtime-client";
+} from "@morphdsl/domain-schema";
+import { buildConfigFiles } from "@morphdsl/builder-app";
+import { generate as generateClient } from "@morphdsl/runtime-client";
 
 import { generateClientReadme } from "./info";
 import { generateClientPackageJson } from "./package-json";
@@ -60,7 +60,7 @@ export const clientPlugin: GeneratorPlugin = {
 			});
 
 			files.push({
-				content: `export type { ClientConfig, HttpClientError } from "@morph/http-client";
+				content: `export type { ClientConfig, HttpClientError } from "@morphdsl/http-client";
 export type { Client } from "./client";
 export { createClient } from "./client";
 `,

@@ -9,7 +9,7 @@
  * - Operation: "op.{name}"
  * - Error: "error.{Name}"
  */
-import { defineText } from "@morph/domain-schema";
+import { defineText } from "@morphdsl/domain-schema";
 
 export default defineText({
 	domain: {

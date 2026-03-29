@@ -1,8 +1,8 @@
 /**
  * Entry point generation for UI server.
  */
-import { schemaHasAuthRequirement } from "@morph/domain-schema";
-import { separator, toKebabCase } from "@morph/utils";
+import { schemaHasAuthRequirement } from "@morphdsl/domain-schema";
+import { separator, toKebabCase } from "@morphdsl/utils";
 
 import type { GenerateUiAppOptions } from "./config";
 

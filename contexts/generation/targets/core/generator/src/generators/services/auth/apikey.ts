@@ -1,19 +1,19 @@
 /**
  * AuthServiceApiKey implementation generator.
- * Delegates to @morph/auth-apikey-impls for API key operations.
+ * Delegates to @morphdsl/auth-apikey-impls for API key operations.
  */
 
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the API Key AuthService implementation.
- * Uses @morph/auth-apikey-impls for API key operations.
+ * Uses @morphdsl/auth-apikey-impls for API key operations.
  */
 export const generateAuthServiceApiKey = (
 	_envPrefix: string,
 ): GeneratedFile => {
 	const content = `// Generated AuthServiceApiKey implementation
-// Delegates to @morph/auth-apikey-impls for API key operations
+// Delegates to @morphdsl/auth-apikey-impls for API key operations
 // Do not edit - regenerate from schema
 
 import { Effect, Layer } from "effect";
@@ -21,7 +21,7 @@ import {
 	createApiKey as createApiKeyImpl,
 	validateApiKey as validateApiKeyImpl,
 	revokeApiKey as revokeApiKeyImpl,
-} from "@morph/auth-apikey-impls";
+} from "@morphdsl/auth-apikey-impls";
 
 import { AuthenticationError } from "./auth-errors";
 import type { AuthService } from "./auth-service";

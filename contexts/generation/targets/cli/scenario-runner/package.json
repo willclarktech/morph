@@ -1,5 +1,5 @@
 {
-	"name": "@morph/scenario-runner-cli",
+	"name": "@morphdsl/scenario-runner-cli",
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
@@ -12,11 +12,11 @@
 		"lint:fix": "eslint . --fix --report-unused-disable-directives"
 	},
 	"dependencies": {
-		"@morph/scenario-runner": "workspace:*",
-		"@morph/utils": "workspace:*"
+		"@morphdsl/scenario-runner": "workspace:*",
+		"@morphdsl/utils": "workspace:*"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
 		"@types/node": "^22.15.3",
 		"typescript": "^5.8.3"
 	}

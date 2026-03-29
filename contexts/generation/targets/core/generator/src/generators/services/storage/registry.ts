@@ -2,9 +2,9 @@
  * Storage registry generator.
  */
 
-import type { GeneratedFile, StorageBackend } from "@morph/domain-schema";
+import type { GeneratedFile, StorageBackend } from "@morphdsl/domain-schema";
 
-import { toPascalCase } from "@morph/utils";
+import { toPascalCase } from "@morphdsl/utils";
 
 /**
  * Generate storage registry for runtime layer selection.

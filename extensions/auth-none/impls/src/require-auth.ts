@@ -1,4 +1,4 @@
-import { NoAuthEnabledError } from "@morph/auth-none-dsl";
+import { NoAuthEnabledError } from "@morphdsl/auth-none-dsl";
 import { Context, Effect, Layer } from "effect";
 
 export interface RequireAuthHandler {
@@ -9,7 +9,7 @@ export interface RequireAuthHandler {
 }
 
 export const RequireAuthHandler = Context.GenericTag<RequireAuthHandler>(
-	"@morph/RequireAuthHandler",
+	"@morphdsl/RequireAuthHandler",
 );
 
 export const RequireAuthHandlerLive = Layer.succeed(RequireAuthHandler, {

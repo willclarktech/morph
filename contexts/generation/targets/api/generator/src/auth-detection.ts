@@ -1,7 +1,7 @@
 /**
  * Auth entity detection helpers for API generation.
  */
-import type { CommandDef, DomainSchema, EntityDef } from "@morph/domain-schema";
+import type { CommandDef, DomainSchema, EntityDef } from "@morphdsl/domain-schema";
 
 export interface AuthEntityInfo {
 	readonly contextName: string;

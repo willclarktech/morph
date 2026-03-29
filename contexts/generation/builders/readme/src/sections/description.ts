@@ -1,7 +1,7 @@
 /**
  * Generate description section from schema context descriptions.
  */
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
 /**
  * Generate a description from all context descriptions in the schema.

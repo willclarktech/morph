@@ -1,8 +1,8 @@
-import type { ExecuteOperation, Prose, Runner } from "@morph/scenario-runner";
-import type { ServerConfig, ServerInstance } from "@morph/scenario-runner-api";
+import type { ExecuteOperation, Prose, Runner } from "@morphdsl/scenario-runner";
+import type { ServerConfig, ServerInstance } from "@morphdsl/scenario-runner-api";
 
-import { createRunner, getField } from "@morph/scenario-runner";
-import { startServer } from "@morph/scenario-runner-api";
+import { createRunner, getField } from "@morphdsl/scenario-runner";
+import { startServer } from "@morphdsl/scenario-runner-api";
 import { execSync } from "node:child_process";
 
 export type ParamOrder = Record<string, readonly string[]>;

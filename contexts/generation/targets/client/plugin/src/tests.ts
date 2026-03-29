@@ -1,7 +1,7 @@
-import type { DomainSchema } from "@morph/domain-schema";
-import { schemaHasAuthRequirement } from "@morph/domain-schema";
-import { buildTokenAuthConfig } from "@morph/builder-test";
-import { sortImports } from "@morph/utils";
+import type { DomainSchema } from "@morphdsl/domain-schema";
+import { schemaHasAuthRequirement } from "@morphdsl/domain-schema";
+import { buildTokenAuthConfig } from "@morphdsl/builder-test";
+import { sortImports } from "@morphdsl/utils";
 
 export const generateClientScenarioTest = (
 	schema: DomainSchema,
@@ -13,7 +13,7 @@ export const generateClientScenarioTest = (
 
 	const imports = sortImports(
 		[
-			`import { createClientRunner } from "@morph/scenario-runner-client";`,
+			`import { createClientRunner } from "@morphdsl/scenario-runner-client";`,
 			`import { createClient } from "../client";`,
 			`import { prose } from "${corePackage}";`,
 			`import { scenarios } from "${scenariosPackage}";`,

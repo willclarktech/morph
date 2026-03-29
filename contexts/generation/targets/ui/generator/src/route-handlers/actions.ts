@@ -6,9 +6,9 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { pluralize, toTitleCase } from "@morph/utils";
+import { pluralize, toTitleCase } from "@morphdsl/utils";
 
 import type { RouteHandler } from "./crud";
 

@@ -5,7 +5,7 @@ import type {
 	QualifiedEntry,
 	TypeRef,
 	ValueObjectDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import { code, heading, table } from "../markdown";
 

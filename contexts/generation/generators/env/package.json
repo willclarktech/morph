@@ -1,5 +1,5 @@
 {
-	"name": "@morph/generator-env",
+	"name": "@morphdsl/generator-env",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {

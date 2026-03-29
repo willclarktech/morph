@@ -5,7 +5,7 @@ import type {
 	DomainSchema,
 	EncodingFormat,
 	InjectableParam,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
@@ -14,7 +14,7 @@ import {
 	getCommandsWithEvents,
 	getInjectableParams,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import type { AuthEntityInfo, CreateUserCommandInfo } from "./auth-detection";
 

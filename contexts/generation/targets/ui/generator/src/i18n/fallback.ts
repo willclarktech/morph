@@ -1,14 +1,14 @@
 /**
  * Fallback domain translation generation.
  */
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
 	getAllErrors,
 	getAllOperations,
-} from "@morph/domain-schema";
-import { pluralize, toTitleCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { pluralize, toTitleCase } from "@morphdsl/utils";
 
 /**
  * Generate fallback domain translations when textConfig is not provided.

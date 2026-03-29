@@ -1,14 +1,14 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
 import {
 	getCommandsWithEvents,
 	getEntitiesForContext,
 	getOperationsForContext,
 	getValueObjectsForContext,
-} from "@morph/domain-schema";
-import { buildConfigFiles } from "@morph/builder-app";
-import { generate as generateOperations } from "@morph/generator-core";
+} from "@morphdsl/domain-schema";
+import { buildConfigFiles } from "@morphdsl/builder-app";
+import { generate as generateOperations } from "@morphdsl/generator-core";
 
 import {
 	createContextFilteredSchema,

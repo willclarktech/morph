@@ -1,4 +1,4 @@
-import { buildDockerfile } from "@morph/builder-app";
+import { buildDockerfile } from "@morphdsl/builder-app";
 
 export const generateApiDockerfile = (name: string): string =>
 	buildDockerfile({

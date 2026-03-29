@@ -1,4 +1,4 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
 export const detectPasswordAuth = (schema: DomainSchema): boolean => {
 	for (const [, context] of Object.entries(schema.contexts)) {

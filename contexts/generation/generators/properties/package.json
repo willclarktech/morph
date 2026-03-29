@@ -1,5 +1,5 @@
 {
-	"name": "@morph/generator-properties",
+	"name": "@morphdsl/generator-properties",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {
@@ -9,10 +9,10 @@
 		"build:check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/generator-core": "*",
-		"@morph/builder-readme": "*",
-		"@morph/utils": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/generator-core": "*",
+		"@morphdsl/builder-readme": "*",
+		"@morphdsl/utils": "*"
 	},
 	"devDependencies": {
 		"typescript": "^5.8.3"

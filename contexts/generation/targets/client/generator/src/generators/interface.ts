@@ -2,9 +2,9 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getInjectableParams } from "@morph/domain-schema";
+import { getInjectableParams } from "@morphdsl/domain-schema";
 
 import { typeRefToTypeScript } from "../mappers";
 

@@ -5,7 +5,7 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	codeBlock,
@@ -17,13 +17,13 @@ import {
 	joinSections,
 	operations,
 	valueObjects,
-} from "@morph/builder-readme";
+} from "@morphdsl/builder-readme";
 import {
 	getAllEntities,
 	getAllFunctions,
 	getAllOperations,
 	getAllValueObjects,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 /**
  * Infer HTTP method from operation name.

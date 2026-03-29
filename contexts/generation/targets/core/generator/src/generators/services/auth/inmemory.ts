@@ -1,4 +1,4 @@
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 export const generateAuthServiceInMemory = (): GeneratedFile => {
 	const content = `// Generated AuthServiceInMemory for e2e testing
@@ -9,7 +9,7 @@ export {
 	AuthState,
 	AuthStateInMemory,
 	setCurrentUser,
-} from "@morph/testing";
+} from "@morphdsl/testing";
 `;
 
 	return { content, filename: "services/auth-service-inmemory.ts" };

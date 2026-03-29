@@ -2,7 +2,7 @@
  * EventStore registry generator.
  */
 
-import type { EventStoreBackend, GeneratedFile } from "@morph/domain-schema";
+import type { EventStoreBackend, GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the EventStore registry for runtime selection.
@@ -56,7 +56,7 @@ export const generateEventStoreRegistry = (
 import { Data, Effect } from "effect";
 import type { Layer } from "effect";
 
-import type { EventStoreTransport } from "@morph/eventstore-dsl";
+import type { EventStoreTransport } from "@morphdsl/eventstore-dsl";
 
 import type { EventStore } from "./event-store";
 

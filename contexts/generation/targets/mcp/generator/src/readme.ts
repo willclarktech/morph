@@ -5,7 +5,7 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	codeBlock,
@@ -17,14 +17,14 @@ import {
 	joinSections,
 	operations,
 	valueObjects,
-} from "@morph/builder-readme";
+} from "@morphdsl/builder-readme";
 import {
 	getAllEntities,
 	getAllFunctions,
 	getAllOperations,
 	getAllValueObjects,
 	getInjectableParams,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 /**
  * Generate an MCP tool usage example.

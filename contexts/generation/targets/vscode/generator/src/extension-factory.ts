@@ -1,7 +1,7 @@
 import type { Effect, ManagedRuntime as MRT } from "effect";
 import type { Layer } from "effect/Layer";
 
-import { isOperation } from "@morph/operation";
+import { isOperation } from "@morphdsl/operation";
 import { Cause, Exit, ManagedRuntime } from "effect";
 
 interface VsCodeOp {

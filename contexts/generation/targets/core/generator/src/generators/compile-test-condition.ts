@@ -4,7 +4,7 @@
  * This compiles invariant conditions to TypeScript boolean expressions
  * for use in property tests (verifying condition vs validator agreement).
  */
-import type { ConditionExpr, ValueExpr } from "@morph/domain-schema";
+import type { ConditionExpr, ValueExpr } from "@morphdsl/domain-schema";
 
 /**
  * Compile a ConditionExpr to a TypeScript boolean expression for property tests.

@@ -1,4 +1,4 @@
-import type { QuickStartStep } from "@morph/plugin";
+import type { QuickStartStep } from "@morphdsl/plugin";
 
 import { codeBlock, heading, joinSections } from "./markdown";
 

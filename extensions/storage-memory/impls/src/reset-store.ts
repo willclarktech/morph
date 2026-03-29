@@ -10,7 +10,7 @@ export interface ResetStoreHandler {
 }
 
 export const ResetStoreHandler = Context.GenericTag<ResetStoreHandler>(
-	"@morph/ResetStoreHandler",
+	"@morphdsl/ResetStoreHandler",
 );
 
 export const ResetStoreHandlerLive = Layer.succeed(ResetStoreHandler, {

@@ -1,9 +1,9 @@
-import type { SchemaFeatures } from "@morph/builder-app";
+import type { SchemaFeatures } from "@morphdsl/builder-app";
 import type {
 	DomainSchema,
 	GeneratedFile,
 	TextConfig,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 export type PluginKind = "lib" | "app" | "test-support" | "doc" | "infra";
 

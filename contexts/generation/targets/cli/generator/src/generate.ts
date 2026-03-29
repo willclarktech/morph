@@ -6,15 +6,15 @@ import type {
 	EncodingFormat,
 	GeneratedFile,
 	GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
 	getAllSubscribers,
 	getCommandsWithEvents,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
-import { configProperties, indent, sortImports } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { configProperties, indent, sortImports } from "@morphdsl/utils";
 
 import type { ContextPackages } from "./imports";
 
@@ -185,26 +185,26 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 			switch (format) {
 				case "json": {
 					codecFactories.push(
-						`import { createJsonCodec } from "@morph/codec-json-impls";`,
+						`import { createJsonCodec } from "@morphdsl/codec-json-impls";`,
 					);
 					break;
 				}
 				case "protobuf": {
 					codecFactories.push(
-						`import { createProtobufCodec } from "@morph/codec-protobuf-impls";`,
+						`import { createProtobufCodec } from "@morphdsl/codec-protobuf-impls";`,
 					);
 					break;
 				}
 				case "yaml": {
 					codecFactories.push(
-						`import { createYamlCodec } from "@morph/codec-yaml-impls";`,
+						`import { createYamlCodec } from "@morphdsl/codec-yaml-impls";`,
 					);
 					break;
 				}
 			}
 		}
 		encodingImports.push(
-			`import { createCodecRegistry } from "@morph/codec-impls";`,
+			`import { createCodecRegistry } from "@morphdsl/codec-impls";`,
 			...codecFactories,
 		);
 	}
@@ -224,11 +224,11 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 		[
 			...(hasAuth
 				? [
-						`import {\n\tAuthenticationError,\n\tverifyPassword,\n} from "@morph/auth-password-impls";`,
+						`import {\n\tAuthenticationError,\n\tverifyPassword,\n} from "@morphdsl/auth-password-impls";`,
 					]
 				: []),
 			...encodingImports,
-			`import { ${generatorCliImports.join(", ")} } from "@morph/runtime-cli";`,
+			`import { ${generatorCliImports.join(", ")} } from "@morphdsl/runtime-cli";`,
 			contextImports,
 			`import { Effect, Layer, Logger${hasAuth ? ", Ref" : ""}${hasInjectableParameters ? ", Schema as S" : ""} } from "effect";`,
 			...(userTypeImport ? [userTypeImport] : []),

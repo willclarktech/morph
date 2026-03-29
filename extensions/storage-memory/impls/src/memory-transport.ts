@@ -1,6 +1,6 @@
-import type { PaginationParams, StorageTransport } from "@morph/storage-dsl";
+import type { PaginationParams, StorageTransport } from "@morphdsl/storage-dsl";
 
-import { applyPagination } from "@morph/storage-dsl";
+import { applyPagination } from "@morphdsl/storage-dsl";
 import { Effect, Ref } from "effect";
 
 /**

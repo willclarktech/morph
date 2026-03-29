@@ -1,7 +1,7 @@
-import type { Operations, Prose, Runner } from "@morph/scenario-runner";
+import type { Operations, Prose, Runner } from "@morphdsl/scenario-runner";
 import type { Runtime as EffectRuntime } from "effect";
 
-import { createRunner } from "@morph/scenario-runner";
+import { createRunner } from "@morphdsl/scenario-runner";
 import { Effect, Layer } from "effect";
 
 export interface LibraryRunnerConfig<R> {

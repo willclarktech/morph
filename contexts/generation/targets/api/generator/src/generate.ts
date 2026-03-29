@@ -5,9 +5,9 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { configProperties, indent, separator, sortImports } from "@morph/utils";
+import { configProperties, indent, separator, sortImports } from "@morphdsl/utils";
 
 import {
 	buildAuthImports,
@@ -51,7 +51,7 @@ export interface GenerateApiAppOptions {
 
 /**
  * Generate an API app entry point.
- * Mirrors the pattern used by @morph/runtime-cli's generate().
+ * Mirrors the pattern used by @morphdsl/runtime-cli's generate().
  */
 export const generate = (options: GenerateApiAppOptions): GenerationResult => {
 	const packageDir = options.packageDir ?? "apps/api";
@@ -119,7 +119,7 @@ export const generate = (options: GenerateApiAppOptions): GenerationResult => {
 
 	const importBlock = sortImports(
 		[
-			`import { createApi } from "@morph/runtime-api";`,
+			`import { createApi } from "@morphdsl/runtime-api";`,
 			`import {\n\t${coreImports},\n} from "${corePath}";`,
 			`import { ${effectImports} } from "effect";`,
 			`import { ${schemaExportName} } from "${dslPath}";`,

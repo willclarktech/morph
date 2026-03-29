@@ -2,7 +2,7 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	conditionReferencesCurrentUser,
@@ -11,8 +11,8 @@ import {
 	getOperationPreInvariantDefs,
 	getPrimaryWriteAggregate,
 	isDomainService,
-} from "@morph/domain-schema";
-import { indent } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { indent } from "@morphdsl/utils";
 
 import type { DomainServiceContext } from "../routes";
 
@@ -216,7 +216,7 @@ const generateMethodImplementation = (
 		route.method !== "DELETE" &&
 		nonPathParameters.length > 0;
 
-	// Build headers expression using helpers from @morph/http-client
+	// Build headers expression using helpers from @morphdsl/http-client
 	let headersExpr: string | undefined;
 	if (needsBody && requiresAuth && hasAuth) {
 		headersExpr = "jsonHeaders(token, format)";

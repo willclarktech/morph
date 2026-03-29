@@ -10,14 +10,14 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	OperationDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getOperationAggregates,
 	getOperationsFlat,
 	isDomainService,
-} from "@morph/domain-schema";
-import { indent, sortImports, toKebabCase, toPascalCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { indent, sortImports, toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 import { describeOutput, extractOutputTypes } from "./operation";
 

@@ -1,6 +1,6 @@
-import type { Codec, CodecRegistry } from "@morph/codec-dsl";
+import type { Codec, CodecRegistry } from "@morphdsl/codec-dsl";
 
-import { CodecNegotiationError } from "@morph/codec-dsl";
+import { CodecNegotiationError } from "@morphdsl/codec-dsl";
 import { Effect } from "effect";
 
 import { negotiateMime } from "./negotiation";

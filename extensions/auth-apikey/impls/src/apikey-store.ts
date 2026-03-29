@@ -2,9 +2,9 @@ import type {
 	ApiKey,
 	ApiKeyStorageError,
 	ApiKeyWithSecret,
-} from "@morph/auth-apikey-dsl";
+} from "@morphdsl/auth-apikey-dsl";
 
-import { ApiKeyExpiredError, ApiKeyInvalidError } from "@morph/auth-apikey-dsl";
+import { ApiKeyExpiredError, ApiKeyInvalidError } from "@morphdsl/auth-apikey-dsl";
 /**
  * API key storage with pluggable strategies.
  *

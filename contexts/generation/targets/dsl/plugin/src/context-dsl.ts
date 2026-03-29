@@ -1,7 +1,7 @@
 /**
  * Context-specific DSL generation for per-context packages.
  */
-import type { ContextDef, ParamDef, TypeRef } from "@morph/domain-schema";
+import type { ContextDef, ParamDef, TypeRef } from "@morphdsl/domain-schema";
 
 export interface DependencyImport {
 	readonly contextName: string;
@@ -215,7 +215,7 @@ export const generateContextDsl = (
 
 	// Only import defineOp if context has operations (commands/queries)
 	if (hasOperations(context)) {
-		lines.push('import { defineOp } from "@morph/operation";', "");
+		lines.push('import { defineOp } from "@morphdsl/operation";', "");
 	}
 
 	const typeImports = collectTypeImports(context);

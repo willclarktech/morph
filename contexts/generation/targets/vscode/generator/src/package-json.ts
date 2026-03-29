@@ -93,7 +93,7 @@ export const generateVsCodePackageJson = (
 			"lint:fix": "eslint . --fix",
 		},
 		dependencies: {
-			"@morph/generator-vscode": "workspace:*",
+			"@morphdsl/generator-vscode": "workspace:*",
 			...contextDeps,
 			effect: "^3.19.13",
 		},

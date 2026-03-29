@@ -1,6 +1,6 @@
-import type { ExecuteOperation, Prose, Runner } from "@morph/scenario-runner";
+import type { ExecuteOperation, Prose, Runner } from "@morphdsl/scenario-runner";
 
-import { createRunner, resolveOperationName } from "@morph/scenario-runner";
+import { createRunner, resolveOperationName } from "@morphdsl/scenario-runner";
 
 import type { McpInstance } from "./server";
 

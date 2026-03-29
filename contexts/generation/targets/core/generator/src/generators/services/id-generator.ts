@@ -2,7 +2,7 @@
  * IdGenerator service generators.
  */
 
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the IdGenerator service interface.

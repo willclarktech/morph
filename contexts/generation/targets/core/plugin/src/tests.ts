@@ -1,4 +1,4 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 import {
 	conditionReferencesInput,
 	getAllInvariants,
@@ -6,7 +6,7 @@ import {
 	getFunctionsForContext,
 	getOperationsForContext,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 export const generateCoreScenarioTest = (
 	schema: DomainSchema,
@@ -70,7 +70,7 @@ const AuthLayer = Layer.mergeAll(
 		? `ops, HandlersLayer, InMemoryLayer${authImports}`
 		: `ops, HandlersLayer${authImports}`;
 
-	return `import { createLibraryRunner } from "@morph/scenario-runner-core";
+	return `import { createLibraryRunner } from "@morphdsl/scenario-runner-core";
 import { ${coreImportsString}, prose } from "${corePackage}";
 import { scenarios } from "${scenariosPackage}";
 import { expect, test } from "bun:test";
@@ -162,7 +162,7 @@ const AuthLayer = Layer.mergeAll(
 		? `${baseImports}, InMemoryLayer${authImports}`
 		: `${baseImports}${authImports}`;
 
-	return `import { createPropertyLibraryRunner } from "@morph/property-runner-core";
+	return `import { createPropertyLibraryRunner } from "@morphdsl/property-runner-core";
 import { ${coreImportsString} } from "${corePackage}";
 import { validatorProperties } from "${propertiesPackage}";
 import { expect, test } from "bun:test";

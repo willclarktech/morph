@@ -10,7 +10,7 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import { generateDslReadme } from "./readme-generation";
 import { generateOperation } from "./type-codegen";
@@ -113,7 +113,7 @@ const generatePackageJson = (name: string, scope: string): string => {
 	const package_ = {
 		$schema: "https://json.schemastore.org/package.json",
 		dependencies: {
-			"@morph/operation": "workspace:*",
+			"@morphdsl/operation": "workspace:*",
 			effect: "^3.19.13",
 		},
 		devDependencies: {
@@ -190,7 +190,7 @@ const generateContextDsl = (
 	// Only import defineOp if context has operations (commands/queries)
 	// Functions don't need defineOp wrappers
 	if (hasOperations(context)) {
-		lines.push('import { defineOp } from "@morph/operation";', "");
+		lines.push('import { defineOp } from "@morphdsl/operation";', "");
 	}
 
 	const typeImports = collectTypeImports(context);
@@ -215,4 +215,4 @@ const generateContextDsl = (
 export {
 	type GeneratedFile,
 	type GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";

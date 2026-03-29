@@ -1,8 +1,8 @@
-import type { DslFoldingRange } from "@morph/schema-dsl-dsl";
-import type { DomainAst, SourceRange } from "@morph/schema-dsl-parser";
+import type { DslFoldingRange } from "@morphdsl/schema-dsl-dsl";
+import type { DomainAst, SourceRange } from "@morphdsl/schema-dsl-parser";
 import type { Effect } from "effect";
 
-import { parse } from "@morph/schema-dsl-parser";
+import { parse } from "@morphdsl/schema-dsl-parser";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface GetFoldingRangesHandler {
@@ -14,7 +14,7 @@ export interface GetFoldingRangesHandler {
 
 export const GetFoldingRangesHandler =
 	Context.GenericTag<GetFoldingRangesHandler>(
-		"@morph/impls/GetFoldingRangesHandler",
+		"@morphdsl/impls/GetFoldingRangesHandler",
 	);
 
 const addRange = (ranges: DslFoldingRange[], range: SourceRange): void => {

@@ -1,6 +1,6 @@
-import type { FunctionDef, ParamDef, TypeRef } from "@morph/domain-schema";
+import type { FunctionDef, ParamDef, TypeRef } from "@morphdsl/domain-schema";
 
-import { indent, sortImports, toPascalCase } from "@morph/utils";
+import { indent, sortImports, toPascalCase } from "@morphdsl/utils";
 
 import { parameterDefToSchema } from "../mappers";
 
@@ -45,7 +45,7 @@ export const generateFunctionOperation = (
 
 	const imports = sortImports(
 		[
-			'import { defineOperation } from "@morph/operation";',
+			'import { defineOperation } from "@morphdsl/operation";',
 			'import { Effect } from "effect";',
 			'import * as S from "effect/Schema";',
 			"",

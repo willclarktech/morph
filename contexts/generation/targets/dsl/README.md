@@ -95,7 +95,7 @@ export class TodoNotFoundError extends Data.TaggedError(
 **tasks.ts** — Operation constructors:
 
 ```typescript
-import { defineOp } from "@morph/operation";
+import { defineOp } from "@morphdsl/operation";
 import type { Todo, TodoId, User, UserId } from "./schemas";
 
 export const createTodo = defineOp<

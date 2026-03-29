@@ -1,5 +1,5 @@
 {
-	"name": "@morph/schema-dsl-decompiler",
+	"name": "@morphdsl/schema-dsl-decompiler",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -14,11 +14,11 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"dependencies": {
-		"@morph/domain-schema": "workspace:*"
+		"@morphdsl/domain-schema": "workspace:*"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"@types/bun": "latest",
 		"eslint": "^9.0.0",
 		"prettier": "^3.0.0",

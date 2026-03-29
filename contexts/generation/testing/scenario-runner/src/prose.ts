@@ -1,6 +1,6 @@
-import type { Step } from "@morph/scenario";
+import type { Step } from "@morphdsl/scenario";
 
-import { interpolate, isAssertion } from "@morph/scenario";
+import { interpolate, isAssertion } from "@morphdsl/scenario";
 
 import type { Prose } from "./index";
 

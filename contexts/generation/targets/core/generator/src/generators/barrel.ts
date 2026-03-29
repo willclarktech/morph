@@ -2,7 +2,7 @@ import type {
 	DomainSchema,
 	FunctionDef,
 	OperationDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
@@ -10,8 +10,8 @@ import {
 	getAllSubscribers,
 	getFunctionsFlat,
 	getOperationsFlat,
-} from "@morph/domain-schema";
-import { toKebabCase, toPascalCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Filter operations by tags (any match).

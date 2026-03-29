@@ -1,15 +1,15 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 import {
 	getAllOperations,
 	getInjectableParams,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 import {
 	buildTokenAuthConfig,
 	getOptionNames,
 	getParamNames,
 	getSensitiveNames,
-} from "@morph/builder-test";
-import { indent, sortImports, toEnvironmentPrefix, toKebabCase } from "@morph/utils";
+} from "@morphdsl/builder-test";
+import { indent, sortImports, toEnvironmentPrefix, toKebabCase } from "@morphdsl/utils";
 
 export const generateClientCliScenarioTest = (
 	schema: DomainSchema,
@@ -72,7 +72,7 @@ export const generateClientCliScenarioTest = (
 		: "";
 
 	const imports = sortImports([
-		`import { createClientCliRunner } from "@morph/scenario-runner-cli-client";`,
+		`import { createClientCliRunner } from "@morphdsl/scenario-runner-cli-client";`,
 		`import { prose } from "${corePackage}";`,
 		`import { scenarios } from "${scenariosPackage}";`,
 		`import { expect, test } from "bun:test";`,

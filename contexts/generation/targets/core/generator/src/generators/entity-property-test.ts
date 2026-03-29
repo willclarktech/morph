@@ -1,9 +1,9 @@
 /**
  * Entity-scoped property test generation.
  */
-import type { InvariantDef } from "@morph/domain-schema";
+import type { InvariantDef } from "@morphdsl/domain-schema";
 
-import { toCamelCase } from "@morph/utils";
+import { toCamelCase } from "@morphdsl/utils";
 
 import { compileTestCondition } from "./compile-test-condition";
 import { inferContextFields } from "./infer-context-fields";

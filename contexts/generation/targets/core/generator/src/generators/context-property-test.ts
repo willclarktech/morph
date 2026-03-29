@@ -1,7 +1,7 @@
 /**
  * Context-scoped property test generation.
  */
-import type { InvariantDef } from "@morph/domain-schema";
+import type { InvariantDef } from "@morphdsl/domain-schema";
 
 import { compileTestCondition } from "./compile-test-condition";
 import { conditionReferencesCurrentUser } from "./invariants";

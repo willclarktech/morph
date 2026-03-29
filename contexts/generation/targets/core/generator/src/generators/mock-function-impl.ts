@@ -5,10 +5,10 @@ import type {
 	DomainSchema,
 	FunctionDef,
 	GeneratedFile,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getFunctionsFlat } from "@morph/domain-schema";
-import { indent, sortImports, toKebabCase, toPascalCase } from "@morph/utils";
+import { getFunctionsFlat } from "@morphdsl/domain-schema";
+import { indent, sortImports, toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 import type { MockImplOptions } from "./mock-operation-impl";
 

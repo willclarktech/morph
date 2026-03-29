@@ -1,5 +1,5 @@
 /**
- * @morph/auth-jwt-impls - JWT authentication implementations
+ * @morphdsl/auth-jwt-impls - JWT authentication implementations
  *
  * Provides:
  * - Handler implementations (SignToken, VerifyToken, RefreshToken)
@@ -21,5 +21,5 @@ export { HandlersLayer } from "./layer";
 export { prose } from "./prose";
 
 // Re-export types and errors from DSL for convenience
-export type { JwtPayload } from "@morph/auth-jwt-dsl";
-export { TokenExpiredError, TokenInvalidError } from "@morph/auth-jwt-dsl";
+export type { JwtPayload } from "@morphdsl/auth-jwt-dsl";
+export { TokenExpiredError, TokenInvalidError } from "@morphdsl/auth-jwt-dsl";

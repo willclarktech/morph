@@ -1,4 +1,4 @@
-import type { AnyOperation } from "@morph/operation";
+import type { AnyOperation } from "@morphdsl/operation";
 /**
  * HTTP Request Building
  *
@@ -9,11 +9,11 @@ import type {
 	DomainServiceContext,
 	HttpMethod,
 	RouteDefinition,
-} from "@morph/runtime-api";
+} from "@morphdsl/runtime-api";
 
-import { buildRoute } from "@morph/runtime-api";
+import { buildRoute } from "@morphdsl/runtime-api";
 
-export type { DomainServiceContext } from "@morph/runtime-api";
+export type { DomainServiceContext } from "@morphdsl/runtime-api";
 
 /**
  * Build an HTTP request for an operation.

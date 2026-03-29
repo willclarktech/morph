@@ -7,7 +7,7 @@ import type {
 	DomainSchema,
 	EntityDef,
 	GeneratedFile,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	entityToFieldSpecs,
@@ -49,7 +49,7 @@ export const generateRelationalConfigs = (
 	const content = `// Relational table configurations for SQLite storage
 // Do not edit - regenerate from schema
 
-import type { RelationalTableConfig } from "@morph/storage-sqlite-impls";
+import type { RelationalTableConfig } from "@morphdsl/storage-sqlite-impls";
 
 ${configs.join("\n\n")}
 `;

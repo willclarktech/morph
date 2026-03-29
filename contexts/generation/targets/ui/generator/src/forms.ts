@@ -1,9 +1,9 @@
 /**
  * Form generation for UI.
  */
-import type { OperationDef, QualifiedEntry } from "@morph/domain-schema";
+import type { OperationDef, QualifiedEntry } from "@morphdsl/domain-schema";
 
-import { separator, toTitleCase } from "@morph/utils";
+import { separator, toTitleCase } from "@morphdsl/utils";
 
 import { typeRefToInputType } from "./utilities";
 

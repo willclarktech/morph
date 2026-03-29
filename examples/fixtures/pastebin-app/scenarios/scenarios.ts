@@ -1,4 +1,4 @@
-import { assert, given, scenario, then, when } from "@morph/scenario";
+import { assert, given, scenario, then, when } from "@morphdsl/scenario";
 import { createPaste, listPastes } from "@pastebin-app/pastes-dsl";
 
 /**

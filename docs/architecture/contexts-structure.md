@@ -127,8 +127,8 @@ Morph dogfoods itself. Its schema defines two contexts: `generation` (code gener
 morph/
 ├── contexts/
 │   ├── generation/              # Code generation context
-│   │   ├── dsl/                 # @morph/generation-dsl
-│   │   ├── core/                # @morph/generation-core
+│   │   ├── dsl/                 # @morphdsl/generation-dsl
+│   │   ├── core/                # @morphdsl/generation-core
 │   │   ├── impls/               # Hand-written generation implementations
 │   │   │
 │   │   ├── targets/             # Generation targets
@@ -156,8 +156,8 @@ morph/
 │   │   └── plugin/              # Plugin system
 │   │
 │   └── schema-dsl/              # Schema DSL context
-│       ├── dsl/                 # @morph/schema-dsl-dsl
-│       ├── core/                # @morph/schema-dsl-core
+│       ├── dsl/                 # @morphdsl/schema-dsl-dsl
+│       ├── core/                # @morphdsl/schema-dsl-core
 │       ├── impls/               # Hand-written schema-dsl implementations
 │       ├── compiler/            # Schema compiler
 │       ├── decompiler/          # Schema decompiler
@@ -165,8 +165,8 @@ morph/
 │
 └── extensions/                  # Infrastructure extensions
     ├── auth-password/           # Password hashing
-    │   ├── dsl/                 # @morph/auth-password-dsl
-    │   └── impls/               # @morph/auth-password-impls
+    │   ├── dsl/                 # @morphdsl/auth-password-dsl
+    │   └── impls/               # @morphdsl/auth-password-impls
     ├── auth-session/            # Session management
     ├── storage-memory/          # In-memory storage
     ├── storage-jsonfile/        # JSON file storage
@@ -181,7 +181,7 @@ The `generation` context is special because it contains both:
 
 The `schema-dsl` context handles parsing `.morph` schema files, compiling them to the internal representation, and decompiling back. It also contains generated packages (`dsl/`, `core/`) plus domain-specific tooling (`compiler/`, `decompiler/`, `parser/`).
 
-Extensions are not contexts -- they provide reusable infrastructure (auth providers, storage backends) that generated projects can opt into via the `extensions` field in their domain schema. Extension packages use `@morph/{name}-dsl` and `@morph/{name}-impls` naming (not `-core`).
+Extensions are not contexts -- they provide reusable infrastructure (auth providers, storage backends) that generated projects can opt into via the `extensions` field in their domain schema. Extension packages use `@morphdsl/{name}-dsl` and `@morphdsl/{name}-impls` naming (not `-core`).
 
 ## Related Documentation
 

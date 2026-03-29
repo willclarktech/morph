@@ -1,13 +1,13 @@
-import type { DomainSchema } from "@morph/domain-schema";
-import { getAllOperations } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
+import { getAllOperations } from "@morphdsl/domain-schema";
 import {
 	buildCredentialAuthConfig,
 	getOptionNames,
 	getParamNames,
 	getSensitiveNames,
-} from "@morph/builder-test";
-import { indent, sortImports, toKebabCase, toPascalCase } from "@morph/utils";
-import { schemaHasAuthRequirement } from "@morph/domain-schema";
+} from "@morphdsl/builder-test";
+import { indent, sortImports, toKebabCase, toPascalCase } from "@morphdsl/utils";
+import { schemaHasAuthRequirement } from "@morphdsl/domain-schema";
 
 interface ContextPackages {
 	readonly contextName: string;
@@ -81,7 +81,7 @@ export const generateCliScenarioTest = (
 
 	const imports = sortImports(
 		[
-			`import { createCliRunner } from "@morph/scenario-runner-cli";`,
+			`import { createCliRunner } from "@morphdsl/scenario-runner-cli";`,
 			proseImports,
 			`import { scenarios } from "${scenariosPackage}";`,
 			`import { expect, test } from "bun:test";`,
@@ -138,7 +138,7 @@ export const generateCliPropertyTest = (
 		})
 		.join("\n");
 
-	return `import { createPropertyCliRunner } from "@morph/property-runner-cli";
+	return `import { createPropertyCliRunner } from "@morphdsl/property-runner-cli";
 import { validatorProperties } from "${propertiesPackage}";
 import { expect, test } from "bun:test";
 import path from "node:path";

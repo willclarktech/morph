@@ -1,9 +1,9 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
-import { parseSchema } from "@morph/domain-schema";
-import { InvalidSchemaError } from "@morph/generation-dsl";
-import { compile } from "@morph/schema-dsl-compiler";
-import { parse } from "@morph/schema-dsl-parser";
+import { parseSchema } from "@morphdsl/domain-schema";
+import { InvalidSchemaError } from "@morphdsl/generation-dsl";
+import { compile } from "@morphdsl/schema-dsl-compiler";
+import { parse } from "@morphdsl/schema-dsl-parser";
 import { Effect } from "effect";
 
 const parseSchemaFromJson = (

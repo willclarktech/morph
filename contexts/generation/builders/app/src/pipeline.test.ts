@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 import { generateAppFiles } from "./pipeline";
 

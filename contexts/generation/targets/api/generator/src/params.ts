@@ -9,12 +9,12 @@
  * Supports context injection for parameters constrained by invariants.
  */
 
-import type { CodecRegistry } from "@morph/codec-dsl";
-import type { InjectableParam } from "@morph/domain-schema";
-import type { AnyOperation } from "@morph/operation";
+import type { CodecRegistry } from "@morphdsl/codec-dsl";
+import type { InjectableParam } from "@morphdsl/domain-schema";
+import type { AnyOperation } from "@morphdsl/operation";
 
-import { getFieldNames } from "@morph/operation";
-import { toCamelCase } from "@morph/utils";
+import { getFieldNames } from "@morphdsl/operation";
+import { toCamelCase } from "@morphdsl/utils";
 import { Effect, Exit } from "effect";
 
 export interface ExtractedParameters {

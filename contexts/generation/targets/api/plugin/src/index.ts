@@ -1,15 +1,15 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
-import { contextNameToKebab } from "@morph/domain-schema";
-import { generate as generateApiAppEntry } from "@morph/runtime-api";
+import { contextNameToKebab } from "@morphdsl/domain-schema";
+import { generate as generateApiAppEntry } from "@morphdsl/runtime-api";
 import {
 	buildConfigFiles,
 	generateAppFiles,
-} from "@morph/builder-app";
-import { generate as generateEnvironmentExample } from "@morph/generator-env";
-import { generate as generateOpenApi } from "@morph/generator-openapi";
-import { toEnvironmentPrefix } from "@morph/utils";
+} from "@morphdsl/builder-app";
+import { generate as generateEnvironmentExample } from "@morphdsl/generator-env";
+import { generate as generateOpenApi } from "@morphdsl/generator-openapi";
+import { toEnvironmentPrefix } from "@morphdsl/utils";
 
 import { detectPasswordAuth } from "./info";
 import { generateApiDockerfile } from "./dockerfile";

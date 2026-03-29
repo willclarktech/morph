@@ -2,7 +2,7 @@
 // Do not edit manually
 
 // Re-exports from eventstore context
-export * from "@morph/eventstore-dsl";
+export * from "@morphdsl/eventstore-dsl";
 
 // Type schemas
 export * from "./schemas";

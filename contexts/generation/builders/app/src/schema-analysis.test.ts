@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import type { ContextDef, DomainSchema } from "@morph/domain-schema";
+import type { ContextDef, DomainSchema } from "@morphdsl/domain-schema";
 
 import { analyzeSchemaFeatures } from "./schema-analysis";
 

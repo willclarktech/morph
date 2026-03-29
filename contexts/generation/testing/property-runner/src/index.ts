@@ -5,7 +5,7 @@
  * Common types and interfaces for property test runners.
  */
 
-import type { AnyPropertySuite } from "@morph/property";
+import type { AnyPropertySuite } from "@morphdsl/property";
 
 /**
  * Result of running a single property test.

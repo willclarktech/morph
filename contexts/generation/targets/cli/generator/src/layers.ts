@@ -1,4 +1,4 @@
-import { buildLayerComposition } from "@morph/utils";
+import { buildLayerComposition } from "@morphdsl/utils";
 
 const generateStderrLoggerCode =
 	(): string => `// Use stderr logger to keep stdout clean for JSON output

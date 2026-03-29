@@ -1,12 +1,12 @@
-import type { DomainSchema } from "@morph/domain-schema";
-import type { PluginContext } from "@morph/plugin";
+import type { DomainSchema } from "@morphdsl/domain-schema";
+import type { PluginContext } from "@morphdsl/plugin";
 
 import {
 	contextNameToKebab,
 	getFunctionsForContext,
 	getOperationsForContext,
-} from "@morph/domain-schema";
-import { toPascalCase, toKebabCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { toPascalCase, toKebabCase } from "@morphdsl/utils";
 
 export interface ContextImplsInfo {
 	readonly contextName: string;

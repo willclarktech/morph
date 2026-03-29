@@ -1,12 +1,12 @@
-import type { DslSymbol } from "@morph/schema-dsl-dsl";
+import type { DslSymbol } from "@morphdsl/schema-dsl-dsl";
 import type {
 	ContextAst,
 	DomainAst,
 	SourceRange,
-} from "@morph/schema-dsl-parser";
+} from "@morphdsl/schema-dsl-parser";
 import type { Effect } from "effect";
 
-import { parse } from "@morph/schema-dsl-parser";
+import { parse } from "@morphdsl/schema-dsl-parser";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface GetSymbolsHandler {
@@ -17,7 +17,7 @@ export interface GetSymbolsHandler {
 }
 
 export const GetSymbolsHandler = Context.GenericTag<GetSymbolsHandler>(
-	"@morph/impls/GetSymbolsHandler",
+	"@morphdsl/impls/GetSymbolsHandler",
 );
 
 const rangeToDto = (range: SourceRange) => ({

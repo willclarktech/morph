@@ -1,3 +1,3 @@
-// Re-export from @morph/schema-dsl-impls
+// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetDiagnosticsHandlerLive } from "@morph/schema-dsl-impls";
+export { GetDiagnosticsHandlerLive } from "@morphdsl/schema-dsl-impls";

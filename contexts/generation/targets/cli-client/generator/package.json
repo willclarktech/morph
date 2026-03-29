@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/runtime-cli-client",
+	"name": "@morphdsl/runtime-cli-client",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -17,13 +17,13 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/builder-readme": "*",
-		"@morph/utils": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/builder-readme": "*",
+		"@morphdsl/utils": "*"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "*",
-		"@morph/tsconfig": "*",
+		"@morphdsl/eslint-config": "*",
+		"@morphdsl/tsconfig": "*",
 		"eslint": "^9.39.0"
 	}
 }

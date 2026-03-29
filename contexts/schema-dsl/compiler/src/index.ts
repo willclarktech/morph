@@ -28,7 +28,7 @@ import type {
 	ValueExpr,
 	ValueObjectDef,
 	VariantDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 import type {
 	AliasTypeAst,
 	AttributeAst,
@@ -58,7 +58,7 @@ import type {
 	TypeParameterAst,
 	ValueExprAst,
 	ValueObjectAst,
-} from "@morph/schema-dsl-parser";
+} from "@morphdsl/schema-dsl-parser";
 
 // =============================================================================
 // Compile Error

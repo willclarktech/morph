@@ -2,20 +2,20 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	codeBlock,
 	description,
 	heading,
 	joinSections,
-} from "@morph/builder-readme";
+} from "@morphdsl/builder-readme";
 import {
 	getAllOperations,
 	getInjectableParams,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
-import { toEnvironmentPrefix, toKebabCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { toEnvironmentPrefix, toKebabCase } from "@morphdsl/utils";
 
 const generateOperationExample = (
 	op: QualifiedEntry<OperationDef>,

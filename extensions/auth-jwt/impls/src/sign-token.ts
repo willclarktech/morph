@@ -1,4 +1,4 @@
-import type { JwtPayload } from "@morph/auth-jwt-dsl";
+import type { JwtPayload } from "@morphdsl/auth-jwt-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -13,7 +13,7 @@ export interface SignTokenHandler {
 }
 
 export const SignTokenHandler = Context.GenericTag<SignTokenHandler>(
-	"@morph/SignTokenHandler",
+	"@morphdsl/SignTokenHandler",
 );
 
 export const SignTokenHandlerLive = Layer.succeed(SignTokenHandler, {

@@ -1,4 +1,4 @@
-import type { ParamDef } from "@morph/domain-schema";
+import type { ParamDef } from "@morphdsl/domain-schema";
 
 import { typeRefToSchema } from "./type-to-schema";
 

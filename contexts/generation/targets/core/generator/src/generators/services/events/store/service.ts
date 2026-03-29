@@ -2,7 +2,7 @@
  * EventStore service interface generator.
  */
 
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the EventStore service interface.
@@ -20,7 +20,7 @@ import { Context } from "effect";
 
 import type { DomainEvent } from "${typesImportPath}";
 
-import type { EventStoreOperationError } from "@morph/eventstore-dsl";
+import type { EventStoreOperationError } from "@morphdsl/eventstore-dsl";
 
 /**
  * Service for durable event storage.

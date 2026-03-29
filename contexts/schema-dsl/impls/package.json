@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json-schema.org/package.json",
-	"name": "@morph/schema-dsl-impls",
+	"name": "@morphdsl/schema-dsl-impls",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -8,16 +8,16 @@
 		".": "./src/index.ts"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "workspace:*",
-		"@morph/schema-dsl-dsl": "workspace:*",
-		"@morph/schema-dsl-parser": "workspace:*",
-		"@morph/schema-dsl-compiler": "workspace:*",
-		"@morph/schema-dsl-decompiler": "workspace:*",
+		"@morphdsl/domain-schema": "workspace:*",
+		"@morphdsl/schema-dsl-dsl": "workspace:*",
+		"@morphdsl/schema-dsl-parser": "workspace:*",
+		"@morphdsl/schema-dsl-compiler": "workspace:*",
+		"@morphdsl/schema-dsl-decompiler": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"

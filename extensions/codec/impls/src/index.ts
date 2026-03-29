@@ -6,10 +6,10 @@ export type {
 	CodecRegistry,
 	EncodeResult,
 	MimeContribution,
-} from "@morph/codec-dsl";
+} from "@morphdsl/codec-dsl";
 
 export {
 	CodecDecodeError,
 	CodecEncodeError,
 	CodecNegotiationError,
-} from "@morph/codec-dsl";
+} from "@morphdsl/codec-dsl";

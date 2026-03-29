@@ -184,7 +184,7 @@
 
 Defines the formal schema language for describing domains.
 
-**Package**: `@morph/domain-schema`
+**Package**: `@morphdsl/domain-schema`
 
 **Entities**: DomainSchema, EntityDef, OperationDef, ContextDef, InvariantDef, TermDef, ExampleDef
 
@@ -194,7 +194,7 @@ Defines the formal schema language for describing domains.
 
 Provides type references and constraints for schema attributes.
 
-**Package**: `@morph/domain-schema`
+**Package**: `@morphdsl/domain-schema`
 
 **Entities**: TypeRef (and variants), ConstraintDef (and variants), ParamDef, AttributeDef
 
@@ -204,7 +204,7 @@ Provides type references and constraints for schema attributes.
 
 Defines the operation pattern for schema-first development.
 
-**Package**: `@morph/operation`
+**Package**: `@morphdsl/operation`
 
 **Entities**: OperationDefinition
 
@@ -214,7 +214,7 @@ Defines the operation pattern for schema-first development.
 
 Transforms schemas into generated files.
 
-**Packages**: `@morph/generator-types`, `@morph/generator-core`, `@morph/generator-steps`, `@morph/runtime-cli`, `@morph/scaffold`
+**Packages**: `@morphdsl/generator-types`, `@morphdsl/generator-core`, `@morphdsl/generator-steps`, `@morphdsl/runtime-cli`, `@morphdsl/scaffold`
 
 **Entities**: GeneratedFile, GenerationResult
 
@@ -224,7 +224,7 @@ Transforms schemas into generated files.
 
 Provides Cucumber step definitions and test contexts.
 
-**Package**: `@morph/generator-steps`
+**Package**: `@morphdsl/generator-steps`
 
 **Entities**: World, CoreWorld
 
@@ -234,7 +234,7 @@ Provides Cucumber step definitions and test contexts.
 
 Creates new projects and packages from templates.
 
-**Package**: `@morph/scaffold`
+**Package**: `@morphdsl/scaffold`
 
 **Entities**: (templates embedded as constants)
 

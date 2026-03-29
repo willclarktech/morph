@@ -1,9 +1,9 @@
-import type { EventStoreTransport } from "@morph/eventstore-dsl";
+import type { EventStoreTransport } from "@morphdsl/eventstore-dsl";
 
 import {
 	EventStoreConnectionError,
 	EventStoreOperationError,
-} from "@morph/eventstore-dsl";
+} from "@morphdsl/eventstore-dsl";
 import { Effect } from "effect";
 
 type RedisClient = InstanceType<typeof Bun.RedisClient>;

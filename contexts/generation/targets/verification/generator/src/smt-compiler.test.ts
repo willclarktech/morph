@@ -1,4 +1,4 @@
-import type { ConditionExpr, ValueExpr } from "@morph/domain-schema";
+import type { ConditionExpr, ValueExpr } from "@morphdsl/domain-schema";
 
 import { describe, expect, test } from "bun:test";
 

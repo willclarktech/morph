@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/codec-protobuf-impls",
+	"name": "@morphdsl/codec-protobuf-impls",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -8,13 +8,13 @@
 		".": "./src/index.ts"
 	},
 	"dependencies": {
-		"@morph/codec-dsl": "workspace:*",
+		"@morphdsl/codec-dsl": "workspace:*",
 		"effect": "^3.19.13",
 		"protobufjs": "^7.4.0"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"

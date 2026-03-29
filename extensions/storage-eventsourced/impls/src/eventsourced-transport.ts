@@ -1,8 +1,8 @@
-import type { EventStoreTransport } from "@morph/eventstore-dsl";
-import type { PaginationParams, StorageTransport } from "@morph/storage-dsl";
+import type { EventStoreTransport } from "@morphdsl/eventstore-dsl";
+import type { PaginationParams, StorageTransport } from "@morphdsl/storage-dsl";
 
-import { applyPagination, StorageOperationError } from "@morph/storage-dsl";
-import { jsonParse, jsonStringify } from "@morph/utils";
+import { applyPagination, StorageOperationError } from "@morphdsl/storage-dsl";
+import { jsonParse, jsonStringify } from "@morphdsl/utils";
 import { Effect, Ref } from "effect";
 
 interface ParsedEvent {

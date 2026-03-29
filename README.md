@@ -191,8 +191,8 @@ cd examples/pastebin-app && bun run apps/api/src/index.ts
 Morph dogfoods — its own CLI, MCP server, and VS Code extension are generated from [`schema.morph`](schema.morph):
 
 ```sh
-bun run --filter @morph/cli start -- --help   # Morph CLI
-bun run --filter @morph/mcp start             # MCP server
+bun run --filter @morphdsl/cli start -- --help   # Morph CLI
+bun run --filter @morphdsl/mcp start             # MCP server
 cd apps/vscode && bun run build               # VS Code extension
 ```
 

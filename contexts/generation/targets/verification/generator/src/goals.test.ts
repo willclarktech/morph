@@ -1,4 +1,4 @@
-import type { ContextDef, DomainSchema } from "@morph/domain-schema";
+import type { ContextDef, DomainSchema } from "@morphdsl/domain-schema";
 
 import { describe, expect, test } from "bun:test";
 

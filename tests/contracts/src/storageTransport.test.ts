@@ -1,6 +1,6 @@
-import { createJsonFileTransport } from "@morph/storage-jsonfile-impls";
-import { createMemoryTransport } from "@morph/storage-memory-impls";
-import { createSqliteTransport } from "@morph/storage-sqlite-impls";
+import { createJsonFileTransport } from "@morphdsl/storage-jsonfile-impls";
+import { createMemoryTransport } from "@morphdsl/storage-memory-impls";
+import { createSqliteTransport } from "@morphdsl/storage-sqlite-impls";
 import { Database } from "bun:sqlite";
 import { afterEach, describe, test } from "bun:test";
 import { Effect } from "effect";

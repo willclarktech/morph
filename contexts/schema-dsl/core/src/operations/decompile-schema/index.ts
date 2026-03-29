@@ -1,6 +1,6 @@
 // Generated function operation - delegates to injected handler
 // Do not edit - regenerate from schema
-import { defineOperation } from "@morph/operation";
+import { defineOperation } from "@morphdsl/operation";
 import { Effect } from "effect";
 import * as S from "effect/Schema";
 

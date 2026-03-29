@@ -1,22 +1,22 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
 import {
 	contextNameToKebab,
 	getAllFunctions,
 	getAllOperations,
 	getContextDependencies,
-} from "@morph/domain-schema";
-import { buildConfigFiles } from "@morph/builder-app";
-import { generate as generateProperties } from "@morph/generator-properties";
-import { generate as generateScenarios } from "@morph/generator-scenarios";
+} from "@morphdsl/domain-schema";
+import { buildConfigFiles } from "@morphdsl/builder-app";
+import { generate as generateProperties } from "@morphdsl/generator-properties";
+import { generate as generateScenarios } from "@morphdsl/generator-scenarios";
 import {
 	generateArbitraries,
 	generateErrors,
 	generatePorts,
 	generateSchemaWrapper,
 	generateSchemas,
-} from "@morph/generator-types";
+} from "@morphdsl/generator-types";
 
 import { generateContextDsl } from "./context-dsl";
 import {

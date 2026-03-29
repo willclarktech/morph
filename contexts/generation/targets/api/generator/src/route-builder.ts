@@ -1,16 +1,16 @@
-import type { CodecRegistry } from "@morph/codec-dsl";
+import type { CodecRegistry } from "@morphdsl/codec-dsl";
 /**
  * Route building from domain operations.
  */
-import type { DomainSchema, InjectableParam } from "@morph/domain-schema";
-import type { AnyOperation } from "@morph/operation";
+import type { DomainSchema, InjectableParam } from "@morphdsl/domain-schema";
+import type { AnyOperation } from "@morphdsl/operation";
 import type { Context, ManagedRuntime } from "effect";
 
 import {
 	getDomainServiceAction,
 	getPrimaryWriteAggregate,
 	isDomainService,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import type { AuthStrategy } from "./auth";
 import type { RouteHandler } from "./handler";

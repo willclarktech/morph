@@ -1,4 +1,4 @@
-import type { EventStoreTransport } from "@morph/eventstore-dsl";
+import type { EventStoreTransport } from "@morphdsl/eventstore-dsl";
 
 import { Effect, Ref } from "effect";
 

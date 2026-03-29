@@ -1,4 +1,4 @@
-import type { OperationCall } from "@morph/operation";
+import type { OperationCall } from "@morphdsl/operation";
 
 /**
  * Assertion matchers.

@@ -1,4 +1,4 @@
-import { assert, given, ref, scenario, then, when } from "@morph/scenario";
+import { assert, given, ref, scenario, then, when } from "@morphdsl/scenario";
 import type { Todo, User } from "@todo-app/tasks-dsl";
 import {
 	completeTodo,

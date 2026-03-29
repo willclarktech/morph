@@ -1,4 +1,4 @@
-import type { AssertionMatcher } from "@morph/scenario";
+import type { AssertionMatcher } from "@morphdsl/scenario";
 
 export const runAssertion = (
 	value: unknown,

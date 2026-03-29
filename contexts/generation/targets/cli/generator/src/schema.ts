@@ -1,6 +1,6 @@
 import type * as S from "effect/Schema";
 
-import { getFieldNames } from "@morph/operation";
+import { getFieldNames } from "@morphdsl/operation";
 
 export const getSchemaDescription = (
 	schema: S.Schema.All,

@@ -1,14 +1,14 @@
-import type { AnyPropertySuite } from "@morph/property";
+import type { AnyPropertySuite } from "@morphdsl/property";
 import type {
 	PropertyResult,
 	PropertyRunner,
 	PropertyRunOptions,
 	PropertySuiteResult,
-} from "@morph/property-runner";
+} from "@morphdsl/property-runner";
 import type { Layer } from "effect";
 
-import { isOperationSuite, isValidatorSuite } from "@morph/property";
-import { printPropertySuiteResult } from "@morph/property-runner";
+import { isOperationSuite, isValidatorSuite } from "@morphdsl/property";
+import { printPropertySuiteResult } from "@morphdsl/property-runner";
 import { Effect } from "effect";
 
 import { runOperationSuite } from "./operation-suite";
@@ -77,10 +77,10 @@ export const createPropertyLibraryRunner = <R>(
 export {
 	printPropertyResult,
 	printPropertySuiteResult,
-} from "@morph/property-runner";
+} from "@morphdsl/property-runner";
 export type {
 	PropertyResult,
 	PropertyRunner,
 	PropertyRunOptions,
 	PropertySuiteResult,
-} from "@morph/property-runner";
+} from "@morphdsl/property-runner";

@@ -1,4 +1,4 @@
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
 import { describe, expect, test } from "bun:test";
 

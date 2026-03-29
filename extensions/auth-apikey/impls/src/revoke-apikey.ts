@@ -1,4 +1,4 @@
-import type { ApiKeyStorageError } from "@morph/auth-apikey-dsl";
+import type { ApiKeyStorageError } from "@morphdsl/auth-apikey-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -13,7 +13,7 @@ export interface RevokeApiKeyHandler {
 }
 
 export const RevokeApiKeyHandler = Context.GenericTag<RevokeApiKeyHandler>(
-	"@morph/RevokeApiKeyHandler",
+	"@morphdsl/RevokeApiKeyHandler",
 );
 
 export const RevokeApiKeyHandlerLive = Layer.succeed(RevokeApiKeyHandler, {

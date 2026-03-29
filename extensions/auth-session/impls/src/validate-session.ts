@@ -3,7 +3,7 @@ import type {
 	SessionExpiredError,
 	SessionNotFoundError,
 	SessionStorageError,
-} from "@morph/auth-session-dsl";
+} from "@morphdsl/auth-session-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -21,7 +21,7 @@ export interface ValidateSessionHandler {
 }
 
 export const ValidateSessionHandler =
-	Context.GenericTag<ValidateSessionHandler>("@morph/ValidateSessionHandler");
+	Context.GenericTag<ValidateSessionHandler>("@morphdsl/ValidateSessionHandler");
 
 export const ValidateSessionHandlerLive = Layer.succeed(
 	ValidateSessionHandler,

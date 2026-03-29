@@ -1,5 +1,5 @@
 import type { ContextImplsInfo } from "./info";
-import { buildPackageJson } from "@morph/builder-app";
+import { buildPackageJson } from "@morphdsl/builder-app";
 
 export const generateImplsPackageJson = (
 	projectName: string,

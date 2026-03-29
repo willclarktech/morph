@@ -1,9 +1,9 @@
 /**
  * Context field inference for property test arbitrary generation.
  */
-import type { ConditionExpr, ValueExpr } from "@morph/domain-schema";
+import type { ConditionExpr, ValueExpr } from "@morphdsl/domain-schema";
 
-import { toPascalCase } from "@morph/utils";
+import { toPascalCase } from "@morphdsl/utils";
 
 export interface ContextField {
 	readonly name: string;

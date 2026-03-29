@@ -2,7 +2,7 @@
  * Morph API Generator
  *
  * Generate Effect-based HTTP handlers with Bun.serve from domain operations.
- * Follows the same pattern as @morph/runtime-cli.
+ * Follows the same pattern as @morphdsl/runtime-cli.
  */
 export * from "./api";
 export * from "./auth";

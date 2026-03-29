@@ -1,3 +1,3 @@
-// Re-export handler interfaces from @morph/generation-impls
+// Re-export handler interfaces from @morphdsl/generation-impls
 
-export { GenerateHandler, type GenerateOptions } from "@morph/generation-impls";
+export { GenerateHandler, type GenerateOptions } from "@morphdsl/generation-impls";

@@ -5,7 +5,7 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	code,
@@ -19,7 +19,7 @@ import {
 	operations,
 	table,
 	valueObjects,
-} from "@morph/builder-readme";
+} from "@morphdsl/builder-readme";
 import {
 	getAllEntities,
 	getAllFunctions,
@@ -27,8 +27,8 @@ import {
 	getAllValueObjects,
 	getCommandsWithEvents,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
-import { toKebabCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { toKebabCase } from "@morphdsl/utils";
 
 /**
  * Generate a CLI command example.

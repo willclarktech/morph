@@ -1,10 +1,10 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 import {
 	getAllOperations,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
-import { buildTokenAuthConfig } from "@morph/builder-test";
-import { indent, sortImports } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { buildTokenAuthConfig } from "@morphdsl/builder-test";
+import { indent, sortImports } from "@morphdsl/utils";
 
 export const generateApiScenarioTest = (
 	schema: DomainSchema,
@@ -23,7 +23,7 @@ export const generateApiScenarioTest = (
 
 	const imports = sortImports(
 		[
-			`import { createApiRunner } from "@morph/scenario-runner-api";`,
+			`import { createApiRunner } from "@morphdsl/scenario-runner-api";`,
 			`import { ${coreImports} } from "${corePackage}";`,
 			`import { ${schemaExportName} } from "${dslPackage}";`,
 			`import { scenarios } from "${scenariosPackage}";`,

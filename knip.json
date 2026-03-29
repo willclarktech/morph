@@ -10,13 +10,13 @@
 		"**/eslint.config.ts"
 	],
 	"ignoreDependencies": [
-		"@morph/tsconfig",
-		"@morph/eslint-config",
-		"@morph/generation-dsl",
-		"@morph/schema-dsl-dsl",
-		"@morph/testing",
-		"@morph/codec-json-impls",
-		"@morph/codec-yaml-impls",
+		"@morphdsl/tsconfig",
+		"@morphdsl/eslint-config",
+		"@morphdsl/generation-dsl",
+		"@morphdsl/schema-dsl-dsl",
+		"@morphdsl/testing",
+		"@morphdsl/codec-json-impls",
+		"@morphdsl/codec-yaml-impls",
 		"@types/vscode",
 		"effect"
 	],

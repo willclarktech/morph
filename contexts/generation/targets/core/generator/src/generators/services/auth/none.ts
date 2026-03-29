@@ -1,17 +1,17 @@
 /**
  * AuthServiceNone implementation generator.
- * Delegates to @morph/auth-none-core operations.
+ * Delegates to @morphdsl/auth-none-core operations.
  */
 
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the "None" AuthService implementation (no auth).
- * Uses @morph/auth-none-core adapter.
+ * Uses @morphdsl/auth-none-core adapter.
  */
 export const generateAuthServiceNone = (): GeneratedFile => {
 	const content = `// Generated AuthServiceNone implementation
-// Delegates to @morph/auth-none-core adapter
+// Delegates to @morphdsl/auth-none-core adapter
 // Do not edit - regenerate from schema
 
 import { Effect, Layer } from "effect";

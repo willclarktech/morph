@@ -5,9 +5,9 @@ import type {
 	DomainSchema,
 	FunctionDef,
 	OperationDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getFunctionsFlat, getOperationsFlat } from "@morph/domain-schema";
+import { getFunctionsFlat, getOperationsFlat } from "@morphdsl/domain-schema";
 
 /**
  * Filter operations by tags.

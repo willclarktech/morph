@@ -1,6 +1,6 @@
-// Re-export handler interfaces from @morph/generation-impls
+// Re-export handler interfaces from @morphdsl/generation-impls
 
 export {
 	NewProjectHandler,
 	type NewProjectOptions,
-} from "@morph/generation-impls";
+} from "@morphdsl/generation-impls";

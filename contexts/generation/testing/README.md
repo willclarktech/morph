@@ -6,10 +6,10 @@ Morph generates three layers of verification for every domain: behavior scenario
 
 ```
 contexts/generation/testing/
-├── scenario/          # @morph/scenario — BDD step types and DSL
-├── scenario-runner/   # @morph/scenario-runner — shared execution engine
-├── property/          # @morph/property — property test types (fast-check)
-└── property-runner/   # @morph/property-runner — shared property runner interface
+├── scenario/          # @morphdsl/scenario — BDD step types and DSL
+├── scenario-runner/   # @morphdsl/scenario-runner — shared execution engine
+├── property/          # @morphdsl/property — property test types (fast-check)
+└── property-runner/   # @morphdsl/property-runner — shared property runner interface
 
 contexts/generation/generators/
 ├── scenarios/         # Generates tests/scenarios/ packages (step definitions)
@@ -29,7 +29,7 @@ Scenarios are behavior-driven tests using a Given/When/Then DSL. A single scenar
 Scenarios are generated in `tests/scenarios/` from the schema. Each scenario uses the operation DSL:
 
 ```typescript
-import { assert, given, ref, scenario, then, when } from "@morph/scenario";
+import { assert, given, ref, scenario, then, when } from "@morphdsl/scenario";
 import { completeTodo, createTodo, createUser } from "@todo-app/tasks-dsl";
 import type { Todo, User } from "@todo-app/tasks-dsl";
 
@@ -55,7 +55,7 @@ export const scenarios = [
 
 ### Runner Interface
 
-Each target implements the shared `Runner` interface from `@morph/scenario-runner`:
+Each target implements the shared `Runner` interface from `@morphdsl/scenario-runner`:
 
 ```typescript
 interface Runner {
@@ -83,7 +83,7 @@ Each target with a scenario runner gets a `src/test/scenarios.test.ts`:
 
 ```typescript
 import { scenarios } from "@todo-app/scenarios";
-import { createApiRunner } from "@morph/scenario-runner-api";
+import { createApiRunner } from "@morphdsl/scenario-runner-api";
 
 const runner = createApiRunner({ port: 3001 });
 const results = await runner.runAllAndPrint(scenarios);
@@ -98,7 +98,7 @@ Property-based tests validate domain invariants using fast-check. Properties run
 Properties are generated in `tests/properties/` from schema invariants:
 
 ```typescript
-import { validatorProperty } from "@morph/property";
+import { validatorProperty } from "@morphdsl/property";
 import { TodoArbitrary, UserArbitrary } from "@todo-app/tasks-dsl";
 import * as fc from "fast-check";
 

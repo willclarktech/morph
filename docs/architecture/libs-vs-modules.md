@@ -25,7 +25,7 @@ Libs are **runtime dependencies** that generated applications import and use at 
 
 ### Characteristics
 
-- Imported by user-generated code (e.g., `@morph/test` in generated test files)
+- Imported by user-generated code (e.g., `@morphdsl/test` in generated test files)
 - Stable public APIs that external users depend on
 - Dogfooding candidates - could be generated from the morph schema itself
 - Minimal internal dependencies
@@ -34,16 +34,16 @@ Libs are **runtime dependencies** that generated applications import and use at 
 
 | Package | Purpose | Dep Type |
 |---------|---------|----------|
-| `@morph/core` | Morph's own generated core (operations, types) | direct |
-| `@morph/dsl` | Morph's own generated DSL (schemas, errors) | direct |
-| `@morph/operation` | defineOperation(), operation types | direct |
-| `@morph/test` | scenario(), given/when/then DSL | direct |
-| `@morph/property` | Property-based testing DSL | direct |
-| `@morph/scenario` | Reference binding, interpolation | transitive |
-| `@morph/scenario-runner` | Base scenario runner | transitive |
-| `@morph/property-runner` | Base property runner | transitive |
-| `@morph/auth` | Auth interfaces, error types | direct |
-| `@morph/auth-password` | Password auth implementation | direct |
+| `@morphdsl/core` | Morph's own generated core (operations, types) | direct |
+| `@morphdsl/dsl` | Morph's own generated DSL (schemas, errors) | direct |
+| `@morphdsl/operation` | defineOperation(), operation types | direct |
+| `@morphdsl/test` | scenario(), given/when/then DSL | direct |
+| `@morphdsl/property` | Property-based testing DSL | direct |
+| `@morphdsl/scenario` | Reference binding, interpolation | transitive |
+| `@morphdsl/scenario-runner` | Base scenario runner | transitive |
+| `@morphdsl/property-runner` | Base property runner | transitive |
+| `@morphdsl/auth` | Auth interfaces, error types | direct |
+| `@morphdsl/auth-password` | Password auth implementation | direct |
 
 ## Contexts (`contexts/`)
 
@@ -66,20 +66,20 @@ The `generation` context is special - it contains both generated packages and th
 
 ```
 contexts/generation/
-├── dsl/                     # @morph/generation-dsl (generated)
-├── core/                    # @morph/generation-core (generated)
+├── dsl/                     # @morphdsl/generation-dsl (generated)
+├── core/                    # @morphdsl/generation-core (generated)
 ├── impls/                   # Hand-written implementations for generation operations
 │
 ├── targets/                 # Generation targets (apps + libs)
 │   ├── api/                 # REST API target
-│   │   ├── generator/       # @morph/runtime-api
-│   │   ├── plugin/          # @morph/plugin-api
-│   │   └── scenario-runner/ # @morph/scenario-runner-api
+│   │   ├── generator/       # @morphdsl/runtime-api
+│   │   ├── plugin/          # @morphdsl/plugin-api
+│   │   └── scenario-runner/ # @morphdsl/scenario-runner-api
 │   ├── cli/                 # CLI target
-│   │   ├── generator/       # @morph/runtime-cli
-│   │   ├── plugin/          # @morph/plugin-cli
-│   │   ├── scenario-runner/ # @morph/scenario-runner-cli
-│   │   └── property-runner/ # @morph/property-runner-cli
+│   │   ├── generator/       # @morphdsl/runtime-cli
+│   │   ├── plugin/          # @morphdsl/plugin-cli
+│   │   ├── scenario-runner/ # @morphdsl/scenario-runner-cli
+│   │   └── property-runner/ # @morphdsl/property-runner-cli
 │   ├── mcp/                 # MCP server target
 │   ├── ui/                  # Web UI target
 │   ├── dsl/                 # DSL library target
@@ -88,20 +88,20 @@ contexts/generation/
 │   └── monorepo/            # Monorepo root target
 │
 ├── builders/                # Reusable code builders
-│   ├── app/                 # @morph/builder-app
-│   ├── readme/              # @morph/builder-readme
-│   ├── test/                # @morph/builder-test
-│   └── scaffold/            # @morph/builder-scaffold
+│   ├── app/                 # @morphdsl/builder-app
+│   ├── readme/              # @morphdsl/builder-readme
+│   ├── test/                # @morphdsl/builder-test
+│   └── scaffold/            # @morphdsl/builder-scaffold
 │
 ├── generators/              # Cross-cutting generators
-│   ├── types/               # @morph/generator-types
-│   ├── openapi/             # @morph/generator-openapi
-│   ├── diagrams/            # @morph/generator-diagrams
-│   ├── env/                 # @morph/generator-env
-│   ├── scenarios/           # @morph/generator-scenarios
-│   └── properties/          # @morph/generator-properties
+│   ├── types/               # @morphdsl/generator-types
+│   ├── openapi/             # @morphdsl/generator-openapi
+│   ├── diagrams/            # @morphdsl/generator-diagrams
+│   ├── env/                 # @morphdsl/generator-env
+│   ├── scenarios/           # @morphdsl/generator-scenarios
+│   └── properties/          # @morphdsl/generator-properties
 │
-└── plugin/                  # @morph/plugin (plugin system interface)
+└── plugin/                  # @morphdsl/plugin (plugin system interface)
 ```
 
 ### Target Structure
@@ -134,7 +134,7 @@ Cross-cutting generators used by multiple plugins:
 
 Create a lib when:
 
-1. **Generated code imports it** - If generated applications need `import { something } from "@morph/foo"`, it's a lib
+1. **Generated code imports it** - If generated applications need `import { something } from "@morphdsl/foo"`, it's a lib
 2. **External users depend on it** - Stable API required for user-facing functionality
 3. **It's self-contained** - Minimal dependencies, clear purpose
 4. **Dogfooding potential** - Could eventually be generated from a schema definition

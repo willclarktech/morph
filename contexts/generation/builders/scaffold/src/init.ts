@@ -1,4 +1,4 @@
-import type { GeneratedFile, GenerationResult } from "@morph/domain-schema";
+import type { GeneratedFile, GenerationResult } from "@morphdsl/domain-schema";
 
 import { interpolate } from "./interpolate";
 import { loadTemplates } from "./template-loader";
@@ -29,4 +29,4 @@ export const init = async (options: InitOptions): Promise<GenerationResult> => {
 export {
 	type GeneratedFile,
 	type GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";

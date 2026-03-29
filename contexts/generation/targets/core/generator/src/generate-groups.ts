@@ -1,12 +1,12 @@
 /**
  * File group generation helpers for operations.
  */
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
 import {
 	conditionReferencesCurrentUser,
 	getAllInvariants,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	generateFunctionHandlerImplTemplates,

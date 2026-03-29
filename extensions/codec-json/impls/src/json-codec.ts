@@ -1,7 +1,7 @@
-import type { Codec } from "@morph/codec-dsl";
+import type { Codec } from "@morphdsl/codec-dsl";
 
-import { CodecDecodeError, CodecEncodeError } from "@morph/codec-dsl";
-import { jsonParse, jsonStringify } from "@morph/utils";
+import { CodecDecodeError, CodecEncodeError } from "@morphdsl/codec-dsl";
+import { jsonParse, jsonStringify } from "@morphdsl/utils";
 import { Effect } from "effect";
 
 export const createJsonCodec = (): Codec => ({

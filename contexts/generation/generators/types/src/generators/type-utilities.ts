@@ -5,7 +5,7 @@ import type {
 	SumTypeDef,
 	TypeParameterDef,
 	TypeRef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import type { SchemaContext } from "../mappers/schema-reference";
 

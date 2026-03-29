@@ -61,7 +61,7 @@ export interface EntityStore {
  * Context tag for EntityStore dependency injection.
  */
 export const EntityStore =
-	Context.GenericTag<EntityStore>("@morph/EntityStore");
+	Context.GenericTag<EntityStore>("@morphdsl/EntityStore");
 
 /**
  * Raw key-value storage transport
@@ -99,5 +99,5 @@ export interface StorageTransport {
  * Context tag for StorageTransport dependency injection.
  */
 export const StorageTransport = Context.GenericTag<StorageTransport>(
-	"@morph/StorageTransport",
+	"@morphdsl/StorageTransport",
 );

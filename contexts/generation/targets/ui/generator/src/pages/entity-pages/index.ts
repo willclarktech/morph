@@ -5,9 +5,9 @@ import type {
 	DomainSchema,
 	EntityDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getAllCommands, getAllOperations } from "@morph/domain-schema";
+import { getAllCommands, getAllOperations } from "@morphdsl/domain-schema";
 
 import { buildEntityContext } from "./context";
 import {

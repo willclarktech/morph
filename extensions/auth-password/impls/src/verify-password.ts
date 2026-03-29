@@ -1,4 +1,4 @@
-import type { PasswordVerifyError } from "@morph/auth-password-dsl";
+import type { PasswordVerifyError } from "@morphdsl/auth-password-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -13,7 +13,7 @@ export interface VerifyPasswordHandler {
 }
 
 export const VerifyPasswordHandler = Context.GenericTag<VerifyPasswordHandler>(
-	"@morph/VerifyPasswordHandler",
+	"@morphdsl/VerifyPasswordHandler",
 );
 
 export const VerifyPasswordHandlerLive = Layer.succeed(VerifyPasswordHandler, {

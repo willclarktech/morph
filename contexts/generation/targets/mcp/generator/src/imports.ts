@@ -1,6 +1,6 @@
-import type { InjectableParam } from "@morph/domain-schema";
+import type { InjectableParam } from "@morphdsl/domain-schema";
 
-import { separator } from "@morph/utils";
+import { separator } from "@morphdsl/utils";
 
 /**
  * Context package information for multi-context apps.

@@ -8,13 +8,13 @@ import type {
 	EntityDef,
 	QualifiedEntry,
 	TypeRef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	conditionReferencesCurrentUser,
 	getInjectableParams,
 	getOperationPreInvariantDefs,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 export type AttributeCategory = "boolean" | "date" | "array" | "enum" | "text";
 
@@ -333,4 +333,4 @@ export {
 	sortObjectKeys,
 	toKebabCase,
 	toTitleCase,
-} from "@morph/utils";
+} from "@morphdsl/utils";

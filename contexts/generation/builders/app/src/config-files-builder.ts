@@ -1,4 +1,4 @@
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 /** Convert project name to lowercase for package scope */
 const toPackageScope = (name: string): string => name.toLowerCase();

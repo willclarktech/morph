@@ -2,14 +2,14 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getAllOperations,
 	getInjectableParams,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
-import { sortImports, toEnvironmentPrefix } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { sortImports, toEnvironmentPrefix } from "@morphdsl/utils";
 
 import { generateLoginCommand, generateOperationHandler } from "./commands";
 import { generateHelpText } from "./help";
@@ -70,7 +70,7 @@ export const generate = (
 		[
 			`import { createClient } from "${clientPackage}";`,
 			`import { Effect } from "effect";`,
-			`import { ${generatorCliImports.join(", ")} } from "@morph/runtime-cli";`,
+			`import { ${generatorCliImports.join(", ")} } from "@morphdsl/runtime-cli";`,
 		].join("\n"),
 	);
 

@@ -3,9 +3,9 @@ import type {
 	FunctionDef,
 	TypeDef,
 	TypeRef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getAllFunctions, getAllTypes } from "@morph/domain-schema";
+import { getAllFunctions, getAllTypes } from "@morphdsl/domain-schema";
 
 const renderTypeRef = (typeRef: TypeRef): string => {
 	switch (typeRef.kind) {

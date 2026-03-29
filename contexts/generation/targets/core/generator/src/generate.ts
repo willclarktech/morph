@@ -3,13 +3,13 @@ import type {
 	Extensions,
 	GeneratedFile,
 	GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getOperationPostInvariantDefs,
 	getOperationPreInvariantDefs,
-} from "@morph/domain-schema";
-import { toKebabCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { toKebabCase } from "@morphdsl/utils";
 
 import { filterFunctions, filterOperations } from "./filter-operations";
 import {
@@ -235,4 +235,4 @@ export const generate = (
 export {
 	type GeneratedFile,
 	type GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";

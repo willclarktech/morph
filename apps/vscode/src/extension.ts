@@ -1,10 +1,10 @@
-import { createExtension } from "@morph/generator-vscode";
+import { createExtension } from "@morphdsl/generator-vscode";
 import {
 	HandlersLayer,
 	languageConfiguration,
 	ops,
 	textMateGrammar,
-} from "@morph/schema-dsl-core";
+} from "@morphdsl/schema-dsl-core";
 import * as vscode from "vscode";
 
 const extension = createExtension({

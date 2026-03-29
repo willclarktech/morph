@@ -6,9 +6,9 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { joinLines, separator, toKebabCase } from "@morph/utils";
+import { joinLines, separator, toKebabCase } from "@morphdsl/utils";
 
 import type { BooleanToggle, ClassifiedAttribute } from "../../utilities";
 import type { EntityPageContext } from "./context";

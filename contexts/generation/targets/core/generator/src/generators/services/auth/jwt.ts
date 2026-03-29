@@ -1,21 +1,21 @@
 /**
  * AuthServiceJwt implementation generator.
- * Delegates to @morph/auth-jwt-impls for JWT operations.
+ * Delegates to @morphdsl/auth-jwt-impls for JWT operations.
  */
 
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the JWT AuthService implementation.
- * Uses @morph/auth-jwt-impls for JWT operations.
+ * Uses @morphdsl/auth-jwt-impls for JWT operations.
  */
 export const generateAuthServiceJwt = (envPrefix: string): GeneratedFile => {
 	const content = `// Generated AuthServiceJwt implementation
-// Delegates to @morph/auth-jwt-impls for JWT operations
+// Delegates to @morphdsl/auth-jwt-impls for JWT operations
 // Do not edit - regenerate from schema
 
 import { Effect, Layer } from "effect";
-import { signToken, verifyToken } from "@morph/auth-jwt-impls";
+import { signToken, verifyToken } from "@morphdsl/auth-jwt-impls";
 
 import { AuthenticationError } from "./auth-errors";
 import type { AuthService } from "./auth-service";

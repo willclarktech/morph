@@ -6,10 +6,10 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	SubscriberDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getCommandsWithEvents } from "@morph/domain-schema";
-import { indent, toKebabCase, toPascalCase } from "@morph/utils";
+import { getCommandsWithEvents } from "@morphdsl/domain-schema";
+import { indent, toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Generate the EventSubscriber service interface with typed subscribe methods.

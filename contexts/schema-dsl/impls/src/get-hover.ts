@@ -1,4 +1,4 @@
-import type { DslHoverResult } from "@morph/schema-dsl-dsl";
+import type { DslHoverResult } from "@morphdsl/schema-dsl-dsl";
 import type {
 	CommandAst,
 	ContextAst,
@@ -8,10 +8,10 @@ import type {
 	QueryAst,
 	SourceRange,
 	ValueObjectAst,
-} from "@morph/schema-dsl-parser";
+} from "@morphdsl/schema-dsl-parser";
 import type { Effect } from "effect";
 
-import { parse } from "@morph/schema-dsl-parser";
+import { parse } from "@morphdsl/schema-dsl-parser";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface GetHoverHandler {
@@ -26,7 +26,7 @@ export interface GetHoverHandler {
 }
 
 export const GetHoverHandler = Context.GenericTag<GetHoverHandler>(
-	"@morph/impls/GetHoverHandler",
+	"@morphdsl/impls/GetHoverHandler",
 );
 
 const rangeToDto = (range: SourceRange) => ({

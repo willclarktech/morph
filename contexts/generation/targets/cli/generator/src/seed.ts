@@ -1,7 +1,7 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
-import { getAllEntities } from "@morph/domain-schema";
-import { sortImports } from "@morph/utils";
+import { getAllEntities } from "@morphdsl/domain-schema";
+import { sortImports } from "@morphdsl/utils";
 
 import type { ContextPackages } from "./imports";
 

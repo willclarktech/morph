@@ -5,14 +5,14 @@ import type {
 	DomainSchema,
 	EntityDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
 	getAllFunctions,
 	getAllOperations,
-} from "@morph/domain-schema";
-import { pluralize } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { pluralize } from "@morphdsl/utils";
 
 import type { AuthOperations } from "../auth/detection";
 import type { UiConfig } from "../config";

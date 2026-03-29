@@ -1,10 +1,10 @@
-import type { DomainSchema, FunctionDef, TypeRef } from "@morph/domain-schema";
+import type { DomainSchema, FunctionDef, TypeRef } from "@morphdsl/domain-schema";
 
 import {
 	getAllFunctions,
 	getFunctionsForContext,
 	getTypesForContext,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import { typeRefToSchema } from "../mappers/schema-reference";
 import { typeRefToTypeScript } from "../mappers/type-reference";
@@ -15,7 +15,7 @@ export interface GenerateFunctionSchemasOptions {
 	/**
 	 * Package to import external output types from.
 	 * External types are those referenced in function outputs but not defined in the schema.
-	 * For example, `@morph/property` for the property context.
+	 * For example, `@morphdsl/property` for the property context.
 	 */
 	readonly externalTypesPackage?: string | undefined;
 }

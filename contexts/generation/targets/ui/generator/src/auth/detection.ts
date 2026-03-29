@@ -1,7 +1,7 @@
 /**
  * Auth operation detection from schema.
  */
-import type { OperationDef, QualifiedEntry } from "@morph/domain-schema";
+import type { OperationDef, QualifiedEntry } from "@morphdsl/domain-schema";
 
 /**
  * Auth operations detection result.

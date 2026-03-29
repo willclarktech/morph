@@ -1,17 +1,17 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
 import {
 	findPrimaryContext,
 	getContextsWithTag,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 import {
 	buildCliConfigFiles,
 	generateAppFiles,
-} from "@morph/builder-app";
-import { generate as generateApp } from "@morph/runtime-cli";
-import { generate as generateEnvironmentExample } from "@morph/generator-env";
-import { toEnvironmentPrefix, toKebabCase } from "@morph/utils";
+} from "@morphdsl/builder-app";
+import { generate as generateApp } from "@morphdsl/runtime-cli";
+import { generate as generateEnvironmentExample } from "@morphdsl/generator-env";
+import { toEnvironmentPrefix, toKebabCase } from "@morphdsl/utils";
 
 import { generateCliDockerfile } from "./dockerfile";
 import { generateCliPackageJson } from "./package-json";

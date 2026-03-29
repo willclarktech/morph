@@ -1,11 +1,11 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
 import {
 	getAllCommands,
 	getAllQueries,
 	getOperationAggregates,
 	getPrimaryWriteAggregate,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 interface OperationInfo {
 	readonly name: string;

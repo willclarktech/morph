@@ -2,31 +2,31 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	TextConfig,
-} from "@morph/domain-schema";
-import type { InvalidSchemaError } from "@morph/generation-dsl";
-import type { UiConfig } from "@morph/runtime-ui";
+} from "@morphdsl/domain-schema";
+import type { InvalidSchemaError } from "@morphdsl/generation-dsl";
+import type { UiConfig } from "@morphdsl/runtime-ui";
 import type { Effect } from "effect";
 
-import { analyzeSchemaFeatures } from "@morph/builder-app";
-import { runPlugins } from "@morph/plugin";
-import { apiPlugin } from "@morph/plugin-api";
-import { cliPlugin } from "@morph/plugin-cli";
-import { cliClientPlugin } from "@morph/plugin-cli-client";
-import { clientPlugin } from "@morph/plugin-client";
-import { corePlugin } from "@morph/plugin-core";
-import { dslPlugin } from "@morph/plugin-dsl";
-import { mcpPlugin } from "@morph/plugin-mcp";
-import { monorepoRootPlugin } from "@morph/plugin-monorepo-root";
-import { protoPlugin } from "@morph/plugin-proto";
-import { uiPlugin } from "@morph/plugin-ui";
-import { verificationPlugin } from "@morph/plugin-verification";
-import { vsCodePlugin } from "@morph/plugin-vscode";
+import { analyzeSchemaFeatures } from "@morphdsl/builder-app";
+import { runPlugins } from "@morphdsl/plugin";
+import { apiPlugin } from "@morphdsl/plugin-api";
+import { cliPlugin } from "@morphdsl/plugin-cli";
+import { cliClientPlugin } from "@morphdsl/plugin-cli-client";
+import { clientPlugin } from "@morphdsl/plugin-client";
+import { corePlugin } from "@morphdsl/plugin-core";
+import { dslPlugin } from "@morphdsl/plugin-dsl";
+import { mcpPlugin } from "@morphdsl/plugin-mcp";
+import { monorepoRootPlugin } from "@morphdsl/plugin-monorepo-root";
+import { protoPlugin } from "@morphdsl/plugin-proto";
+import { uiPlugin } from "@morphdsl/plugin-ui";
+import { verificationPlugin } from "@morphdsl/plugin-verification";
+import { vsCodePlugin } from "@morphdsl/plugin-vscode";
 import { Context, Effect as E, Layer } from "effect";
 
 import { parseSchemaInput } from "./utils";
 
-export { generate as generateEnvironmentExample } from "@morph/generator-env";
-export { schemaHasTag } from "@morph/plugin";
+export { generate as generateEnvironmentExample } from "@morphdsl/generator-env";
+export { schemaHasTag } from "@morphdsl/plugin";
 
 export interface GenerateOptions {
 	readonly textConfig?: TextConfig | undefined;
@@ -41,7 +41,7 @@ export interface GenerateHandler {
 }
 
 export const GenerateHandler = Context.GenericTag<GenerateHandler>(
-	"@morph/impls/GenerateHandler",
+	"@morphdsl/impls/GenerateHandler",
 );
 
 const plugins = [

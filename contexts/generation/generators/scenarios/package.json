@@ -1,5 +1,5 @@
 {
-	"name": "@morph/generator-scenarios",
+	"name": "@morphdsl/generator-scenarios",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {
@@ -9,8 +9,8 @@
 		"build:check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/builder-readme": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/builder-readme": "*"
 	},
 	"devDependencies": {
 		"typescript": "^5.8.3"

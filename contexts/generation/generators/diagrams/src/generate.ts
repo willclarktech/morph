@@ -1,4 +1,4 @@
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
 import { generateEntityDiagram } from "./entity-diagram";
 import { generateOperationsDiagram } from "./operations-diagram";

@@ -6,7 +6,7 @@ import type {
 	I18nConfig,
 	TextConfig,
 	TranslationEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 /**
  * UI theme configuration (maps to Pico CSS variables).

@@ -1,6 +1,6 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
-import { getAllEntities } from "@morph/domain-schema";
+import { getAllEntities } from "@morphdsl/domain-schema";
 
 /**
  * Generate named union type aliases from a DomainSchema.

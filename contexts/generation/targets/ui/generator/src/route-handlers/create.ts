@@ -1,7 +1,7 @@
 /**
  * Create route handler generation.
  */
-import { pluralize } from "@morph/utils";
+import { pluralize } from "@morphdsl/utils";
 
 import type { CrudRouteContext, RouteHandler } from "./crud";
 

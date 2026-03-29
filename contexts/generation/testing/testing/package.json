@@ -1,5 +1,5 @@
 {
-	"name": "@morph/testing",
+	"name": "@morphdsl/testing",
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
@@ -12,11 +12,11 @@
 		"lint:fix": "eslint . --fix --report-unused-disable-directives"
 	},
 	"dependencies": {
-		"@morph/auth-dsl": "workspace:*",
+		"@morphdsl/auth-dsl": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
 		"typescript": "^5.8.3"
 	}
 }

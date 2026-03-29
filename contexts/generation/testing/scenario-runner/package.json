@@ -1,5 +1,5 @@
 {
-	"name": "@morph/scenario-runner",
+	"name": "@morphdsl/scenario-runner",
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
@@ -14,11 +14,11 @@
 		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
 	},
 	"dependencies": {
-		"@morph/scenario": "workspace:*",
+		"@morphdsl/scenario": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
 		"typescript": "^5.8.3"
 	}
 }

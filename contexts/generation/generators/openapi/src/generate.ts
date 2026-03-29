@@ -1,4 +1,4 @@
-import type { DomainSchema, GenerationResult } from "@morph/domain-schema";
+import type { DomainSchema, GenerationResult } from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
@@ -7,7 +7,7 @@ import {
 	getAllOperations,
 	getAllValueObjects,
 	getInjectableParams,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import type { OpenApiSchema } from "./mappers";
 

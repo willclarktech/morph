@@ -12,14 +12,14 @@ import type {
 	DomainSchema,
 	Extensions,
 	GeneratedFile,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	DEFAULT_EXTENSIONS,
 	getAggregateRoots,
 	getAllSubscribers,
 	getCommandsWithEvents,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	generateAuthErrors,

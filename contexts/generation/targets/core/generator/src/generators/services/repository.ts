@@ -2,13 +2,13 @@
  * Repository service interface generator.
  */
 
-import type { EntityDef, GeneratedFile } from "@morph/domain-schema";
+import type { EntityDef, GeneratedFile } from "@morphdsl/domain-schema";
 
 import {
 	getForeignKeyAttributes,
 	getUniqueAttributes,
-} from "@morph/domain-schema";
-import { toKebabCase, toPascalCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Generate TypeScript type for an attribute's type.

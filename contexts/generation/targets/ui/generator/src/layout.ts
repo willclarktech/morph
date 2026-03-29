@@ -1,7 +1,7 @@
 /**
  * HTML layout generation for UI.
  */
-import { configProperties, indent, separator } from "@morph/utils";
+import { configProperties, indent, separator } from "@morphdsl/utils";
 
 import type { UiConfig, UiTheme } from "./config";
 

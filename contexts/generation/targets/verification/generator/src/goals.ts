@@ -1,11 +1,11 @@
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
 import {
 	getAllOperations,
 	getEntityInvariants,
 	getOperationPostInvariantDefs,
 	getOperationPreInvariantDefs,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	declareEntityFields,

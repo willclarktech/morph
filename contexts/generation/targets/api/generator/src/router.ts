@@ -10,10 +10,10 @@
  * - transferTodos → POST /todos/transfer
  */
 
-import type { AnyOperation } from "@morph/operation";
+import type { AnyOperation } from "@morphdsl/operation";
 
-import { getFieldNames } from "@morph/operation";
-import { toKebabCase } from "@morph/utils";
+import { getFieldNames } from "@morphdsl/operation";
+import { toKebabCase } from "@morphdsl/utils";
 
 export type HttpMethod = "DELETE" | "GET" | "PATCH" | "POST" | "PUT";
 

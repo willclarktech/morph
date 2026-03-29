@@ -1,8 +1,8 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
-import { buildConfigFiles } from "@morph/builder-app";
-import { generate as generateProto } from "@morph/runtime-proto";
+import { buildConfigFiles } from "@morphdsl/builder-app";
+import { generate as generateProto } from "@morphdsl/runtime-proto";
 
 export const protoPlugin: GeneratorPlugin = {
 	id: "lib-proto",

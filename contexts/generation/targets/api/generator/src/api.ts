@@ -1,12 +1,12 @@
-import type { CodecRegistry } from "@morph/codec-dsl";
+import type { CodecRegistry } from "@morphdsl/codec-dsl";
 /**
  * API server creation and runtime handler management.
  */
-import type { DomainSchema, InjectableParam } from "@morph/domain-schema";
+import type { DomainSchema, InjectableParam } from "@morphdsl/domain-schema";
 import type { Context } from "effect";
 import type { Layer } from "effect/Layer";
 
-import { isOperation } from "@morph/operation";
+import { isOperation } from "@morphdsl/operation";
 import { Data, Effect, ManagedRuntime } from "effect";
 
 import type { AuthStrategy } from "./auth";

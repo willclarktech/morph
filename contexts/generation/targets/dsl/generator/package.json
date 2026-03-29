@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/generator-dsl",
+	"name": "@morphdsl/generator-dsl",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -17,12 +17,12 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/builder-readme": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/builder-readme": "*"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "*",
-		"@morph/tsconfig": "*",
+		"@morphdsl/eslint-config": "*",
+		"@morphdsl/tsconfig": "*",
 		"eslint": "^9.39.0"
 	}
 }

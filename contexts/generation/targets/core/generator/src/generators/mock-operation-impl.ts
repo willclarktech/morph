@@ -5,14 +5,14 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	OperationDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
 	getAllValueObjects,
 	getOperationsFlat,
-} from "@morph/domain-schema";
-import { indent, sortImports, toKebabCase, toPascalCase } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { indent, sortImports, toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 import {
 	collectArbitraryImports,

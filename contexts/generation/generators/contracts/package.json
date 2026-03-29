@@ -1,5 +1,5 @@
 {
-	"name": "@morph/generator-contracts",
+	"name": "@morphdsl/generator-contracts",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {
@@ -9,8 +9,8 @@
 		"build:check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/utils": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/utils": "*"
 	},
 	"devDependencies": {
 		"typescript": "^5.8.3"

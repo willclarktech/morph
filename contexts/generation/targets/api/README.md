@@ -40,7 +40,7 @@ query listTodos @api @cli {
 **src/index.ts** (excerpt):
 
 ```typescript
-import { createApi, createSimpleBearerStrategy, createSseManager } from "@morph/runtime-api";
+import { createApi, createSimpleBearerStrategy, createSseManager } from "@morphdsl/runtime-api";
 import { HandlersLayer, ops, resolveStorage, resolveEventStore } from "@todo-app/tasks-core";
 
 const injectableParams = {

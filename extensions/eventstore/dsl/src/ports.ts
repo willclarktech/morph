@@ -52,5 +52,5 @@ export interface EventStoreTransport {
  * Context tag for EventStoreTransport dependency injection.
  */
 export const EventStoreTransport = Context.GenericTag<EventStoreTransport>(
-	"@morph/EventStoreTransport",
+	"@morphdsl/EventStoreTransport",
 );

@@ -2,9 +2,9 @@ import type {
 	OperationDef,
 	QualifiedEntry,
 	TypeRef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { contextNameToKebab } from "@morph/domain-schema";
+import { contextNameToKebab } from "@morphdsl/domain-schema";
 
 /**
  * Collect all entity/value object types needed for imports, grouped by context.

@@ -1,4 +1,4 @@
-import { contractProperty } from "@morph/property";
+import { contractProperty } from "@morphdsl/property";
 import { Effect } from "effect";
 import * as fc from "fast-check";
 

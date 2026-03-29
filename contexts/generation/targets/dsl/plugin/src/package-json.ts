@@ -1,7 +1,7 @@
 import type { ContextPackageInfo } from "./info";
 import { toPackageScope } from "./info";
-import { buildPackageJson } from "@morph/builder-app";
-import { sortObjectKeys } from "@morph/utils";
+import { buildPackageJson } from "@morphdsl/builder-app";
+import { sortObjectKeys } from "@morphdsl/utils";
 
 export const generateContextDslPackageJson = (
 	projectName: string,
@@ -11,12 +11,12 @@ export const generateContextDslPackageJson = (
 ): string => {
 	const scope = toPackageScope(projectName);
 	const dependencies: Record<string, string> = {
-		...(isPrimary ? { "@morph/domain-schema": "workspace:*" } : {}),
+		...(isPrimary ? { "@morphdsl/domain-schema": "workspace:*" } : {}),
 		effect: "^3.19.13",
 	};
 
 	if (info.hasOperations) {
-		dependencies["@morph/operation"] = "workspace:*";
+		dependencies["@morphdsl/operation"] = "workspace:*";
 	}
 
 	for (const depPackage of dependencyPackages) {
@@ -60,7 +60,7 @@ export const generateScenariosPackageJson = (
 	dslPackages: readonly string[],
 ): string => {
 	const dependencies: Record<string, string> = {
-		"@morph/scenario": "workspace:*",
+		"@morphdsl/scenario": "workspace:*",
 	};
 	for (const pkg of dslPackages) {
 		dependencies[pkg] = "workspace:*";
@@ -79,7 +79,7 @@ export const generatePropertiesPackageJson = (
 	dslPackages: readonly string[],
 ): string => {
 	const dependencies: Record<string, string> = {
-		"@morph/property": "workspace:*",
+		"@morphdsl/property": "workspace:*",
 	};
 	for (const pkg of dslPackages) {
 		dependencies[pkg] = "workspace:*";

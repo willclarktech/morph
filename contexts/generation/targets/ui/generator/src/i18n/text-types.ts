@@ -1,9 +1,9 @@
 /**
  * Text types module generation.
  */
-import type { I18nConfig } from "@morph/domain-schema";
+import type { I18nConfig } from "@morphdsl/domain-schema";
 
-import { separator } from "@morph/utils";
+import { separator } from "@morphdsl/utils";
 
 /**
  * Generate the text-types.ts file with Language and TextKey union types.

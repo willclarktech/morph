@@ -5,10 +5,10 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	InvariantDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getAllInvariants } from "@morph/domain-schema";
-import { toCamelCase, toKebabCase } from "@morph/utils";
+import { getAllInvariants } from "@morphdsl/domain-schema";
+import { toCamelCase, toKebabCase } from "@morphdsl/utils";
 
 import { compileCondition } from "./compiler";
 import { inferContextFields, inferInputFields } from "./context";

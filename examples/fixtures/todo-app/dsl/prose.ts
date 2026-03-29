@@ -10,7 +10,7 @@
  * - {actor} - replaced with scenario actor if present
  * - {$binding.field} - reference to a bound value from a previous step (runtime only)
  */
-import type { Prose } from "@morph/operation";
+import type { Prose } from "@morphdsl/operation";
 
 import type * as ops from "./tasks";
 

@@ -1,28 +1,28 @@
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
 import {
 	findPrimaryContext,
 	getContextsWithTag,
 	schemaHasAuthRequirement,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 import {
 	buildConfigFiles,
 	buildDockerfile,
 	generateAppFiles,
-} from "@morph/builder-app";
-import { generate as generateEnvironmentExample } from "@morph/generator-env";
+} from "@morphdsl/builder-app";
+import { generate as generateEnvironmentExample } from "@morphdsl/generator-env";
 import {
 	generate as generateMcpAppEntry,
 	generateMcpPackageJson,
-} from "@morph/runtime-mcp";
-import { buildTokenAuthConfig } from "@morph/builder-test";
+} from "@morphdsl/runtime-mcp";
+import { buildTokenAuthConfig } from "@morphdsl/builder-test";
 import {
 	sortImports,
 	toEnvironmentPrefix,
 	toKebabCase,
 	toPascalCase,
-} from "@morph/utils";
+} from "@morphdsl/utils";
 
 interface ContextPackages {
 	readonly contextName: string;
@@ -72,7 +72,7 @@ const generateMcpScenarioTest = (
 
 	const imports = sortImports(
 		[
-			`import { createMcpRunner } from "@morph/scenario-runner-mcp";`,
+			`import { createMcpRunner } from "@morphdsl/scenario-runner-mcp";`,
 			proseImports,
 			`import { scenarios } from "${scenariosPackage}";`,
 			`import { expect, test } from "bun:test";`,

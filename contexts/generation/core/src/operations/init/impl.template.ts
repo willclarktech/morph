@@ -1,7 +1,7 @@
 // Template for implementing the function handler.
 // This file is NOT imported by the core package.
 // Copy to your impls package and implement the logic.
-import type { GenerationResult } from "@morph/generation-dsl";
+import type { GenerationResult } from "@morphdsl/generation-dsl";
 
 import { Effect, Layer } from "effect";
 

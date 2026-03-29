@@ -2,15 +2,15 @@
  * Generate typed HTTP client from domain schema.
  */
 
-import type { DomainSchema, OperationDef } from "@morph/domain-schema";
+import type { DomainSchema, OperationDef } from "@morphdsl/domain-schema";
 
 import {
 	conditionReferencesCurrentUser,
 	getAllFunctions,
 	getAllOperations,
 	getOperationPreInvariantDefs,
-} from "@morph/domain-schema";
-import { sortImports } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { sortImports } from "@morphdsl/utils";
 
 import { generateClientFactory } from "./implementation";
 import {
@@ -89,9 +89,9 @@ export const generate = (
 
 	const importBlock = sortImports(
 		[
-			'import type { ClientConfig, HttpClientError } from "@morph/http-client";',
+			'import type { ClientConfig, HttpClientError } from "@morphdsl/http-client";',
 			'import type { Effect } from "effect";',
-			`import { ${httpValueImports} } from "@morph/http-client";`,
+			`import { ${httpValueImports} } from "@morphdsl/http-client";`,
 			generateMultiContextTypeImports(scope, typeImports, errorImports),
 		]
 			.filter(Boolean)

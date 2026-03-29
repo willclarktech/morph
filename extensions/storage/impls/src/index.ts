@@ -5,9 +5,9 @@ export type {
 	EntityStoreConfig,
 	IndexDescriptor,
 	StorageTransport,
-} from "@morph/storage-dsl";
+} from "@morphdsl/storage-dsl";
 
 export {
 	StorageConnectionError,
 	StorageOperationError,
-} from "@morph/storage-dsl";
+} from "@morphdsl/storage-dsl";

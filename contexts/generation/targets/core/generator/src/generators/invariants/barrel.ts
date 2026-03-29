@@ -1,10 +1,10 @@
 /**
  * Barrel and supporting file generation for invariants.
  */
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
-import { getAllInvariants } from "@morph/domain-schema";
-import { toKebabCase } from "@morph/utils";
+import { getAllInvariants } from "@morphdsl/domain-schema";
+import { toKebabCase } from "@morphdsl/utils";
 
 import { conditionReferencesCurrentUser } from "./inference";
 

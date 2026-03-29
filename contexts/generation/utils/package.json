@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/utils",
+	"name": "@morphdsl/utils",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -17,8 +17,8 @@
 		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"eslint": "^9.39.0",
 		"fast-check": "^3.23.1",
 		"prettier": "^3.4.2",

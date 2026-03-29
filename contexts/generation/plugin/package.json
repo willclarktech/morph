@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/plugin",
+	"name": "@morphdsl/plugin",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -17,12 +17,12 @@
 		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
 	},
 	"dependencies": {
-		"@morph/builder-app": "workspace:*",
-		"@morph/domain-schema": "workspace:*"
+		"@morphdsl/builder-app": "workspace:*",
+		"@morphdsl/domain-schema": "workspace:*"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"

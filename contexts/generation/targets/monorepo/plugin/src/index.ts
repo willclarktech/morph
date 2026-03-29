@@ -1,16 +1,16 @@
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 import type {
 	GeneratorPlugin,
 	PluginContext,
 	PluginMetadataEntry,
 	QuickStartStep,
-} from "@morph/plugin";
+} from "@morphdsl/plugin";
 
-import { getAllInvariants } from "@morph/domain-schema";
-import { buildDockerignore } from "@morph/builder-app";
-import { generate as generateDiagrams } from "@morph/generator-diagrams";
-import { schemaHasTag } from "@morph/plugin";
-import { buildRootReadme, description } from "@morph/builder-readme";
+import { getAllInvariants } from "@morphdsl/domain-schema";
+import { buildDockerignore } from "@morphdsl/builder-app";
+import { generate as generateDiagrams } from "@morphdsl/generator-diagrams";
+import { schemaHasTag } from "@morphdsl/plugin";
+import { buildRootReadme, description } from "@morphdsl/builder-readme";
 
 const replaceNamePlaceholder = (command: string, name: string): string =>
 	command.replaceAll("{name}", name);

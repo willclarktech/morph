@@ -1,9 +1,9 @@
-import type { GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
-import { contextNameToKebab } from "@morph/domain-schema";
-import { buildCliConfigFiles } from "@morph/builder-app";
-import { generate as generateClientCli } from "@morph/runtime-cli-client";
+import { contextNameToKebab } from "@morphdsl/domain-schema";
+import { buildCliConfigFiles } from "@morphdsl/builder-app";
+import { generate as generateClientCli } from "@morphdsl/runtime-cli-client";
 
 import { generateClientCliDockerfile } from "./dockerfile";
 import { generateClientCliPackageJson } from "./package-json";

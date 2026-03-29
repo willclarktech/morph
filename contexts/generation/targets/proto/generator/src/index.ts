@@ -2,9 +2,9 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	GenerationResult,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getAllOperations } from "@morph/domain-schema";
+import { getAllOperations } from "@morphdsl/domain-schema";
 
 import { generateDateFieldsModule } from "./date-fields-gen";
 import { generateProtoFile } from "./message-gen";

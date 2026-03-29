@@ -1,7 +1,7 @@
 /**
  * package.json generation for UI app.
  */
-import { sortObjectKeys } from "@morph/utils";
+import { sortObjectKeys } from "@morphdsl/utils";
 
 /**
  * Generate package.json for UI app.
@@ -21,7 +21,7 @@ export const generateUiPackageJson = (
 			effect: "^3.19.13",
 		},
 		devDependencies: {
-			"@morph/scenario-runner-ui": "workspace:*",
+			"@morphdsl/scenario-runner-ui": "workspace:*",
 			[corePackage]: "workspace:*",
 			[`@${name}/eslint-config`]: "workspace:*",
 			[scenariosPackage]: "workspace:*",

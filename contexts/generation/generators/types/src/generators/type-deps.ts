@@ -1,4 +1,4 @@
-import type { TypeDef, TypeRef } from "@morph/domain-schema";
+import type { TypeDef, TypeRef } from "@morphdsl/domain-schema";
 
 const collectTypeRefDeps = (ref: TypeRef): readonly string[] => {
 	switch (ref.kind) {

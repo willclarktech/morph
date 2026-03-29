@@ -1,5 +1,5 @@
 {
-	"name": "@morph/scenario-runner-ui",
+	"name": "@morphdsl/scenario-runner-ui",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -14,13 +14,13 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"dependencies": {
-		"@morph/scenario-runner": "workspace:*",
-		"@morph/scenario-runner-api": "workspace:*",
+		"@morphdsl/scenario-runner": "workspace:*",
+		"@morphdsl/scenario-runner-api": "workspace:*",
 		"playwright": "^1.57.0"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"@types/bun": "latest",
 		"eslint": "^9.27.0",
 		"prettier": "^3.5.3",

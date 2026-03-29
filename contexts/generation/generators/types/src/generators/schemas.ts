@@ -1,4 +1,4 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
 import {
 	getAllEntities,
@@ -8,7 +8,7 @@ import {
 	getEntitiesForContext,
 	getTypesForContext,
 	getValueObjectsForContext,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import { generateEntitySchema, generateEventSchema } from "./entity-schema";
 import { generateFunctionSchemas } from "./functions";

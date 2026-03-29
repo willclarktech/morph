@@ -10,9 +10,9 @@
  * - Guards (validators): Runtime enforcement of the same laws
  */
 
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
-import { getAllInvariants } from "@morph/domain-schema";
+import { getAllInvariants } from "@morphdsl/domain-schema";
 
 import { generateContextPropertyTest } from "./context-property-test";
 import { generateEntityPropertyTest } from "./entity-property-test";

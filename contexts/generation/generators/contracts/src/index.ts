@@ -3,9 +3,9 @@ import type {
 	ContractDef,
 	GeneratedFile,
 	ValueExpr,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { toCamelCase } from "@morph/utils";
+import { toCamelCase } from "@morphdsl/utils";
 
 // =============================================================================
 // Backend Configuration
@@ -19,20 +19,20 @@ interface BackendInfo {
 
 const STORAGE_BACKEND_IMPORTS: Record<string, BackendInfo> = {
 	jsonfile: {
-		pkg: "@morph/storage-jsonfile-impls",
+		pkg: "@morphdsl/storage-jsonfile-impls",
 		factory: "createJsonFileTransport",
 		setup: "jsonfile-storage",
 	},
 	memory: {
-		pkg: "@morph/storage-memory-impls",
+		pkg: "@morphdsl/storage-memory-impls",
 		factory: "createMemoryTransport",
 	},
 	redis: {
-		pkg: "@morph/storage-redis-impls",
+		pkg: "@morphdsl/storage-redis-impls",
 		factory: "createRedisTransport",
 	},
 	sqlite: {
-		pkg: "@morph/storage-sqlite-impls",
+		pkg: "@morphdsl/storage-sqlite-impls",
 		factory: "createSqliteTransport",
 		setup: "sqlite",
 	},
@@ -40,16 +40,16 @@ const STORAGE_BACKEND_IMPORTS: Record<string, BackendInfo> = {
 
 const EVENTSTORE_BACKEND_IMPORTS: Record<string, BackendInfo> = {
 	jsonfile: {
-		pkg: "@morph/eventstore-jsonfile-impls",
+		pkg: "@morphdsl/eventstore-jsonfile-impls",
 		factory: "createJsonFileEventStoreTransport",
 		setup: "jsonfile-eventstore",
 	},
 	memory: {
-		pkg: "@morph/eventstore-memory-impls",
+		pkg: "@morphdsl/eventstore-memory-impls",
 		factory: "createMemoryEventStoreTransport",
 	},
 	redis: {
-		pkg: "@morph/eventstore-redis-impls",
+		pkg: "@morphdsl/eventstore-redis-impls",
 		factory: "createRedisEventStoreTransport",
 	},
 };
@@ -96,7 +96,7 @@ const generateContractSuiteFactory = (
 	const portCamel = toCamelCase(port);
 	const lines: string[] = [];
 
-	lines.push('import { contractProperty } from "@morph/property";');
+	lines.push('import { contractProperty } from "@morphdsl/property";');
 	lines.push('import * as fc from "fast-check";');
 	lines.push('import { Effect } from "effect";');
 	lines.push("");

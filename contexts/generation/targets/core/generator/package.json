@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/generator-core",
+	"name": "@morphdsl/generator-core",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -19,14 +19,14 @@
 		"test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=./coverage"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/utils": "*",
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/utils": "*",
 		"common-tags": "^1.8.2"
 	},
 	"devDependencies": {
 		"@types/common-tags": "^1.8.4",
-		"@morph/eslint-config": "*",
-		"@morph/tsconfig": "*",
+		"@morphdsl/eslint-config": "*",
+		"@morphdsl/tsconfig": "*",
 		"eslint": "^9.39.0"
 	}
 }

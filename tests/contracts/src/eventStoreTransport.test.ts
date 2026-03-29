@@ -1,5 +1,5 @@
-import { createJsonFileEventStoreTransport } from "@morph/eventstore-jsonfile-impls";
-import { createMemoryEventStoreTransport } from "@morph/eventstore-memory-impls";
+import { createJsonFileEventStoreTransport } from "@morphdsl/eventstore-jsonfile-impls";
+import { createMemoryEventStoreTransport } from "@morphdsl/eventstore-memory-impls";
 import { afterEach, describe, test } from "bun:test";
 import { Effect } from "effect";
 import * as fc from "fast-check";

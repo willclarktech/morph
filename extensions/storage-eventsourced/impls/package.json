@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/storage-eventsourced-impls",
+	"name": "@morphdsl/storage-eventsourced-impls",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -8,14 +8,14 @@
 		".": "./src/index.ts"
 	},
 	"dependencies": {
-		"@morph/eventstore-dsl": "workspace:*",
-		"@morph/storage-dsl": "workspace:*",
-		"@morph/utils": "workspace:*",
+		"@morphdsl/eventstore-dsl": "workspace:*",
+		"@morphdsl/storage-dsl": "workspace:*",
+		"@morphdsl/utils": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"

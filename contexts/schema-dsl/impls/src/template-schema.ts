@@ -10,7 +10,7 @@ export interface TemplateSchemaHandler {
 }
 
 export const TemplateSchemaHandler = Context.GenericTag<TemplateSchemaHandler>(
-	"@morph/impls/TemplateSchemaHandler",
+	"@morphdsl/impls/TemplateSchemaHandler",
 );
 
 const TEMPLATE = `\

@@ -1,10 +1,10 @@
-import type { DomainSchema, OperationDef } from "@morph/domain-schema";
+import type { DomainSchema, OperationDef } from "@morphdsl/domain-schema";
 
 import {
 	getDomainServiceAction,
 	getPrimaryWriteAggregate,
 	isDomainService,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 /**
  * Determine HTTP method and path for an operation.

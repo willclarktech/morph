@@ -25,10 +25,10 @@ Morph is a schema-driven code generation framework. Given a domain schema, it ge
 ## Package Dependency Graph
 
 ```
-@morph/domain-schema
+@morphdsl/domain-schema
        │
        ▼
-@morph/operation-dsl
+@morphdsl/operation-dsl
        │
        ▼
 ┌────────────────────────────────────────────────────────────────┐
@@ -46,7 +46,7 @@ Morph is a schema-driven code generation framework. Given a domain schema, it ge
 └────────────────────────────────────────────────────────────────┘
        │
        ▼
-@morph/generation-core (morph's own generated core)
+@morphdsl/generation-core (morph's own generated core)
        │
        ▼
 apps/cli/ (unified CLI)

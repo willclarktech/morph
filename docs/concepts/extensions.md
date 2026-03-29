@@ -80,8 +80,8 @@ Extension implementations live in `extensions/`:
 ```
 extensions/
 ├── auth-password/         # Password hashing extension
-│   ├── dsl/               # @morph/auth-password-dsl
-│   └── impls/             # @morph/auth-password-impls
+│   ├── dsl/               # @morphdsl/auth-password-dsl
+│   └── impls/             # @morphdsl/auth-password-impls
 ├── storage-memory/        # In-memory storage
 ├── storage-jsonfile/      # JSON file storage
 ├── storage-sqlite/        # SQLite storage
@@ -90,4 +90,4 @@ extensions/
 └── ...
 ```
 
-Generated projects import from `@morph/*-impls` packages.
+Generated projects import from `@morphdsl/*-impls` packages.

@@ -2,12 +2,12 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 import {
 	getAllEntities,
 	getAllOperations,
 	getAllValueObjects,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 import {
 	codeBlock,
 	description,
@@ -18,7 +18,7 @@ import {
 	joinSections,
 	operations,
 	valueObjects,
-} from "@morph/builder-readme";
+} from "@morphdsl/builder-readme";
 
 const generateClientExample = (op: QualifiedEntry<OperationDef>): string => {
 	const params = Object.entries(op.def.input)

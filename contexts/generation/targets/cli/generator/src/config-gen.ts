@@ -2,15 +2,15 @@
  * CLI configuration code generation (injectable params, domain services).
  */
 
-import type { DomainSchema, InjectableParam } from "@morph/domain-schema";
+import type { DomainSchema, InjectableParam } from "@morphdsl/domain-schema";
 
 import {
 	getAllOperations,
 	getInjectableParams,
 	getOperationAggregates,
 	isDomainService,
-} from "@morph/domain-schema";
-import { indent } from "@morph/utils";
+} from "@morphdsl/domain-schema";
+import { indent } from "@morphdsl/utils";
 
 /**
  * Helper to convert context path to JS expression.

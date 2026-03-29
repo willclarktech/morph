@@ -1,9 +1,9 @@
 import type { Effect } from "effect";
 
-import { compile } from "@morph/schema-dsl-compiler";
-import { decompile } from "@morph/schema-dsl-decompiler";
-import { ParseFailedError } from "@morph/schema-dsl-dsl";
-import { parse } from "@morph/schema-dsl-parser";
+import { compile } from "@morphdsl/schema-dsl-compiler";
+import { decompile } from "@morphdsl/schema-dsl-decompiler";
+import { ParseFailedError } from "@morphdsl/schema-dsl-dsl";
+import { parse } from "@morphdsl/schema-dsl-parser";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface FormatDslHandler {
@@ -14,7 +14,7 @@ export interface FormatDslHandler {
 }
 
 export const FormatDslHandler = Context.GenericTag<FormatDslHandler>(
-	"@morph/impls/FormatDslHandler",
+	"@morphdsl/impls/FormatDslHandler",
 );
 
 export const FormatDslHandlerLive = Layer.succeed(FormatDslHandler, {

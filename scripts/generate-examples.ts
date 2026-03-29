@@ -498,7 +498,7 @@ const generateExample = (name: string): boolean => {
 
 /**
  * Fix internal package references in generated examples.
- * Internal packages (modules/) use @morph/* scope.
+ * Internal packages (modules/) use @morphdsl/* scope.
  */
 const fixInternalPackageReferences = (outputDir: string): void => {
 	// Find all package.json files recursively
@@ -522,24 +522,24 @@ const fixInternalPackageReferences = (outputDir: string): void => {
 
 		// Fix internal package references
 		content = content.replaceAll(
-			'"@morph/domain-schema": "workspace:*"',
-			'"@morph/domain-schema": "workspace:*"',
+			'"@morphdsl/domain-schema": "workspace:*"',
+			'"@morphdsl/domain-schema": "workspace:*"',
 		);
 		content = content.replaceAll(
-			'"@morph/runtime-cli": "workspace:*"',
-			'"@morph/runtime-cli": "workspace:*"',
+			'"@morphdsl/runtime-cli": "workspace:*"',
+			'"@morphdsl/runtime-cli": "workspace:*"',
 		);
 		content = content.replaceAll(
-			'"@morph/runtime-mcp": "workspace:*"',
-			'"@morph/runtime-mcp": "workspace:*"',
+			'"@morphdsl/runtime-mcp": "workspace:*"',
+			'"@morphdsl/runtime-mcp": "workspace:*"',
 		);
 		content = content.replaceAll(
-			'"@morph/runtime-api": "workspace:*"',
-			'"@morph/runtime-api": "workspace:*"',
+			'"@morphdsl/runtime-api": "workspace:*"',
+			'"@morphdsl/runtime-api": "workspace:*"',
 		);
 		content = content.replaceAll(
-			'"@morph/auth-password": "workspace:*"',
-			'"@morph/auth-password-impls": "workspace:*"',
+			'"@morphdsl/auth-password": "workspace:*"',
+			'"@morphdsl/auth-password-impls": "workspace:*"',
 		);
 
 		writeFileSync(packagePath, content);

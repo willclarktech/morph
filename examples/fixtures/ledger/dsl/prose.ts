@@ -3,7 +3,7 @@
  *
  * This file is a FIXTURE - hand-written, survives regeneration.
  */
-import type { Prose } from "@morph/operation";
+import type { Prose } from "@morphdsl/operation";
 
 import type * as ops from "./accounts";
 

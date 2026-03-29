@@ -1,7 +1,7 @@
 import type {
 	ApiKeyStorageError,
 	ApiKeyWithSecret,
-} from "@morph/auth-apikey-dsl";
+} from "@morphdsl/auth-apikey-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -19,7 +19,7 @@ export interface CreateApiKeyHandler {
 }
 
 export const CreateApiKeyHandler = Context.GenericTag<CreateApiKeyHandler>(
-	"@morph/CreateApiKeyHandler",
+	"@morphdsl/CreateApiKeyHandler",
 );
 
 export const CreateApiKeyHandlerLive = Layer.succeed(CreateApiKeyHandler, {

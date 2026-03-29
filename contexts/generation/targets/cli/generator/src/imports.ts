@@ -1,4 +1,4 @@
-import { separator } from "@morph/utils";
+import { separator } from "@morphdsl/utils";
 
 /**
  * Context package information for multi-context apps.

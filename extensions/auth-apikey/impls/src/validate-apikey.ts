@@ -3,7 +3,7 @@ import type {
 	ApiKeyExpiredError,
 	ApiKeyInvalidError,
 	ApiKeyStorageError,
-} from "@morph/auth-apikey-dsl";
+} from "@morphdsl/auth-apikey-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -21,7 +21,7 @@ export interface ValidateApiKeyHandler {
 }
 
 export const ValidateApiKeyHandler = Context.GenericTag<ValidateApiKeyHandler>(
-	"@morph/ValidateApiKeyHandler",
+	"@morphdsl/ValidateApiKeyHandler",
 );
 
 export const ValidateApiKeyHandlerLive = Layer.succeed(ValidateApiKeyHandler, {

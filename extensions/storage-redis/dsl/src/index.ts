@@ -2,7 +2,7 @@
 // Do not edit manually
 
 // Re-exports from storage context
-export * from "@morph/storage-dsl";
+export * from "@morphdsl/storage-dsl";
 
 // Type schemas
 export * from "./schemas";

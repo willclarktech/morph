@@ -7,9 +7,9 @@
  * 2. A Context.GenericTag for dependency injection
  */
 
-import type { DomainSchema, PortEntry } from "@morph/domain-schema";
+import type { DomainSchema, PortEntry } from "@morphdsl/domain-schema";
 
-import { getAllPorts, getPortsForContext } from "@morph/domain-schema";
+import { getAllPorts, getPortsForContext } from "@morphdsl/domain-schema";
 
 import { typeRefToTypeScript } from "../mappers/type-reference";
 
@@ -106,7 +106,7 @@ export interface GeneratePortsOptions {
 	readonly contextName?: string | undefined;
 	/** Import path for error types */
 	readonly errorsImportPath?: string | undefined;
-	/** Package scope for tag identifiers (e.g., "morph" for "@morph/Service") */
+	/** Package scope for tag identifiers (e.g., "morph" for "@morphdsl/Service") */
 	readonly packageScope: string;
 }
 

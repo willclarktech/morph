@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/eslint-config",
+	"name": "@morphdsl/eslint-config",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -28,7 +28,7 @@
 		"typescript-eslint": "^8.50.0"
 	},
 	"devDependencies": {
-		"@morph/tsconfig": "*",
+		"@morphdsl/tsconfig": "*",
 		"typescript": "^5.9.3"
 	}
 }

@@ -1,13 +1,13 @@
-import type { AnyPropertySuite } from "@morph/property";
+import type { AnyPropertySuite } from "@morphdsl/property";
 import type {
 	PropertyResult,
 	PropertyRunner,
 	PropertyRunOptions,
 	PropertySuiteResult,
-} from "@morph/property-runner";
+} from "@morphdsl/property-runner";
 
-import { isOperationSuite, isValidatorSuite } from "@morph/property";
-import { printPropertySuiteResult } from "@morph/property-runner";
+import { isOperationSuite, isValidatorSuite } from "@morphdsl/property";
+import { printPropertySuiteResult } from "@morphdsl/property-runner";
 
 import { runCliOperationSuite } from "./operation-suite";
 
@@ -71,10 +71,10 @@ export const createPropertyCliRunner = (
 export {
 	printPropertyResult,
 	printPropertySuiteResult,
-} from "@morph/property-runner";
+} from "@morphdsl/property-runner";
 export type {
 	PropertyResult,
 	PropertyRunner,
 	PropertyRunOptions,
 	PropertySuiteResult,
-} from "@morph/property-runner";
+} from "@morphdsl/property-runner";

@@ -1,10 +1,10 @@
 /**
  * Handler interface generation orchestration.
  */
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
-import { getFunctionsFlat, getOperationsFlat } from "@morph/domain-schema";
-import { toKebabCase } from "@morph/utils";
+import { getFunctionsFlat, getOperationsFlat } from "@morphdsl/domain-schema";
+import { toKebabCase } from "@morphdsl/utils";
 
 import { generateFunctionHandler } from "./function-handler";
 import { generateHandler } from "./operation-handler";

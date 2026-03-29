@@ -1,21 +1,21 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
 	"dependencies": {
-		"@morph/generation-core": "workspace:*",
-		"@morph/runtime-mcp": "workspace:*",
-		"@morph/schema-dsl-core": "workspace:*",
+		"@morphdsl/generation-core": "workspace:*",
+		"@morphdsl/runtime-mcp": "workspace:*",
+		"@morphdsl/schema-dsl-core": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
-		"@morph/scenario-runner-mcp": "workspace:*",
-		"@morph/scenarios": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
+		"@morphdsl/scenario-runner-mcp": "workspace:*",
+		"@morphdsl/scenarios": "workspace:*",
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"
 	},
-	"name": "@morph/mcp",
+	"name": "@morphdsl/mcp",
 	"private": true,
 	"scripts": {
 		"build:check": "tsc --noEmit",

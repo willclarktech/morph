@@ -1,4 +1,4 @@
-import { AuthenticationError, AuthService } from "@morph/auth-dsl";
+import { AuthenticationError, AuthService } from "@morphdsl/auth-dsl";
 import { Context, Effect, Layer, Ref } from "effect";
 
 export interface AuthState<TUser> {
@@ -6,7 +6,7 @@ export interface AuthState<TUser> {
 }
 
 export const AuthState =
-	Context.GenericTag<AuthState<unknown>>("@morph/AuthState");
+	Context.GenericTag<AuthState<unknown>>("@morphdsl/AuthState");
 
 export const AuthStateInMemory: Layer.Layer<AuthState<unknown>> = Layer.effect(
 	AuthState,

@@ -4,7 +4,7 @@
  * Maps domain errors to appropriate HTTP status codes based on error tag patterns.
  */
 
-import type { CodecRegistry } from "@morph/codec-dsl";
+import type { CodecRegistry } from "@morphdsl/codec-dsl";
 
 import { Effect, Exit } from "effect";
 

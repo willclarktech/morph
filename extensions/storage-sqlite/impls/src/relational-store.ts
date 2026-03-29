@@ -2,11 +2,11 @@ import type {
 	EntityStore,
 	IndexDescriptor,
 	PaginationParams,
-} from "@morph/storage-dsl";
+} from "@morphdsl/storage-dsl";
 import type { Database, Statement } from "bun:sqlite";
 
-import { applyPagination, StorageOperationError } from "@morph/storage-dsl";
-import { jsonParse, jsonStringify } from "@morph/utils";
+import { applyPagination, StorageOperationError } from "@morphdsl/storage-dsl";
+import { jsonParse, jsonStringify } from "@morphdsl/utils";
 import { Effect } from "effect";
 
 import type {

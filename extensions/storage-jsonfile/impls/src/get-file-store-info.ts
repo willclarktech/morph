@@ -2,7 +2,7 @@ import type {
 	FileAccessError,
 	FileCorruptedError,
 	FileStoreInfo,
-} from "@morph/storage-jsonfile-dsl";
+} from "@morphdsl/storage-jsonfile-dsl";
 
 import { Context, Effect, Layer } from "effect";
 
@@ -17,7 +17,7 @@ export interface GetFileStoreInfoHandler {
 }
 
 export const GetFileStoreInfoHandler =
-	Context.GenericTag<GetFileStoreInfoHandler>("@morph/GetFileStoreInfoHandler");
+	Context.GenericTag<GetFileStoreInfoHandler>("@morphdsl/GetFileStoreInfoHandler");
 
 export const GetFileStoreInfoHandlerLive = Layer.succeed(
 	GetFileStoreInfoHandler,

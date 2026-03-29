@@ -2,7 +2,7 @@
 // Do not edit manually
 
 // Re-exports from auth context
-export * from "@morph/auth-dsl";
+export * from "@morphdsl/auth-dsl";
 
 // Type schemas
 export * from "./schemas";

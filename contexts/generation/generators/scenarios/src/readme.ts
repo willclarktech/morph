@@ -1,12 +1,12 @@
-import type { DomainSchema } from "@morph/domain-schema";
+import type { DomainSchema } from "@morphdsl/domain-schema";
 
-import { getAllOperations } from "@morph/domain-schema";
+import { getAllOperations } from "@morphdsl/domain-schema";
 import {
 	codeBlock,
 	description,
 	heading,
 	joinSections,
-} from "@morph/builder-readme";
+} from "@morphdsl/builder-readme";
 
 export const generateScenariosReadme = (
 	schema: DomainSchema,
@@ -22,7 +22,7 @@ export const generateScenariosReadme = (
 	const quickStart = [
 		heading(2, "Quick Start"),
 		codeBlock(
-			`import { assert, given, scenario, then, when } from "@morph/scenario";\nimport { ${opImports} } from "${resolvedDslPackage}";\n\nexport const scenarios = [\n  scenario("Example scenario",\n    given([]),\n    when(${exampleOp}({ /* params */ })),\n    then(assert.succeeds())\n  ),\n];`,
+			`import { assert, given, scenario, then, when } from "@morphdsl/scenario";\nimport { ${opImports} } from "${resolvedDslPackage}";\n\nexport const scenarios = [\n  scenario("Example scenario",\n    given([]),\n    when(${exampleOp}({ /* params */ })),\n    then(assert.succeeds())\n  ),\n];`,
 			"typescript",
 		),
 	].join("\n\n");

@@ -5,7 +5,7 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import {
 	codeBlock,
@@ -17,12 +17,12 @@ import {
 	joinSections,
 	operations,
 	valueObjects,
-} from "@morph/builder-readme";
+} from "@morphdsl/builder-readme";
 import {
 	getAllEntities,
 	getAllOperations,
 	getAllValueObjects,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 /**
  * Generate a DSL usage example.

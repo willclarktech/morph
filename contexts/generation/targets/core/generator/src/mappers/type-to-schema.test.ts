@@ -1,4 +1,4 @@
-import type { TypeRef } from "@morph/domain-schema";
+import type { TypeRef } from "@morphdsl/domain-schema";
 
 import { describe, expect, test } from "bun:test";
 

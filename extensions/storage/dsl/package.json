@@ -4,8 +4,8 @@
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"
@@ -13,7 +13,7 @@
 	"exports": {
 		".": "./src/index.ts"
 	},
-	"name": "@morph/storage-dsl",
+	"name": "@morphdsl/storage-dsl",
 	"private": true,
 	"scripts": {
 		"build:check": "tsc --noEmit",

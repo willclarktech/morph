@@ -1,4 +1,4 @@
-import { assert, given, scenario, then, when } from "@morph/scenario";
+import { assert, given, scenario, then, when } from "@morphdsl/scenario";
 import { describe, expect, test } from "bun:test";
 
 import type { ExecuteOperation, RunScenarioConfig } from "./run";

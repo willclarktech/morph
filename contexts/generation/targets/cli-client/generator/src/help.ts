@@ -2,10 +2,10 @@ import type {
 	DomainSchema,
 	OperationDef,
 	QualifiedEntry,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getInjectableParams } from "@morph/domain-schema";
-import { toEnvironmentPrefix, toKebabCase } from "@morph/utils";
+import { getInjectableParams } from "@morphdsl/domain-schema";
+import { toEnvironmentPrefix, toKebabCase } from "@morphdsl/utils";
 
 export const generateHelpText = (
 	cliName: string,

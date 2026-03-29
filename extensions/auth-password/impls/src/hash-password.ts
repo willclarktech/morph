@@ -1,4 +1,4 @@
-import type { PasswordHashError } from "@morph/auth-password-dsl";
+import type { PasswordHashError } from "@morphdsl/auth-password-dsl";
 import type { Effect } from "effect";
 
 import { Context, Layer } from "effect";
@@ -13,7 +13,7 @@ export interface HashPasswordHandler {
 }
 
 export const HashPasswordHandler = Context.GenericTag<HashPasswordHandler>(
-	"@morph/HashPasswordHandler",
+	"@morphdsl/HashPasswordHandler",
 );
 
 export const HashPasswordHandlerLive = Layer.succeed(HashPasswordHandler, {

@@ -1,4 +1,4 @@
-import type { PluginContext } from "@morph/plugin";
+import type { PluginContext } from "@morphdsl/plugin";
 
 import {
 	contextNameToKebab,
@@ -9,7 +9,7 @@ import {
 	getPortsForContext,
 	getTypesForContext,
 	getValueObjectsForContext,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 export interface ContextPackageInfo {
 	readonly contextName: string;

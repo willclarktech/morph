@@ -1,9 +1,9 @@
-import type { DatabaseInfo } from "@morph/storage-sqlite-dsl";
+import type { DatabaseInfo } from "@morphdsl/storage-sqlite-dsl";
 
 import {
 	DatabaseLockedError,
 	MigrationFailedError,
-} from "@morph/storage-sqlite-dsl";
+} from "@morphdsl/storage-sqlite-dsl";
 import { Database } from "bun:sqlite";
 import { Context, Effect, Layer } from "effect";
 import { statSync } from "node:fs";
@@ -18,7 +18,7 @@ export interface InitializeDatabaseHandler {
 
 export const InitializeDatabaseHandler =
 	Context.GenericTag<InitializeDatabaseHandler>(
-		"@morph/InitializeDatabaseHandler",
+		"@morphdsl/InitializeDatabaseHandler",
 	);
 
 const getTableCount = (database: Database): number => {

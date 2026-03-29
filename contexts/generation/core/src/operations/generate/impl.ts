@@ -1,4 +1,4 @@
-// Re-export from @morph/generation-impls
+// Re-export from @morphdsl/generation-impls
 
 export {
 	executeGenerate,
@@ -6,4 +6,4 @@ export {
 	GenerateHandlerLive,
 	type GenerateOptions,
 	schemaHasTag,
-} from "@morph/generation-impls";
+} from "@morphdsl/generation-impls";

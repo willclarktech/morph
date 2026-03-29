@@ -1,7 +1,7 @@
 /**
  * TypeScript code generation utilities for DSL.
  */
-import type { ParamDef, TypeRef } from "@morph/domain-schema";
+import type { ParamDef, TypeRef } from "@morphdsl/domain-schema";
 
 import type { GeneratableDef } from "./type-collection";
 

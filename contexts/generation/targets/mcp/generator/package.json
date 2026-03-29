@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/runtime-mcp",
+	"name": "@morphdsl/runtime-mcp",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -18,16 +18,16 @@
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.12.0",
-		"@morph/domain-schema": "*",
-		"@morph/builder-readme": "*",
-		"@morph/operation": "workspace:*",
-		"@morph/utils": "*",
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/builder-readme": "*",
+		"@morphdsl/operation": "workspace:*",
+		"@morphdsl/utils": "*",
 		"effect": "^3.16.0",
 		"zod": "^3.24.0"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "*",
-		"@morph/tsconfig": "*",
+		"@morphdsl/eslint-config": "*",
+		"@morphdsl/tsconfig": "*",
 		"eslint": "^9.39.0"
 	}
 }

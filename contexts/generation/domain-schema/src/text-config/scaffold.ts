@@ -1,4 +1,4 @@
-import { indent } from "@morph/utils";
+import { indent } from "@morphdsl/utils";
 
 /**
  * Text Configuration Scaffold Generation
@@ -94,7 +94,7 @@ export const generateTextScaffold = (
  * - Operation: "op.{name}"
  * - Error: "error.{Name}"
  */
-import { defineText } from "@morph/domain-schema";
+import { defineText } from "@morphdsl/domain-schema";
 
 export default defineText({
 	domain: {

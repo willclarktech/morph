@@ -1,7 +1,7 @@
 /**
  * Type generation for function handler interfaces.
  */
-import type { FunctionDef } from "@morph/domain-schema";
+import type { FunctionDef } from "@morphdsl/domain-schema";
 
 import { typeRefToTsType } from "../type-utilities";
 

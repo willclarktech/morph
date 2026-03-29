@@ -1,5 +1,5 @@
 /**
- * @morph/auth-session-impls - Session management implementations
+ * @morphdsl/auth-session-impls - Session management implementations
  *
  * Provides:
  * - Handler implementations (CreateSession, ValidateSession, DestroySession)
@@ -41,9 +41,9 @@ export { HandlersLayer } from "./layer";
 export { prose } from "./prose";
 
 // Re-export types and errors from DSL for convenience
-export type { Session } from "@morph/auth-session-dsl";
+export type { Session } from "@morphdsl/auth-session-dsl";
 export {
 	SessionExpiredError,
 	SessionNotFoundError,
 	SessionStorageError,
-} from "@morph/auth-session-dsl";
+} from "@morphdsl/auth-session-dsl";

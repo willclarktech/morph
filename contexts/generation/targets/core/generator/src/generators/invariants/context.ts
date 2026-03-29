@@ -1,7 +1,7 @@
 /**
  * Context type inference for invariants.
  */
-import type { ConditionExpr, ValueExpr } from "@morph/domain-schema";
+import type { ConditionExpr, ValueExpr } from "@morphdsl/domain-schema";
 
 /**
  * Context field with inferred element type.

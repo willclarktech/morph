@@ -1,5 +1,5 @@
 /* eslint-disable no-console -- test output */
-import type { Scenario } from "@morph/scenario";
+import type { Scenario } from "@morphdsl/scenario";
 import type { Effect } from "effect";
 
 /**

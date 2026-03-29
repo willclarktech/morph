@@ -1,5 +1,5 @@
 {
-	"name": "@morph/plugin-mcp",
+	"name": "@morphdsl/plugin-mcp",
 	"version": "0.0.0",
 	"type": "module",
 	"exports": {
@@ -12,12 +12,12 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*",
-		"@morph/builder-app": "*",
-		"@morph/generator-env": "*",
-		"@morph/runtime-mcp": "*",
-		"@morph/plugin": "*",
-		"@morph/builder-test": "*",
-		"@morph/utils": "*"
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/builder-app": "*",
+		"@morphdsl/generator-env": "*",
+		"@morphdsl/runtime-mcp": "*",
+		"@morphdsl/plugin": "*",
+		"@morphdsl/builder-test": "*",
+		"@morphdsl/utils": "*"
 	}
 }

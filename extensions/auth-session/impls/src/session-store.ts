@@ -1,11 +1,11 @@
-import type { Session } from "@morph/auth-session-dsl";
+import type { Session } from "@morphdsl/auth-session-dsl";
 
 import {
 	SessionExpiredError,
 	SessionNotFoundError,
 	SessionStorageError,
-} from "@morph/auth-session-dsl";
-import { jsonParse, jsonStringify } from "@morph/utils";
+} from "@morphdsl/auth-session-dsl";
+import { jsonParse, jsonStringify } from "@morphdsl/utils";
 /**
  * Session storage with pluggable strategies.
  *

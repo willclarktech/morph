@@ -1,5 +1,5 @@
 {
-	"name": "@morph/generator-verification",
+	"name": "@morphdsl/generator-verification",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -15,11 +15,11 @@
 		"test": "bun test"
 	},
 	"dependencies": {
-		"@morph/domain-schema": "*"
+		"@morphdsl/domain-schema": "*"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "*",
-		"@morph/tsconfig": "*",
+		"@morphdsl/eslint-config": "*",
+		"@morphdsl/tsconfig": "*",
 		"eslint": "^9.39.0"
 	}
 }

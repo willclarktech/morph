@@ -2,10 +2,10 @@ import type {
 	DomainSchema,
 	GeneratedFile,
 	SubscriberDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getAllSubscribers } from "@morph/domain-schema";
-import { indent, toKebabCase, toPascalCase } from "@morph/utils";
+import { getAllSubscribers } from "@morphdsl/domain-schema";
+import { indent, toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 /**
  * Generate a scaffold subscriber implementation file.

@@ -1,10 +1,10 @@
-import type { PaginationParams, StorageTransport } from "@morph/storage-dsl";
+import type { PaginationParams, StorageTransport } from "@morphdsl/storage-dsl";
 
 import {
 	applyPagination,
 	StorageConnectionError,
 	StorageOperationError,
-} from "@morph/storage-dsl";
+} from "@morphdsl/storage-dsl";
 import { Effect } from "effect";
 
 type RedisClient = InstanceType<typeof Bun.RedisClient>;

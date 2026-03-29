@@ -1,3 +1,3 @@
-// Re-export handler interfaces from @morph/schema-dsl-impls
+// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { GetFoldingRangesHandler } from "@morph/schema-dsl-impls";
+export { GetFoldingRangesHandler } from "@morphdsl/schema-dsl-impls";

@@ -1,4 +1,4 @@
-import type { ValueObjectDef } from "@morph/domain-schema";
+import type { ValueObjectDef } from "@morphdsl/domain-schema";
 
 import { constraintsToRefinements } from "../mappers/constraint";
 import { typeRefToSchema } from "../mappers/schema-reference";

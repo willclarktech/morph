@@ -1,7 +1,7 @@
 /**
  * TypeRef to TypeScript type conversion utilities.
  */
-import type { OperationDef } from "@morph/domain-schema";
+import type { OperationDef } from "@morphdsl/domain-schema";
 
 /**
  * Convert TypeRef to TypeScript type string.

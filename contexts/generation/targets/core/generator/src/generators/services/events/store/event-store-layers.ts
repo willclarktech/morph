@@ -3,7 +3,7 @@
  * Generates layer composition functions that wire transports via the functor.
  */
 
-import type { EventStoreBackend, GeneratedFile } from "@morph/domain-schema";
+import type { EventStoreBackend, GeneratedFile } from "@morphdsl/domain-schema";
 
 /**
  * Generate the event-store-layers file that composes transports via the functor.
@@ -21,26 +21,26 @@ export const generateEventStoreLayers = (
 	const imports: string[] = [
 		'import { Effect, Layer } from "effect";',
 		"",
-		'import { createEventStore } from "@morph/eventstore-impls";',
+		'import { createEventStore } from "@morphdsl/eventstore-impls";',
 	];
 
 	if (hasMemory) {
 		imports.push(
-			'import { createMemoryEventStoreTransport } from "@morph/eventstore-memory-impls";',
+			'import { createMemoryEventStoreTransport } from "@morphdsl/eventstore-memory-impls";',
 		);
 	}
 	if (hasJsonFile) {
 		imports.push(
-			'import { createJsonFileEventStoreTransport } from "@morph/eventstore-jsonfile-impls";',
+			'import { createJsonFileEventStoreTransport } from "@morphdsl/eventstore-jsonfile-impls";',
 		);
 	}
 	if (hasRedis) {
 		imports.push(
-			'import { connectEventStoreRedis, createRedisEventStoreTransport } from "@morph/eventstore-redis-impls";',
+			'import { connectEventStoreRedis, createRedisEventStoreTransport } from "@morphdsl/eventstore-redis-impls";',
 		);
 	}
 
-	imports.push('import { EventStoreTransport } from "@morph/eventstore-dsl";');
+	imports.push('import { EventStoreTransport } from "@morphdsl/eventstore-dsl";');
 
 	imports.push("");
 	imports.push(`import type { DomainEvent } from "${typesImportPath}";`);

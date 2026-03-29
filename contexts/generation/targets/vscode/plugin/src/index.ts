@@ -1,14 +1,14 @@
-import type { ContextDef, GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
-import type { CommandOp } from "@morph/generator-vscode";
+import type { ContextDef, GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
+import type { CommandOp } from "@morphdsl/generator-vscode";
 
-import { getContextsWithTag } from "@morph/domain-schema";
-import { buildConfigFiles } from "@morph/builder-app";
+import { getContextsWithTag } from "@morphdsl/domain-schema";
+import { buildConfigFiles } from "@morphdsl/builder-app";
 import {
 	generate as generateVsCodeAppEntry,
 	generateVsCodePackageJson,
-} from "@morph/generator-vscode";
-import { toKebabCase, toPascalCase } from "@morph/utils";
+} from "@morphdsl/generator-vscode";
+import { toKebabCase, toPascalCase } from "@morphdsl/utils";
 
 interface ContextPackages {
 	readonly contextName: string;

@@ -4,21 +4,21 @@
 		"Morph": "./src/index.ts"
 	},
 	"dependencies": {
-		"@morph/generation-core": "workspace:*",
-		"@morph/runtime-cli": "workspace:*",
-		"@morph/schema-dsl-core": "workspace:*",
+		"@morphdsl/generation-core": "workspace:*",
+		"@morphdsl/runtime-cli": "workspace:*",
+		"@morphdsl/schema-dsl-core": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "workspace:*",
-		"@morph/scenario-runner-cli": "workspace:*",
-		"@morph/scenarios": "workspace:*",
-		"@morph/tsconfig": "workspace:*",
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/scenario-runner-cli": "workspace:*",
+		"@morphdsl/scenarios": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"eslint": "^9.39.0",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"
 	},
-	"name": "@morph/cli",
+	"name": "@morphdsl/cli",
 	"private": true,
 	"scripts": {
 		"build:check": "tsc --noEmit",

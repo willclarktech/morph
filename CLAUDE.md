@@ -227,7 +227,7 @@ Use the `/land` command to automate the merge workflow, or manually:
 
 **Exports:**
 - No re-exports from other packages — consumers import directly from source
-  - Exception: Generated packages may re-export from fixture packages (e.g., @morph/core re-exports from @morph/impls)
+  - Exception: Generated packages may re-export from fixture packages (e.g., @morphdsl/core re-exports from @morphdsl/impls)
 - Barrel files use `export * from "./module"` for internal modules, not named exports
 - Exception: A package may use named exports from internal modules if intentionally hiding implementation details
 
@@ -288,7 +288,7 @@ For generators that produce similar output (Dockerfiles, package.json):
 - Avoids duplication while allowing specialization
 
 **Utility extraction:**
-- Duplicated utilities go to shared packages (`@morph/utils`)
+- Duplicated utilities go to shared packages (`@morphdsl/utils`)
 - Never copy utility functions between files
 - If you find yourself copying, extract instead
 

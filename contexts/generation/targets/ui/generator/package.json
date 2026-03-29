@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@morph/runtime-ui",
+	"name": "@morphdsl/runtime-ui",
 	"version": "0.0.0",
 	"private": true,
 	"type": "module",
@@ -17,13 +17,13 @@
 		"lint:fix": "eslint --fix ."
 	},
 	"dependencies": {
-		"@morph/auth-password-impls": "workspace:*",
-		"@morph/domain-schema": "*",
-		"@morph/utils": "*"
+		"@morphdsl/auth-password-impls": "workspace:*",
+		"@morphdsl/domain-schema": "*",
+		"@morphdsl/utils": "*"
 	},
 	"devDependencies": {
-		"@morph/eslint-config": "*",
-		"@morph/tsconfig": "*",
+		"@morphdsl/eslint-config": "*",
+		"@morphdsl/tsconfig": "*",
 		"eslint": "^9.39.0"
 	}
 }

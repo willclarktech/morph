@@ -1,3 +1,3 @@
-// Re-export from @morph/schema-dsl-impls
+// Re-export from @morphdsl/schema-dsl-impls
 
-export { TemplateSchemaHandlerLive } from "@morph/schema-dsl-impls";
+export { TemplateSchemaHandlerLive } from "@morphdsl/schema-dsl-impls";

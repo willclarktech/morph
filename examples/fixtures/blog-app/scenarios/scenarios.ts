@@ -1,7 +1,7 @@
 import type { Post, User } from "@blog-app/blog-dsl";
 
 import { createPost, createUser, publishPost } from "@blog-app/blog-dsl";
-import { assert, given, ref, scenario, then, when } from "@morph/scenario";
+import { assert, given, ref, scenario, then, when } from "@morphdsl/scenario";
 
 export const scenarios = [
 	scenario("Admin publishes a post")

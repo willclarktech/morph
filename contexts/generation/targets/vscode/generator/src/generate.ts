@@ -1,6 +1,6 @@
-import type { GeneratedFile } from "@morph/domain-schema";
+import type { GeneratedFile } from "@morphdsl/domain-schema";
 
-import { sortImports, toPascalCase } from "@morph/utils";
+import { sortImports, toPascalCase } from "@morphdsl/utils";
 
 export interface ContextPackages {
 	readonly contextName: string;
@@ -52,7 +52,7 @@ export const generate = (
 	const importBlock = sortImports(
 		[
 			`import * as vscode from "vscode";`,
-			`import { createExtension } from "@morph/generator-vscode";`,
+			`import { createExtension } from "@morphdsl/generator-vscode";`,
 			contextImports,
 			...(isMultiContext ? [`import { Layer } from "effect";`] : []),
 		].join("\n"),

@@ -340,8 +340,9 @@ const fixPackageJsonFiles = (): void => {
 			continue;
 		}
 
-		// Fix package name references
-		content = content.replaceAll("@Morph/", "@morph/");
+		// Fix package name references (generators produce @morph/ from toPackageScope("Morph"))
+		content = content.replaceAll("@Morph/", "@morphdsl/");
+		content = content.replaceAll("@morph/", "@morphdsl/");
 
 		writeFileSync(packagePath, content);
 	}
@@ -430,12 +431,12 @@ const fixEslintConfigFiles = (): void => {
 
 	const packageDirectories = getGeneratedPackageDirectories();
 
-	const eslintContent = `import { configs } from "@morph/eslint-config";
+	const eslintContent = `import { configs } from "@morphdsl/eslint-config";
 
 export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated];
 `;
 
-	const cliEslintContent = `import { configs } from "@morph/eslint-config";
+	const cliEslintContent = `import { configs } from "@morphdsl/eslint-config";
 
 export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated, ...configs.cli];
 `;
@@ -469,43 +470,43 @@ const writeImplsAndHandlers = (): void => {
 		// Handler re-exports (generation context)
 		{
 			path: "contexts/generation/core/src/operations/validate/handler.ts",
-			content: `// Re-export handler interfaces from @morph/generation-impls
+			content: `// Re-export handler interfaces from @morphdsl/generation-impls
 
-export { ValidateHandler } from "@morph/generation-impls";
+export { ValidateHandler } from "@morphdsl/generation-impls";
 `,
 		},
 		{
 			path: "contexts/generation/core/src/operations/generate/handler.ts",
-			content: `// Re-export handler interfaces from @morph/generation-impls
+			content: `// Re-export handler interfaces from @morphdsl/generation-impls
 
-export { GenerateHandler, type GenerateOptions } from "@morph/generation-impls";
+export { GenerateHandler, type GenerateOptions } from "@morphdsl/generation-impls";
 `,
 		},
 		{
 			path: "contexts/generation/core/src/operations/init/handler.ts",
-			content: `// Re-export handler interfaces from @morph/generation-impls
+			content: `// Re-export handler interfaces from @morphdsl/generation-impls
 
-export { InitHandler } from "@morph/generation-impls";
+export { InitHandler } from "@morphdsl/generation-impls";
 `,
 		},
 		{
 			path: "contexts/generation/core/src/operations/new-project/handler.ts",
-			content: `// Re-export handler interfaces from @morph/generation-impls
+			content: `// Re-export handler interfaces from @morphdsl/generation-impls
 
-export { NewProjectHandler, type NewProjectOptions } from "@morph/generation-impls";
+export { NewProjectHandler, type NewProjectOptions } from "@morphdsl/generation-impls";
 `,
 		},
 		// Impl re-exports (generation context)
 		{
 			path: "contexts/generation/core/src/operations/validate/impl.ts",
-			content: `// Re-export from @morph/generation-impls
+			content: `// Re-export from @morphdsl/generation-impls
 
-export { ValidateHandlerLive } from "@morph/generation-impls";
+export { ValidateHandlerLive } from "@morphdsl/generation-impls";
 `,
 		},
 		{
 			path: "contexts/generation/core/src/operations/generate/impl.ts",
-			content: `// Re-export from @morph/generation-impls
+			content: `// Re-export from @morphdsl/generation-impls
 
 export {
 	executeGenerate,
@@ -513,177 +514,177 @@ export {
 	GenerateHandlerLive,
 	type GenerateOptions,
 	schemaHasTag,
-} from "@morph/generation-impls";
+} from "@morphdsl/generation-impls";
 `,
 		},
 		{
 			path: "contexts/generation/core/src/operations/init/impl.ts",
-			content: `// Re-export from @morph/generation-impls
+			content: `// Re-export from @morphdsl/generation-impls
 
-export { InitHandlerLive } from "@morph/generation-impls";
+export { InitHandlerLive } from "@morphdsl/generation-impls";
 `,
 		},
 		{
 			path: "contexts/generation/core/src/operations/new-project/impl.ts",
-			content: `// Re-export from @morph/generation-impls
+			content: `// Re-export from @morphdsl/generation-impls
 
-export { NewProjectHandlerLive } from "@morph/generation-impls";
+export { NewProjectHandlerLive } from "@morphdsl/generation-impls";
 `,
 		},
 		// Handler re-exports (schema-dsl context)
 		{
 			path: "contexts/schema-dsl/core/src/operations/parse-morph/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { ParseMorphHandler } from "@morph/schema-dsl-impls";
+export { ParseMorphHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/decompile-schema/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { DecompileSchemaHandler } from "@morph/schema-dsl-impls";
+export { DecompileSchemaHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/format-dsl/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { FormatDslHandler } from "@morph/schema-dsl-impls";
+export { FormatDslHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/validate-dsl/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { ValidateDslHandler } from "@morph/schema-dsl-impls";
+export { ValidateDslHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-diagnostics/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { GetDiagnosticsHandler } from "@morph/schema-dsl-impls";
+export { GetDiagnosticsHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-symbols/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { GetSymbolsHandler } from "@morph/schema-dsl-impls";
+export { GetSymbolsHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-completions/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { GetCompletionsHandler } from "@morph/schema-dsl-impls";
+export { GetCompletionsHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-hover/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { GetHoverHandler } from "@morph/schema-dsl-impls";
+export { GetHoverHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-definition/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { GetDefinitionHandler } from "@morph/schema-dsl-impls";
+export { GetDefinitionHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-folding-ranges/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { GetFoldingRangesHandler } from "@morph/schema-dsl-impls";
+export { GetFoldingRangesHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		// Impl re-exports (schema-dsl context)
 		{
 			path: "contexts/schema-dsl/core/src/operations/parse-morph/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { ParseMorphHandlerLive } from "@morph/schema-dsl-impls";
+export { ParseMorphHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/decompile-schema/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { DecompileSchemaHandlerLive } from "@morph/schema-dsl-impls";
+export { DecompileSchemaHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/format-dsl/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { FormatDslHandlerLive } from "@morph/schema-dsl-impls";
+export { FormatDslHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/validate-dsl/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { ValidateDslHandlerLive } from "@morph/schema-dsl-impls";
+export { ValidateDslHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-diagnostics/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetDiagnosticsHandlerLive } from "@morph/schema-dsl-impls";
+export { GetDiagnosticsHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-symbols/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetSymbolsHandlerLive } from "@morph/schema-dsl-impls";
+export { GetSymbolsHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-completions/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetCompletionsHandlerLive } from "@morph/schema-dsl-impls";
+export { GetCompletionsHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-hover/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetHoverHandlerLive } from "@morph/schema-dsl-impls";
+export { GetHoverHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-definition/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetDefinitionHandlerLive } from "@morph/schema-dsl-impls";
+export { GetDefinitionHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-folding-ranges/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetFoldingRangesHandlerLive } from "@morph/schema-dsl-impls";
+export { GetFoldingRangesHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/template-schema/handler.ts",
-			content: `// Re-export handler interfaces from @morph/schema-dsl-impls
+			content: `// Re-export handler interfaces from @morphdsl/schema-dsl-impls
 
-export { TemplateSchemaHandler } from "@morph/schema-dsl-impls";
+export { TemplateSchemaHandler } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/template-schema/impl.ts",
-			content: `// Re-export from @morph/schema-dsl-impls
+			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { TemplateSchemaHandlerLive } from "@morph/schema-dsl-impls";
+export { TemplateSchemaHandlerLive } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 	];
@@ -728,7 +729,7 @@ export { HandlersLayer, MockHandlersLayer } from "./operations";
 
 /**
  * Add extra dependencies to core packages.
- * Generation-core re-exports from @morph/generation-impls which contains the actual implementations.
+ * Generation-core re-exports from @morphdsl/generation-impls which contains the actual implementations.
  */
 const addCoreDependencies = (): void => {
 	console.info("Adding core dependencies...");
@@ -745,10 +746,10 @@ const addCoreDependencies = (): void => {
 			dependencies?: Record<string, string>;
 		};
 
-		// Generation-core re-exports from @morph/generation-impls, which has all generator dependencies
+		// Generation-core re-exports from @morphdsl/generation-impls, which has all generator dependencies
 		packageJson.dependencies = {
 			...packageJson.dependencies,
-			"@morph/generation-impls": "workspace:*",
+			"@morphdsl/generation-impls": "workspace:*",
 		};
 
 		writeFileSync(
@@ -769,7 +770,7 @@ const addCoreDependencies = (): void => {
 
 		packageJson.dependencies = {
 			...packageJson.dependencies,
-			"@morph/schema-dsl-impls": "workspace:*",
+			"@morphdsl/schema-dsl-impls": "workspace:*",
 		};
 
 		writeFileSync(
@@ -812,21 +813,21 @@ const writeProseReexports = (): void => {
 			path: "contexts/generation/core/src/prose.ts",
 			content: `// Re-export prose fixtures from impls
 
-export { prose } from "@morph/generation-impls";
+export { prose } from "@morphdsl/generation-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/prose.ts",
 			content: `// Re-export prose fixtures from impls
 
-export { prose } from "@morph/schema-dsl-impls";
+export { prose } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/grammar.ts",
 			content: `// Re-export grammar fixtures from impls
 
-export { languageConfiguration, textMateGrammar } from "@morph/schema-dsl-impls";
+export { languageConfiguration, textMateGrammar } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 	];
@@ -898,7 +899,11 @@ const fixImports = (): void => {
 					let content = readFileSync(entryPath, "utf8");
 					let changed = false;
 					if (content.includes("@Morph/")) {
-						content = content.replaceAll("@Morph/", "@morph/");
+						content = content.replaceAll("@Morph/", "@morphdsl/");
+						changed = true;
+					}
+					if (content.includes("@morph/")) {
+						content = content.replaceAll("@morph/", "@morphdsl/");
 						changed = true;
 					}
 					// Fix schema import path for morph (uses schema-resolved.json with $ref resolved)
@@ -1048,7 +1053,7 @@ const main = async (): Promise<void> => {
 	// issues with non-auto-fixable errors causing inconsistent behavior
 	console.info("\nRunning format:fix...");
 	const formatResult = Bun.spawnSync(
-		["bun", "run", "format:fix", "--filter=@morph/*", "--force"],
+		["bun", "run", "format:fix", "--filter=@morphdsl/*", "--force"],
 		{
 			cwd: ROOT_DIR,
 			stderr: "inherit",

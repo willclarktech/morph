@@ -1,6 +1,6 @@
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
 
-import { getAllInvariants } from "@morph/domain-schema";
+import { getAllInvariants } from "@morphdsl/domain-schema";
 
 import {
 	generateConsistencyCheck,

@@ -1,4 +1,4 @@
-import { sortObjectKeys } from "@morph/utils";
+import { sortObjectKeys } from "@morphdsl/utils";
 
 /** Common tool versions used across all packages */
 const TOOL_VERSIONS = {

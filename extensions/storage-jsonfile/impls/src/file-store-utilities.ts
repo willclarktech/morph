@@ -1,10 +1,10 @@
-import type { FileStoreInfo } from "@morph/storage-jsonfile-dsl";
+import type { FileStoreInfo } from "@morphdsl/storage-jsonfile-dsl";
 
 import {
 	FileAccessError,
 	FileCorruptedError,
-} from "@morph/storage-jsonfile-dsl";
-import { jsonParse, jsonStringify } from "@morph/utils";
+} from "@morphdsl/storage-jsonfile-dsl";
+import { jsonParse, jsonStringify } from "@morphdsl/utils";
 import { Effect } from "effect";
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";

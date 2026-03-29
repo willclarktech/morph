@@ -1,19 +1,19 @@
-import type { DomainSchema, GeneratedFile } from "@morph/domain-schema";
-import type { GeneratorPlugin, PluginContext } from "@morph/plugin";
-import type { UiConfig } from "@morph/runtime-ui";
+import type { DomainSchema, GeneratedFile } from "@morphdsl/domain-schema";
+import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
+import type { UiConfig } from "@morphdsl/runtime-ui";
 
-import { contextNameToKebab } from "@morph/domain-schema";
-import { buildDockerfile, generateAppFiles } from "@morph/builder-app";
-import { generate as generateEnvironmentExample } from "@morph/generator-env";
+import { contextNameToKebab } from "@morphdsl/domain-schema";
+import { buildDockerfile, generateAppFiles } from "@morphdsl/builder-app";
+import { generate as generateEnvironmentExample } from "@morphdsl/generator-env";
 import {
 	generate as generateUiAppEntry,
 	generateUiPackageJson,
-} from "@morph/runtime-ui";
+} from "@morphdsl/runtime-ui";
 import {
 	generateInjectableParamsConfig,
 	generateUiMappings,
-} from "@morph/generator-ui-mappings";
-import { toEnvironmentPrefix } from "@morph/utils";
+} from "@morphdsl/generator-ui-mappings";
+import { toEnvironmentPrefix } from "@morphdsl/utils";
 
 const generateUiDockerfile = (name: string): string =>
 	buildDockerfile({
@@ -43,7 +43,7 @@ const generateUiScenarioTest = (
 	const injectableParamsConfig = generateInjectableParamsConfig(schema);
 	const envPrefix = name.toUpperCase().replaceAll("-", "_");
 
-	return `import { createUiRunner } from "@morph/scenario-runner-ui";
+	return `import { createUiRunner } from "@morphdsl/scenario-runner-ui";
 import { prose } from "${corePackage}";
 import { scenarios } from "${scenariosPackage}";
 import { expect, test } from "bun:test";

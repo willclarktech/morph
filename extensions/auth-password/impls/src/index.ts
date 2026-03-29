@@ -1,11 +1,11 @@
 /**
- * @morph/auth-password-impls - Password hashing and verification
+ * @morphdsl/auth-password-impls - Password hashing and verification
  *
  * Provides:
  * - Handler implementations (HashPassword, VerifyPassword)
  * - Password hashing (bcrypt via Bun.password)
  *
- * For session management, use @morph/auth-session-impls.
+ * For session management, use @morphdsl/auth-session-impls.
  */
 
 // Handler implementations
@@ -31,4 +31,4 @@ export {
 	AuthService,
 	PasswordHashError,
 	PasswordVerifyError,
-} from "@morph/auth-password-dsl";
+} from "@morphdsl/auth-password-dsl";

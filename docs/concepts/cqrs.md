@@ -150,7 +150,7 @@ Both use the same handler interface pattern, allowing implementations to focus o
 
 ## Helper Functions
 
-The `@morph/domain-schema` package provides helpers for working with commands and queries:
+The `@morphdsl/domain-schema` package provides helpers for working with commands and queries:
 
 ```typescript
 import {
@@ -158,7 +158,7 @@ import {
 	getAllCommands, // Returns only commands
 	getAllQueries, // Returns only queries
 	getCommandsWithEvents, // Commands with their event definitions
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 ```
 
 ## When to Use Each

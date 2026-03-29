@@ -5,9 +5,9 @@ import type {
 	EntityStoreConfig,
 	PaginationParams,
 	StorageTransport,
-} from "@morph/storage-dsl";
+} from "@morphdsl/storage-dsl";
 
-import { applyPagination, StorageOperationError } from "@morph/storage-dsl";
+import { applyPagination, StorageOperationError } from "@morphdsl/storage-dsl";
 import { Effect } from "effect";
 
 /**

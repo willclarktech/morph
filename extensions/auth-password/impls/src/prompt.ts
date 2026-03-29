@@ -2,7 +2,7 @@
  * Password-prompt based AuthService implementation.
  * Prompts for email/password on requireAuth(), verifies against provided lookup.
  */
-import { AuthenticationError, AuthService } from "@morph/auth-password-dsl";
+import { AuthenticationError, AuthService } from "@morphdsl/auth-password-dsl";
 import { Effect, Layer, Ref } from "effect";
 
 import { verifyPassword } from "./password";

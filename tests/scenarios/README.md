@@ -7,8 +7,8 @@ Parse, compile, and decompile .morph DSL files
 ## Quick Start
 
 ```typescript
-import { assert, given, scenario, then, when } from "@morph/scenario";
-import {} from "@morph/generation-dsl";
+import { assert, given, scenario, then, when } from "@morphdsl/scenario";
+import {} from "@morphdsl/generation-dsl";
 
 export const scenarios = [
 	scenario(

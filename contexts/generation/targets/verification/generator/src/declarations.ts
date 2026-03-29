@@ -1,4 +1,4 @@
-import type { EntityDef, TypeRef } from "@morph/domain-schema";
+import type { EntityDef, TypeRef } from "@morphdsl/domain-schema";
 
 import type { SmtCollector } from "./smt-compiler";
 

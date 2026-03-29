@@ -1,8 +1,8 @@
-import type { CodecRegistry } from "@morph/codec-dsl";
+import type { CodecRegistry } from "@morphdsl/codec-dsl";
 import type * as Layer from "effect/Layer";
 
-import { getFieldNames } from "@morph/operation";
-import { jsonStringify, toKebabCase } from "@morph/utils";
+import { getFieldNames } from "@morphdsl/operation";
+import { jsonStringify, toKebabCase } from "@morphdsl/utils";
 import { Exit } from "effect";
 import * as Effect from "effect/Effect";
 import * as S from "effect/Schema";

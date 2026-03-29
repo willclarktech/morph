@@ -1,7 +1,7 @@
 /**
  * Type traversal and collection utilities for DSL generation.
  */
-import type { ContextDef, ParamDef, TypeRef } from "@morph/domain-schema";
+import type { ContextDef, ParamDef, TypeRef } from "@morphdsl/domain-schema";
 
 /**
  * Minimal definition type for DSL generation.

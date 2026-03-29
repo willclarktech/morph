@@ -2,7 +2,7 @@ import type {
 	CommandDef,
 	EmittedEventDef,
 	EntityDef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
 import { constraintsToRefinements } from "../mappers/constraint";
 import { typeRefToSchema } from "../mappers/schema-reference";

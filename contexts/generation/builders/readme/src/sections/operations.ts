@@ -6,9 +6,9 @@ import type {
 	OperationDef,
 	QualifiedEntry,
 	TypeRef,
-} from "@morph/domain-schema";
+} from "@morphdsl/domain-schema";
 
-import { getOperationAggregates, isDomainService } from "@morph/domain-schema";
+import { getOperationAggregates, isDomainService } from "@morphdsl/domain-schema";
 
 import { bold, code, codeBlock, heading, table } from "../markdown";
 

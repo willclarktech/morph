@@ -1,4 +1,4 @@
-import { parseSchema } from "@morph/domain-schema";
+import { parseSchema } from "@morphdsl/domain-schema";
 
 import schemaJson from "../../../../schema-resolved.json";
 

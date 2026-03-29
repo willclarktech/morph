@@ -1,8 +1,8 @@
-import type { DslDiagnostic } from "@morph/schema-dsl-dsl";
+import type { DslDiagnostic } from "@morphdsl/schema-dsl-dsl";
 import type { Effect } from "effect";
 
-import { compile } from "@morph/schema-dsl-compiler";
-import { parse } from "@morph/schema-dsl-parser";
+import { compile } from "@morphdsl/schema-dsl-compiler";
+import { parse } from "@morphdsl/schema-dsl-parser";
 import { Context, Effect as E, Layer } from "effect";
 
 export interface GetDiagnosticsHandler {
@@ -13,7 +13,7 @@ export interface GetDiagnosticsHandler {
 }
 
 export const GetDiagnosticsHandler = Context.GenericTag<GetDiagnosticsHandler>(
-	"@morph/impls/GetDiagnosticsHandler",
+	"@morphdsl/impls/GetDiagnosticsHandler",
 );
 
 export const GetDiagnosticsHandlerLive = Layer.succeed(GetDiagnosticsHandler, {

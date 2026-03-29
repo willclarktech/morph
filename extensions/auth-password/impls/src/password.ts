@@ -1,7 +1,7 @@
 import {
 	PasswordHashError,
 	PasswordVerifyError,
-} from "@morph/auth-password-dsl";
+} from "@morphdsl/auth-password-dsl";
 /**
  * Password hashing utilities using Bun's built-in bcrypt.
  */

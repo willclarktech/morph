@@ -1,9 +1,9 @@
 import type {
 	ConnectionInfo,
 	ConnectionTimeoutError,
-} from "@morph/storage-redis-dsl";
+} from "@morphdsl/storage-redis-dsl";
 
-import { ConnectionFailedError } from "@morph/storage-redis-dsl";
+import { ConnectionFailedError } from "@morphdsl/storage-redis-dsl";
 import { Context, Effect, Layer } from "effect";
 
 export interface ConnectHandler {
@@ -17,7 +17,7 @@ export interface ConnectHandler {
 }
 
 export const ConnectHandler = Context.GenericTag<ConnectHandler>(
-	"@morph/ConnectHandler",
+	"@morphdsl/ConnectHandler",
 );
 
 export const ConnectHandlerLive = Layer.succeed(ConnectHandler, {

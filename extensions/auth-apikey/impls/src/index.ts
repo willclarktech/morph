@@ -1,5 +1,5 @@
 /**
- * @morph/auth-apikey-impls - API key authentication implementations
+ * @morphdsl/auth-apikey-impls - API key authentication implementations
  *
  * Provides:
  * - Handler implementations (CreateApiKey, ValidateApiKey, RevokeApiKey)
@@ -35,9 +35,9 @@ export { HandlersLayer } from "./layer";
 export { prose } from "./prose";
 
 // Re-export types and errors from DSL for convenience
-export type { ApiKey, ApiKeyWithSecret } from "@morph/auth-apikey-dsl";
+export type { ApiKey, ApiKeyWithSecret } from "@morphdsl/auth-apikey-dsl";
 export {
 	ApiKeyExpiredError,
 	ApiKeyInvalidError,
 	ApiKeyStorageError,
-} from "@morph/auth-apikey-dsl";
+} from "@morphdsl/auth-apikey-dsl";
