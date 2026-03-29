@@ -5,6 +5,7 @@ import {
 	findPrimaryContext,
 	getContextsWithTag,
 } from "@morphdsl/domain-schema";
+import { getPackageScope } from "@morphdsl/plugin";
 import {
 	buildCliConfigFiles,
 	generateAppFiles,
@@ -45,7 +46,7 @@ export const cliPlugin: GeneratorPlugin = {
 	generate(ctx: PluginContext): GeneratedFile[] {
 		const { schema, name } = ctx;
 		const packagePath = `apps/cli`;
-		const scope = name.toLowerCase();
+		const scope = getPackageScope(schema, name);
 
 		const cliContexts = getContextsWithTag(schema, "@cli");
 		const usePrefix = cliContexts.length > 1;
@@ -88,11 +89,12 @@ export const cliPlugin: GeneratorPlugin = {
 					hasAuth: features.hasAuth,
 					hasEntities: features.hasEntities,
 					hasPropertyTests: features.hasPropertyTests,
+					...(schema.npmScope ? { npmScope: schema.npmScope } : {}),
 					projectName: name,
 					propertiesPackage,
 					scenariosPackage,
 				}),
-			generateConfigFiles: () => buildCliConfigFiles(packagePath, name),
+			generateConfigFiles: () => buildCliConfigFiles(packagePath, name, schema.npmScope),
 			generateAppEntry: () =>
 				generateApp({
 					cliName: toKebabCase(name),

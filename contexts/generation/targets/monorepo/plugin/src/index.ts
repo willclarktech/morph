@@ -7,10 +7,10 @@ import type {
 } from "@morphdsl/plugin";
 
 import { getAllInvariants } from "@morphdsl/domain-schema";
+import { getPackageScope, schemaHasTag } from "@morphdsl/plugin";
 import { buildDockerignore } from "@morphdsl/builder-app";
 import { generate as generateDiagrams } from "@morphdsl/generator-diagrams";
 import { generateLicense } from "@morphdsl/generator-license";
-import { schemaHasTag } from "@morphdsl/plugin";
 import { buildRootReadme, description } from "@morphdsl/builder-readme";
 
 const replaceNamePlaceholder = (command: string, name: string): string =>
@@ -197,7 +197,7 @@ export const monorepoRootPlugin: GeneratorPlugin = {
 
 		// Procfile (only if apps exist)
 		if (hasAnyApp(schema)) {
-			const scope = name.toLowerCase();
+			const scope = getPackageScope(schema, name);
 			const processes: string[] = [];
 			if (schemaHasTag(schema, "@api"))
 				processes.push(`web: bun run --filter @${scope}/api start`);

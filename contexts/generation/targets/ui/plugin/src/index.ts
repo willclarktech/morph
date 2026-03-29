@@ -3,6 +3,7 @@ import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 import type { UiConfig } from "@morphdsl/runtime-ui";
 
 import { contextNameToKebab } from "@morphdsl/domain-schema";
+import { getPackageScope } from "@morphdsl/plugin";
 import { buildDockerfile, generateAppFiles } from "@morphdsl/builder-app";
 import { generate as generateEnvironmentExample } from "@morphdsl/generator-env";
 import {
@@ -99,7 +100,7 @@ export const uiPlugin: GeneratorPlugin = {
 	generate(ctx: PluginContext): GeneratedFile[] {
 		const { schema, name, config } = ctx;
 		const packagePath = `apps/ui`;
-		const scope = name.toLowerCase();
+		const scope = getPackageScope(schema, name);
 
 		const primaryContext = ctx.features.primaryContext ?? "app";
 		const contextKebab = contextNameToKebab(primaryContext);

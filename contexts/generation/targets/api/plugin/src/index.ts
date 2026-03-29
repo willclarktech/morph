@@ -2,6 +2,7 @@ import type { GeneratedFile } from "@morphdsl/domain-schema";
 import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
 import { contextNameToKebab } from "@morphdsl/domain-schema";
+import { getPackageScope } from "@morphdsl/plugin";
 import { generate as generateApiAppEntry } from "@morphdsl/runtime-api";
 import {
 	buildConfigFiles,
@@ -36,7 +37,7 @@ export const apiPlugin: GeneratorPlugin = {
 	generate(ctx: PluginContext): GeneratedFile[] {
 		const { schema, name } = ctx;
 		const packagePath = `apps/api`;
-		const scope = name.toLowerCase();
+		const scope = getPackageScope(schema, name);
 
 		const primaryContext = ctx.features.primaryContext ?? "app";
 		const contextKebab = contextNameToKebab(primaryContext);
@@ -55,8 +56,8 @@ export const apiPlugin: GeneratorPlugin = {
 			name,
 			packagePath,
 			generatePackageJson: () =>
-				generateApiPackageJson(name, corePackage, dslPackage, hasPasswordAuth, encodingFormats),
-			generateConfigFiles: () => buildConfigFiles(packagePath, name),
+				generateApiPackageJson(name, corePackage, dslPackage, hasPasswordAuth, encodingFormats, schema.npmScope),
+			generateConfigFiles: () => buildConfigFiles(packagePath, name, schema.npmScope),
 			generateAppEntry: () =>
 				generateApiAppEntry({
 					apiName: name,

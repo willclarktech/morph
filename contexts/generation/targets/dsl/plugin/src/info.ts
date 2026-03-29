@@ -23,7 +23,8 @@ export interface ContextPackageInfo {
 	readonly packageName: string;
 }
 
-export const toPackageScope = (name: string): string => name.toLowerCase();
+export const toPackageScope = (name: string, npmScope?: string): string =>
+	npmScope ?? name.toLowerCase();
 
 export const getContextPackageInfo = (
 	ctx: PluginContext,
@@ -31,7 +32,7 @@ export const getContextPackageInfo = (
 ): ContextPackageInfo => {
 	const { schema, name } = ctx;
 	const kebabName = contextNameToKebab(contextName);
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, schema.npmScope);
 
 	const errors = getContextErrorsForContext(schema, contextName);
 	const ports = getPortsForContext(schema, contextName);

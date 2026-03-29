@@ -35,11 +35,11 @@ const generateContextImplsPackage = (
 	const allNames = [...operationNames, ...functionNames];
 
 	files.push({
-		content: generateImplsPackageJson(name, info),
+		content: generateImplsPackageJson(name, info, schema.npmScope),
 		filename: `${packagePath}/package.json`,
 	});
 
-	files.push(...buildConfigFiles(packagePath, name));
+	files.push(...buildConfigFiles(packagePath, name, schema.npmScope));
 
 	for (const handlerName of allNames) {
 		files.push({

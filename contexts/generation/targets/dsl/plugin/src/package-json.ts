@@ -8,8 +8,9 @@ export const generateContextDslPackageJson = (
 	info: ContextPackageInfo,
 	dependencyPackages: readonly string[],
 	isPrimary: boolean,
+	npmScope?: string,
 ): string => {
-	const scope = toPackageScope(projectName);
+	const scope = toPackageScope(projectName, npmScope);
 	const dependencies: Record<string, string> = {
 		...(isPrimary ? { "@morphdsl/domain-schema": "workspace:*" } : {}),
 		effect: "^3.19.13",
@@ -58,6 +59,7 @@ export const generateContextDslPackageJson = (
 export const generateScenariosPackageJson = (
 	name: string,
 	dslPackages: readonly string[],
+	npmScope?: string,
 ): string => {
 	const dependencies: Record<string, string> = {
 		"@morphdsl/scenario": "workspace:*",
@@ -71,12 +73,14 @@ export const generateScenariosPackageJson = (
 		packageSuffix: "scenarios",
 		dependencies,
 		exports: { ".": "./src/index.ts" },
+		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 };
 
 export const generatePropertiesPackageJson = (
 	name: string,
 	dslPackages: readonly string[],
+	npmScope?: string,
 ): string => {
 	const dependencies: Record<string, string> = {
 		"@morphdsl/property": "workspace:*",
@@ -91,5 +95,6 @@ export const generatePropertiesPackageJson = (
 		dependencies,
 		exports: { ".": "./src/index.ts" },
 		includeFastCheck: "dependencies",
+		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 };

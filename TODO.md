@@ -25,7 +25,7 @@
 | First npm publish via changesets | S | Run `bunx changeset` + `bunx changeset version` + `bunx changeset publish`. First version 0.1.0 |
 | VSCode Marketplace publisher setup | S | Create publisher at marketplace.visualstudio.com, set PAT, add icon |
 | Register on mcp.so | S | Submit @morphdsl/mcp package for discovery |
-| Thread schema metadata through all `buildPackageJson` callers | M | Core/DSL/CLI/etc plugins should pass `metadata` from schema context |
+| ~~Thread schema metadata through all `buildPackageJson` callers~~ | ~~M~~ | ~~Done: npmScope flows from schema.morph through all generators natively~~ |
 | Project website (GitHub Pages) | M | Static site with docs, getting started guide, DSL playground. Deploy from `docs/` or a dedicated `site/` directory via GitHub Pages |
 
 ## Post-MVP

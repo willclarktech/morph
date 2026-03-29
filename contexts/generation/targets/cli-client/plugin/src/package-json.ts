@@ -6,6 +6,7 @@ export const generateClientCliPackageJson = (
 	corePackage: string,
 	scenariosPackage: string,
 	hasAuth: boolean,
+	npmScope?: string,
 ): string =>
 	buildPackageJson({
 		projectName: name,
@@ -23,4 +24,5 @@ export const generateClientCliPackageJson = (
 		includeEffect: true,
 		includeStartScript: true,
 		includeTestScript: true,
+		...(npmScope ? { metadata: { npmScope } } : {}),
 	});

@@ -13,8 +13,8 @@
 		"package": "bun run build && bunx @vscode/vsce package --no-dependencies --skip-license"
 	},
 	"dependencies": {
-		"@morphdsl/schema-dsl-core": "workspace:*",
 		"@morphdsl/generator-vscode": "workspace:*",
+		"@morphdsl/schema-dsl-core": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {

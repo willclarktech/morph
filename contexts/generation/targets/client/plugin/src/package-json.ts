@@ -4,7 +4,9 @@ export const generateClientPackageJson = (
 	name: string,
 	dslPackages: readonly string[],
 	corePackage: string,
+	npmScope?: string,
 ): string => {
+	const scope = npmScope ?? name;
 	const dslDependencies: Record<string, string> = {};
 	for (const pkg of dslPackages) {
 		dslDependencies[pkg] = "workspace:*";
@@ -19,10 +21,11 @@ export const generateClientPackageJson = (
 		devDependencies: {
 			"@morphdsl/scenario-runner-client": "workspace:*",
 			[corePackage]: "workspace:*",
-			[`@${name}/scenarios`]: "workspace:*",
+			[`@${scope}/scenarios`]: "workspace:*",
 		},
 		exports: { ".": "./src/index.ts" },
 		includeEffect: true,
 		includeTestScript: true,
+		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 };

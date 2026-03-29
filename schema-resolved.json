@@ -700,5 +700,6 @@
 			}
 		}
 	},
-	"name": "Morph"
+	"name": "Morph",
+	"npmScope": "morphdsl"
 }

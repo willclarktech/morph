@@ -16,15 +16,16 @@ export interface ContextImplsInfo {
 	readonly dslPackage: string;
 }
 
-const toPackageScope = (name: string): string => name.toLowerCase();
+const toPackageScope = (name: string, npmScope?: string): string =>
+	npmScope ?? name.toLowerCase();
 
 export const getContextImplsInfo = (
 	ctx: PluginContext,
 	contextName: string,
 ): ContextImplsInfo => {
-	const { name } = ctx;
+	const { schema, name } = ctx;
 	const kebabName = contextNameToKebab(contextName);
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, schema.npmScope);
 
 	return {
 		contextName,

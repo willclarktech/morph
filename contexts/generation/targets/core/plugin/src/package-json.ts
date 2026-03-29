@@ -12,8 +12,9 @@ export const generateCorePackageJson = (
 	eventStoreBackends: readonly string[],
 	hasPropertyTests: boolean,
 	hasScenarioTests: boolean,
+	npmScope?: string,
 ): string => {
-	const scope = toPackageScope(projectName);
+	const scope = toPackageScope(projectName, npmScope);
 	const scenariosPackage = `@${scope}/scenarios`;
 	const propertiesPackage = `@${scope}/properties`;
 	const hasAnyTests = hasPropertyTests || hasScenarioTests;
@@ -107,5 +108,6 @@ export const generateCorePackageJson = (
 		includeEffect: true,
 		includeFastCheck: needsFastCheck ? "devDependencies" : undefined,
 		includeTestScript: hasAnyTests,
+		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 };

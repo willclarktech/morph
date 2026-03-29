@@ -17,6 +17,7 @@ export interface CliPackageJsonOptions {
 	readonly hasAuth: boolean;
 	readonly hasEntities: boolean;
 	readonly hasPropertyTests: boolean;
+	readonly npmScope?: string;
 }
 
 export const generateCliPackageJson = (options: CliPackageJsonOptions): string => {
@@ -29,6 +30,7 @@ export const generateCliPackageJson = (options: CliPackageJsonOptions): string =
 		hasAuth,
 		hasEntities,
 		hasPropertyTests,
+		npmScope,
 	} = options;
 
 	// Codec dependencies based on encoding formats
@@ -99,5 +101,6 @@ export const generateCliPackageJson = (options: CliPackageJsonOptions): string =
 				: undefined,
 		includeTestScript: true,
 		includeStartScript: true,
+		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 };

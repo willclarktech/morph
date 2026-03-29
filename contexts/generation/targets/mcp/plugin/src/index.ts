@@ -6,6 +6,7 @@ import {
 	getContextsWithTag,
 	schemaHasAuthRequirement,
 } from "@morphdsl/domain-schema";
+import { getPackageScope } from "@morphdsl/plugin";
 import {
 	buildConfigFiles,
 	buildDockerfile,
@@ -117,7 +118,7 @@ export const mcpPlugin: GeneratorPlugin = {
 	generate(ctx: PluginContext): GeneratedFile[] {
 		const { schema, name } = ctx;
 		const packagePath = `apps/mcp`;
-		const scope = name.toLowerCase();
+		const scope = getPackageScope(schema, name);
 
 		// Find all contexts with @mcp-tagged operations
 		const mcpContexts = getContextsWithTag(schema, "@mcp");
@@ -160,7 +161,7 @@ export const mcpPlugin: GeneratorPlugin = {
 					name,
 					scenariosPackage,
 				}),
-			generateConfigFiles: () => buildConfigFiles(packagePath, name),
+			generateConfigFiles: () => buildConfigFiles(packagePath, name, schema.npmScope),
 			generateAppEntry: () =>
 				generateMcpAppEntry({
 					contexts,

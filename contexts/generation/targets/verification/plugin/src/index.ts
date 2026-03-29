@@ -6,13 +6,14 @@ import { generate } from "@morphdsl/generator-verification";
 
 const PACKAGE_PATH = "tests/verification";
 
-const generateVerificationPackageJson = (name: string): string =>
+const generateVerificationPackageJson = (name: string, npmScope?: string): string =>
 	buildPackageJson({
 		projectName: name,
 		packageSuffix: "verification",
 		scripts: {
 			verify: "bun run src/verify.ts",
 		},
+		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 
 export const verificationPlugin: GeneratorPlugin = {
@@ -32,10 +33,10 @@ export const verificationPlugin: GeneratorPlugin = {
 
 		return [
 			{
-				content: generateVerificationPackageJson(ctx.name),
+				content: generateVerificationPackageJson(ctx.name, ctx.schema.npmScope),
 				filename: `${PACKAGE_PATH}/package.json`,
 			},
-			...buildConfigFiles(PACKAGE_PATH, ctx.name),
+			...buildConfigFiles(PACKAGE_PATH, ctx.name, ctx.schema.npmScope),
 			...coreFiles,
 		];
 	},

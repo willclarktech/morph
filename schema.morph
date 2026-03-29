@@ -1,4 +1,5 @@
 domain Morph
+	npmScope "morphdsl"
 
 context generation "Code generation from domain schemas" {
 

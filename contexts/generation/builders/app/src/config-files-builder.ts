@@ -1,7 +1,6 @@
 import type { GeneratedFile } from "@morphdsl/domain-schema";
 
-/** Convert project name to lowercase for package scope */
-const toPackageScope = (name: string): string => name.toLowerCase();
+import { toPackageScope } from "./package-json-builder";
 
 /**
  * Generate standard ESLint and TypeScript config files for a package.
@@ -9,8 +8,9 @@ const toPackageScope = (name: string): string => name.toLowerCase();
 export const buildConfigFiles = (
 	packagePath: string,
 	name: string,
+	npmScope?: string,
 ): GeneratedFile[] => {
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, npmScope);
 	return [
 		{
 			content: `import { configs } from "@${scope}/eslint-config";
@@ -40,8 +40,9 @@ export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated];
 export const buildCliConfigFiles = (
 	packagePath: string,
 	name: string,
+	npmScope?: string,
 ): GeneratedFile[] => {
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, npmScope);
 	return [
 		{
 			content: `import { configs } from "@${scope}/eslint-config";

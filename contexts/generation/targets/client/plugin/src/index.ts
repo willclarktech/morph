@@ -5,6 +5,7 @@ import {
 	contextNameToKebab,
 	getContextsWithTag,
 } from "@morphdsl/domain-schema";
+import { getPackageScope } from "@morphdsl/plugin";
 import { buildConfigFiles } from "@morphdsl/builder-app";
 import { generate as generateClient } from "@morphdsl/runtime-client";
 
@@ -28,7 +29,7 @@ export const clientPlugin: GeneratorPlugin = {
 	generate(ctx: PluginContext): GeneratedFile[] {
 		const { schema, name } = ctx;
 		const packagePath = `libs/client`;
-		const scope = name.toLowerCase();
+		const scope = getPackageScope(schema, name);
 
 		const apiContexts = getContextsWithTag(schema, "@api");
 
@@ -46,11 +47,11 @@ export const clientPlugin: GeneratorPlugin = {
 		const files: GeneratedFile[] = [];
 
 		files.push({
-			content: generateClientPackageJson(name, dslPackages, corePackage),
+			content: generateClientPackageJson(name, dslPackages, corePackage, schema.npmScope),
 			filename: `${packagePath}/package.json`,
 		});
 
-		files.push(...buildConfigFiles(packagePath, name));
+		files.push(...buildConfigFiles(packagePath, name, schema.npmScope));
 
 		const clientCode = generateClient(schema, { appName: name, scope });
 		if (clientCode) {

@@ -39,7 +39,7 @@ const generateContextDslPackage = (
 	isPrimary: boolean,
 ): GeneratedFile[] => {
 	const { schema, name } = ctx;
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, schema.npmScope);
 	const info = getContextPackageInfo(ctx, contextName);
 	const packagePath = `contexts/${info.kebabName}/dsl`;
 	const files: GeneratedFile[] = [];
@@ -50,11 +50,11 @@ const generateContextDslPackage = (
 	);
 
 	files.push({
-		content: generateContextDslPackageJson(name, info, depPackages, isPrimary),
+		content: generateContextDslPackageJson(name, info, depPackages, isPrimary, schema.npmScope),
 		filename: `${packagePath}/package.json`,
 	});
 
-	files.push(...buildConfigFiles(packagePath, name));
+	files.push(...buildConfigFiles(packagePath, name, schema.npmScope));
 
 	if (info.hasTypes) {
 		const schemasContent = generateSchemas(schema, { contextName });
@@ -128,7 +128,7 @@ const generateContextDslPackage = (
 
 const generateScenariosPackage = (ctx: PluginContext): GeneratedFile[] => {
 	const { schema, name } = ctx;
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, schema.npmScope);
 	const packagePath = `tests/scenarios`;
 
 	const contextNames = Object.keys(schema.contexts);
@@ -143,14 +143,14 @@ const generateScenariosPackage = (ctx: PluginContext): GeneratedFile[] => {
 		name,
 		packagePath,
 		generatePackageJson: () =>
-			generateScenariosPackageJson(name, [primaryDslPackage]),
-		generateConfigFiles: () => buildConfigFiles(packagePath, name),
+			generateScenariosPackageJson(name, [primaryDslPackage], schema.npmScope),
+		generateConfigFiles: () => buildConfigFiles(packagePath, name, schema.npmScope),
 	});
 };
 
 const generatePropertiesPackage = (ctx: PluginContext): GeneratedFile[] => {
 	const { schema, name } = ctx;
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, schema.npmScope);
 	const packagePath = `tests/properties`;
 
 	const dslPackages = Object.keys(schema.contexts).map(
@@ -164,8 +164,8 @@ const generatePropertiesPackage = (ctx: PluginContext): GeneratedFile[] => {
 		name,
 		packagePath,
 		generatePackageJson: () =>
-			generatePropertiesPackageJson(name, [primaryDslPackage]),
-		generateConfigFiles: () => buildConfigFiles(packagePath, name),
+			generatePropertiesPackageJson(name, [primaryDslPackage], schema.npmScope),
+		generateConfigFiles: () => buildConfigFiles(packagePath, name, schema.npmScope),
 	});
 };
 
@@ -182,7 +182,7 @@ export const dslPlugin: GeneratorPlugin = {
 
 	generate(ctx: PluginContext): GeneratedFile[] {
 		const { schema, name } = ctx;
-		const scope = toPackageScope(name);
+		const scope = toPackageScope(name, schema.npmScope);
 		const files: GeneratedFile[] = [];
 		const contextNames = Object.keys(schema.contexts);
 

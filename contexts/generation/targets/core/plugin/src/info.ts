@@ -29,7 +29,8 @@ export interface ContextCoreInfo {
 	readonly packageName: string;
 }
 
-export const toPackageScope = (name: string): string => name.toLowerCase();
+export const toPackageScope = (name: string, npmScope?: string): string =>
+	npmScope ?? name.toLowerCase();
 
 export const getContextCoreInfo = (
 	ctx: PluginContext,
@@ -37,7 +38,7 @@ export const getContextCoreInfo = (
 ): ContextCoreInfo => {
 	const { schema, name } = ctx;
 	const kebabName = contextNameToKebab(contextName);
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, schema.npmScope);
 
 	const ops = getOperationsForContext(schema, contextName);
 	const functions = getFunctionsForContext(schema, contextName);
@@ -72,7 +73,7 @@ export const generateCoreReadme = (
 	const hasEntities = getEntitiesForContext(schema, contextName).length > 0;
 	const firstOp = allOps[0]?.name ?? allFuncs[0]?.name ?? "operationName";
 
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, schema.npmScope);
 	const packageSuffix = contextNameToKebab(contextName);
 	const packageName = `@${scope}/${packageSuffix}-core`;
 

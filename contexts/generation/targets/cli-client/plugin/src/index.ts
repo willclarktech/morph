@@ -2,6 +2,7 @@ import type { GeneratedFile } from "@morphdsl/domain-schema";
 import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
 import { contextNameToKebab } from "@morphdsl/domain-schema";
+import { getPackageScope } from "@morphdsl/plugin";
 import { buildCliConfigFiles } from "@morphdsl/builder-app";
 import { generate as generateClientCli } from "@morphdsl/runtime-cli-client";
 
@@ -39,7 +40,7 @@ export const cliClientPlugin: GeneratorPlugin = {
 	generate(ctx: PluginContext): GeneratedFile[] {
 		const { schema, name } = ctx;
 		const packagePath = `apps/cli-client`;
-		const scope = name.toLowerCase();
+		const scope = getPackageScope(schema, name);
 
 		const primaryContext = ctx.features.primaryContext ?? "app";
 		const contextKebab = contextNameToKebab(primaryContext);
@@ -59,11 +60,12 @@ export const cliClientPlugin: GeneratorPlugin = {
 				corePackage,
 				scenariosPackage,
 				hasAuth,
+				schema.npmScope,
 			),
 			filename: `${packagePath}/package.json`,
 		});
 
-		files.push(...buildCliConfigFiles(packagePath, name));
+		files.push(...buildCliConfigFiles(packagePath, name, schema.npmScope));
 
 		const cliCode = generateClientCli({
 			clientPackage,

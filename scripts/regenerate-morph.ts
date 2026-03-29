@@ -326,27 +326,7 @@ const getGeneratedPackageDirectories = (): string[] => {
 /**
  * Fix package.json files to use correct scopes and configs.
  */
-const fixPackageJsonFiles = (): void => {
-	console.info("Fixing package.json files...");
-
-	const packageDirectories = getGeneratedPackageDirectories();
-
-	for (const dir of packageDirectories) {
-		const packagePath = path.join(MORPH_DIR, dir, "package.json");
-		let content: string;
-		try {
-			content = readFileSync(packagePath, "utf8");
-		} catch {
-			continue;
-		}
-
-		// Fix package name references (generators produce @morph/ from toPackageScope("Morph"))
-		content = content.replaceAll("@Morph/", "@morphdsl/");
-		content = content.replaceAll("@morph/", "@morphdsl/");
-
-		writeFileSync(packagePath, content);
-	}
-};
+// Package scope fixup removed: npmScope field in schema.morph handles this natively.
 
 /**
  * Fix tsconfig.json files to use relative paths to morph config.
@@ -880,30 +860,13 @@ const addCoreFixtureExports = (): void => {
 };
 
 /**
- * Fix all @Morph/ references in generated TypeScript files.
+ * Fix schema.json → schema-resolved.json imports in generated TypeScript files.
+ * (Scope fixup removed: npmScope in schema.morph handles @morph/ → @morphdsl/ natively.)
  */
 const fixImports = (): void => {
-	console.info("Fixing imports in TypeScript files...");
+	console.info("Fixing schema imports in TypeScript files...");
 
 	const packageDirectories = getGeneratedPackageDirectories();
-
-	// Fix root-level config files (eslint.config.ts) in each package
-	for (const dir of packageDirectories) {
-		const eslintPath = path.join(MORPH_DIR, dir, "eslint.config.ts");
-		let content: string;
-		try {
-			content = readFileSync(eslintPath, "utf8");
-		} catch {
-			continue;
-		}
-		if (content.includes("@Morph/") || content.includes("@morph/")) {
-			content = content.replaceAll("@Morph/", "@morphdsl/");
-			content = content.replaceAll("@morph/", "@morphdsl/");
-			writeFileSync(eslintPath, content);
-		}
-	}
-
-	// Fix source files
 	const directories = packageDirectories.map((dir) => `${dir}/src`);
 
 	for (const dir of directories) {
@@ -919,14 +882,6 @@ const fixImports = (): void => {
 				} else if (entry.name.endsWith(".ts")) {
 					let content = readFileSync(entryPath, "utf8");
 					let changed = false;
-					if (content.includes("@Morph/")) {
-						content = content.replaceAll("@Morph/", "@morphdsl/");
-						changed = true;
-					}
-					if (content.includes("@morph/")) {
-						content = content.replaceAll("@morph/", "@morphdsl/");
-						changed = true;
-					}
 					// Fix schema import path for morph (uses schema-resolved.json with $ref resolved)
 					// contexts packages use ../../../../schema.json (4 levels), apps/tests use ../../../ (3 levels)
 					if (content.includes("../../../../schema.json")) {
@@ -1020,10 +975,7 @@ const main = async (): Promise<void> => {
 	// 2c. Copy scenario fixtures over generated scaffold
 	copyScenariosFixtures();
 
-	// 3. Fix package.json files
-	fixPackageJsonFiles();
-
-	// 4. Fix tsconfig.json files
+	// 3. Fix tsconfig.json files
 	fixTsconfigFiles();
 
 	// 4b. Fix VSCode app

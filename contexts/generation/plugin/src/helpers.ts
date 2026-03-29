@@ -5,3 +5,6 @@ import { getAllFunctions, getAllOperations } from "@morphdsl/domain-schema";
 export const schemaHasTag = (schema: DomainSchema, tag: string): boolean =>
 	getAllOperations(schema).some((entry) => entry.def.tags.includes(tag)) ||
 	getAllFunctions(schema).some((entry) => entry.def.tags.includes(tag));
+
+export const getPackageScope = (schema: DomainSchema, name: string): string =>
+	schema.npmScope ?? name.toLowerCase();

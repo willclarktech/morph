@@ -3,6 +3,7 @@ import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 import type { CommandOp } from "@morphdsl/generator-vscode";
 
 import { getContextsWithTag } from "@morphdsl/domain-schema";
+import { getPackageScope } from "@morphdsl/plugin";
 import { buildConfigFiles } from "@morphdsl/builder-app";
 import {
 	generate as generateVsCodeAppEntry,
@@ -67,8 +68,7 @@ esbuild.config.ts
 .env*
 `;
 
-const generateTsConfig = (name: string): string => {
-	const scope = name.toLowerCase();
+const generateTsConfig = (scope: string): string => {
 	return JSON.stringify(
 		{
 			extends: `@${scope}/tsconfig/base.json`,
@@ -109,7 +109,7 @@ export const vsCodePlugin: GeneratorPlugin = {
 	generate(ctx: PluginContext): GeneratedFile[] {
 		const { schema, name } = ctx;
 		const packagePath = "apps/vscode";
-		const scope = name.toLowerCase();
+		const scope = getPackageScope(schema, name);
 
 		const vsCodeContexts = getContextsWithTag(schema, "@vscode");
 
@@ -143,7 +143,7 @@ export const vsCodePlugin: GeneratorPlugin = {
 			filename: `${packagePath}/package.json`,
 		});
 
-		const configFiles = buildConfigFiles(packagePath, name);
+		const configFiles = buildConfigFiles(packagePath, name, schema.npmScope);
 		for (const f of configFiles) {
 			if (f.filename.endsWith("eslint.config.ts")) {
 				files.push({
@@ -159,7 +159,7 @@ export const vsCodePlugin: GeneratorPlugin = {
 		}
 
 		files.push({
-			content: generateTsConfig(name),
+			content: generateTsConfig(scope),
 			filename: `${packagePath}/tsconfig.json`,
 		});
 

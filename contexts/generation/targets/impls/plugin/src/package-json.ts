@@ -4,6 +4,7 @@ import { buildPackageJson } from "@morphdsl/builder-app";
 export const generateImplsPackageJson = (
 	projectName: string,
 	info: ContextImplsInfo,
+	npmScope?: string,
 ): string => {
 	return buildPackageJson({
 		projectName,
@@ -14,5 +15,6 @@ export const generateImplsPackageJson = (
 		},
 		exports: { ".": "./src/index.ts" },
 		includeEffect: true,
+		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 };

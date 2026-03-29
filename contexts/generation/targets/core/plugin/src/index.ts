@@ -29,7 +29,7 @@ const generateContextCorePackage = (
 	contextName: string,
 ): GeneratedFile[] => {
 	const { schema, name } = ctx;
-	const scope = toPackageScope(name);
+	const scope = toPackageScope(name, schema.npmScope);
 	const info = getContextCoreInfo(ctx, contextName);
 	const packagePath = `contexts/${info.kebabName}/core`;
 	const dslPackage = `@${scope}/${info.kebabName}-dsl`;
@@ -64,11 +64,12 @@ const generateContextCorePackage = (
 			eventStoreBackends,
 			hasProperties,
 			hasScenarioTests,
+			schema.npmScope,
 		),
 		filename: `${packagePath}/package.json`,
 	});
 
-	files.push(...buildConfigFiles(packagePath, name));
+	files.push(...buildConfigFiles(packagePath, name, schema.npmScope));
 
 	// Create a filtered schema with only this context for generation
 	const filteredSchema = createContextFilteredSchema(schema, contextName);

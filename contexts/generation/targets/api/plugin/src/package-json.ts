@@ -34,6 +34,7 @@ export const generateApiPackageJson = (
 	dslPackage: string,
 	hasPasswordAuth: boolean,
 	encodingFormats: readonly EncodingFormat[] = [],
+	npmScope?: string,
 ): string =>
 	buildPackageJson({
 		projectName: name,
@@ -47,10 +48,11 @@ export const generateApiPackageJson = (
 		devDependencies: {
 			"@morphdsl/scenario-runner-api": "workspace:*",
 			[dslPackage]: "workspace:*",
-			[`@${name.toLowerCase()}/scenarios`]: "workspace:*",
+			[`@${npmScope ?? name.toLowerCase()}/scenarios`]: "workspace:*",
 		},
 		includeEffect: true,
 		includeTestScript: true,
 		includeStartScript: true,
 		includeDevScript: true,
+		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
