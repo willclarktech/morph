@@ -559,8 +559,15 @@ export interface ContextAst {
 // Domain (root)
 // =============================================================================
 
+export interface DomainMetadataEntryAst {
+	readonly key: string;
+	readonly value: string;
+	readonly range: SourceRange;
+}
+
 export interface DomainAst {
 	readonly name: string;
+	readonly metadata: readonly DomainMetadataEntryAst[];
 	readonly extensions?: ExtensionsAst;
 	readonly profiles?: ProfilesAst;
 	readonly contexts: readonly ContextAst[];

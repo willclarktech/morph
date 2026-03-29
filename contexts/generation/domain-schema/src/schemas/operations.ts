@@ -286,13 +286,18 @@ export type ContextEntry = S.Schema.Type<typeof ContextEntrySchema>;
  */
 export const DomainSchemaSchema = S.Struct({
 	$schema: S.optionalWith(S.String, { exact: true }),
+	author: S.optionalWith(S.String, { exact: true }),
 	contexts: S.Record({ key: S.String, value: ContextDefSchema }),
+	description: S.optionalWith(S.String, { exact: true }),
 	extensions: S.optionalWith(ExtensionsSchema, { exact: true }),
+	license: S.optionalWith(S.String, { exact: true }),
 	name: S.String,
+	npmScope: S.optionalWith(S.String, { exact: true }),
 	profiles: S.optionalWith(
 		S.Record({ key: S.String, value: S.Array(S.String) }),
 		{ exact: true },
 	),
+	repository: S.optionalWith(S.String, { exact: true }),
 });
 
 export type DomainSchema = S.Schema.Type<typeof DomainSchemaSchema>;
@@ -303,13 +308,18 @@ export type DomainSchema = S.Schema.Type<typeof DomainSchemaSchema>;
  */
 export const UnresolvedDomainSchemaSchema = S.Struct({
 	$schema: S.optionalWith(S.String, { exact: true }),
+	author: S.optionalWith(S.String, { exact: true }),
 	contexts: S.Record({ key: S.String, value: ContextEntrySchema }),
+	description: S.optionalWith(S.String, { exact: true }),
 	extensions: S.optionalWith(ExtensionsSchema, { exact: true }),
+	license: S.optionalWith(S.String, { exact: true }),
 	name: S.String,
+	npmScope: S.optionalWith(S.String, { exact: true }),
 	profiles: S.optionalWith(
 		S.Record({ key: S.String, value: S.Array(S.String) }),
 		{ exact: true },
 	),
+	repository: S.optionalWith(S.String, { exact: true }),
 });
 
 export type UnresolvedDomainSchema = S.Schema.Type<

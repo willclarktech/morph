@@ -15,6 +15,10 @@ export const TemplateSchemaHandler = Context.GenericTag<TemplateSchemaHandler>(
 
 const TEMPLATE = `\
 domain MyApp
+	license "MIT"
+	description "A sample application"
+	author "Your Name"
+	repository "https://github.com/your-org/my-app"
 
 extensions {
 	storage [memory, sqlite, redis] default memory

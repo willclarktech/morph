@@ -16,6 +16,7 @@ import type {
 	ContractAst,
 	ContractBindingAst,
 	DomainAst,
+	DomainMetadataEntryAst,
 	EmittedEventAst,
 	EntityAst,
 	ErrorRefAst,
@@ -70,6 +71,9 @@ class MorphCstVisitor extends BaseCstVisitor {
 	domain(context: Record<string, (CstNode | IToken)[]>): DomainAst {
 		const nameToken = context["IdentifierName"]![0] as IToken;
 		const domainToken = context["Domain"]![0] as IToken;
+		const metadata: DomainMetadataEntryAst[] = (
+			context["domainMetadataEntry"] ?? []
+		).map((entry) => this.visit(entry as CstNode));
 		const extensions = context["extensionsBlock"]
 			? this.visit(context["extensionsBlock"][0] as CstNode)
 			: undefined;
@@ -93,10 +97,23 @@ class MorphCstVisitor extends BaseCstVisitor {
 
 		return {
 			name: tokenImage(nameToken),
+			metadata,
 			extensions,
 			...(profiles ? { profiles } : {}),
 			contexts,
 			range: rangeFromTokens(domainToken, lastToken),
+		};
+	}
+
+	domainMetadataEntry(
+		context: Record<string, (CstNode | IToken)[]>,
+	): DomainMetadataEntryAst {
+		const keyToken = context["IdentifierName"]![0] as IToken;
+		const valueToken = context["StringLiteral"]![0] as IToken;
+		return {
+			key: tokenImage(keyToken),
+			value: stripQuotes(valueToken),
+			range: rangeFromTokens(keyToken, valueToken),
 		};
 	}
 

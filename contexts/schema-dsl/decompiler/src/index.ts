@@ -31,9 +31,25 @@ import type {
 // Top-level
 // =============================================================================
 
+const METADATA_KEYS = [
+	"license",
+	"author",
+	"description",
+	"repository",
+	"npmScope",
+] as const;
+
 export const decompile = (schema: DomainSchema): string => {
 	const lines: string[] = [];
 	lines.push(`domain ${schema.name}`);
+
+	for (const key of METADATA_KEYS) {
+		const value = schema[key];
+		if (value !== undefined) {
+			const escaped = value.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
+			lines.push(`\t${key} "${escaped}"`);
+		}
+	}
 
 	if (schema.extensions) {
 		lines.push("");

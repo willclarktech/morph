@@ -860,6 +860,19 @@ export const compile = (ast: DomainAst): CompileResult => {
 		name: ast.name,
 	};
 
+	const METADATA_KEYS = new Set([
+		"license",
+		"author",
+		"description",
+		"repository",
+		"npmScope",
+	]);
+	for (const entry of ast.metadata) {
+		if (METADATA_KEYS.has(entry.key)) {
+			schema[entry.key] = entry.value;
+		}
+	}
+
 	if (ast.extensions) {
 		schema["extensions"] = compileExtensions(ast.extensions.entries);
 	}

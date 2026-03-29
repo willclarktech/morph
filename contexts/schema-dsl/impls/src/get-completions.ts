@@ -101,6 +101,31 @@ const TOP_LEVEL_KEYWORDS: readonly DslCompletion[] = [
 		kind: "keyword",
 		detail: "Define extensions (storage, auth, etc.)",
 	},
+	{
+		label: "license",
+		kind: "keyword",
+		detail: 'Package license (e.g. "MIT")',
+	},
+	{
+		label: "author",
+		kind: "keyword",
+		detail: "Package author name",
+	},
+	{
+		label: "description",
+		kind: "keyword",
+		detail: "Package description",
+	},
+	{
+		label: "repository",
+		kind: "keyword",
+		detail: "Repository URL",
+	},
+	{
+		label: "npmScope",
+		kind: "keyword",
+		detail: "npm scope override (default: lowercased domain name)",
+	},
 ];
 
 const EXTENSION_TYPES: readonly DslCompletion[] = [

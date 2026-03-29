@@ -97,15 +97,26 @@ export class MorphParser extends CstParser {
 	domain = this.RULE("domain", () => {
 		this.CONSUME(Domain);
 		this.CONSUME(IdentifierName);
+		this.MANY({
+			GATE: () => this.LA(2).tokenType === StringLiteral,
+			DEF: () => {
+				this.SUBRULE(this.domainMetadataEntry);
+			},
+		});
 		this.OPTION(() => {
 			this.SUBRULE(this.extensionsBlock);
 		});
 		this.OPTION2(() => {
 			this.SUBRULE(this.profilesBlock);
 		});
-		this.MANY(() => {
+		this.MANY2(() => {
 			this.SUBRULE(this.contextBlock);
 		});
+	});
+
+	domainMetadataEntry = this.RULE("domainMetadataEntry", () => {
+		this.CONSUME(IdentifierName);
+		this.CONSUME(StringLiteral);
 	});
 
 	// =========================================================================
