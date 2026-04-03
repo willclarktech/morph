@@ -1,4 +1,4 @@
-# Contexts Structure
+# Contexts
 
 This document explains the context-centric package organization used in morph and generated projects.
 
