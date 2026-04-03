@@ -17,8 +17,8 @@
 - [Transformation Domains](concepts/transformation-domains.md) — Non-CRUD, transformation-centric schemas
 - [Modeling by Example](concepts/modeling-by-example.md) — Example-driven domain modeling
 - [Features and Bugs](concepts/features-and-bugs.md) — How morph defines features and bugs via DSL, invariants, and examples
-- [Testing Philosophy](testing/testing-philosophy.md) — Scenarios as algebraic laws
-- [Formal Verification](testing/formal-verification.md) — Formal verification of domain invariants
+- [Testing Philosophy](concepts/testing-philosophy.md) — Scenarios as algebraic laws
+- [Formal Verification](concepts/formal-verification.md) — SMT-LIB2 invariant verification
 
 ## Architecture
 
@@ -26,7 +26,6 @@
 - [Contexts Structure](architecture/contexts-structure.md) — Context-centric package organization
 - [Extensions](architecture/extensions.md) — Schema extensions for storage, auth, and infrastructure
 - [12-Factor](architecture/12-factor.md) — How generated apps follow 12-factor methodology
-- [Design Decisions](design/design-decisions.md) — Settled decisions with rationale
 - [Authorization](design/authorization.md) — Authorization as domain invariants
 - [Execution Context](design/context.md) — How auth and request metadata flow through generated apps
 - [Schema Model](design/schema-model.md) — Schema model design
@@ -36,5 +35,4 @@
 
 ## Other
 
-- [Artifacts](artifacts/) — Discovery artifacts, feature specifications, and project history
 - [Images](images/) — Screenshots and diagrams

@@ -134,7 +134,7 @@ Shared:
 - **config/** - ESLint and TypeScript configs
 - `TODO.md` - Backlog at root
 - `docs/architecture/overview.md` - Monorepo structure
-- `docs/` - Morph documentation (DSL reference, domain schema, architecture, extensions, testing philosophy, 12-factor, design decisions)
+- `docs/` - Morph documentation (DSL reference, domain schema, architecture, extensions, testing philosophy, 12-factor, formal verification)
 
 ## Scripts
 

@@ -87,4 +87,4 @@ Recommended reading order:
 
 - [Source Tour](../../docs/architecture/tour.md) — guided walkthrough from schema to generated output
 - [Architecture](../../docs/architecture/overview.md) — monorepo structure and workspace layout
-- [Testing Philosophy](../../docs/testing/testing-philosophy.md) — how scenarios verify algebraic laws
+- [Testing Philosophy](../../docs/concepts/testing-philosophy.md) — how scenarios verify algebraic laws

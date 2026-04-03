@@ -206,4 +206,4 @@ Reference docs:
 
 - **[DSL Reference](./dsl-reference.md)** — Full `.morph` syntax (invariants, events, relationships, generics)
 - **[Extensions](../architecture/extensions.md)** — Configure auth, event stores, i18n
-- **[Testing Philosophy](../testing/testing-philosophy.md)** — Scenarios as algebraic laws
+- **[Testing Philosophy](../concepts/testing-philosophy.md)** — Scenarios as algebraic laws

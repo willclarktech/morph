@@ -38,10 +38,11 @@ extensions {
   auth [none, jwt, session, apikey, password] default jwt
   eventStore [memory, jsonfile, redis] default memory
   i18n [en, de, fr] base en
+  sse [true, false, auto] default auto
 }
 ```
 
-Each line declares an extension type with available options and a default. The `base` keyword is used for i18n's base language. The `eventsourced` storage backend derives entity state from the event store (see [Domain Events](../concepts/domain-events.md#event-sourcing)).
+Each line declares an extension type with available options and a default. The `base` keyword is used for i18n's base language. The `eventsourced` storage backend derives entity state from the event store (see [Domain Events](../concepts/domain-events.md#event-sourcing)). The `sse` extension enables Server-Sent Events for real-time event streaming to HTTP clients; `auto` (the default) enables SSE only when the schema has commands that emit events and subscribers to handle them.
 
 ## Profiles
 

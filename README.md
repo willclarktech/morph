@@ -217,7 +217,6 @@ No backward compatibility guarantees. Breaking changes happen freely.
 ### Getting Started
 - **[Getting Started](docs/guides/getting-started.md)** — Write a schema, generate a project, run it
 - **[DSL Reference](docs/guides/dsl-reference.md)** — Full `.morph` syntax
-- **[Demo Script](docs/guides/demo-script.md)** — Live demo walkthrough
 
 ### Concepts
 - **[Algebraic Foundations](docs/concepts/algebraic-foundations.md)** — Functorial semantics model
@@ -235,7 +234,6 @@ No backward compatibility guarantees. Breaking changes happen freely.
 - **[12-Factor Conformance](docs/architecture/12-factor.md)** — Generated apps follow 12-factor
 
 ### Design
-- **[Design Decisions](docs/design/design-decisions.md)** — Settled decisions with rationale
 - **[Authorization](docs/design/authorization.md)** — Auth as domain invariants
 - **[Execution Context](docs/design/context.md)** — How context flows
 - **[Schema Model](docs/design/schema-model.md)** — Schema model design
@@ -243,13 +241,8 @@ No backward compatibility guarantees. Breaking changes happen freely.
 - **[Prose Design](docs/design/prose-design.md)** — Human-readable BDD templates
 
 ### Testing & Verification
-- **[Testing Philosophy](docs/testing/testing-philosophy.md)** — Scenarios as algebraic laws
-- **[Formal Verification](docs/testing/formal-verification.md)** — SMT-LIB2 invariant checking
-- **[Manual Test Plan](docs/testing/manual-test-plan.md)** — Verification procedures
-
-### Project History
-- **[Discovery](docs/history/discovery.md)** — Founding document
-- **[Dogfooding Learnings](docs/history/dogfooding-learnings.md)** — Insights from self-hosting
+- **[Testing Philosophy](docs/concepts/testing-philosophy.md)** — Scenarios as algebraic laws
+- **[Formal Verification](docs/concepts/formal-verification.md)** — SMT-LIB2 invariant verification
 
 ## Contributing
 

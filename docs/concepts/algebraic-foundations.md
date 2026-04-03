@@ -242,7 +242,7 @@ The `verification` target generates SMT-LIB2 checks from the same `ConditionExpr
 | Precondition satisfiability | Each operation's preconditions can actually be satisfied (not dead code) |
 | Preservation                | Operations preserve entity invariants: pre ∧ post → invariant            |
 
-The invariant fragment (QF_UFLIA with bounded quantifier macros) is decidable — Z3 terminates with a definitive answer. When verification fails, Z3 produces a concrete counterexample. See [Formal Verification](../testing/formal-verification.md) for the full specification.
+The invariant fragment (QF_UFLIA with bounded quantifier macros) is decidable — Z3 terminates with a definitive answer. When verification fails, Z3 produces a concrete counterexample. See [Formal Verification](./formal-verification.md) for the full specification.
 
 ## Limitations of the Analogy
 
