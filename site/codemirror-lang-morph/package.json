@@ -1,7 +1,14 @@
 {
 	"name": "@morphdsl/codemirror-lang-morph",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph codemirror-lang-morph",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "site/codemirror-lang-morph",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
@@ -10,14 +17,14 @@
 		"build:check": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@morphdsl/schema-dsl-parser": "workspace:*",
-		"@morphdsl/schema-dsl-compiler": "workspace:*",
-		"@morphdsl/schema-dsl-decompiler": "workspace:*",
 		"@codemirror/autocomplete": "^6.18.0",
 		"@codemirror/language": "^6.10.0",
 		"@codemirror/lint": "^6.8.0",
 		"@codemirror/state": "^6.5.0",
-		"@codemirror/view": "^6.35.0"
+		"@codemirror/view": "^6.35.0",
+		"@morphdsl/schema-dsl-compiler": "workspace:*",
+		"@morphdsl/schema-dsl-decompiler": "workspace:*",
+		"@morphdsl/schema-dsl-parser": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/bun": "latest",

@@ -53,6 +53,7 @@ for (const { entry, output } of clientEntries) {
 		target: "browser",
 		minify: true,
 		plugins: [stubServerModules],
+		loader: { ".morph": "text" },
 	});
 	if (!result.success) {
 		console.error(`Failed to bundle ${entry}:`, result.logs);

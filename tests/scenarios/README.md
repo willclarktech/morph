@@ -1,4 +1,4 @@
-# @Morph/scenarios
+# @morph/scenarios
 
 Code generation from domain schemas
 

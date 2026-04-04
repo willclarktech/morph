@@ -53,6 +53,7 @@ await esbuild.build({
 	target: "node18",
 	sourcemap: true,
 	minify: true,
+	loader: { ".morph": "text" },
 });
 
 console.info("Build complete: dist/extension.js");

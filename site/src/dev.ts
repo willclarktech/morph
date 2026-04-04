@@ -52,6 +52,7 @@ const buildClientJs = async (entrypoint: string) => {
 		target: "browser",
 		minify: false,
 		plugins: [stubServerModules],
+		loader: { ".morph": "text" },
 	});
 	if (result.success && result.outputs[0]) {
 		return new Response(await result.outputs[0].text(), {

@@ -1,28 +1,37 @@
 {
 	"name": "@morphdsl/site",
 	"version": "0.0.0",
-	"private": true,
+	"description": "Morph site",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "site",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
 	"type": "module",
 	"scripts": {
-		"dev": "bun --hot src/dev.ts",
 		"build": "bun src/build.ts",
-		"build:check": "tsc -p tsconfig.check.json --noEmit"
+		"build:check": "tsc -p tsconfig.check.json --noEmit",
+		"dev": "bun --hot src/dev.ts"
 	},
 	"dependencies": {
-		"@morphdsl/codemirror-lang-morph": "workspace:*",
-		"@morphdsl/schema-dsl-parser": "workspace:*",
-		"@morphdsl/schema-dsl-compiler": "workspace:*",
-		"@morphdsl/schema-dsl-decompiler": "workspace:*",
-		"@morphdsl/domain-schema": "workspace:*",
-		"@morphdsl/generation-impls": "workspace:*",
-		"effect": "^3.19.13",
 		"@codemirror/autocomplete": "^6.18.0",
 		"@codemirror/lang-javascript": "^6.2.0",
 		"@codemirror/language": "^6.10.0",
 		"@codemirror/lint": "^6.8.0",
 		"@codemirror/state": "^6.5.0",
 		"@codemirror/view": "^6.35.0",
+		"@morphdsl/codemirror-lang-morph": "workspace:*",
+		"@morphdsl/domain-schema": "workspace:*",
+		"@morphdsl/generation-impls": "workspace:*",
+		"@morphdsl/schema-dsl-compiler": "workspace:*",
+		"@morphdsl/schema-dsl-core": "workspace:*",
+		"@morphdsl/schema-dsl-decompiler": "workspace:*",
+		"@morphdsl/schema-dsl-impls": "workspace:*",
+		"@morphdsl/schema-dsl-parser": "workspace:*",
 		"codemirror": "^6.0.0",
+		"effect": "^3.19.13",
 		"markdown-it": "^14.1.0",
 		"mermaid": "^11.4.0"
 	},

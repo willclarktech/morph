@@ -23,6 +23,7 @@ export { GetHoverHandler, GetHoverHandlerLive } from "./get-hover";
 export { GetSymbolsHandler, GetSymbolsHandlerLive } from "./get-symbols";
 export { ParseMorphHandler, ParseMorphHandlerLive } from "./parse-morph";
 export {
+	TEMPLATE_SCHEMA,
 	TemplateSchemaHandler,
 	TemplateSchemaHandlerLive,
 } from "./template-schema";

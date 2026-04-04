@@ -143,6 +143,75 @@ const generateRootReadme = (
 	});
 };
 
+const generateConfigPackages = (scope: string): GeneratedFile[] => [
+	{
+		content: `export { configs, default } from "@morphdsl/eslint-config";\n`,
+		filename: "config/eslint/src/index.ts",
+	},
+	{
+		content: JSON.stringify(
+			{
+				name: `@${scope}/eslint-config`,
+				private: true,
+				type: "module",
+				exports: { ".": "./src/index.ts" },
+				dependencies: { "@morphdsl/eslint-config": "^0.0.0" },
+			},
+			undefined,
+			"\t",
+		) + "\n",
+		filename: "config/eslint/package.json",
+	},
+	{
+		content: JSON.stringify(
+			{
+				$schema: "https://json.schemastore.org/tsconfig",
+				compilerOptions: {
+					lib: ["ESNext"],
+					target: "ESNext",
+					module: "ESNext",
+					moduleResolution: "bundler",
+					moduleDetection: "force",
+					resolveJsonModule: true,
+					allowArbitraryExtensions: true,
+					strict: true,
+					exactOptionalPropertyTypes: true,
+					noImplicitOverride: true,
+					noImplicitReturns: true,
+					noPropertyAccessFromIndexSignature: true,
+					noUncheckedIndexedAccess: true,
+					noUncheckedSideEffectImports: true,
+					forceConsistentCasingInFileNames: true,
+					isolatedModules: true,
+					isolatedDeclarations: false,
+					esModuleInterop: true,
+					skipLibCheck: true,
+					declaration: true,
+					declarationMap: true,
+					sourceMap: true,
+					noFallthroughCasesInSwitch: false,
+					noUnusedLocals: false,
+					noUnusedParameters: false,
+				},
+			},
+			undefined,
+			"\t",
+		) + "\n",
+		filename: "config/tsconfig/base.json",
+	},
+	{
+		content: JSON.stringify(
+			{
+				name: `@${scope}/tsconfig`,
+				private: true,
+			},
+			undefined,
+			"\t",
+		) + "\n",
+		filename: "config/tsconfig/package.json",
+	},
+];
+
 const hasAnyApp = (schema: DomainSchema): boolean =>
 	schemaHasTag(schema, "@api") ||
 	schemaHasTag(schema, "@cli") ||
@@ -187,6 +256,12 @@ export const monorepoRootPlugin: GeneratorPlugin = {
 			}
 		}
 
+		// Shared config packages
+		const scope = getPackageScope(schema, name);
+		files.push(
+			...generateConfigPackages(scope),
+		);
+
 		// Dockerignore (only if apps exist)
 		if (hasAnyApp(schema)) {
 			files.push({
@@ -197,7 +272,6 @@ export const monorepoRootPlugin: GeneratorPlugin = {
 
 		// Procfile (only if apps exist)
 		if (hasAnyApp(schema)) {
-			const scope = getPackageScope(schema, name);
 			const processes: string[] = [];
 			if (schemaHasTag(schema, "@api"))
 				processes.push(`web: bun run --filter @${scope}/api start`);

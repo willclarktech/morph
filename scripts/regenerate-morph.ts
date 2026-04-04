@@ -188,7 +188,13 @@ const runGenerate = async (schema: DomainSchema): Promise<boolean> => {
 		const result = await Effect.runPromise(executeGenerate(schema, "Morph"));
 
 		// Files that are hand-written in the morph repo and should not be overwritten
-		const SKIP_FILES = new Set(["README.md"]);
+		const SKIP_FILES = new Set([
+			"README.md",
+			"config/eslint/package.json",
+			"config/eslint/src/index.ts",
+			"config/tsconfig/base.json",
+			"config/tsconfig/package.json",
+		]);
 
 		// Write generated files
 		for (const file of result.files) {

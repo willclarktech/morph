@@ -1,0 +1,115 @@
+domain MyApp
+	license "MIT"
+	author "Your Name"
+	description "A sample application"
+	repository "https://github.com/your-org/my-app"
+
+extensions {
+	storage [memory, jsonfile, sqlite, redis] default memory
+	auth [none, inmemory, test, jwt] default jwt
+	encoding [json, yaml] default json
+	eventStore [memory, jsonfile, redis] default memory
+	sse [auto]
+	i18n [en, de] base en
+}
+
+profiles {
+	admin: @cli @api
+	public: @cli @api @mcp @ui
+}
+
+context Catalog "Product catalog bounded context" {
+
+	entity Category {
+		name: string
+	}
+
+	@root
+	entity Product {
+		active: boolean
+		category: "electronics" | "clothing" | "food"
+		createdAt: datetime
+		description: string?
+		dueDate?: date
+		@unique
+		name: string
+		price: float
+		quantity: integer
+		slug: string
+		belongs_to Category "Product category"
+	}
+
+	value Money "Monetary amount" {
+		amount: float
+		currency: string
+	}
+
+	invariant PositivePrice on Product
+		"Price must be positive when product is active"
+		violation "Price must be greater than zero"
+		where active == false || price > 0
+
+	@context
+	invariant ValidInput
+		"Create input must include a name"
+		violation "Name is required"
+		where input.name != ""
+
+	#public
+	command CreateProduct "Create a new product in the catalog"
+		reads Product, writes Product
+		pre ValidInput
+		input {
+			category: string
+			name: string
+			price: float
+			@sensitive
+			sku: string
+		}
+		output Product
+		emits ProductCreated "Emitted when a product is created"
+		errors {
+			DuplicateSku "A product with this SKU already exists" when "sku is taken"
+		}
+
+	#admin
+	command UpdatePrice "Update the price of an existing product"
+		reads Product, writes Product
+		input {
+			id: string
+			newPrice: float
+		}
+		output Product
+		emits PriceChanged "Emitted when a product price changes"
+		errors {
+			ProductNotFound "No product found with the given ID" when "id does not exist"
+		}
+
+	#public
+	query GetProduct "Retrieve a product by ID"
+		reads Product
+		input {
+			id: string
+		}
+		output Product?
+		errors {
+			ProductNotFound "No product found with the given ID" when "id does not exist"
+		}
+
+	#public
+	query ListProducts "List all products, optionally filtered by category"
+		reads Product
+		input {
+			category: string?
+		}
+		output Product[]
+
+	function ValidateSku "Check whether a SKU format is valid"
+		input {
+			sku: string
+		}
+		output boolean
+
+	subscriber OnProductCreated "Handle product creation side effects"
+		on ProductCreated
+}

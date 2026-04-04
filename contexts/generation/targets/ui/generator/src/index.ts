@@ -7,6 +7,7 @@
 import type { GeneratedFile, GenerationResult } from "@morphdsl/domain-schema";
 
 import { TEXT } from "@morphdsl/auth-password-impls";
+import { toPackageScope } from "@morphdsl/builder-app";
 import {
 	deriveRequiredKeys,
 	getAllEntities,
@@ -39,7 +40,6 @@ export const generate = (options: GenerateUiAppOptions): GenerationResult => {
 	const packageDir = options.packageDir ?? "apps/ui";
 	const sourceDir = options.sourceDir ?? "src";
 	const prefix = `${packageDir}/${sourceDir}/`;
-	const uiName = options.uiName ?? "ui";
 	const apiUrl = options.apiUrl ?? "http://localhost:3000";
 	const hasAuth = schemaHasAuthRequirement(options.schema);
 	const hasEvents = getCommandsWithEvents(options.schema).length > 0;
@@ -158,10 +158,10 @@ export const generate = (options: GenerateUiAppOptions): GenerationResult => {
 		filename: `${prefix}index.ts`,
 	});
 
-	// Config files - use uiName directly (already kebab-case, e.g. "pastebin-app")
-	const name = uiName;
+	// Config files - use package scope for config references
+	const scope = toPackageScope(options.appName, options.schema.npmScope);
 	files.push({
-		content: `import { configs } from "@${name}/eslint-config";
+		content: `import { configs } from "@${scope}/eslint-config";
 
 export default configs.generated;
 `,
@@ -170,7 +170,7 @@ export default configs.generated;
 
 	files.push({
 		content: `{
-	"extends": "@${name}/tsconfig/base.json",
+	"extends": "@${scope}/tsconfig/base.json",
 	"compilerOptions": {
 		"rootDir": ".",
 		"outDir": "dist"
