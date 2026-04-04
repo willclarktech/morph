@@ -157,7 +157,7 @@ const compileExtensionSchemas = (): void => {
 			extensionJson.functions = contextDef.functions;
 		}
 
-		if (contextDef.contracts && contextDef.contracts.length > 0) {
+		if (contextDef.contracts.length > 0) {
 			extensionJson.contracts = contextDef.contracts;
 		}
 
@@ -185,11 +185,11 @@ const runGenerate = async (schema: DomainSchema): Promise<boolean> => {
 
 		// Files that are hand-written in the morph repo and should not be overwritten
 		const SKIP_FILES = new Set([
-			"README.md",
 			"config/eslint/package.json",
 			"config/eslint/src/index.ts",
 			"config/tsconfig/base.json",
 			"config/tsconfig/package.json",
+			"README.md",
 		]);
 
 		// Write generated files

@@ -1,10 +1,10 @@
-import { parse } from "../contexts/schema-dsl/parser/src/index";
 import { compile } from "../contexts/schema-dsl/compiler/src/index";
 import { decompile } from "../contexts/schema-dsl/decompiler/src/index";
+import { parse } from "../contexts/schema-dsl/parser/src/index";
 
 const glob = new Bun.Glob("**/*.morph");
 const root = import.meta.dir + "/..";
-const files = Array.from(glob.scanSync({ cwd: root }))
+const files = [...glob.scanSync({ cwd: root })]
 	.filter((f) => !f.includes("node_modules") && !f.startsWith(".worktrees/"))
 	.sort();
 
@@ -12,8 +12,8 @@ let formatted = 0;
 let unchanged = 0;
 let failed = 0;
 
-for (const rel of files) {
-	const abs = `${import.meta.dir}/../${rel}`;
+for (const relative of files) {
+	const abs = `${import.meta.dir}/../${relative}`;
 	const file = Bun.file(abs);
 	const source = await file.text();
 
