@@ -19,7 +19,8 @@ export const layout = (options: {
 	<title>${options.title} — Morph</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
 	<link rel="stylesheet" href="/morph.css">
-	<link rel="icon" href="/logo.png" type="image/png">
+	<link rel="icon" href="/favicon.png" type="image/png">
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 	${options.headExtra ?? ""}
 </head>
 <body>
