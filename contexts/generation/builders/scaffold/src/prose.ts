@@ -53,10 +53,10 @@ export const generateDefaultProse = (
 		const entries: string[] = [];
 		const allOps: Record<string, readonly string[]> = {};
 
-		for (const [name, cmd] of Object.entries(context.commands)) {
+		for (const [name, cmd] of Object.entries(context.commands ?? {})) {
 			allOps[name] = Object.keys(cmd.input);
 		}
-		for (const [name, query] of Object.entries(context.queries)) {
+		for (const [name, query] of Object.entries(context.queries ?? {})) {
 			allOps[name] = Object.keys(query.input);
 		}
 

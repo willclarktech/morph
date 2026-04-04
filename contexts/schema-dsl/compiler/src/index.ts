@@ -237,6 +237,7 @@ const compileAttribute = (ast: AttributeAst, names: NameMap): AttributeDef => {
 		type: compileTypeRef(ast.type, names),
 	};
 	if (ast.optional) result["optional"] = true;
+	if (ast.sensitive) result["sensitive"] = true;
 	if (ast.constraints && ast.constraints.length > 0)
 		result["constraints"] = [...ast.constraints];
 	return result as unknown as AttributeDef;
@@ -772,7 +773,7 @@ const compileContext = (
 	for (const c of ast.commands) {
 		commands[c.name] = compileCommand(c, names, profiles);
 	}
-	if (ast.commands.length > 0) result["commands"] = commands;
+	result["commands"] = commands;
 
 	result["dependencies"] = [...ast.dependencies];
 
@@ -792,13 +793,11 @@ const compileContext = (
 		result["ports"] = ports;
 	}
 
-	if (ast.queries.length > 0) {
-		const queries: Record<string, QueryDef> = {};
-		for (const q of ast.queries) {
-			queries[q.name] = compileQuery(q, names, profiles);
-		}
-		result["queries"] = queries;
+	const queries: Record<string, QueryDef> = {};
+	for (const q of ast.queries) {
+		queries[q.name] = compileQuery(q, names, profiles);
 	}
+	result["queries"] = queries;
 
 	if (ast.subscribers.length > 0) {
 		const subscribers: Record<string, SubscriberDef> = {};

@@ -13,6 +13,7 @@ export const AttributeDefSchema = S.Struct({
 	constraints: S.optionalWith(S.Array(ConstraintDefSchema), { exact: true }),
 	description: S.String,
 	optional: S.optionalWith(S.Boolean, { exact: true }),
+	sensitive: S.optionalWith(S.Boolean, { exact: true }),
 	type: TypeRefSchema,
 });
 

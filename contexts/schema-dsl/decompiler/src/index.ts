@@ -259,6 +259,8 @@ const decompileAttribute = (
 		}
 	}
 
+	if (attribute.sensitive) tags.push("@sensitive");
+
 	for (const tag of tags) lines.push(tag);
 
 	const opt = attribute.optional ? "?" : "";

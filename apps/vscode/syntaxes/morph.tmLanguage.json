@@ -160,7 +160,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.morph",
-					"match": "\\b(?:if|then|where|when|on|in|forall|exists|contains|count|and|or|not)\\b"
+					"match": "\\b(?:if|then|where|when|on|in|forall|exists|contains|count|given|and|or|not)\\b"
 				}
 			]
 		},

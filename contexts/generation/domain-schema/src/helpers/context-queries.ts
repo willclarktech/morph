@@ -7,8 +7,8 @@ export const getContextOperationsWithTag = (
 	tag: string,
 ): readonly string[] => {
 	const ops = [
-		...Object.entries(context.commands),
-		...Object.entries(context.queries),
+		...Object.entries(context.commands ?? {}),
+		...Object.entries(context.queries ?? {}),
 		...Object.entries(context.functions ?? {}),
 	];
 	return ops.filter(([_, op]) => op.tags.includes(tag)).map(([name]) => name);
@@ -33,8 +33,8 @@ export const findPrimaryContext = (
 			const context = schema.contexts[contextName];
 			return (
 				context &&
-				(Object.keys(context.commands).length > 0 ||
-					Object.keys(context.queries).length > 0 ||
+				(Object.keys(context.commands ?? {}).length > 0 ||
+					Object.keys(context.queries ?? {}).length > 0 ||
 					Object.keys(context.functions ?? {}).length > 0)
 			);
 		}) ?? contextNames[0]

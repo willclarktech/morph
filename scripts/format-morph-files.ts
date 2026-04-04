@@ -1,12 +1,12 @@
-import { globSync } from "node:fs";
 import { parse } from "../contexts/schema-dsl/parser/src/index";
 import { compile } from "../contexts/schema-dsl/compiler/src/index";
 import { decompile } from "../contexts/schema-dsl/decompiler/src/index";
 
-const files = globSync("**/*.morph", {
-	cwd: import.meta.dir + "/..",
-	ignore: ["**/node_modules/**", ".worktrees/**"],
-}).sort();
+const glob = new Bun.Glob("**/*.morph");
+const root = import.meta.dir + "/..";
+const files = Array.from(glob.scanSync({ cwd: root }))
+	.filter((f) => !f.includes("node_modules") && !f.startsWith(".worktrees/"))
+	.sort();
 
 let formatted = 0;
 let unchanged = 0;

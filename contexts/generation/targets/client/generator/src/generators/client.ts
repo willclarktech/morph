@@ -138,7 +138,7 @@ const getPasswordAuthEntity = (schema: DomainSchema): string | undefined => {
 		for (const [entName, ent] of Object.entries(context.entities)) {
 			if (ent.attributes["passwordHash"]) {
 				// Check for createUser command with sensitive password
-				for (const [cmdName, cmd] of Object.entries(context.commands)) {
+				for (const [cmdName, cmd] of Object.entries(context.commands ?? {})) {
 					const passwordInput = cmd.input["password"];
 					if (
 						cmdName.toLowerCase().includes("create") &&

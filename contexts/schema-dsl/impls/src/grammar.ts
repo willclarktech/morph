@@ -173,7 +173,7 @@ export const textMateGrammar = {
 			patterns: [
 				{
 					name: "keyword.control.morph",
-					match: String.raw`\b(?:if|then|where|when|on|in|forall|exists|contains|count|and|or|not)\b`,
+					match: String.raw`\b(?:if|then|where|when|on|in|forall|exists|contains|count|given|and|or|not)\b`,
 				},
 			],
 		},

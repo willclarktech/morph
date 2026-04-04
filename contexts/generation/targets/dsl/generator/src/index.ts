@@ -21,8 +21,8 @@ import { collectTypeImports, getContextOperations } from "./type-collection";
  * Functions are not operations - they don't need defineOp wrappers.
  */
 const hasOperations = (context: ContextDef): boolean =>
-	Object.keys(context.commands).length > 0 ||
-	Object.keys(context.queries).length > 0;
+	Object.keys(context.commands ?? {}).length > 0 ||
+	Object.keys(context.queries ?? {}).length > 0;
 
 export interface GenerateOptions {
 	/** Package name (required if standalone) */
