@@ -3,7 +3,7 @@
  */
 
 /**
- * Convert app name to env var prefix (e.g., "todo-app" -> "TODO_APP").
+ * Convert app name to env var prefix (e.g., "todo" -> "TODO").
  */
 export const toEnvironmentPrefix = (name: string): string =>
 	name.toUpperCase().replaceAll("-", "_");

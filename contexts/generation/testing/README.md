@@ -30,8 +30,8 @@ Scenarios are generated in `tests/scenarios/` from the schema. Each scenario use
 
 ```typescript
 import { assert, given, ref, scenario, then, when } from "@morphdsl/scenario";
-import { completeTodo, createTodo, createUser } from "@todo-app/tasks-dsl";
-import type { Todo, User } from "@todo-app/tasks-dsl";
+import { completeTodo, createTodo, createUser } from "@todo/tasks-dsl";
+import type { Todo, User } from "@todo/tasks-dsl";
 
 export const scenarios = [
   scenario("Create and complete a todo")
@@ -82,7 +82,7 @@ interface Runner {
 Each target with a scenario runner gets a `src/test/scenarios.test.ts`:
 
 ```typescript
-import { scenarios } from "@todo-app/scenarios";
+import { scenarios } from "@todo/scenarios";
 import { createApiRunner } from "@morphdsl/scenario-runner-api";
 
 const runner = createApiRunner({ port: 3001 });
@@ -99,7 +99,7 @@ Properties are generated in `tests/properties/` from schema invariants:
 
 ```typescript
 import { validatorProperty } from "@morphdsl/property";
-import { TodoArbitrary, UserArbitrary } from "@todo-app/tasks-dsl";
+import { TodoArbitrary, UserArbitrary } from "@todo/tasks-dsl";
 import * as fc from "fast-check";
 
 export const todoBelongsToUser = validatorProperty({
@@ -142,11 +142,11 @@ See the [verification target README](../targets/verification/README.md).
 bun run test
 
 # Run tests for a specific target
-cd examples/todo-app/apps/api && bun test
-cd examples/todo-app/apps/cli && bun test
+cd examples/todo/apps/api && bun test
+cd examples/todo/apps/cli && bun test
 
 # Run formal verification
-bun run --filter @todo-app/verification verify
+bun run --filter @todo/verification verify
 ```
 
 ## How It Fits Together

@@ -5,7 +5,7 @@ import { buildDockerfile, buildDockerignore } from "./dockerfile-builder";
 describe("buildDockerfile", () => {
 	test("API configuration includes health check and port", () => {
 		const result = buildDockerfile({
-			name: "todo-app",
+			name: "todo",
 			build: {
 				libs: ["dsl", "core"],
 				appDir: "api",

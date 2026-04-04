@@ -34,7 +34,7 @@
 
 | Task | Effort | Notes |
 |------|--------|-------|
-| Add example schemas for expression types | S | GreaterThan, LessThan, Contains untested. ContextScope and Equals exercised by blog-app role invariants. delivery-tracker exercises != |
+| Add example schemas for expression types | S | GreaterThan, LessThan, Contains untested. ContextScope and Equals exercised by blog role invariants. delivery-tracker exercises != |
 | Configurable ID format | S | Support nanoid, ulid via `config.idFormat`. Currently hardcoded to UUID |
 | Improve validation error messages | S | Effect Schema errors are verbose. Add custom error messages to schemas |
 | Revisit per-operation errors design | S | Consider defaults/inheritance patterns to reduce schema verbosity |

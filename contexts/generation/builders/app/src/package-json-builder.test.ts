@@ -5,7 +5,7 @@ import { buildPackageJson } from "./package-json-builder";
 describe("buildPackageJson", () => {
 	test("generates valid JSON", () => {
 		const result = buildPackageJson({
-			projectName: "todo-app",
+			projectName: "todo",
 			packageSuffix: "core",
 		});
 		expect(() => JSON.parse(result)).not.toThrow();
@@ -13,9 +13,9 @@ describe("buildPackageJson", () => {
 
 	test("uses lowercase project name for scope", () => {
 		const result = JSON.parse(
-			buildPackageJson({ projectName: "Todo-App", packageSuffix: "core" }),
+			buildPackageJson({ projectName: "Todo", packageSuffix: "core" }),
 		);
-		expect(result.name).toBe("@todo-app/core");
+		expect(result.name).toBe("@todo/core");
 	});
 
 	test("includes base scripts", () => {

@@ -6,16 +6,16 @@ import { join } from "node:path";
 const FIXTURES_DIR = join(import.meta.dir, "../../../examples/fixtures");
 
 const DESCRIPTIONS: Record<string, string> = {
-	"pastebin-app": "Minimal — single entity, no auth",
+	pastebin: "Minimal — single entity, no auth",
 	"cache-port": "Abstract ports, property-based contracts",
 	"type-gallery": "Generics, unions, aliases, pure functions",
 	"address-book": "Value objects, @sensitive fields",
 	"code-generator": "Transformation domain — no CRUD, pure functions",
 	"marketplace": "Multiple contexts, cross-context references, profiles",
 	"delivery-tracker": "Entity relationships, post conditions",
-	"blog-app": "Role-based auth, domain events, subscribers",
+	blog: "Role-based auth, domain events, subscribers",
 	"ledger": "Event-sourced storage, event store queries",
-	"todo-app": "Full-featured — auth, invariants, events, i18n, all app targets",
+	todo: "Full-featured — auth, invariants, events, i18n, all app targets",
 };
 
 export const loadExamples = async (): Promise<readonly ExampleSnapshot[]> => {

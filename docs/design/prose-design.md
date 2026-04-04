@@ -70,7 +70,7 @@ If no prose template exists for an operation, the runner falls back to a structu
 
 ## Multi-Context Composition
 
-When an app has multiple contexts (e.g., blog-app with users + posts), each context provides its own prose. The generator merges them into a single flat `Record<string, string>` keyed by operation name (which is unique across contexts by schema constraint). At runtime, `renderStepProse()` looks up by operation name — no merging algorithm needed.
+When an app has multiple contexts (e.g., blog with users + posts), each context provides its own prose. The generator merges them into a single flat `Record<string, string>` keyed by operation name (which is unique across contexts by schema constraint). At runtime, `renderStepProse()` looks up by operation name — no merging algorithm needed.
 
 ## Auto-Generation as Complement
 

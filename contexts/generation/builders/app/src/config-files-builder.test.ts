@@ -4,7 +4,7 @@ import { buildCliConfigFiles, buildConfigFiles } from "./config-files-builder";
 
 describe("buildConfigFiles", () => {
 	test("generates eslint and tsconfig files", () => {
-		const files = buildConfigFiles("apps/api", "todo-app");
+		const files = buildConfigFiles("apps/api", "todo");
 		expect(files).toHaveLength(2);
 		expect(files.map((f) => f.filename).sort()).toEqual([
 			"apps/api/eslint.config.ts",
@@ -13,10 +13,10 @@ describe("buildConfigFiles", () => {
 	});
 
 	test("eslint config uses generated preset", () => {
-		const files = buildConfigFiles("apps/api", "todo-app");
+		const files = buildConfigFiles("apps/api", "todo");
 		const eslint = files.find((f) => f.filename.endsWith("eslint.config.ts"));
 		expect(eslint!.content).toContain("configs.generated");
-		expect(eslint!.content).toContain("@todo-app/eslint-config");
+		expect(eslint!.content).toContain("@todo/eslint-config");
 	});
 
 	test("tsconfig extends base config with correct scope", () => {
@@ -34,12 +34,12 @@ describe("buildConfigFiles", () => {
 
 describe("buildCliConfigFiles", () => {
 	test("generates eslint and tsconfig files", () => {
-		const files = buildCliConfigFiles("apps/cli", "todo-app");
+		const files = buildCliConfigFiles("apps/cli", "todo");
 		expect(files).toHaveLength(2);
 	});
 
 	test("eslint config includes both generated and cli presets", () => {
-		const files = buildCliConfigFiles("apps/cli", "todo-app");
+		const files = buildCliConfigFiles("apps/cli", "todo");
 		const eslint = files.find((f) => f.filename.endsWith("eslint.config.ts"));
 		expect(eslint!.content).toContain("configs.generated");
 		expect(eslint!.content).toContain("configs.cli");

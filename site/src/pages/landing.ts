@@ -85,7 +85,7 @@ export const landingPage = (): string =>
 			<h2>Quick Start</h2>
 			<pre><code class="language-sh">bun install
 bun run generate:examples
-cd examples/pastebin-app && bun run apps/api/src/index.ts</code></pre>
+cd examples/pastebin && bun run apps/api/src/index.ts</code></pre>
 		</section>
 
 		<section>

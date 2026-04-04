@@ -56,13 +56,13 @@ Key concepts:
 ## 2. Generate the Project
 
 ```sh
-morph new-project --name pastebin-app --schema schema.morph
+morph new-project --name pastebin --schema schema.morph
 ```
 
 This generates a complete monorepo:
 
 ```
-pastebin-app/
+pastebin/
 ├── apps/
 │   ├── api/          # REST API server
 │   ├── cli/          # Interactive CLI
@@ -83,7 +83,7 @@ The only code you write by hand. Each command/query gets a handler file in `cont
 // contexts/pastes/core/src/operations/create-paste/impl.ts
 
 import { Effect, Layer } from "effect";
-import type { Paste, PasteId } from "@pastebin-app/pastes-dsl";
+import type { Paste, PasteId } from "@pastebin/pastes-dsl";
 import { IdGenerator, PasteRepository } from "../../services";
 import { CreatePasteHandler } from "./handler";
 
@@ -150,7 +150,7 @@ Scenario tests verify behavior across all app targets:
 // fixtures/scenarios/scenarios.ts
 
 import { assert, given, scenario, then, when } from "@morphdsl/scenario";
-import { createPaste, listPastes } from "@pastebin-app/pastes-dsl";
+import { createPaste, listPastes } from "@pastebin/pastes-dsl";
 
 export const scenarios = [
   scenario("Create a paste")
@@ -194,9 +194,9 @@ Explore the example suite for progressively advanced features:
 | `code-generator` | Pure functions, unions — no entities or CRUD |
 | `marketplace` | Multiple contexts, `depends on`, profiles |
 | `delivery-tracker` | Entity relationships (`has_one`, `references`), post conditions |
-| `blog-app` | Role-based auth, domain events, subscribers |
+| `blog` | Role-based auth, domain events, subscribers |
 | `ledger` | Event-sourced storage, event store queries, transaction history |
-| `todo-app` | Full-featured: auth, invariants, events, i18n, all five app targets |
+| `todo` | Full-featured: auth, invariants, events, i18n, all five app targets |
 
 Each example lives in `examples/fixtures/<name>/schema.morph` (source) and `examples/<name>/` (generated output).
 

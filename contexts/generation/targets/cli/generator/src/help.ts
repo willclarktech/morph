@@ -32,11 +32,11 @@ export interface CliConfig {
 	readonly codecRegistry?: CodecRegistry | undefined;
 	/** Brief description of what the CLI does */
 	readonly description?: string;
-	/** Env var prefix for test credentials (e.g., "TODO_APP" -> TODO_APP_CREATE_USER_PASSWORD) */
+	/** Env var prefix for test credentials (e.g., "TODO" -> TODO_CREATE_USER_PASSWORD) */
 	readonly envPrefix?: string;
 	/** Map of operation names to their auth-injectable parameter names (computed at generation time) */
 	readonly injectableParams?: Readonly<Record<string, readonly string[]>>;
-	/** CLI program name (e.g., "todo-app") */
+	/** CLI program name (e.g., "todo") */
 	readonly name?: string;
 }
 

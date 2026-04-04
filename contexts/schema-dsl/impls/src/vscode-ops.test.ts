@@ -27,7 +27,7 @@ import { GetSymbolsHandler, GetSymbolsHandlerLive } from "./get-symbols";
 const VALID_SOURCE = readFileSync(
 	path.resolve(
 		import.meta.dir,
-		"../../../../examples/fixtures/todo-app/schema.morph",
+		"../../../../examples/fixtures/todo/schema.morph",
 	),
 	"utf8",
 );

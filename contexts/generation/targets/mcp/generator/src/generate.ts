@@ -128,11 +128,11 @@ export interface GenerateMcpAppOptions {
 	readonly corePackagePath?: string;
 	/** DSL package path (legacy single-context) */
 	readonly dslPackagePath?: string;
-	/** Env var prefix (e.g., "TODO_APP" -> TODO_APP_STORAGE) */
+	/** Env var prefix (e.g., "TODO" -> TODO_STORAGE) */
 	readonly envPrefix?: string;
 	/** MCP server description */
 	readonly mcpDescription?: string;
-	/** MCP server name (e.g., "todo-app") */
+	/** MCP server name (e.g., "todo") */
 	readonly mcpName?: string;
 	/** Package directory (e.g., "apps/mcp") */
 	readonly packageDir?: string;

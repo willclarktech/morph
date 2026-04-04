@@ -73,15 +73,15 @@ describe("buildTokenAuthConfig", () => {
 
 describe("buildCredentialAuthConfig", () => {
 	test("includes appName and auth params when hasAuth is true", () => {
-		const result = buildCredentialAuthConfig("todo-app", true);
-		expect(result).toContain('appName: "todo-app"');
+		const result = buildCredentialAuthConfig("todo", true);
+		expect(result).toContain('appName: "todo"');
 		expect(result).toContain("emailParam");
 		expect(result).toContain("passwordParam");
 	});
 
 	test("includes only appName when hasAuth is false", () => {
-		const result = buildCredentialAuthConfig("todo-app", false);
-		expect(result).toContain('appName: "todo-app"');
+		const result = buildCredentialAuthConfig("todo", false);
+		expect(result).toContain('appName: "todo"');
 		expect(result).not.toContain("emailParam");
 	});
 });

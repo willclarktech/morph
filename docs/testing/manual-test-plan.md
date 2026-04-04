@@ -22,7 +22,7 @@ bun run generate:examples
 **Verify:**
 
 - [ ] No errors during generation
-- [ ] All examples regenerated (todo-app, pastebin-app, code-generator, blog-app, generics-test)
+- [ ] All examples regenerated (todo, pastebin, code-generator, blog, generics-test)
 
 ---
 
@@ -59,7 +59,7 @@ Check that generated examples follow the context-centric structure.
 ### Todo App Structure
 
 ```bash
-ls -la examples/todo-app/
+ls -la examples/todo/
 ```
 
 Expected:
@@ -76,7 +76,7 @@ Expected:
 ### Pastebin App Structure
 
 ```bash
-ls -la examples/pastebin-app/
+ls -la examples/pastebin/
 ```
 
 Expected:
@@ -93,7 +93,7 @@ Expected:
 Check a generated core package for expected files.
 
 ```bash
-ls examples/todo-app/contexts/tasks/core/src/
+ls examples/todo/contexts/tasks/core/src/
 ```
 
 Expected:
@@ -107,7 +107,7 @@ Expected:
 ### Operation Module Structure
 
 ```bash
-ls examples/todo-app/contexts/tasks/core/src/operations/create-todo/
+ls examples/todo/contexts/tasks/core/src/operations/create-todo/
 ```
 
 Expected:
@@ -123,7 +123,7 @@ Expected:
 ## 6. Verify DSL Package Contents
 
 ```bash
-ls examples/todo-app/contexts/tasks/dsl/src/
+ls examples/todo/contexts/tasks/dsl/src/
 ```
 
 Expected:
@@ -143,7 +143,7 @@ Verify that fixtures are correctly copied during generation.
 ### Fixtures Location
 
 ```bash
-ls examples/fixtures/todo-app/
+ls examples/fixtures/todo/
 ```
 
 Expected:
@@ -184,12 +184,12 @@ git diff examples/
 Test regenerating a specific example.
 
 ```bash
-bun scripts/generate-examples.ts todo-app
+bun scripts/generate-examples.ts todo
 ```
 
 **Verify:**
 
-- [ ] Only todo-app regenerated
+- [ ] Only todo regenerated
 - [ ] Other examples unchanged
 
 ---

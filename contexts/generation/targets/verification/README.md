@@ -57,7 +57,7 @@ invariant UserOwnsTodo {
 ### Running It
 
 ```
-$ bun run --filter @todo-app/verification verify
+$ bun run --filter @todo/verification verify
 
 === Formal Verification Results ===
 

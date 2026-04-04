@@ -140,16 +140,16 @@ Morph generates its own CLI, MCP server, and VS Code extension from [`schema.mor
 
 | Example            | What it demonstrates                                            |
 | ------------------ | --------------------------------------------------------------- |
-| `pastebin-app`     | Minimal — single entity, no auth                                |
+| `pastebin`         | Minimal — single entity, no auth                                |
 | `cache-port`       | Abstract ports, property-based contracts                        |
 | `type-gallery`     | Generics, unions, aliases, pure functions                       |
 | `address-book`     | Value objects, `@sensitive` fields                              |
 | `code-generator`   | Transformation domain — no CRUD, pure functions                 |
 | `marketplace`      | Multiple contexts, cross-context references, profiles           |
 | `delivery-tracker` | Entity relationships, post conditions                           |
-| `blog-app`         | Role-based auth, domain events, subscribers                     |
+| `blog`             | Role-based auth, domain events, subscribers                     |
 | `ledger`           | Event-sourced storage, event store queries                      |
-| `todo-app`         | Full-featured — auth, invariants, events, i18n, all app targets |
+| `todo`             | Full-featured — auth, invariants, events, i18n, all app targets |
 
 Regenerate all examples: `bun run generate:examples`
 
@@ -189,7 +189,7 @@ Prerequisites: [Bun](https://bun.sh/) v1.0+. Optional: [Z3](https://github.com/Z
 ```sh
 bun install
 bun run generate:examples
-cd examples/pastebin-app && bun run apps/api/src/index.ts
+cd examples/pastebin && bun run apps/api/src/index.ts
 ```
 
 Morph dogfoods — its own CLI, MCP server, and VS Code extension are generated from [`schema.morph`](schema.morph):

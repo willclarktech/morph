@@ -155,14 +155,14 @@ context c "" {
 
 const examples = [
 	"address-book",
-	"blog-app",
+	"blog",
 	"cache-port",
 	"code-generator",
 	"delivery-tracker",
 	"ledger",
 	"marketplace",
-	"pastebin-app",
-	"todo-app",
+	"pastebin",
+	"todo",
 	"type-gallery",
 ] as const;
 

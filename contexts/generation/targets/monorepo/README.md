@@ -27,15 +27,15 @@ Generates the root monorepo configuration — README, Procfile, Docker files, ar
 **Procfile:**
 
 ```
-web: bun run --filter @todo-app/api start
-ui: bun run --filter @todo-app/ui start
-mcp: bun run --filter @todo-app/mcp start
+web: bun run --filter @todo/api start
+ui: bun run --filter @todo/ui start
+mcp: bun run --filter @todo/mcp start
 ```
 
 **File tree:**
 
 ```
-todo-app/
+todo/
 ├── package.json          # Workspace root
 ├── Procfile              # Process definitions
 ├── README.md             # Generated documentation
@@ -68,7 +68,7 @@ todo-app/
 
 ```json
 {
-  "name": "@todo-app/root",
+  "name": "@todo/root",
   "type": "module",
   "workspaces": ["config/*", "libs/*", "apps/*", "tests/*"],
   "scripts": {

@@ -138,7 +138,7 @@
 
 **Given**:
 
-- Sam wants to create a "todo-app" project
+- Sam wants to create a "todo" project
 - Desired scope is "todo"
 
 **When**: Sam runs scaffold.init with name and scope

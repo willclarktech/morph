@@ -1,4 +1,4 @@
-import { sortObjectKeys } from "@morphdsl/utils";
+import { sortObjectKeys, toKebabCase } from "@morphdsl/utils";
 
 /** Common tool versions used across all packages */
 const TOOL_VERSIONS = {
@@ -30,7 +30,7 @@ export interface PackageMetadata {
 
 /** Configuration for building a package.json */
 export interface PackageJsonConfig {
-	/** Project name (e.g., "todo-app") */
+	/** Project name (e.g., "todo") */
 	projectName: string;
 	/** Package suffix (e.g., "core", "api", "cli") */
 	packageSuffix: string;
@@ -64,7 +64,7 @@ export interface PackageJsonConfig {
 
 /** Convert project name to npm package scope */
 export const toPackageScope = (name: string, npmScope?: string): string =>
-	npmScope ?? name.toLowerCase();
+	npmScope ?? toKebabCase(name);
 
 /** Get standard dev dependencies for a package */
 const getStandardDevDeps = (

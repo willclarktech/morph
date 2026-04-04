@@ -36,7 +36,7 @@ command createTodo @api @mcp {
 
 ```typescript
 import { createAuthInfoStrategy, createMcp } from "@morphdsl/runtime-mcp";
-import { HandlersLayer, ops, resolveStorage, resolveEventStore } from "@todo-app/tasks-core";
+import { HandlersLayer, ops, resolveStorage, resolveEventStore } from "@todo/tasks-core";
 import { Effect, Layer, Logger } from "effect";
 
 const authStrategy = createAuthInfoStrategy<{ id: string }>();
@@ -51,7 +51,7 @@ const main = Effect.gen(function* () {
   const AppLayer = /* ... layer composition ... */;
 
   const mcp = createMcp(ops, AppLayer, {
-    name: "todo-app",
+    name: "todo",
     version: "1.0.0",
     auth: authStrategy,
     injectableParams,
@@ -66,7 +66,7 @@ const main = Effect.gen(function* () {
 ### Running It
 
 ```bash
-$ bun run --filter @todo-app/mcp start
+$ bun run --filter @todo/mcp start
 # MCP server listening on stdio (JSON-RPC)
 
 # Tools registered:

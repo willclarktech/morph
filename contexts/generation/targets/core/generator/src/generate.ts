@@ -34,7 +34,7 @@ import {
 } from "./generators";
 
 export interface GenerateOperationsOptions {
-	/** Environment variable prefix (e.g., "TODO_APP"). Defaults to schema name in SCREAMING_SNAKE_CASE. */
+	/** Environment variable prefix (e.g., "TODO"). Defaults to schema name in SCREAMING_SNAKE_CASE. */
 	readonly envPrefix?: string;
 	/** Generate handler implementation scaffolds (default: false) */
 	readonly generateImpls?: boolean;
@@ -42,7 +42,7 @@ export interface GenerateOperationsOptions {
 	readonly extensions?: Extensions | undefined;
 	/** Output directory prefix (default: "src") */
 	readonly outputDir?: string;
-	/** Project name for Context tag namespacing (e.g., "todo-app" -> "@todo-app/Handler") */
+	/** Project name for Context tag namespacing (e.g., "todo" -> "@todo/Handler") */
 	readonly projectName?: string;
 	/** Filter operations by tags (e.g., ["@cli"]) */
 	readonly tags?: readonly string[];

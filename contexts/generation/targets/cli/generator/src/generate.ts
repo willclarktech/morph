@@ -44,7 +44,7 @@ export type { ContextPackages } from "./imports";
 export interface GenerateAppOptions {
 	/** Brief description of what the CLI does */
 	readonly cliDescription?: string;
-	/** CLI program name (e.g., "todo-app") */
+	/** CLI program name (e.g., "todo") */
 	readonly cliName?: string;
 	/** Context packages for multi-context apps */
 	readonly contexts?: readonly ContextPackages[];
@@ -52,7 +52,7 @@ export interface GenerateAppOptions {
 	readonly corePackagePath?: string;
 	/** Import path to the DSL package (legacy single-context) */
 	readonly dslPackagePath?: string;
-	/** Env var prefix (e.g., "TODO_APP" -> TODO_APP_STORAGE). Defaults to CLI name in uppercase with hyphens replaced by underscores. */
+	/** Env var prefix (e.g., "TODO" -> TODO_STORAGE). Defaults to CLI name in uppercase with hyphens replaced by underscores. */
 	readonly envPrefix?: string;
 	/** Package directory (e.g., "apps/my-cli") - prepended to all filenames */
 	readonly packageDir?: string;
@@ -80,7 +80,7 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 		},
 	];
 
-	// Generate env var prefix from CLI name (e.g., "todo-app" -> "TODO_APP")
+	// Generate env var prefix from CLI name (e.g., "todo" -> "TODO")
 	const envPrefix =
 		options.envPrefix ??
 		(options.cliName ?? "cli").toUpperCase().replaceAll("-", "_");

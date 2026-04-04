@@ -38,7 +38,7 @@ The CLI exposes each operation as a subcommand with typed arguments:
 
 ```typescript
 const cli = createCli(ops, AppLayer, {
-  name: "todo-app",
+  name: "todo",
   auth: AuthLayer,
   injectableParams,
 });
@@ -47,11 +47,11 @@ const cli = createCli(ops, AppLayer, {
 ### Running It
 
 ```
-$ bun run --filter @todo-app/cli start -- --help
+$ bun run --filter @todo/cli start -- --help
 
-todo-app
+todo
 
-Usage: todo-app <command> [options]
+Usage: todo <command> [options]
 
 Commands:
   complete-todo   Mark a todo as completed.
@@ -67,7 +67,7 @@ Global options:
   --event-store <name>   Event store backend (default: memory)
   --help, -h             Show help
 
-Run 'todo-app <command> --help' for more information.
+Run 'todo <command> --help' for more information.
 ```
 
 ## Testing

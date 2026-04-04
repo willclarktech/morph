@@ -4,7 +4,7 @@
  *
  * Usage:
  *   bun scripts/generate-examples.ts           # Regenerate all examples
- *   bun scripts/generate-examples.ts todo-app  # Regenerate specific example
+ *   bun scripts/generate-examples.ts todo       # Regenerate specific example
  *
  * This script:
  * 1. Deletes the existing example directory (clean slate)

@@ -24,7 +24,7 @@ Generates a thin remote CLI that dispatches commands to the API server over HTTP
 The CLI client persists API URL and auth token locally:
 
 ```typescript
-const config = createConfigManager("todo-app-client", "TODO_APP_CLIENT");
+const config = createConfigManager("todo-client", "TODO_CLIENT");
 
 commands.login = async (argv) => {
   const { token } = await client.login({ email, password });
@@ -41,9 +41,9 @@ commands["create-todo"] = async (argv) => {
 ### Running It
 
 ```
-$ bun run --filter @todo-app/cli-client start -- --help
+$ bun run --filter @todo/cli-client start -- --help
 
-todo-app-client - CLI client for remote API
+todo-client - CLI client for remote API
 
 Configuration:
   config --api-url <url>    Set API URL
@@ -59,8 +59,8 @@ Commands:
   list-todos                       Get all todos for a user.
 
 Environment:
-  TODO_APP_CLIENT_API_URL      Override API URL
-  TODO_APP_CLIENT_API_TOKEN    Override auth token
+  TODO_CLIENT_API_URL      Override API URL
+  TODO_CLIENT_API_TOKEN    Override auth token
 ```
 
 ## Testing

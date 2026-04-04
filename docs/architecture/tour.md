@@ -6,9 +6,9 @@ A guided walkthrough of key source files. Follow this to understand how a `.morp
 
 Start here. The `.morph` DSL is the user-facing entry point.
 
-**`examples/fixtures/todo-app/schema.morph`** — The most complete example schema. Entities, operations, invariants, events, subscribers, extension config.
+**`examples/fixtures/todo/schema.morph`** — The most complete example schema. Entities, operations, invariants, events, subscribers, extension config.
 
-**`examples/fixtures/pastebin-app/schema.morph`** — The simplest example. Single entity, no auth, no invariants.
+**`examples/fixtures/pastebin/schema.morph`** — The simplest example. Single entity, no auth, no invariants.
 
 ## 2. DSL Parsing
 
@@ -106,23 +106,23 @@ Generated from `fixtures/<name>/schema.morph`. Listed by complexity:
 
 - **`cache-port`** — No entities. Abstract port with generic methods, property-based contracts.
 - **`type-gallery`** — No entities. Generics, discriminated unions, type aliases, pure functions.
-- **`pastebin-app`** — Single entity, no auth. The simplest CRUD app.
+- **`pastebin`** — Single entity, no auth. The simplest CRUD app.
 - **`address-book`** — Value objects, standalone errors with typed fields, `@sensitive`.
 - **`ledger`** — Event-sourced storage. Balance from transaction history.
 - **`code-generator`** — Pure transformation domain. No entities or CRUD.
 - **`marketplace`** — Multiple contexts with `depends on`, cross-context refs, profiles.
 - **`delivery-tracker`** — Entity relationships, post conditions, invariants.
-- **`blog-app`** — Role-based auth, domain events, subscribers, JWT.
-- **`todo-app`** — Full-featured: auth, multi-entity, invariants, events, i18n, all app targets.
+- **`blog`** — Role-based auth, domain events, subscribers, JWT.
+- **`todo`** — Full-featured: auth, multi-entity, invariants, events, i18n, all app targets.
 
 Hand-written handler implementations live in **`examples/fixtures/*/impls/`** — the only code a user writes.
 
 ## Reading Order
 
-1. `examples/fixtures/pastebin-app/schema.morph` (simplest schema)
+1. `examples/fixtures/pastebin/schema.morph` (simplest schema)
 2. `contexts/schema-dsl/parser/src/ast.ts` (what the parser produces)
 3. `contexts/generation/domain-schema/src/schemas/operations.ts` (the canonical format)
 4. `scripts/regenerate-morph.ts` (how generation is orchestrated)
 5. `contexts/generation/targets/dsl/generator/src/` (simplest generator)
 6. `contexts/generation/targets/core/generator/src/` (most complex generator)
-7. `examples/pastebin-app/` (the generated output)
+7. `examples/pastebin/` (the generated output)

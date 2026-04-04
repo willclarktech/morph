@@ -45,7 +45,7 @@ command createTodo {
 **handler.ts** — Handler interface:
 
 ```typescript
-import type { Todo, UserId, UserNotFoundError, InvalidDueDateError } from "@todo-app/tasks-dsl";
+import type { Todo, UserId, UserNotFoundError, InvalidDueDateError } from "@todo/tasks-dsl";
 import type { Effect } from "effect";
 import { Context } from "effect";
 
@@ -60,7 +60,7 @@ export interface CreateTodoHandler {
 }
 
 export const CreateTodoHandler = Context.GenericTag<CreateTodoHandler>(
-  "@todo-app/CreateTodoHandler",
+  "@todo/CreateTodoHandler",
 );
 ```
 

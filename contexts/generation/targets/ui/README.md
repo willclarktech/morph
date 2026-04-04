@@ -34,7 +34,7 @@ Generates a server-rendered web application using HTMX + Pico CSS. The UI server
 **src/index.ts** (excerpt):
 
 ```typescript
-import { createClient } from "@todo-app/client";
+import { createClient } from "@todo/client";
 import { createInMemorySessionStore } from "./session";
 import { loginPage, listTodoPage, createTodoPage, viewTodoPage } from "./pages";
 
@@ -46,7 +46,7 @@ const setSessionCookie = (sessionId: string): string =>
 const createClientForRequest = (request: Request) => {
   const { token } = getAuthState(request);
   return createClient({
-    baseUrl: process.env["TODO_APP_API_URL"] ?? "http://localhost:3000",
+    baseUrl: process.env["TODO_API_URL"] ?? "http://localhost:3000",
     token: token ?? undefined,
   });
 };
@@ -58,7 +58,7 @@ const createClientForRequest = (request: Request) => {
 ### Running It
 
 ```bash
-$ bun run --filter @todo-app/ui start
+$ bun run --filter @todo/ui start
 # Listening on http://localhost:4000
 ```
 

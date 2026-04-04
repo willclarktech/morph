@@ -41,7 +41,7 @@ query listTodos @api @cli {
 
 ```typescript
 import { createApi, createSimpleBearerStrategy, createSseManager } from "@morphdsl/runtime-api";
-import { HandlersLayer, ops, resolveStorage, resolveEventStore } from "@todo-app/tasks-core";
+import { HandlersLayer, ops, resolveStorage, resolveEventStore } from "@todo/tasks-core";
 
 const injectableParams = {
   createTodo: [{ paramName: "userId", contextPath: "currentUser.id", invariantName: "UserIdMatchesCurrentUser" }],
@@ -49,8 +49,8 @@ const injectableParams = {
 };
 
 const main = Effect.gen(function* () {
-  const eventStoreLayer = yield* resolveEventStore({ envPrefix: "TODO_APP" });
-  const storageLayer = yield* resolveStorage({ envPrefix: "TODO_APP" });
+  const eventStoreLayer = yield* resolveEventStore({ envPrefix: "TODO" });
+  const storageLayer = yield* resolveStorage({ envPrefix: "TODO" });
   const AppLayer = Layer.mergeAll(storageLayer, eventStoreLayer, HandlersLayer, /* ... */);
 
   const api = createApi(ops, AppLayer, {
@@ -66,7 +66,7 @@ const main = Effect.gen(function* () {
 ### Running It
 
 ```bash
-$ bun run --filter @todo-app/api start
+$ bun run --filter @todo/api start
 # Listening on http://localhost:3000
 
 $ curl -s http://localhost:3000/api/todos -H "Authorization: Bearer <token>" | jq

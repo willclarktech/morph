@@ -33,14 +33,14 @@ Declare extensions directly in `schema.json`:
 
 ## Runtime Config
 
-Environment variables select which backend to use at runtime. They are prefixed with the app name (e.g., `todo-app` -> `TODO_APP_`).
+Environment variables select which backend to use at runtime. They are prefixed with the app name (e.g., `todo` -> `TODO_`).
 
 ### Backend Selection
 
 | Variable               | Description         | Example                         |
 | ---------------------- | ------------------- | ------------------------------- |
-| `{PREFIX}_STORAGE`     | Storage backend     | `TODO_APP_STORAGE=redis`        |
-| `{PREFIX}_EVENT_STORE` | Event store backend | `TODO_APP_EVENT_STORE=jsonfile` |
+| `{PREFIX}_STORAGE`     | Storage backend     | `TODO_STORAGE=redis`        |
+| `{PREFIX}_EVENT_STORE` | Event store backend | `TODO_EVENT_STORE=jsonfile` |
 
 ### Backend-Specific Config
 

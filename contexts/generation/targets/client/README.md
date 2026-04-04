@@ -23,7 +23,7 @@ Generates a typed HTTP client library with method-per-operation, typed error uni
 **client.ts** — Typed client interface:
 
 ```typescript
-import type { Todo, TodoId, User, UserId } from "@todo-app/tasks-dsl";
+import type { Todo, TodoId, User, UserId } from "@todo/tasks-dsl";
 import type { HttpClientError } from "@morphdsl/http-client";
 
 export interface Client {
