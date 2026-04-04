@@ -157,7 +157,8 @@ const compileExtensionSchemas = (): void => {
 			extensionJson.functions = contextDef.functions;
 		}
 
-		if (contextDef.contracts.length > 0) {
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- contextDef is raw JSON, not decoded schema
+		if (contextDef.contracts && contextDef.contracts.length > 0) {
 			extensionJson.contracts = contextDef.contracts;
 		}
 
