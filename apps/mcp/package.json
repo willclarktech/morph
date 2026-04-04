@@ -14,6 +14,9 @@
 	"files": [
 		"dist"
 	],
+	"bin": {
+		"morph-mcp": "./dist/cli.js"
+	},
 	"publishConfig": {
 		"exports": {
 			".": {
@@ -23,7 +26,7 @@
 		}
 	},
 	"scripts": {
-		"build": "bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json",
+		"build": "bun build ./src/index.ts ./src/cli.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json",
 		"build:check": "tsc --noEmit",
 		"format": "prettier --check .",
 		"format:fix": "prettier --write .",

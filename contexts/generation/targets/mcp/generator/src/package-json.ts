@@ -4,6 +4,7 @@
 import type { PackageMetadata } from "@morphdsl/builder-app";
 
 import { orderedPackageJson, toPackageScope } from "@morphdsl/builder-app";
+import { toKebabCase } from "@morphdsl/utils";
 
 /**
  * Context package information for multi-context apps.
@@ -56,6 +57,7 @@ export const generateMcpPackageJson = (
 				}
 			: {}),
 		type: "module",
+		bin: { [`${toKebabCase(name)}-mcp`]: "./dist/cli.js" },
 		scripts: {
 			"build:check": "tsc --noEmit",
 			format: "prettier --check .",
@@ -82,7 +84,6 @@ export const generateMcpPackageJson = (
 			prettier: "^3.4.2",
 			typescript: "^5.7.2",
 		},
-		private: true,
 	};
 	return JSON.stringify(orderedPackageJson(package_), undefined, "\t") + "\n";
 };

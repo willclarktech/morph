@@ -328,6 +328,11 @@ await Effect.runPromise(main).catch((error: unknown) => {
 		filename: `${prefix}index.ts`,
 	};
 
+	const cliWrapperFile: GeneratedFile = {
+		content: `#!/usr/bin/env node\nimport "./index.js";\n`,
+		filename: `${prefix}cli.ts`,
+	};
+
 	// Generate README
 	const readmeFile: GeneratedFile | undefined = options.schema
 		? {
@@ -340,5 +345,9 @@ await Effect.runPromise(main).catch((error: unknown) => {
 			}
 		: undefined;
 
-	return { files: readmeFile ? [entryFile, readmeFile] : [entryFile] };
+	return {
+		files: readmeFile
+			? [entryFile, cliWrapperFile, readmeFile]
+			: [entryFile, cliWrapperFile],
+	};
 };

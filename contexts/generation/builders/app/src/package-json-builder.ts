@@ -86,6 +86,9 @@ const getStandardDevDeps = (
 const BUILD_SCRIPT =
 	"bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json";
 
+const BUILD_SCRIPT_WITH_CLI =
+	"bun build ./src/index.ts ./src/cli.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json";
+
 /** Human-friendly key ordering for package.json */
 const PACKAGE_KEY_ORDER = [
 	"$schema",
@@ -178,7 +181,7 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 	// Build scripts
 	const finalScripts: Record<string, string> = { ...BASE_SCRIPTS, ...scripts };
 	if (publishable) {
-		finalScripts["build"] = BUILD_SCRIPT;
+		finalScripts["build"] = bin ? BUILD_SCRIPT_WITH_CLI : BUILD_SCRIPT;
 	}
 	if (includeTestScript) {
 		finalScripts["test"] = "bun test";

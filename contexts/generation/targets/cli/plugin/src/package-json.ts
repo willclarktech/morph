@@ -1,6 +1,7 @@
 import type { EncodingFormat } from "@morphdsl/domain-schema";
 
 import { buildPackageJson } from "@morphdsl/builder-app";
+import { toKebabCase } from "@morphdsl/utils";
 
 interface ContextPackages {
 	readonly contextName: string;
@@ -70,7 +71,7 @@ export const generateCliPackageJson = (options: CliPackageJsonOptions): string =
 	return buildPackageJson({
 		projectName,
 		packageSuffix: "cli",
-		bin: { [projectName]: "./src/index.ts" },
+		bin: { [toKebabCase(projectName)]: "./dist/cli.js" },
 		dependencies: {
 			...(hasAuth
 				? {

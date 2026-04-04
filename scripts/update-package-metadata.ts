@@ -29,6 +29,9 @@ const NO_BUILD_PACKAGES = new Set([
 const BUILD_SCRIPT =
 	"bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json";
 
+const BUILD_SCRIPT_WITH_CLI =
+	"bun build ./src/index.ts ./src/cli.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json";
+
 const PACKAGE_KEY_ORDER = [
 	"$schema",
 	"name",
@@ -175,9 +178,12 @@ const main = (): void => {
 		}
 
 		if (isPublishable && !NO_BUILD_PACKAGES.has(name)) {
+			const hasBin = "bin" in parsed;
 			const scripts = (parsed.scripts ?? {}) as Record<string, unknown>;
 			if (!("build" in scripts)) {
-				scripts.build = BUILD_SCRIPT;
+				scripts.build = hasBin ? BUILD_SCRIPT_WITH_CLI : BUILD_SCRIPT;
+			} else if (hasBin && scripts.build === BUILD_SCRIPT) {
+				scripts.build = BUILD_SCRIPT_WITH_CLI;
 			}
 			parsed.scripts = scripts;
 

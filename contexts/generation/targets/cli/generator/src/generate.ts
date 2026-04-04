@@ -322,6 +322,11 @@ process.exit(code);
 		filename: `${prefix}index.ts`,
 	};
 
+	const cliWrapperFile: GeneratedFile = {
+		content: `#!/usr/bin/env node\nimport "./index.js";\n`,
+		filename: `${prefix}cli.ts`,
+	};
+
 	// Generate seed file for entity seeding
 	const seedContent =
 		hasEntities && options.schema
@@ -352,6 +357,7 @@ process.exit(code);
 
 	const files = [
 		entryFile,
+		cliWrapperFile,
 		...(seedFile ? [seedFile] : []),
 		...(readmeFile ? [readmeFile] : []),
 	];
