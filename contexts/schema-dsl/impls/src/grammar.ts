@@ -10,6 +10,7 @@ export const textMateGrammar = {
 		{ include: "#numbers" },
 		{ include: "#constants" },
 		{ include: "#tags" },
+		{ include: "#profile-references" },
 		{ include: "#entity-declarations" },
 		{ include: "#operation-declarations" },
 		{ include: "#context-declaration" },
@@ -187,11 +188,19 @@ export const textMateGrammar = {
 				},
 			],
 		},
+		"profile-references": {
+			patterns: [
+				{
+					name: "entity.name.label.morph",
+					match: String.raw`#[a-zA-Z_]\w*`,
+				},
+			],
+		},
 		"extension-keywords": {
 			patterns: [
 				{
 					name: "storage.type.morph",
-					match: String.raw`\b(?:extensions)\b`,
+					match: String.raw`\b(?:extensions|profiles)\b`,
 				},
 				{
 					name: "support.type.morph",

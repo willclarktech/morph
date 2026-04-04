@@ -84,6 +84,12 @@ const morphStreamLanguage = StreamLanguage.define({
 			return "meta";
 		}
 
+		// Profile references (#name)
+		if (stream.match("#")) {
+			stream.eatWhile(/[\w]/);
+			return "labelName";
+		}
+
 		// Numbers
 		if (stream.match(/^-?\d+(\.\d+)?/)) {
 			return "number";

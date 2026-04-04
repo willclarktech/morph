@@ -9,6 +9,7 @@
 		{ "include": "#numbers" },
 		{ "include": "#constants" },
 		{ "include": "#tags" },
+		{ "include": "#profile-references" },
 		{ "include": "#entity-declarations" },
 		{ "include": "#operation-declarations" },
 		{ "include": "#context-declaration" },
@@ -174,9 +175,17 @@
 				}
 			]
 		},
+		"profile-references": {
+			"patterns": [
+				{ "name": "entity.name.label.morph", "match": "#[a-zA-Z_]\\w*" }
+			]
+		},
 		"extension-keywords": {
 			"patterns": [
-				{ "name": "storage.type.morph", "match": "\\b(?:extensions)\\b" },
+				{
+					"name": "storage.type.morph",
+					"match": "\\b(?:extensions|profiles)\\b"
+				},
 				{
 					"name": "support.type.morph",
 					"match": "\\b(?:storage|auth|eventStore|sse|i18n)(?=\\s+\\[|\\s+\\w)"
