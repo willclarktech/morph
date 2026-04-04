@@ -22,7 +22,7 @@ describe("buildConfigFiles", () => {
 	test("tsconfig extends base config with correct scope", () => {
 		const files = buildConfigFiles("apps/api", "MyApp");
 		const tsconfig = files.find((f) => f.filename.endsWith("tsconfig.json"));
-		expect(tsconfig!.content).toContain("@myapp/tsconfig/base.json");
+		expect(tsconfig!.content).toContain("@my-app/tsconfig/base.json");
 	});
 
 	test("tsconfig includes src directory", () => {
