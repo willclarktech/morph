@@ -19,25 +19,25 @@ for (const relative of files) {
 
 	const parseResult = parse(source);
 	if (!parseResult.ast || parseResult.errors.length > 0) {
-		console.error(`  SKIP ${rel}: parse errors`);
+		console.error(`  SKIP ${relative}: parse errors`);
 		failed++;
 		continue;
 	}
 
 	const compileResult = compile(parseResult.ast);
 	if (!compileResult.schema || compileResult.errors.length > 0) {
-		console.error(`  SKIP ${rel}: compile errors`);
+		console.error(`  SKIP ${relative}: compile errors`);
 		failed++;
 		continue;
 	}
 
 	const result = decompile(compileResult.schema);
 	if (result === source) {
-		console.info(`  OK   ${rel} (unchanged)`);
+		console.info(`  OK   ${relative} (unchanged)`);
 		unchanged++;
 	} else {
 		await Bun.write(abs, result);
-		console.info(`  FMT  ${rel}`);
+		console.info(`  FMT  ${relative}`);
 		formatted++;
 	}
 }
