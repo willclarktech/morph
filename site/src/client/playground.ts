@@ -202,11 +202,14 @@ const renderFileTree = (
 	contentEl: HTMLElement,
 	summaryEl: HTMLElement | undefined,
 ) => {
+	const filenameEl = document.getElementById("generated-filename");
+
 	if (files.length === 0) {
 		treeEl.innerHTML =
 			'<span class="diagnostic-warning">No files generated</span>';
 		contentEl.textContent = "";
 		if (summaryEl) summaryEl.textContent = "";
+		if (filenameEl) filenameEl.textContent = "";
 		return;
 	}
 
@@ -218,16 +221,21 @@ const renderFileTree = (
 	}
 
 	treeEl.innerHTML = renderFolderHtml(tree, files, 0);
+	contentEl.textContent = "";
+	if (filenameEl) filenameEl.textContent = "";
 
-	const firstItem = treeEl.querySelector(".file-tree-item");
-	if (firstItem) {
-		firstItem.classList.add("selected");
+	const selectFile = (item: Element) => {
+		treeEl
+			.querySelectorAll(".file-tree-item")
+			.forEach((el) => el.classList.remove("selected"));
+		item.classList.add("selected");
 		const idx = parseInt(
-			firstItem.getAttribute("data-index") ?? "0",
+			item.getAttribute("data-index") ?? "0",
 			10,
 		);
 		contentEl.textContent = files[idx]?.content ?? "";
-	}
+		if (filenameEl) filenameEl.textContent = files[idx]?.filename ?? "";
+	};
 
 	treeEl.querySelectorAll(".folder-header").forEach((header) => {
 		header.addEventListener("click", () => {
@@ -245,17 +253,7 @@ const renderFileTree = (
 	});
 
 	treeEl.querySelectorAll(".file-tree-item").forEach((item) => {
-		item.addEventListener("click", () => {
-			treeEl
-				.querySelectorAll(".file-tree-item")
-				.forEach((el) => el.classList.remove("selected"));
-			item.classList.add("selected");
-			const idx = parseInt(
-				item.getAttribute("data-index") ?? "0",
-				10,
-			);
-			contentEl.textContent = files[idx]?.content ?? "";
-		});
+		item.addEventListener("click", () => selectFile(item));
 	});
 };
 
