@@ -99,7 +99,7 @@ export const generate = (options: GenerateAppOptions): GenerationResult => {
 		? schemaHasAuthRequirement(options.schema)
 		: false;
 	const hasSqlite =
-		options.schema?.extensions?.storage?.backends.includes("sqlite") ?? false;
+		options.schema?.extensions?.storage?.backends?.includes("sqlite") ?? false;
 
 	// Encoding extension
 	const encodingFormats: readonly EncodingFormat[] =
