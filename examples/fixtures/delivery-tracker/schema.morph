@@ -8,15 +8,9 @@ extensions {
 context tracking "Package delivery tracking with shipments and tracking records." {
 
 	@root
-	entity Warehouse "A warehouse location." {
-		name: string "Warehouse name"
-		location: string "Warehouse location"
-	}
-
-	@root
 	entity Shipment "A package shipment." {
-		origin: string "Origin address"
 		destination: string "Destination address"
+		origin: string "Origin address"
 		has_one TrackingRecord "Shipment tracking info"
 		references Warehouse "Ships from warehouse"
 	}
@@ -24,9 +18,15 @@ context tracking "Package delivery tracking with shipments and tracking records.
 	@root
 	entity TrackingRecord "Tracking information for a shipment." {
 		carrier: string "Carrier name"
-		trackingNumber: string "Carrier tracking number"
 		status: "pending" | "in_transit" | "delivered" "Current delivery status"
+		trackingNumber: string "Carrier tracking number"
 		belongs_to Shipment "Tracked shipment"
+	}
+
+	@root
+	entity Warehouse "A warehouse location." {
+		location: string "Warehouse location"
+		name: string "Warehouse name"
 	}
 
 	invariant ShipmentHasOriginAndDestination on Shipment
@@ -39,11 +39,11 @@ context tracking "Package delivery tracking with shipments and tracking records.
 		reads Warehouse, writes Shipment
 		post ShipmentHasOriginAndDestination
 		input {
-			origin: string "Origin address"
-			destination: string "Destination address"
-			warehouseId: Warehouse.id "Warehouse shipping from"
 			carrier: string "Carrier name"
+			destination: string "Destination address"
+			origin: string "Origin address"
 			trackingNumber: string "Carrier tracking number"
+			warehouseId: Warehouse.id "Warehouse shipping from"
 		}
 		output Shipment
 		emits ShipmentCreated "Emitted when a shipment is created"
@@ -55,8 +55,8 @@ context tracking "Package delivery tracking with shipments and tracking records.
 	command updateStatus "Update the delivery status of a shipment."
 		writes TrackingRecord
 		input {
-			trackingRecordId: TrackingRecord.id "The tracking record to update"
 			status: "pending" | "in_transit" | "delivered" "New status"
+			trackingRecordId: TrackingRecord.id "The tracking record to update"
 		}
 		output TrackingRecord
 		emits StatusUpdated "Emitted when delivery status changes"

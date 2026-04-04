@@ -21,6 +21,7 @@ const emptyContext = (overrides?: Partial<ContextDef>): ContextDef =>
 		description: "test",
 		entities: {},
 		commands: {},
+		contracts: [],
 		queries: {},
 		invariants: [],
 		dependencies: [],

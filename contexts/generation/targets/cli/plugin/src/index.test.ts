@@ -55,6 +55,7 @@ const makeContext = (overrides?: {
 						uses: [{ aggregate: "Todo", access: "read" }],
 					},
 				},
+				contracts: [],
 				functions: {},
 				invariants: [],
 				dependencies: [],

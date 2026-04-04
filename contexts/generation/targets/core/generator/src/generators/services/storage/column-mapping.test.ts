@@ -42,6 +42,7 @@ const makeSchema = (
 			},
 			...(valueObjects ? { valueObjects: valueObjects as never } : {}),
 			commands: {},
+			contracts: [],
 			queries: {},
 			dependencies: [],
 			invariants: [],

@@ -775,6 +775,10 @@ const compileContext = (
 	}
 	result["commands"] = commands;
 
+	if (ast.contracts.length > 0) {
+		result["contracts"] = ast.contracts.map(compileContract);
+	}
+
 	result["dependencies"] = [...ast.dependencies];
 
 	const functions: Record<string, FunctionDef> = {};

@@ -11,13 +11,17 @@ import {
 const ctx = (
 	partial: Omit<
 		ContextDef,
-		"commands" | "dependencies" | "invariants" | "queries"
+		"commands" | "contracts" | "dependencies" | "invariants" | "queries"
 	> &
 		Partial<
-			Pick<ContextDef, "commands" | "dependencies" | "invariants" | "queries">
+			Pick<
+				ContextDef,
+				"commands" | "contracts" | "dependencies" | "invariants" | "queries"
+			>
 		>,
 ): ContextDef => ({
 	commands: {},
+	contracts: [],
 	dependencies: [],
 	invariants: [],
 	queries: {},

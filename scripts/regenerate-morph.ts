@@ -30,10 +30,7 @@ import { parseSchema } from "../contexts/generation/domain-schema/src/schemas";
 import { generateContractTests } from "../contexts/generation/generators/contracts/src/index";
 import { executeGenerate } from "../contexts/generation/impls/src/generate";
 import { sortFileImports } from "../contexts/generation/utils/src/imports";
-import {
-	compile,
-	compileContract,
-} from "../contexts/schema-dsl/compiler/src/index";
+import { compile } from "../contexts/schema-dsl/compiler/src/index";
 import { parse } from "../contexts/schema-dsl/parser/src/index";
 
 const ROOT_DIR = path.join(import.meta.dir, "..");
@@ -160,9 +157,8 @@ const compileExtensionSchemas = (): void => {
 			extensionJson.functions = contextDef.functions;
 		}
 
-		// Compile contracts from AST (not in ContextDef)
-		if (contextAst.contracts.length > 0) {
-			extensionJson.contracts = contextAst.contracts.map(compileContract);
+		if (contextDef.contracts && contextDef.contracts.length > 0) {
+			extensionJson.contracts = contextDef.contracts;
 		}
 
 		extensionJson.invariants = contextDef.invariants;

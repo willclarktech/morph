@@ -14,29 +14,19 @@ context accounts "Financial accounts with event-sourced transaction history." {
 		name: string "Display name for the account"
 	}
 
+	value ReplayStep "A single step in event replay showing how state was reconstructed." {
+		balanceAfter: float "Account balance after this event"
+		description: string "What happened in this step"
+		event: string "Name of the domain event"
+		step: integer "Step number in the replay sequence"
+		timestamp: string "When the event occurred (ISO date)"
+	}
+
 	value Transaction "A record of funds moving in or out of an account." {
 		amount: float "Transaction amount (positive or negative)"
 		description: string "Human-readable description"
 		timestamp: string "When the transaction occurred (ISO date)"
 	}
-
-	value ReplayStep "A single step in event replay showing how state was reconstructed." {
-		step: integer "Step number in the replay sequence"
-		event: string "Name of the domain event"
-		description: string "What happened in this step"
-		balanceAfter: float "Account balance after this event"
-		timestamp: string "When the event occurred (ISO date)"
-	}
-
-	@cli
-	command openAccount "Open a new financial account."
-		writes Account
-		input {
-			initialDeposit: float "Starting balance for the account"
-			name: string "Name for the new account"
-		}
-		output Account
-		emits AccountOpened "Emitted when a new account is created"
 
 	@cli
 	command deposit "Add funds to an account."
@@ -48,6 +38,16 @@ context accounts "Financial accounts with event-sourced transaction history." {
 		}
 		output Account
 		emits FundsDeposited "Emitted when funds are added to an account"
+
+	@cli
+	command openAccount "Open a new financial account."
+		writes Account
+		input {
+			initialDeposit: float "Starting balance for the account"
+			name: string "Name for the new account"
+		}
+		output Account
+		emits AccountOpened "Emitted when a new account is created"
 
 	@cli
 	command withdraw "Remove funds from an account."

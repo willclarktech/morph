@@ -171,6 +171,13 @@ const decompileContext = (
 		}
 	}
 
+	if (context.contracts && context.contracts.length > 0) {
+		for (const contract of context.contracts) {
+			lines.push("");
+			lines.push(...indent(decompileContract(contract)));
+		}
+	}
+
 	for (const [cName, cDef] of sorted(context.commands)) {
 		lines.push("");
 		lines.push(...indent(decompileCommand(cName, cDef, profileLookup)));
@@ -484,19 +491,22 @@ const decompileScopeTag = (scope: InvariantScope): string | undefined => {
 export const decompileContract = (contract: ContractDef): string[] => {
 	const lines: string[] = [];
 
-	const bindingParts = contract.bindings.map((b) => `${b.name}: ${b.type}`);
-	const givenClause =
-		bindingParts.length > 0 ? `\n\tgiven ${bindingParts.join(", ")}` : "";
-
-	const afterSteps = contract.after.map(
-		(step) => `${step.method}(${step.args.map(decompileValue).join(", ")})`,
-	);
-	const whenClause =
-		afterSteps.length > 0 ? `\n\twhen ${afterSteps.join(", ")}` : "";
-
 	lines.push(
-		`contract ${contract.name} on ${contract.port} ${q(contract.description)}${givenClause}${whenClause}`,
+		`contract ${contract.name} on ${contract.port} ${q(contract.description)}`,
 	);
+
+	if (contract.bindings.length > 0) {
+		const bindingParts = contract.bindings.map((b) => `${b.name}: ${b.type}`);
+		lines.push(`\tgiven ${bindingParts.join(", ")}`);
+	}
+
+	if (contract.after.length > 0) {
+		const afterSteps = contract.after.map(
+			(step) => `${step.method}(${step.args.map(decompileValue).join(", ")})`,
+		);
+		lines.push(`\twhen ${afterSteps.join(", ")}`);
+	}
+
 	lines.push(`\tthen ${decompileCondition(contract.then)}`);
 
 	return lines;

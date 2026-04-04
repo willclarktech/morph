@@ -2,6 +2,7 @@
 	"contexts": {
 		"generation": {
 			"commands": {},
+			"contracts": [],
 			"dependencies": [],
 			"description": "Code generation from domain schemas",
 			"entities": {},
@@ -165,6 +166,7 @@
 		},
 		"schema-dsl": {
 			"commands": {},
+			"contracts": [],
 			"dependencies": [],
 			"description": "Parse, compile, and decompile .morph DSL files",
 			"entities": {},

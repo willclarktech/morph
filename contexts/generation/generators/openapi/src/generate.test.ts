@@ -49,6 +49,7 @@ const minimalSchema: DomainSchema = {
 					uses: [{ aggregate: "Todo", access: "write" as const }],
 				},
 			},
+			contracts: [],
 			queries: {
 				listTodos: {
 					description: "List todos",

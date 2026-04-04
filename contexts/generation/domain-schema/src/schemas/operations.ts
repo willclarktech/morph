@@ -11,6 +11,7 @@ import {
 	TypeParameterDefSchema,
 	ValueObjectDefSchema,
 } from "./entities";
+import { ContractDefSchema } from "./contract";
 import { InvariantDefSchema } from "./expressions";
 import { TypeRefSchema } from "./primitives";
 
@@ -211,6 +212,10 @@ export const ContextDefSchema = S.Struct({
 		S.Record({ key: S.String, value: CommandDefSchema }),
 		{ exact: true, default: () => ({}) },
 	),
+	contracts: S.optionalWith(S.Array(ContractDefSchema), {
+		exact: true,
+		default: () => [],
+	}),
 	dependencies: S.optionalWith(S.Array(S.String), {
 		exact: true,
 		default: () => [],

@@ -13,8 +13,8 @@ context catalog "Product catalog for the marketplace." {
 
 	@root
 	entity Product "An item available for purchase." {
-		name: string "Product name"
 		description: string "Product description"
+		name: string "Product name"
 		price: float "Price in dollars"
 	}
 
@@ -22,8 +22,8 @@ context catalog "Product catalog for the marketplace." {
 	command addProduct "Add a new product to the catalog."
 		writes Product
 		input {
-			name: string "Product name"
 			description: string "Product description"
+			name: string "Product name"
 			price: float "Price in dollars"
 		}
 		output Product

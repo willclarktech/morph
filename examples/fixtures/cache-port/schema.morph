@@ -2,11 +2,17 @@ domain CachePort
 
 context caching "A typed key-value cache with an abstract storage port and property-based contracts." {
 
+	type CacheStatistics "Cache hit/miss counters" {
+		hits: integer "Number of cache hits"
+		misses: integer "Number of cache misses"
+		size: integer "Number of entries currently in the cache"
+	}
+
 	port Cache<T> "Generic key-value cache" {
 		get(key: string): T throws CacheMissError
+		has(key: string): boolean
 		put(key: string, value: T): void
 		remove(key: string): void throws CacheMissError
-		has(key: string): boolean
 	}
 
 	error CacheMissError "Requested key was not found in the cache" {
@@ -27,10 +33,4 @@ context caching "A typed key-value cache with an abstract storage port and prope
 	function cacheStats "Get hit/miss statistics for the cache"
 		input {}
 		output CacheStatistics
-
-	type CacheStatistics "Cache hit/miss counters" {
-		hits: integer "Number of cache hits"
-		misses: integer "Number of cache misses"
-		size: integer "Number of entries currently in the cache"
-	}
 }

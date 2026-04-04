@@ -63,6 +63,7 @@ describe("getSchemaDescription", () => {
 					description: "Main context description",
 					entities: {},
 					commands: {},
+					contracts: [],
 					queries: {},
 					invariants: [],
 					dependencies: [],

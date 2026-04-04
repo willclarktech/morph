@@ -12,13 +12,7 @@ import { ValueExprSchema } from "./expressions/value-expr";
 
 interface ContractBindingDef {
 	readonly name: string;
-	readonly type:
-		| "boolean"
-		| "date"
-		| "datetime"
-		| "float"
-		| "integer"
-		| "string";
+	readonly type: string;
 }
 
 interface ContractStepDef {
@@ -41,7 +35,7 @@ interface ContractDef {
 
 export const ContractBindingDefSchema = S.Struct({
 	name: S.String,
-	type: S.Literal("boolean", "date", "datetime", "float", "integer", "string"),
+	type: S.String,
 });
 
 export const ContractStepDefSchema: S.Schema<ContractStepDef> = S.Struct({

@@ -30,6 +30,7 @@ describe("schemaHasTag", () => {
 						uses: [],
 					},
 				},
+				contracts: [],
 				queries: {},
 				invariants: [],
 				dependencies: [],
@@ -54,6 +55,7 @@ describe("schemaHasTag", () => {
 						uses: [],
 					},
 				},
+				contracts: [],
 				queries: {},
 				invariants: [],
 				dependencies: [],
@@ -68,6 +70,7 @@ describe("schemaHasTag", () => {
 				description: "test",
 				entities: {},
 				commands: {},
+				contracts: [],
 				queries: {
 					getStuff: {
 						description: "get",
@@ -101,6 +104,7 @@ describe("schemaHasTag", () => {
 						uses: [],
 					},
 				},
+				contracts: [],
 				queries: {},
 				invariants: [],
 				dependencies: [],
@@ -119,6 +123,7 @@ describe("schemaHasTag", () => {
 						uses: [],
 					},
 				},
+				contracts: [],
 				queries: {},
 				invariants: [],
 				dependencies: [],
@@ -135,6 +140,7 @@ describe("schemaHasTag", () => {
 				description: "test",
 				entities: {},
 				commands: {},
+				contracts: [],
 				queries: {},
 				functions: {
 					helper: {

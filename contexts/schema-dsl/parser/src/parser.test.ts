@@ -153,20 +153,20 @@ context c "" {
 	});
 });
 
-describe("round-trip", () => {
-	const examples = [
-		"address-book",
-		"blog-app",
-		"cache-port",
-		"code-generator",
-		"delivery-tracker",
-		"ledger",
-		"marketplace",
-		"pastebin-app",
-		"todo-app",
-		"type-gallery",
-	] as const;
+const examples = [
+	"address-book",
+	"blog-app",
+	"cache-port",
+	"code-generator",
+	"delivery-tracker",
+	"ledger",
+	"marketplace",
+	"pastebin-app",
+	"todo-app",
+	"type-gallery",
+] as const;
 
+describe("round-trip", () => {
 	for (const name of examples) {
 		test(`${name}: .morph → compile → decompile → parse → compile → compare`, () => {
 			const { schema } = loadSchema(name);
@@ -179,6 +179,37 @@ describe("round-trip", () => {
 			expect(compileResult.errors).toHaveLength(0);
 
 			expect(normalize(compileResult.schema)).toEqual(normalize(schema));
+		});
+	}
+});
+
+describe("round-trip completeness", () => {
+	for (const name of examples) {
+		test(`${name}: no structural loss through compile → decompile`, () => {
+			const source = readFileSync(
+				path.resolve(fixturesDir, name, "schema.morph"),
+				"utf8",
+			);
+			const original = parse(source);
+
+			const compiled = compile(original.ast!);
+			const decompiled = decompile(compiled.schema as any);
+			const reparsed = parse(decompiled);
+
+			for (const ctx of original.ast!.contexts) {
+				const rt = reparsed.ast!.contexts.find((c) => c.name === ctx.name)!;
+				expect(rt.entities.length).toBe(ctx.entities.length);
+				expect(rt.valueObjects.length).toBe(ctx.valueObjects.length);
+				expect(rt.commands.length).toBe(ctx.commands.length);
+				expect(rt.queries.length).toBe(ctx.queries.length);
+				expect(rt.functions.length).toBe(ctx.functions.length);
+				expect(rt.invariants.length).toBe(ctx.invariants.length);
+				expect(rt.contracts.length).toBe(ctx.contracts.length);
+				expect(rt.ports.length).toBe(ctx.ports.length);
+				expect(rt.subscribers.length).toBe(ctx.subscribers.length);
+				expect(rt.types.length).toBe(ctx.types.length);
+				expect(rt.errors.length).toBe(ctx.errors.length);
+			}
 		});
 	}
 });

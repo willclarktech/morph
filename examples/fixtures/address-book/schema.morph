@@ -9,18 +9,18 @@ context contacts "Contact management with structured addresses." {
 
 	@root
 	entity Contact "A person in the address book." {
+		address: Address "Mailing address"
+		email: string "Email address"
 		name: string "Full name"
 		@sensitive
 		phone: string "Phone number"
-		email: string "Email address"
-		address: Address "Mailing address"
 	}
 
 	value Address "A structured mailing address." {
-		street: string "Street address"
 		city: string "City name"
-		zip: string "Postal code"
 		country: string "Country name"
+		street: string "Street address"
+		zip: string "Postal code"
 	}
 
 	error DuplicateContact "A contact with this email already exists" {
@@ -31,11 +31,11 @@ context contacts "Contact management with structured addresses." {
 	command createContact "Add a new contact to the address book."
 		writes Contact
 		input {
+			address: Address "Mailing address"
+			email: string "Email address"
 			name: string "Full name"
 			@sensitive
 			phone: string "Phone number"
-			email: string "Email address"
-			address: Address "Mailing address"
 		}
 		output Contact
 		emits ContactCreated "Emitted when a contact is added"
@@ -44,17 +44,17 @@ context contacts "Contact management with structured addresses." {
 		}
 
 	@cli @api
-	query listContacts "List all contacts."
-		reads Contact
-		input {}
-		output Contact[]
-
-	@cli @api
 	query findByCity "Find contacts in a given city."
 		reads Contact
 		input {
 			city: string "City to search for"
 		}
+		output Contact[]
+
+	@cli @api
+	query listContacts "List all contacts."
+		reads Contact
+		input {}
 		output Contact[]
 
 	subscriber logContactEvents "Log contact events for auditing"

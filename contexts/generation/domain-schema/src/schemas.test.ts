@@ -59,6 +59,7 @@ describe("DomainSchema with types and functions", () => {
 						},
 					},
 					entities: {},
+					contracts: [],
 					invariants: [],
 					dependencies: [],
 				},
@@ -102,6 +103,7 @@ describe("DomainSchema with types and functions", () => {
 						},
 					},
 					entities: {},
+					contracts: [],
 					invariants: [],
 					dependencies: [],
 				},
@@ -145,6 +147,7 @@ describe("DomainSchema with types and functions", () => {
 						},
 					},
 					entities: {},
+					contracts: [],
 					invariants: [],
 					dependencies: [],
 				},
@@ -206,6 +209,7 @@ describe("DomainSchema with types and functions", () => {
 							uses: [{ aggregate: "User", access: "write" }],
 						},
 					},
+					contracts: [],
 					functions: {
 						summarize: {
 							description: "Summarize users",

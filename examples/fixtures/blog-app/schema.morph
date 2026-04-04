@@ -9,15 +9,6 @@ extensions {
 context blog "A blog platform with role-based authorization. Admins manage all content; authors create and edit their own posts." {
 
 	@root
-	entity User "A person who can author or administer blog posts." {
-		@unique
-		email: string "Email address"
-		name: string "Display name"
-		passwordHash: string "Bcrypt hash of the user's password"
-		role: "admin" | "author" "User's role for authorization"
-	}
-
-	@root
 	entity Post "A blog post written by an author." {
 		authorId: User.id "The user who wrote this post"
 		content: string "Post body content"
@@ -25,6 +16,15 @@ context blog "A blog platform with role-based authorization. Admins manage all c
 		status: "draft" | "published" "Publication status"
 		title: string "Post title"
 		belongs_to User "Written by user"
+	}
+
+	@root
+	entity User "A person who can author or administer blog posts." {
+		@unique
+		email: string "Email address"
+		name: string "Display name"
+		passwordHash: string "Bcrypt hash of the user's password"
+		role: "admin" | "author" "User's role for authorization"
 	}
 
 	@context
@@ -51,6 +51,21 @@ context blog "A blog platform with role-based authorization. Admins manage all c
 		where context.currentUser.role == "admin" || post.authorId == context.currentUser.id
 
 	@cli @api @mcp
+	command createPost "Create a new blog post as a draft."
+		reads User, writes Post
+		pre RequiresAuthorOrAdmin, AuthorIdMatchesCurrentUser
+		input {
+			authorId: User.id "The user creating the post"
+			content: string "Post body content"
+			title: string "Post title"
+		}
+		output Post
+		emits PostCreated "Emitted when a new post is created"
+		errors {
+			UserNotFound "The specified author does not exist" when "authorId is invalid"
+		}
+
+	@cli @api @mcp
 	command createUser "Register a new user in the system."
 		writes User
 		input {
@@ -67,18 +82,16 @@ context blog "A blog platform with role-based authorization. Admins manage all c
 		}
 
 	@cli @api @mcp
-	command createPost "Create a new blog post as a draft."
-		reads User, writes Post
-		pre RequiresAuthorOrAdmin, AuthorIdMatchesCurrentUser
+	command deletePost "Delete a blog post."
+		writes Post
+		pre AdminOrOwnsPost
 		input {
-			authorId: User.id "The user creating the post"
-			content: string "Post body content"
-			title: string "Post title"
+			postId: Post.id "The post to delete"
 		}
-		output Post
-		emits PostCreated "Emitted when a new post is created"
+		output boolean
+		emits PostDeleted "Emitted when a post is deleted"
 		errors {
-			UserNotFound "The specified author does not exist" when "authorId is invalid"
+			PostNotFound "The specified post does not exist" when "postId is invalid"
 		}
 
 	@cli @api @mcp
@@ -97,38 +110,17 @@ context blog "A blog platform with role-based authorization. Admins manage all c
 		}
 
 	@cli @api @mcp
-	command deletePost "Delete a blog post."
-		writes Post
-		pre AdminOrOwnsPost
-		input { postId: Post.id "The post to delete" }
-		output boolean
-		emits PostDeleted "Emitted when a post is deleted"
-		errors {
-			PostNotFound "The specified post does not exist" when "postId is invalid"
-		}
-
-	@cli @api @mcp
 	command publishPost "Publish a draft post (admin only)."
 		writes Post
 		pre RequiresAdmin
-		input { postId: Post.id "The post to publish" }
+		input {
+			postId: Post.id "The post to publish"
+		}
 		output Post
 		emits PostPublished "Emitted when a post is published"
 		errors {
 			PostNotFound "The specified post does not exist" when "postId is invalid"
 			AlreadyPublished "The post is already published" when "Post.status is published"
-		}
-
-	@cli @api @mcp
-	command unpublishPost "Unpublish a published post (admin only)."
-		writes Post
-		pre RequiresAdmin
-		input { postId: Post.id "The post to unpublish" }
-		output Post
-		emits PostUnpublished "Emitted when a post is unpublished"
-		errors {
-			PostNotFound "The specified post does not exist" when "postId is invalid"
-			NotPublished "The post is not published" when "Post.status is draft"
 		}
 
 	@cli @api @mcp
@@ -146,9 +138,25 @@ context blog "A blog platform with role-based authorization. Admins manage all c
 		}
 
 	@cli @api @mcp
+	command unpublishPost "Unpublish a published post (admin only)."
+		writes Post
+		pre RequiresAdmin
+		input {
+			postId: Post.id "The post to unpublish"
+		}
+		output Post
+		emits PostUnpublished "Emitted when a post is unpublished"
+		errors {
+			PostNotFound "The specified post does not exist" when "postId is invalid"
+			NotPublished "The post is not published" when "Post.status is draft"
+		}
+
+	@cli @api @mcp
 	query getPost "Get a single post by ID."
 		reads Post
-		input { postId: Post.id "The post to retrieve" }
+		input {
+			postId: Post.id "The post to retrieve"
+		}
 		output Post
 		errors {
 			PostNotFound "The specified post does not exist" when "postId is invalid"
