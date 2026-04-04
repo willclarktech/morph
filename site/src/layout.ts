@@ -34,7 +34,7 @@ export const layout = (options: {
 					(item) =>
 						`<li><a href="${item.href}"${options.currentPath === item.href || (item.href !== "/" && options.currentPath.startsWith(item.href)) ? ' aria-current="page"' : ""}>${item.label}</a></li>`,
 				).join("\n\t\t\t\t")}
-				<li><a href="https://github.com/morphdsl/morph" target="_blank" rel="noopener">GitHub</a></li>
+				<li><a href="https://github.com/willclarktech/morph" target="_blank" rel="noopener">GitHub</a></li>
 			</ul>
 		</nav>
 	</header>
