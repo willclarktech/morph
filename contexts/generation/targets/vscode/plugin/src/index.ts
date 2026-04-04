@@ -29,8 +29,8 @@ const KNOWN_PROVIDERS = new Set([
 
 const getCommandOps = (context: ContextDef): readonly CommandOp[] => {
 	const ops = [
-		...Object.entries(context.commands ?? {}),
-		...Object.entries(context.queries ?? {}),
+		...Object.entries(context.commands),
+		...Object.entries(context.queries),
 		...Object.entries(context.functions ?? {}),
 	];
 	return ops

@@ -19,7 +19,7 @@ export const getAllCommands = (
 	schema: DomainSchema,
 ): readonly QualifiedEntry<CommandDef>[] =>
 	Object.entries(schema.contexts).flatMap(([contextName, context]) =>
-		Object.entries(context.commands ?? {}).map(([name, definition]) => ({
+		Object.entries(context.commands).map(([name, definition]) => ({
 			context: contextName,
 			def: definition,
 			name,
@@ -34,7 +34,7 @@ export const getAllQueries = (
 	schema: DomainSchema,
 ): readonly QualifiedEntry<QueryDef>[] =>
 	Object.entries(schema.contexts).flatMap(([contextName, context]) =>
-		Object.entries(context.queries ?? {}).map(([name, definition]) => ({
+		Object.entries(context.queries).map(([name, definition]) => ({
 			context: contextName,
 			def: definition,
 			name,

@@ -4,8 +4,6 @@ import { Context, Effect as E, Layer } from "effect";
 
 import TEMPLATE_SCHEMA from "./template.morph";
 
-export { TEMPLATE_SCHEMA };
-
 export interface TemplateSchemaHandler {
 	readonly handle: (
 		params: Record<string, never>,
@@ -20,3 +18,5 @@ export const TemplateSchemaHandler = Context.GenericTag<TemplateSchemaHandler>(
 export const TemplateSchemaHandlerLive = Layer.succeed(TemplateSchemaHandler, {
 	handle: () => E.succeed(TEMPLATE_SCHEMA),
 });
+
+export { default as TEMPLATE_SCHEMA } from "./template.morph";

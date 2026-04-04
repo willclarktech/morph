@@ -42,7 +42,7 @@ export const getCreateUserCommand = (
 	entityName: string,
 ): CreateUserCommandInfo | undefined => {
 	for (const [, context] of Object.entries(schema.contexts)) {
-		for (const [cmdName, cmd] of Object.entries(context.commands ?? {})) {
+		for (const [cmdName, cmd] of Object.entries(context.commands)) {
 			if (
 				cmdName.toLowerCase().includes("create") &&
 				cmdName.toLowerCase().includes(entityName.toLowerCase()) &&

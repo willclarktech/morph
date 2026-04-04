@@ -36,8 +36,8 @@ const getContextOperations = (
  * Check if a context has operations (commands or queries).
  */
 const hasOperations = (context: ContextDef): boolean =>
-	Object.keys(context.commands ?? {}).length > 0 ||
-	Object.keys(context.queries ?? {}).length > 0;
+	Object.keys(context.commands).length > 0 ||
+	Object.keys(context.queries).length > 0;
 
 /**
  * Recursively collect type names from a TypeRef.

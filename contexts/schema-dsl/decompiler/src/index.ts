@@ -171,7 +171,7 @@ const decompileContext = (
 		}
 	}
 
-	if (context.contracts && context.contracts.length > 0) {
+	if (context.contracts.length > 0) {
 		for (const contract of context.contracts) {
 			lines.push("");
 			lines.push(...indent(decompileContract(contract)));

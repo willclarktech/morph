@@ -4,6 +4,7 @@
 import { Schema as S } from "effect";
 
 import { ExtensionsSchema } from "../extensions";
+import { ContractDefSchema } from "./contract";
 import {
 	EntityDefSchema,
 	FieldDefSchema,
@@ -11,7 +12,6 @@ import {
 	TypeParameterDefSchema,
 	ValueObjectDefSchema,
 } from "./entities";
-import { ContractDefSchema } from "./contract";
 import { InvariantDefSchema } from "./expressions";
 import { TypeRefSchema } from "./primitives";
 
