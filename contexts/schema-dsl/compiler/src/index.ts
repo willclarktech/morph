@@ -332,7 +332,7 @@ const compileCommand = (
 
 	if (ast.pre && ast.pre.length > 0) result["pre"] = [...ast.pre];
 	if (ast.post && ast.post.length > 0) result["post"] = [...ast.post];
-	if (tags.length > 0) result["tags"] = tags;
+	result["tags"] = tags;
 
 	return result as unknown as CommandDef;
 };
@@ -363,7 +363,7 @@ const compileQuery = (
 	};
 
 	if (ast.pre && ast.pre.length > 0) result["pre"] = [...ast.pre];
-	if (tags.length > 0) result["tags"] = tags;
+	result["tags"] = tags;
 
 	return result as unknown as QueryDef;
 };
@@ -387,7 +387,7 @@ const compileFunction = (
 		output: compileTypeRef(ast.output, names),
 	};
 
-	if (tags.length > 0) result["tags"] = tags;
+	result["tags"] = tags;
 	if (ast.typeParameters && ast.typeParameters.length > 0) {
 		result["typeParameters"] = ast.typeParameters.map((tp) =>
 			compileTypeParameter(tp, names),

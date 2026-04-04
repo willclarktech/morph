@@ -179,11 +179,13 @@ const runDiagnostics = () => {
 			})
 			.join("\n");
 		statusEl.textContent = `${parseResult.errors.length} error(s)`;
+		switchTab("diagnostics");
 		return;
 	}
 
 	if (!parseResult.ast) {
 		diagnosticsEl.textContent = "Parse returned no AST";
+		switchTab("diagnostics");
 		return;
 	}
 
@@ -196,6 +198,7 @@ const runDiagnostics = () => {
 			)
 			.join("\n");
 		statusEl.textContent = `${compileResult.errors.length} error(s)`;
+		switchTab("diagnostics");
 		return;
 	}
 
@@ -368,21 +371,25 @@ const runGenerate = () => {
 	const statusEl = document.getElementById("status");
 	if (!treeEl || !contentEl) return;
 
+	const diagnosticsEl = document.getElementById("diagnostics-output");
+
 	const parseResult = parse(source);
 	if (!parseResult.ast || parseResult.errors.length > 0) {
-		treeEl.innerHTML =
-			'<span class="diagnostic-error">Fix errors before generating</span>';
-		contentEl.textContent = "";
-		if (summaryEl) summaryEl.textContent = "";
+		if (diagnosticsEl) {
+			diagnosticsEl.innerHTML =
+				'<span class="diagnostic-error">Fix errors before generating</span>';
+		}
+		switchTab("diagnostics");
 		return;
 	}
 
 	const compileResult = compile(parseResult.ast);
 	if (!compileResult.schema || compileResult.errors.length > 0) {
-		treeEl.innerHTML =
-			'<span class="diagnostic-error">Compilation errors — cannot generate</span>';
-		contentEl.textContent = "";
-		if (summaryEl) summaryEl.textContent = "";
+		if (diagnosticsEl) {
+			diagnosticsEl.innerHTML =
+				'<span class="diagnostic-error">Compilation errors — cannot generate</span>';
+		}
+		switchTab("diagnostics");
 		return;
 	}
 
@@ -411,9 +418,10 @@ const runGenerate = () => {
 			}, 3000);
 		}
 	} catch (e) {
-		treeEl.innerHTML = `<span class="diagnostic-error">Generation failed: ${escapeHtml(e instanceof Error ? e.message : String(e))}</span>`;
-		contentEl.textContent = "";
-		if (summaryEl) summaryEl.textContent = "";
+		if (diagnosticsEl) {
+			diagnosticsEl.innerHTML = `<span class="diagnostic-error">Generation failed: ${escapeHtml(e instanceof Error ? e.message : String(e))}</span>`;
+		}
+		switchTab("diagnostics");
 		if (statusEl) statusEl.textContent = "Ready";
 	}
 };

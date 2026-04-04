@@ -25,14 +25,14 @@ export const playgroundPage = (): string =>
 				</div>
 				<div class="panel-output">
 					<div class="output-tabs" role="tablist">
-						<button role="tab" aria-selected="true" data-tab="diagnostics">Diagnostics</button>
-						<button role="tab" data-tab="generated">Generated Files</button>
+						<button role="tab" data-tab="diagnostics">Diagnostics</button>
+						<button role="tab" aria-selected="true" data-tab="generated">Generated Files</button>
 					</div>
 					<div class="output-content">
-						<div id="tab-diagnostics" class="tab-panel active">
+						<div id="tab-diagnostics" class="tab-panel">
 							<pre id="diagnostics-output"></pre>
 						</div>
-						<div id="tab-generated" class="tab-panel">
+						<div id="tab-generated" class="tab-panel active">
 							<div id="generated-summary" class="generated-summary"></div>
 							<div id="generated-tree" class="file-tree"></div>
 							<pre id="generated-content" class="file-content"></pre>
