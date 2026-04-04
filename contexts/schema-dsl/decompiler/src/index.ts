@@ -206,7 +206,8 @@ const decompileContext = (
 const decompileEntity = (name: string, entity: EntityDef): string[] => {
 	const lines: string[] = [];
 	if (entity.aggregate?.root) lines.push("@root");
-	lines.push(`entity ${name} ${q(entity.description)} {`);
+	const desc = entity.description ? ` ${q(entity.description)}` : "";
+	lines.push(`entity ${name}${desc} {`);
 
 	for (const [aName, aDef] of sorted(entity.attributes)) {
 		lines.push(...indent(decompileAttribute(aName, aDef)));
@@ -262,7 +263,8 @@ const decompileAttribute = (
 
 	const opt = attribute.optional ? "?" : "";
 	const typeString = decompileTypeRef(attribute.type);
-	lines.push(`${name}${opt}: ${typeString} ${q(attribute.description)}`);
+	const desc = attribute.description ? ` ${q(attribute.description)}` : "";
+	lines.push(`${name}${opt}: ${typeString}${desc}`);
 
 	return lines;
 };
@@ -759,10 +761,10 @@ const decompileProfiles = (
 };
 
 const decompileTags = (
-	tags: readonly string[],
+	tags: readonly string[] | undefined,
 	profileLookup: ProfileLookup = new Map(),
 ): string | undefined => {
-	if (tags.length === 0) return undefined;
+	if (!tags || tags.length === 0) return undefined;
 
 	if (profileLookup.size > 0) {
 		const key = [...tags].sort().join(",");
@@ -793,9 +795,8 @@ const decompileInputClause = (input: Record<string, ParamDef>): string[] => {
 		if (pDef.sensitive) tags.push("@sensitive");
 		for (const tag of tags) lines.push(`\t${tag}`);
 		const opt = pDef.optional ? "?" : "";
-		lines.push(
-			`\t${pName}${opt}: ${decompileTypeRef(pDef.type)} ${q(pDef.description)}`,
-		);
+		const desc = pDef.description ? ` ${q(pDef.description)}` : "";
+		lines.push(`\t${pName}${opt}: ${decompileTypeRef(pDef.type)}${desc}`);
 	}
 	lines.push("}");
 	return lines;

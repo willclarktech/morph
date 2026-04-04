@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import MarkdownIt from "markdown-it";
+import { stubServerModules } from "./build-plugin-stub-server";
 import { landingPage } from "./pages/landing";
 import { docsPage, docsIndex, DOC_ENTRIES } from "./pages/docs";
 import { playgroundPage } from "./pages/playground";
@@ -44,6 +45,22 @@ const getContentType = (path: string): string => {
 	return "application/octet-stream";
 };
 
+const buildClientJs = async (entrypoint: string) => {
+	const result = await Bun.build({
+		entrypoints: [join(CLIENT_DIR, entrypoint)],
+		format: "esm",
+		target: "browser",
+		minify: false,
+		plugins: [stubServerModules],
+	});
+	if (result.success && result.outputs[0]) {
+		return new Response(await result.outputs[0].text(), {
+			headers: { "content-type": "application/javascript" },
+		});
+	}
+	return new Response("Build failed", { status: 500 });
+};
+
 Bun.serve({
 	port: 3000,
 	async fetch(req) {
@@ -57,49 +74,9 @@ Bun.serve({
 
 		// Static assets from public/
 		if (path.match(/\.\w+$/)) {
-			// Client JS files — build on the fly
-			if (path === "/playground.js") {
-				const result = await Bun.build({
-					entrypoints: [join(CLIENT_DIR, "playground.ts")],
-					format: "esm",
-					target: "browser",
-					minify: false,
-				});
-				if (result.success && result.outputs[0]) {
-					return new Response(await result.outputs[0].text(), {
-						headers: { "content-type": "application/javascript" },
-					});
-				}
-				return new Response("Build failed", { status: 500 });
-			}
-			if (path === "/mermaid-init.js") {
-				const result = await Bun.build({
-					entrypoints: [join(CLIENT_DIR, "mermaid-init.ts")],
-					format: "esm",
-					target: "browser",
-					minify: false,
-				});
-				if (result.success && result.outputs[0]) {
-					return new Response(await result.outputs[0].text(), {
-						headers: { "content-type": "application/javascript" },
-					});
-				}
-				return new Response("Build failed", { status: 500 });
-			}
-			if (path === "/examples-browser.js") {
-				const result = await Bun.build({
-					entrypoints: [join(CLIENT_DIR, "examples-browser.ts")],
-					format: "esm",
-					target: "browser",
-					minify: false,
-				});
-				if (result.success && result.outputs[0]) {
-					return new Response(await result.outputs[0].text(), {
-						headers: { "content-type": "application/javascript" },
-					});
-				}
-				return new Response("Build failed", { status: 500 });
-			}
+			if (path === "/playground.js") return buildClientJs("playground.ts");
+			if (path === "/mermaid-init.js") return buildClientJs("mermaid-init.ts");
+			if (path === "/examples-browser.js") return buildClientJs("examples-browser.ts");
 
 			return serveStatic(join(PUBLIC_DIR, path), getContentType(path));
 		}

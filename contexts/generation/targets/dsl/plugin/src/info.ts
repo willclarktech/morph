@@ -88,7 +88,7 @@ export const generateContextIndex = (
 
 	if (info.hasOperations) {
 		lines.push("// DSL operations");
-		lines.push(`export * from "./${info.contextName}";`);
+		lines.push(`export * from "./${info.kebabName}";`);
 		lines.push("");
 	}
 

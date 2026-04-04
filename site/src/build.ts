@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { mkdir, cp, readdir, rm } from "node:fs/promises";
 import MarkdownIt from "markdown-it";
+import { stubServerModules } from "./build-plugin-stub-server";
 import { landingPage } from "./pages/landing";
 import { docsPage, docsIndex, DOC_ENTRIES } from "./pages/docs";
 import { playgroundPage } from "./pages/playground";
@@ -51,6 +52,7 @@ for (const { entry, output } of clientEntries) {
 		format: "esm",
 		target: "browser",
 		minify: true,
+		plugins: [stubServerModules],
 	});
 	if (!result.success) {
 		console.error(`Failed to bundle ${entry}:`, result.logs);

@@ -64,14 +64,18 @@ h1, h2, h3 {
 	flex-wrap: wrap;
 }
 
-/* ── Features grid ── */
+/* ── Card grids ── */
 
-.features-grid .grid {
+section > .grid {
 	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
-.features-grid article {
+section > .grid > article {
 	margin-bottom: 0;
+}
+
+section > .grid > article > nav {
+	margin-top: 1rem;
 }
 
 /* ── Site logo ── */
@@ -137,8 +141,3 @@ header nav a[aria-current="page"] {
 	border-bottom: 2px solid var(--pico-primary);
 }
 
-/* ── Example cards ── */
-
-.example-card nav {
-	margin-top: 1rem;
-}

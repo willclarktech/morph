@@ -12,21 +12,23 @@ export const examplesPage = (examples: readonly ExampleSnapshot[]): string =>
 		currentPath: "/examples",
 		bodyExtra: '<script type="module" src="/examples-browser.js"></script>',
 		content: `
-		<h1>Example Schemas</h1>
-		<p>Browse example <code>.morph</code> schemas demonstrating various features. Click to open in the playground.</p>
-		<div class="grid">
-			${examples
-				.map(
-					(ex) => `<article class="example-card">
-				<h3>${ex.name}</h3>
-				<p>${escapeHtml(ex.description)}</p>
-				<nav>
-					<a href="/playground#${encodeURIComponent(ex.schema)}" role="button" class="outline">Open in Playground</a>
-				</nav>
-			</article>`,
-				)
-				.join("\n\t\t\t")}
-		</div>`,
+		<section>
+			<h1>Example Schemas</h1>
+			<p>Browse example <code>.morph</code> schemas demonstrating various features. Click to open in the playground.</p>
+			<div class="grid">
+				${examples
+					.map(
+						(ex) => `<article>
+					<h3>${ex.name}</h3>
+					<p>${escapeHtml(ex.description)}</p>
+					<nav>
+						<a href="/playground#${encodeURIComponent(ex.schema)}" role="button" class="outline">Open in Playground</a>
+					</nav>
+				</article>`,
+					)
+					.join("\n\t\t\t\t")}
+			</div>
+		</section>`,
 	});
 
 const escapeHtml = (s: string): string =>

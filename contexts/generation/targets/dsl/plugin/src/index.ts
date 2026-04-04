@@ -113,7 +113,7 @@ const generateContextDslPackage = (
 		});
 		files.push({
 			content: dslContent,
-			filename: `${packagePath}/src/${contextName}.ts`,
+			filename: `${packagePath}/src/${contextNameToKebab(contextName)}.ts`,
 		});
 	}
 

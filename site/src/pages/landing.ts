@@ -94,7 +94,7 @@ cd examples/pastebin-app && bun run apps/api/src/index.ts</code></pre>
 			<p><a href="/playground#${encodeURIComponent(PASTEBIN_SCHEMA)}">Open in Playground →</a></p>
 		</section>
 
-		<section class="features-grid">
+		<section>
 			<h2>Features</h2>
 			<div class="grid">
 				${FEATURES.map(

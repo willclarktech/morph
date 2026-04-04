@@ -10,8 +10,9 @@ export const playgroundPage = (): string =>
 		<div class="playground-layout">
 			<div class="playground-toolbar">
 				<div class="toolbar-left">
-					<button id="btn-format" class="outline">Format</button>
 					<button id="btn-template" class="outline">Template</button>
+					<button id="btn-format" class="outline">Format</button>
+					<button id="btn-generate" class="outline">Generate</button>
 					<button id="btn-share" class="outline">Share</button>
 				</div>
 				<div class="toolbar-right">
@@ -26,18 +27,15 @@ export const playgroundPage = (): string =>
 					<div class="output-tabs" role="tablist">
 						<button role="tab" aria-selected="true" data-tab="diagnostics">Diagnostics</button>
 						<button role="tab" data-tab="generated">Generated Files</button>
-						<button role="tab" data-tab="formatted">Formatted</button>
 					</div>
 					<div class="output-content">
 						<div id="tab-diagnostics" class="tab-panel active">
 							<pre id="diagnostics-output"></pre>
 						</div>
 						<div id="tab-generated" class="tab-panel">
+							<div id="generated-summary" class="generated-summary"></div>
 							<div id="generated-tree" class="file-tree"></div>
 							<pre id="generated-content" class="file-content"></pre>
-						</div>
-						<div id="tab-formatted" class="tab-panel">
-							<pre id="formatted-output"></pre>
 						</div>
 					</div>
 				</div>

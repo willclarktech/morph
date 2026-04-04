@@ -36,7 +36,7 @@ export const generateScenariosReadme = (
 	].join("\n");
 
 	return joinSections([
-		heading(1, `@${name}/scenarios`),
+		heading(1, `@${name.toLowerCase()}/scenarios`),
 		description(schema),
 		quickStart,
 		assertions,
