@@ -171,7 +171,8 @@ const decompileContext = (
 		}
 	}
 
-	if (context.contracts.length > 0) {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- callers may pass raw JSON without defaults
+	if (context.contracts && context.contracts.length > 0) {
 		for (const contract of context.contracts) {
 			lines.push("");
 			lines.push(...indent(decompileContract(contract)));
