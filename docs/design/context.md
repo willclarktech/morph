@@ -71,20 +71,20 @@ Benefits:
 
 ### Application (Impure Shell)
 
-API/CLI handlers inject context before calling the library:
+API/CLI/UI handlers inject context parameters automatically. The `createApi` function uses `injectableParams` config (computed at generation time) to fill in parameters like `userId` from the authenticated user:
 
 ```typescript
-// apps/api/src/handlers.ts
-const handler = async (request: Request) => {
-	const user = await extractUser(request); // Get user from request
-	const params = extractParams(request);
-
-	// Inject userId from context before calling pure library
-	const injectedParams = { ...params, userId: user.id };
-
-	return createTodo(injectedParams); // Call pure operation
-};
+// apps/api/src/index.ts (generated)
+const api = createApi(ops, {
+  injectableParams: {
+    createTodo: ["userId"],   // userId injected from auth context
+    completeTodo: ["userId"],
+  },
+  // ...
+});
 ```
+
+This is framework-handled — implementers don't manually inject parameters.
 
 ## Inference from Invariants
 

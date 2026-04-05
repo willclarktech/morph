@@ -28,7 +28,7 @@ The `.morph` text is parsed into an AST, then compiled to `DomainSchema` JSON.
 
 The canonical intermediate representation. All generators read from this.
 
-**`contexts/generation/domain-schema/src/schemas/`** — Effect Schema definitions for `DomainSchema`, `ContextDef`, `EntityDef`, `OperationDef`, etc. Split across `operations.ts`, `entities.ts`, `primitives.ts`, `expressions.ts`.
+**`contexts/generation/domain-schema/src/schemas/`** — Effect Schema definitions for `DomainSchema`, `ContextDef`, `EntityDef`, `OperationDef`, etc. Split across `operations.ts`, `entities.ts`, `primitives.ts`, and the `expressions/` directory.
 
 **`contexts/generation/domain-schema/src/helpers/context-queries.ts`** — Schema query functions: `findPrimaryContext`, `getContextsWithTag`, `getContextOperationsWithTag`. Used by all generators and plugins.
 
@@ -55,6 +55,12 @@ Each target is a plugin that generates a specific type of output.
 **`contexts/generation/targets/mcp/generator/src/`** — MCP server. Tool definitions, input schemas, handler registration.
 
 **`contexts/generation/targets/dsl/generator/src/`** — DSL package: typed schemas, branded IDs, operation descriptors, arbitraries.
+
+**`contexts/generation/targets/ui/generator/src/`** — HTMX web UI. Auth pages, session management, SSE.
+
+**`contexts/generation/targets/client/generator/src/`** — Typed HTTP client library. Operation methods, error mapping.
+
+Additional targets in `contexts/generation/targets/`: `cli-client` (remote CLI), `vscode` (VS Code extension), `proto` (protobuf schemas), `verification` (SMT-LIB formal verification), `monorepo` (workspace root).
 
 ## 6. Type Generators
 

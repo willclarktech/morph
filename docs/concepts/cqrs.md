@@ -23,10 +23,12 @@ Operations are organized into `commands` and `queries` sections within each cont
       "commands": {
         "createTodo": {
           "description": "Create a new todo",
-          "emits": {
-            "name": "TodoCreated",
-            "description": "Emitted when a todo is created"
-          },
+          "emits": [
+            {
+              "name": "TodoCreated",
+              "description": "Emitted when a todo is created"
+            }
+          ],
           "input": { ... },
           "output": { ... },
           "errors": [ ... ],
@@ -67,10 +69,12 @@ Commands support:
 ```json
 "createTodo": {
   "description": "Create a new todo for a user.",
-  "emits": {
-    "name": "TodoCreated",
-    "description": "Emitted when a new todo is created"
-  },
+  "emits": [
+    {
+      "name": "TodoCreated",
+      "description": "Emitted when a new todo is created"
+    }
+  ],
   "errors": [
     {
       "name": "UserNotFound",

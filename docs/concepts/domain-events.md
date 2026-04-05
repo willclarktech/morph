@@ -142,13 +142,15 @@ Events are declared inline on operations:
 
 ```json
 {
-  "operations": {
+  "commands": {
     "createTodo": {
       "description": "Create a new todo for a user.",
-      "emits": {
-        "name": "TodoCreated",
-        "description": "Emitted when a new todo is created"
-      },
+      "emits": [
+        {
+          "name": "TodoCreated",
+          "description": "Emitted when a new todo is created"
+        }
+      ],
       "input": { ... },
       "output": { ... }
     }

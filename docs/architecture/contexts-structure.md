@@ -134,12 +134,16 @@ morph/
 │   │   ├── targets/             # Generation targets
 │   │   │   ├── api/
 │   │   │   ├── cli/
-│   │   │   ├── mcp/
-│   │   │   ├── ui/
-│   │   │   ├── dsl/
-│   │   │   ├── core/
+│   │   │   ├── cli-client/
 │   │   │   ├── client/
-│   │   │   └── monorepo/
+│   │   │   ├── core/
+│   │   │   ├── dsl/
+│   │   │   ├── mcp/
+│   │   │   ├── monorepo/
+│   │   │   ├── proto/
+│   │   │   ├── ui/
+│   │   │   ├── verification/
+│   │   │   └── vscode/
 │   │   │
 │   │   ├── builders/            # Code builders
 │   │   │   ├── app/
@@ -164,15 +168,15 @@ morph/
 │       └── parser/              # Schema parser
 │
 └── extensions/                  # Infrastructure extensions
-    ├── auth-password/           # Password hashing
-    │   ├── dsl/                 # @morphdsl/auth-password-dsl
-    │   └── impls/               # @morphdsl/auth-password-impls
-    ├── auth-session/            # Session management
-    ├── storage-memory/          # In-memory storage
-    ├── storage-jsonfile/        # JSON file storage
-    ├── storage-sqlite/          # SQLite storage
-    ├── storage-redis/           # Redis storage
-    └── ...
+    ├── auth/                    # Auth interfaces
+    ├── auth-password/           # Password hashing (with dsl/ + impls/)
+    ├── auth-{none,apikey,jwt,session}/
+    ├── codec/                   # Codec interfaces
+    ├── codec-{json,yaml,protobuf}/
+    ├── eventstore/              # Event store interfaces
+    ├── eventstore-{memory,jsonfile,redis}/
+    ├── storage/                 # Storage interfaces
+    └── storage-{memory,jsonfile,sqlite,redis,eventsourced}/
 ```
 
 The `generation` context is special because it contains both:

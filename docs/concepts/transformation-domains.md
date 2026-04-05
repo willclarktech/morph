@@ -277,6 +277,13 @@ A complete transformation domain schema:
 										"kind": "array",
 										"element": { "kind": "type", "name": "GeneratedFile" }
 									}
+								},
+								"warnings": {
+									"description": "Non-fatal warnings",
+									"type": {
+										"kind": "array",
+										"element": { "kind": "primitive", "name": "string" }
+									}
 								}
 							}
 						},

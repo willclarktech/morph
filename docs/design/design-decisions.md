@@ -6,7 +6,7 @@ Settled decisions with rationale. Prevents re-litigating choices already explore
 
 **Status:** Decided — keep uniform wrapping.
 
-**Context:** All operation handlers return `Effect.Effect<T, E>`, even pure functions that can never fail (`Effect.Effect<T, never>`). The ceremony is `Layer.succeed` + `Effect.gen` for every handler, regardless of whether it has errors.
+**Context:** All operation handlers return `Effect.Effect<T, E>`, even pure functions that can never fail (`Effect.Effect<T, never>`). Handlers with dependencies use `Layer.effect` + `Effect.gen`; pure handlers use `Layer.succeed` + `Effect.succeed`. Either way, every handler is wrapped in Effect.
 
 **Alternatives explored:**
 
@@ -14,7 +14,7 @@ Settled decisions with rationale. Prevents re-litigating choices already explore
 
 2. **Keep uniform wrapping** (chosen) — All handlers use `Effect.gen` regardless of error surface.
 
-**Decision:** Adding or removing an error declaration from an operation shouldn't fundamentally change the handler signature. The bifurcation (plain return for total functions, Effect for partial) creates an inconsistent boundary that shifts whenever error declarations change. The uniform `Layer.succeed` + `Effect.gen` pattern is consistent, and the ceremony per handler is modest (3 lines of boilerplate).
+**Decision:** Adding or removing an error declaration from an operation shouldn't fundamentally change the handler signature. The bifurcation (plain return for total functions, Effect for partial) creates an inconsistent boundary that shifts whenever error declarations change. The uniform Effect wrapping is consistent, and the ceremony per handler is modest (a few lines of boilerplate).
 
 ## Hash-prefixed tag profiles
 

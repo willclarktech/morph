@@ -76,14 +76,14 @@ Each app generates a `.env.example` documenting available variables:
 
 ```bash
 # apps/api/.env.example
-# TODO_APP Environment Configuration
+# Todo Environment Configuration
 # Copy this file to .env and customize for your environment
 
 # Storage backend (memory, jsonfile, sqlite, redis)
-TODO_APP_STORAGE=memory
+TODO_STORAGE=memory
 
 # Event store backend (memory, jsonfile)
-TODO_APP_EVENT_STORE=memory
+TODO_EVENT_STORE=memory
 
 # Server port
 PORT=3000
@@ -102,11 +102,11 @@ Storage and event stores are pluggable via environment configuration:
 
 ```typescript
 // Storage backends
-const storageName = process.env["TODO_APP_STORAGE"] ?? "memory";
+const storageName = process.env["TODO_STORAGE"] ?? "memory";
 const storageLayer = yield * getStorageLayer(storageName);
 
 // Event store backends
-const eventStoreName = process.env["TODO_APP_EVENT_STORE"] ?? "memory";
+const eventStoreName = process.env["TODO_EVENT_STORE"] ?? "memory";
 const eventStoreLayer = yield * getEventStoreLayer(eventStoreName);
 ```
 
@@ -144,7 +144,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT}/health || exit 1
 
 EXPOSE ${PORT}
-CMD ["bun", "apps/api/src/index.ts"]
+CMD ["bun", "start"]
 ```
 
 ### CLI Binary
@@ -164,7 +164,7 @@ Build and run:
 
 ```bash
 docker build -f apps/api/Dockerfile -t my-app-api .
-docker run -p 3000:3000 -e MY_APP_STORAGE=memory my-app-api
+docker run -p 3000:3000 -e MY_STORAGE=memory my-app-api
 ```
 
 ---
@@ -220,11 +220,11 @@ Each process type can be independently scaled. The API and UI servers are statel
 
 ```bash
 # Single instance (memory/jsonfile OK)
-MY_APP_STORAGE=jsonfile bun apps/api/src/index.ts
+MY_STORAGE=jsonfile bun apps/api/src/index.ts
 
 # Multi-instance (requires shared backend)
-MY_APP_STORAGE=redis bun apps/api/src/index.ts
-MY_APP_STORAGE=sqlite bun apps/api/src/index.ts
+MY_STORAGE=redis bun apps/api/src/index.ts
+MY_STORAGE=sqlite bun apps/api/src/index.ts
 ```
 
 **SSE connection affinity:** The API server maintains in-memory SSE connections for real-time event streaming. Behind a load balancer, clients must reconnect to the same instance to receive their event stream. Configure sticky sessions on the `/api/events` path:
@@ -250,7 +250,7 @@ services:
     deploy:
       replicas: 3
     environment:
-      - MY_APP_STORAGE=redis
+      - MY_STORAGE=redis
       - REDIS_URL=redis://redis:6379
     depends_on:
       - redis
@@ -262,7 +262,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - MY_APP_API_URL=http://api:3000
+      - MY_API_URL=http://api:3000
 
   redis:
     image: redis:7-alpine
@@ -326,7 +326,7 @@ if (storageName === "memory" && process.env["NODE_ENV"] === "production") {
 		"⚠️  WARNING: Using in-memory storage in production. Data will be lost on restart.",
 	);
 	console.warn(
-		"   Set TODO_APP_STORAGE=jsonfile or redis for persistent storage.",
+		"   Set TODO_STORAGE=jsonfile or redis for persistent storage.",
 	);
 }
 ```
@@ -393,7 +393,7 @@ docker build -f apps/api/Dockerfile -t my-app-api .
 docker run -d --name my-app \
   -p 3000:3000 \
   -e NODE_ENV=production \
-  -e MY_APP_STORAGE=jsonfile \
+  -e MY_STORAGE=jsonfile \
   my-app-api
 
 # 3. Verify health check

@@ -25,7 +25,7 @@ The UI uses **session-based authentication** where the UI server owns sessions a
 
 ## Session Flow
 
-1. **Registration**: User submits registration form → UI calls API's `createUser` → API returns user with ID → UI creates session with user ID as token → Sets `session_id` cookie → Redirects to home
+1. **Registration**: User submits registration form → UI calls API's `createUser` → API returns user → UI extracts token (`.token` field if present, otherwise `.id`) → UI creates session → Sets `session_id` cookie → Redirects to home
 
 2. **Subsequent requests**: UI reads `session_id` cookie → Looks up session → Passes token to HTTP client → API validates token
 
@@ -113,11 +113,17 @@ No special configuration needed. Authentication is automatically enabled when:
 1. Schema has operations with auth requirements (via invariants)
 2. Schema has a `createUser` operation (enables registration)
 
+## Login Convention
+
+The generator detects login operations by checking for operations with sensitive (password) input whose name matches "login", "signin", or "authenticate". When found, the login page calls that operation directly.
+
+When no login operation is detected but a register operation exists, the generated UI falls back to calling `client.login()` — a hardcoded method on the generated HTTP client that calls `POST /auth/login`. The API must provide this endpoint (typically via the auth-password extension's login route).
+
 ## Limitations
 
-1. **No dedicated login API**: If there's no login operation in the schema, the login page prompts users to register. This is because without a login API, we can't verify passwords for existing users.
+1. **Hardcoded `/auth/login` fallback**: When the schema has no explicit login operation, login depends on the `/auth/login` API endpoint existing. This is provided by the auth-password extension but is not enforced by the schema.
 
-2. **Single session duration**: Sessions expire after 24 hours (hardcoded).
+2. **Single session duration**: Sessions expire after 24 hours (hardcoded in the generated session store).
 
 3. **No session persistence**: In-memory sessions are lost on server restart.
 

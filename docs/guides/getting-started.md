@@ -56,8 +56,10 @@ Key concepts:
 ## 2. Generate the Project
 
 ```sh
-morph new-project --name pastebin --schema schema.morph
+morph new-project pastebin --schema-file schema.morph
 ```
+
+Required arguments (`name`) are positional. The schema is passed via `--schema-file` since it's a file path rather than inline text.
 
 This generates a complete monorepo:
 
@@ -147,7 +149,7 @@ PASTEBIN_STORAGE=redis PASTEBIN_REDIS_URL=redis://localhost:6379 bun run apps/ap
 Scenario tests verify behavior across all app targets:
 
 ```typescript
-// fixtures/scenarios/scenarios.ts
+// tests/scenarios/src/scenarios.ts
 
 import { assert, given, scenario, then, when } from "@morphdsl/scenario";
 import { createPaste, listPastes } from "@pastebin/pastes-dsl";
