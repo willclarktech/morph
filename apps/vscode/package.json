@@ -1,6 +1,7 @@
 {
 	"name": "morph-dsl-vscode",
 	"version": "0.0.0",
+	"private": true,
 	"description": "VSCode language support for Morph DSL",
 	"main": "./dist/extension.js",
 	"scripts": {

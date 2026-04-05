@@ -10,12 +10,18 @@ import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 const ROOT_DIR = path.join(import.meta.dir, "..");
-const REPO_URL = "https://github.com/morphdsl/morph";
+const REPO_URL = "git+https://github.com/willclarktech/morph.git";
 
-const KEEP_PRIVATE = new Set(["@morphdsl/eslint-config", "@morphdsl/tsconfig"]);
+const KEEP_PRIVATE = new Set<string>([]);
 
-// Packages in these directories are always private
+// Packages in these directories are always private (not published to npm)
 const PRIVATE_DIRS = new Set(["examples", "fixtures", "tests"]);
+
+// Packages that get special handling (no standard build script)
+const NO_BUILD_PACKAGES = new Set(["@morphdsl/tsconfig", "@morphdsl/eslint-config"]);
+
+const BUILD_SCRIPT =
+	"bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json";
 
 const PACKAGE_KEY_ORDER = [
 	"$schema",
@@ -29,7 +35,9 @@ const PACKAGE_KEY_ORDER = [
 	"type",
 	"main",
 	"exports",
+	"files",
 	"bin",
+	"publishConfig",
 	"scripts",
 	"dependencies",
 	"devDependencies",
@@ -143,6 +151,7 @@ const main = (): void => {
 		if (PRIVATE_DIRS.has(topDir)) continue;
 
 		const shouldKeepPrivate = KEEP_PRIVATE.has(name);
+		const isPublishable = !shouldKeepPrivate && !parsed.private;
 
 		parsed.description ??= descriptionForPackage(name);
 		parsed.license ??= "MIT";
@@ -155,6 +164,45 @@ const main = (): void => {
 
 		if (!shouldKeepPrivate) {
 			delete parsed.private;
+		}
+
+		if (isPublishable && !NO_BUILD_PACKAGES.has(name)) {
+			const scripts = (parsed.scripts ?? {}) as Record<string, string>;
+			scripts["build"] ??= BUILD_SCRIPT;
+			parsed.scripts = scripts;
+
+			parsed.files ??= ["dist"];
+			parsed.publishConfig ??= {
+				exports: {
+					".": {
+						types: "./dist/index.d.ts",
+						import: "./dist/index.js",
+					},
+				},
+			};
+
+			const tsconfigBuildPath = path.join(
+				path.dirname(filePath),
+				"tsconfig.build.json",
+			);
+			const tsconfigBuild = `{
+	"extends": "@morphdsl/tsconfig/build.json",
+	"include": ["src"]
+}
+`;
+			const existingTsconfigBuild = (() => {
+				try {
+					return readFileSync(tsconfigBuildPath, "utf8");
+				} catch {
+					return undefined;
+				}
+			})();
+			if (existingTsconfigBuild !== tsconfigBuild) {
+				writeFileSync(tsconfigBuildPath, tsconfigBuild);
+				console.info(
+					`  Wrote: ${relativePath}/tsconfig.build.json`,
+				);
+			}
 		}
 
 		const ordered = orderedPackageJson(parsed);
