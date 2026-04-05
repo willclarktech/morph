@@ -63,6 +63,7 @@ export const generateVsCodePackageJson = (
 
 	const package_ = {
 		name: `${lowerName}-dsl-vscode`,
+		private: true,
 		displayName,
 		description: `VSCode language support for ${displayName}`,
 		version: "0.0.0",

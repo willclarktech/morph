@@ -1,10 +1,10 @@
 {
 	"name": "@morphdsl/codemirror-lang-morph",
 	"version": "0.0.0",
+	"private": true,
 	"description": "Morph codemirror-lang-morph",
 	"license": "MIT",
 	"author": "Morph Contributors",
-	"private": true,
 	"repository": {
 		"directory": "libs/codemirror-lang-morph",
 		"type": "git",

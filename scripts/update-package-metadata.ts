@@ -12,13 +12,19 @@ import path from "node:path";
 const ROOT_DIR = path.join(import.meta.dir, "..");
 const REPO_URL = "git+https://github.com/willclarktech/morph.git";
 
-const KEEP_PRIVATE = new Set<string>([]);
+const KEEP_PRIVATE = new Set([
+	"@morphdsl/codemirror-lang-morph",
+	"@morphdsl/site",
+]);
 
 // Packages in these directories are always private (not published to npm)
 const PRIVATE_DIRS = new Set(["examples", "fixtures", "tests"]);
 
 // Packages that get special handling (no standard build script)
-const NO_BUILD_PACKAGES = new Set(["@morphdsl/tsconfig"]);
+const NO_BUILD_PACKAGES = new Set([
+	"@morphdsl/eslint-config",
+	"@morphdsl/tsconfig",
+]);
 
 const BUILD_SCRIPT =
 	"bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json";
@@ -151,43 +157,60 @@ const main = (): void => {
 		if (PRIVATE_DIRS.has(topDir)) continue;
 
 		const shouldKeepPrivate = KEEP_PRIVATE.has(name);
-		const isPublishable = !shouldKeepPrivate && !parsed.private;
+		const isPublishable = !shouldKeepPrivate;
 
 		parsed.description ??= descriptionForPackage(name);
 		parsed.license ??= "MIT";
 		parsed.author ??= "Morph Contributors";
-		parsed.repository ??= {
+		parsed.repository = {
 			type: "git",
 			url: REPO_URL,
 			directory: relativePath,
 		};
 
-		if (!shouldKeepPrivate) {
+		if (isPublishable) {
 			delete parsed.private;
+		} else {
+			parsed.private = true;
 		}
 
 		if (isPublishable && !NO_BUILD_PACKAGES.has(name)) {
-			const scripts = (parsed.scripts ?? {}) as Record<string, string>;
-			scripts["build"] ??= BUILD_SCRIPT;
+			const scripts = (parsed.scripts ?? {}) as Record<string, unknown>;
+			if (!("build" in scripts)) {
+				scripts.build = BUILD_SCRIPT;
+			}
 			parsed.scripts = scripts;
 
-			parsed.files ??= ["dist"];
-			parsed.publishConfig ??= {
-				exports: {
-					".": {
-						types: "./dist/index.d.ts",
-						import: "./dist/index.js",
+			if (!("files" in parsed)) {
+				parsed.files = ["dist"];
+			}
+			if (!("publishConfig" in parsed)) {
+				parsed.publishConfig = {
+					exports: {
+						".": {
+							types: "./dist/index.d.ts",
+							import: "./dist/index.js",
+						},
 					},
-				},
-			};
+				};
+			}
 
 			const tsconfigBuildPath = path.join(
 				path.dirname(filePath),
 				"tsconfig.build.json",
 			);
+			const relativeConfigPath = path.relative(
+				path.dirname(filePath),
+				path.join(ROOT_DIR, "config/tsconfig/build.json"),
+			);
 			const tsconfigBuild = `{
-	"extends": "@morphdsl/tsconfig/build.json",
-	"include": ["src"]
+	"extends": "${relativeConfigPath}",
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "dist"
+	},
+	"include": ["src"],
+	"exclude": ["src/**/*.test.ts"]
 }
 `;
 			const existingTsconfigBuild = (() => {
@@ -199,9 +222,7 @@ const main = (): void => {
 			})();
 			if (existingTsconfigBuild !== tsconfigBuild) {
 				writeFileSync(tsconfigBuildPath, tsconfigBuild);
-				console.info(
-					`  Wrote: ${relativePath}/tsconfig.build.json`,
-				);
+				console.info(`  Wrote: ${relativePath}/tsconfig.build.json`);
 			}
 		}
 

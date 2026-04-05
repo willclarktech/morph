@@ -24,7 +24,7 @@ const jsFiles = ["**/*.{cjs,mjs,js,jsx}"];
 const testFiles = ["**/*.test.*"];
 
 const ignoreConfig: Linter.Config = {
-	ignores: ["**/viz/**"],
+	ignores: ["**/dist/**", "**/viz/**"],
 };
 
 /**

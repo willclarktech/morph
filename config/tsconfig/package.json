@@ -10,11 +10,11 @@
 		"type": "git",
 		"url": "git+https://github.com/willclarktech/morph.git"
 	},
+	"files": [
+		"*.json"
+	],
 	"scripts": {
 		"format": "prettier --check .",
 		"format:fix": "prettier --write ."
-	},
-	"files": [
-		"*.json"
-	]
+	}
 }

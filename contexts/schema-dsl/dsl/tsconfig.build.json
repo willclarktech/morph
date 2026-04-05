@@ -1,4 +1,9 @@
 {
-	"extends": "@morphdsl/tsconfig/build.json",
-	"include": ["src"]
+	"extends": "../../../config/tsconfig/build.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "dist"
+	},
+	"include": ["src"],
+	"exclude": ["src/**/*.test.ts"]
 }

@@ -13,12 +13,14 @@
 	"exports": {
 		".": "./src/index.ts"
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"publishConfig": {
 		"exports": {
 			".": {
-				"types": "./dist/index.d.ts",
-				"import": "./dist/index.js"
+				"import": "./dist/index.js",
+				"types": "./dist/index.d.ts"
 			}
 		}
 	},

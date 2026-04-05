@@ -5,8 +5,8 @@ import { toPackageScope } from "./package-json-builder";
 interface ConfigFilesOptions {
 	packagePath: string;
 	name: string;
-	npmScope?: string;
-	isPrivate?: boolean;
+	npmScope?: string | undefined;
+	isPrivate?: boolean | undefined;
 }
 
 /**
@@ -42,7 +42,12 @@ export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated];
 		files.push({
 			content: `{
 	"extends": "@${scope}/tsconfig/build.json",
-	"include": ["src"]
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "dist"
+	},
+	"include": ["src"],
+	"exclude": ["src/**/*.test.ts"]
 }
 `,
 			filename: `${packagePath}/tsconfig.build.json`,
@@ -84,7 +89,12 @@ export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated, ...conf
 		files.push({
 			content: `{
 	"extends": "@${scope}/tsconfig/build.json",
-	"include": ["src"]
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "dist"
+	},
+	"include": ["src"],
+	"exclude": ["src/**/*.test.ts"]
 }
 `,
 			filename: `${packagePath}/tsconfig.build.json`,
