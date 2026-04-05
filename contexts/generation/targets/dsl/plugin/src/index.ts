@@ -54,7 +54,7 @@ const generateContextDslPackage = (
 		filename: `${packagePath}/package.json`,
 	});
 
-	files.push(...buildConfigFiles(packagePath, name, schema.npmScope));
+	files.push(...buildConfigFiles({ packagePath, name, npmScope: schema.npmScope }));
 
 	if (info.hasTypes) {
 		const schemasContent = generateSchemas(schema, { contextName });
@@ -144,7 +144,7 @@ const generateScenariosPackage = (ctx: PluginContext): GeneratedFile[] => {
 		packagePath,
 		generatePackageJson: () =>
 			generateScenariosPackageJson(name, [primaryDslPackage], schema.npmScope),
-		generateConfigFiles: () => buildConfigFiles(packagePath, name, schema.npmScope),
+		generateConfigFiles: () => buildConfigFiles({ packagePath, name, npmScope: schema.npmScope }),
 	});
 };
 
@@ -165,7 +165,7 @@ const generatePropertiesPackage = (ctx: PluginContext): GeneratedFile[] => {
 		packagePath,
 		generatePackageJson: () =>
 			generatePropertiesPackageJson(name, [primaryDslPackage], schema.npmScope),
-		generateConfigFiles: () => buildConfigFiles(packagePath, name, schema.npmScope),
+		generateConfigFiles: () => buildConfigFiles({ packagePath, name, npmScope: schema.npmScope }),
 	});
 };
 

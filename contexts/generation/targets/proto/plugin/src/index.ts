@@ -57,7 +57,7 @@ export const protoPlugin: GeneratorPlugin = {
 			...result.files,
 			{ content: `${packageJson}\n`, filename: `${packagePath}/package.json` },
 			{ content: indexContent, filename: `${packagePath}/src/index.ts` },
-			...buildConfigFiles(packagePath, name, schema.npmScope),
+			...buildConfigFiles({ packagePath, name, npmScope: schema.npmScope }),
 		];
 	},
 };

@@ -161,7 +161,7 @@ export const mcpPlugin: GeneratorPlugin = {
 					name,
 					scenariosPackage,
 				}),
-			generateConfigFiles: () => buildConfigFiles(packagePath, name, schema.npmScope),
+			generateConfigFiles: () => buildConfigFiles({ packagePath, name, npmScope: schema.npmScope }),
 			generateAppEntry: () =>
 				generateMcpAppEntry({
 					contexts,

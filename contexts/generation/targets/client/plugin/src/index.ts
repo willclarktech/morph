@@ -51,7 +51,7 @@ export const clientPlugin: GeneratorPlugin = {
 			filename: `${packagePath}/package.json`,
 		});
 
-		files.push(...buildConfigFiles(packagePath, name, schema.npmScope));
+		files.push(...buildConfigFiles({ packagePath, name, npmScope: schema.npmScope }));
 
 		const clientCode = generateClient(schema, { appName: name, scope });
 		if (clientCode) {

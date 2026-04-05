@@ -81,6 +81,9 @@ const getStandardDevDeps = (
 	};
 };
 
+const BUILD_SCRIPT =
+	"bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json";
+
 /** Human-friendly key ordering for package.json */
 const PACKAGE_KEY_ORDER = [
 	"$schema",
@@ -94,7 +97,9 @@ const PACKAGE_KEY_ORDER = [
 	"type",
 	"main",
 	"exports",
+	"files",
 	"bin",
+	"publishConfig",
 	"scripts",
 	"dependencies",
 	"devDependencies",
@@ -169,6 +174,9 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 
 	// Build scripts
 	const finalScripts: Record<string, string> = { ...BASE_SCRIPTS, ...scripts };
+	if (!isPrivate) {
+		finalScripts["build"] = BUILD_SCRIPT;
+	}
 	if (includeTestScript) {
 		finalScripts["test"] = "bun test";
 		finalScripts["test:coverage"] =
@@ -194,14 +202,29 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 			? {
 					repository: {
 						type: "git",
-						url: metadata.repository,
+						url: metadata.repository.startsWith("git+")
+							? metadata.repository
+							: `git+${metadata.repository}.git`,
 						directory: `packages/${packageSuffix}`,
 					},
 				}
 			: {}),
 		type: "module",
 		...(packageExports ? { exports: packageExports } : {}),
+		...(!isPrivate ? { files: ["dist"] } : {}),
 		...(bin ? { bin } : {}),
+		...(!isPrivate
+			? {
+					publishConfig: {
+						exports: {
+							".": {
+								types: "./dist/index.d.ts",
+								import: "./dist/index.js",
+							},
+						},
+					},
+				}
+			: {}),
 		scripts: finalScripts,
 		...(Object.keys(finalDeps).length > 0 ? { dependencies: finalDeps } : {}),
 		devDependencies: finalDevDeps,

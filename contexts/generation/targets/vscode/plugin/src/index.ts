@@ -144,7 +144,7 @@ export const vsCodePlugin: GeneratorPlugin = {
 			filename: `${packagePath}/package.json`,
 		});
 
-		const configFiles = buildConfigFiles(packagePath, name, schema.npmScope);
+		const configFiles = buildConfigFiles({ packagePath, name, npmScope: schema.npmScope });
 		for (const f of configFiles) {
 			if (f.filename.endsWith("eslint.config.ts")) {
 				files.push({

@@ -36,7 +36,7 @@ export const verificationPlugin: GeneratorPlugin = {
 				content: generateVerificationPackageJson(ctx.name, ctx.schema.npmScope),
 				filename: `${PACKAGE_PATH}/package.json`,
 			},
-			...buildConfigFiles(PACKAGE_PATH, ctx.name, ctx.schema.npmScope),
+			...buildConfigFiles({ packagePath: PACKAGE_PATH, name: ctx.name, npmScope: ctx.schema.npmScope }),
 			...coreFiles,
 		];
 	},

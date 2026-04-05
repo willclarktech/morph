@@ -2,16 +2,22 @@ import type { GeneratedFile } from "@morphdsl/domain-schema";
 
 import { toPackageScope } from "./package-json-builder";
 
+interface ConfigFilesOptions {
+	packagePath: string;
+	name: string;
+	npmScope?: string;
+	isPrivate?: boolean;
+}
+
 /**
  * Generate standard ESLint and TypeScript config files for a package.
  */
 export const buildConfigFiles = (
-	packagePath: string,
-	name: string,
-	npmScope?: string,
+	options: ConfigFilesOptions,
 ): GeneratedFile[] => {
+	const { packagePath, name, npmScope, isPrivate = true } = options;
 	const scope = toPackageScope(name, npmScope);
-	return [
+	const files: GeneratedFile[] = [
 		{
 			content: `import { configs } from "@${scope}/eslint-config";
 
@@ -32,18 +38,28 @@ export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated];
 			filename: `${packagePath}/tsconfig.json`,
 		},
 	];
+	if (!isPrivate) {
+		files.push({
+			content: `{
+	"extends": "@${scope}/tsconfig/build.json",
+	"include": ["src"]
+}
+`,
+			filename: `${packagePath}/tsconfig.build.json`,
+		});
+	}
+	return files;
 };
 
 /**
  * Generate config files for CLI app (includes CLI preset).
  */
 export const buildCliConfigFiles = (
-	packagePath: string,
-	name: string,
-	npmScope?: string,
+	options: ConfigFilesOptions,
 ): GeneratedFile[] => {
+	const { packagePath, name, npmScope, isPrivate = true } = options;
 	const scope = toPackageScope(name, npmScope);
-	return [
+	const files: GeneratedFile[] = [
 		{
 			content: `import { configs } from "@${scope}/eslint-config";
 
@@ -64,4 +80,15 @@ export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated, ...conf
 			filename: `${packagePath}/tsconfig.json`,
 		},
 	];
+	if (!isPrivate) {
+		files.push({
+			content: `{
+	"extends": "@${scope}/tsconfig/build.json",
+	"include": ["src"]
+}
+`,
+			filename: `${packagePath}/tsconfig.build.json`,
+		});
+	}
+	return files;
 };

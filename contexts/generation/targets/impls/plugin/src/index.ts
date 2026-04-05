@@ -39,7 +39,7 @@ const generateContextImplsPackage = (
 		filename: `${packagePath}/package.json`,
 	});
 
-	files.push(...buildConfigFiles(packagePath, name, schema.npmScope));
+	files.push(...buildConfigFiles({ packagePath, name, npmScope: schema.npmScope }));
 
 	for (const handlerName of allNames) {
 		files.push({

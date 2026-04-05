@@ -65,7 +65,7 @@ export const cliClientPlugin: GeneratorPlugin = {
 			filename: `${packagePath}/package.json`,
 		});
 
-		files.push(...buildCliConfigFiles(packagePath, name, schema.npmScope));
+		files.push(...buildCliConfigFiles({ packagePath, name, npmScope: schema.npmScope }));
 
 		const cliCode = generateClientCli({
 			clientPackage,

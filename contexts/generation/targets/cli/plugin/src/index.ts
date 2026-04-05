@@ -94,7 +94,7 @@ export const cliPlugin: GeneratorPlugin = {
 					propertiesPackage,
 					scenariosPackage,
 				}),
-			generateConfigFiles: () => buildCliConfigFiles(packagePath, name, schema.npmScope),
+			generateConfigFiles: () => buildCliConfigFiles({ packagePath, name, npmScope: schema.npmScope }),
 			generateAppEntry: () =>
 				generateApp({
 					cliName: toKebabCase(name),
