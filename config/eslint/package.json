@@ -15,9 +15,18 @@
 		"import": "./src/index.ts"
 	},
 	"files": [
-		"src"
+		"dist"
 	],
+	"publishConfig": {
+		"exports": {
+			".": {
+				"types": "./dist/index.d.ts",
+				"import": "./dist/index.js"
+			}
+		}
+	},
 	"scripts": {
+		"build": "bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json",
 		"build:check": "tsc --noEmit",
 		"format": "prettier --check .",
 		"format:fix": "prettier --write .",

@@ -18,7 +18,7 @@ const KEEP_PRIVATE = new Set<string>([]);
 const PRIVATE_DIRS = new Set(["examples", "fixtures", "tests"]);
 
 // Packages that get special handling (no standard build script)
-const NO_BUILD_PACKAGES = new Set(["@morphdsl/tsconfig", "@morphdsl/eslint-config"]);
+const NO_BUILD_PACKAGES = new Set(["@morphdsl/tsconfig"]);
 
 const BUILD_SCRIPT =
 	"bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json";
