@@ -171,8 +171,8 @@ Cross-cutting concerns (auth, storage, events) aren't ad hoc additions — they'
 
 An operation's `R` type grades it by the capabilities it needs. The generator inspects the theory (schema invariants) and determines the grade:
 
-- An invariant referencing `context.currentUser` adds `CurrentUser` to R
-- Entity persistence adds `EntityRepository` to R
+- An invariant referencing `context.currentUser` adds auth capabilities to R (inferred from invariant expressions)
+- Entity persistence adds per-entity repository services to R (e.g., `TodoRepository`, `UserRepository`)
 - Event emission adds `EventEmitter` to R
 
 This grading is intrinsic to the enriched functor — it's not a meta-level escape from the algebra, it's part of what the functor maps each operation to.
@@ -181,13 +181,13 @@ This grading is intrinsic to the enriched functor — it's not a meta-level esca
 
 The storage interface (get, put, delete, list) is itself a small algebraic theory. Each backend is a different algebra of that sub-theory:
 
-| Sub-theory  | Algebras (backends)                        |
-| ----------- | ------------------------------------------ |
-| Storage     | Memory, JSONFile, SQLite, Redis            |
-| Auth        | Password, JWT, API key, Session, Anonymous |
-| Event store | Memory, JSONFile, Redis                    |
+| Sub-theory  | Algebras (backends)                   |
+| ----------- | ------------------------------------- |
+| Storage     | Memory, JSONFile, SQLite, Redis       |
+| Auth        | Password, JWT, API key, Session, None |
+| Event store | Memory, JSONFile, Redis               |
 
-Choosing a backend is choosing an algebra for a sub-theory. The main algebra F_core _depends on_ these sub-theory choices but is parametric over them — any valid storage algebra satisfies the same interface.
+Choosing a backend is choosing an algebra for a sub-theory. The main algebra F*core \_depends on* these sub-theory choices but is parametric over them — any valid storage algebra satisfies the same interface.
 
 ### Layers as a Monoidal Category
 
@@ -195,32 +195,60 @@ Effect Layers compose the capability algebras into a complete runtime environmen
 
 - **Objects**: requirement types (the `R` in `Effect<A, E, R>`)
 - **Morphisms**: layers (`Layer<ROut, E, RIn>` — "given RIn, provide ROut")
-- **Tensor**: `Layer.merge` (provide multiple capabilities: R_1 ⊗ R_2)
+- **Tensor**: `Layer.mergeAll` (provide multiple capabilities: R_1 ⊗ R_2)
 - **Unit**: `Layer.empty` (no requirements)
 
 `Effect.provide(layer)` is the **evaluation morphism** — it eliminates requirements by supplying concrete implementations. The full app layer (`AppLayer = AuthLayer | StorageLayer | EventLayer`) is a tensor product in this monoidal category, composing all the sub-theory algebra choices into a single runtime.
 
-## Scenarios Verify Naturality
+## Verifying Algebraic Laws
+
+Morph verifies that algebras satisfy the theory's laws at three levels — scenarios (example-based), property tests (probabilistic), and formal verification (exhaustive). Each level corresponds to a different kind of evidence about the algebraic structure.
+
+### Scenarios Verify Naturality
 
 Gherkin scenarios are **equations in the theory T**. Each scenario asserts: given these preconditions, this operation produces this result.
 
-Running a scenario against interpretation F means applying F to the equation and checking it holds. The step definitions for each runner (@core, @api, @cli) are the **components of the natural transformation** — they map abstract scenario steps to concrete actions in each interpretation.
+Running a scenario against interpretation F means applying F to the equation and checking it holds. The step definitions for each target runner (core, api, cli, mcp) are the **components of the natural transformation** — they map abstract scenario steps to concrete actions in each interpretation.
 
-| Component              | Algebraic role                                         |
-| ---------------------- | ------------------------------------------------------ |
-| Scenario               | Equation in T                                          |
-| @core step definitions | Components of F_core applied to the equation           |
-| @api step definitions  | Components of η_api ∘ F_core applied to the equation   |
-| @cli step definitions  | Components of η_cli ∘ F_core applied to the equation   |
-| All runners pass       | Evidence that η preserves equations (naturality holds) |
+| Component        | Algebraic role                                         |
+| ---------------- | ------------------------------------------------------ |
+| Scenario         | Equation in T                                          |
+| Core step defs   | Components of F_core applied to the equation           |
+| API step defs    | Components of η_api ∘ F_core applied to the equation   |
+| CLI step defs    | Components of η_cli ∘ F_core applied to the equation   |
+| All runners pass | Evidence that η preserves equations (naturality holds) |
 
-If the same scenario passes for F_core and F_api, this provides evidence that η_api is a valid natural transformation — it preserves the algebraic laws. If @core passes but @api fails, the API generator has a bug: the natural transformation doesn't commute for that equation.
+If the same scenario passes for F_core and F_api, this provides evidence that η_api is a valid natural transformation — it preserves the algebraic laws. If core passes but API fails, the API generator has a bug: the natural transformation doesn't commute for that equation.
 
-## Where the Analogy is Approximate
+### Property Tests Verify Invariants Probabilistically
 
-Two honest qualifications:
+Property-based tests (fast-check) verify that the algebra's **universal laws** — invariants that must hold for all inputs — are satisfied by randomly sampling the input space. The same `ConditionExpr` AST that defines invariants in the schema is compiled to JavaScript predicates and tested against schema-derived arbitraries.
 
-**Target categories are informal.** "Eff" as a category of Effect computations doesn't have a standard mathematical definition. The objects are TypeScript types, the morphisms are Effect programs, and composition is `Effect.flatMap` / `pipe`. This is workable as a design language — it guides architecture and catches structural errors — but it's not a formal proof framework.
+| Suite type | What it verifies                                                      |
+| ---------- | --------------------------------------------------------------------- |
+| Validator  | Guard functions correctly implement invariant predicates              |
+| Operation  | Operation execution respects pre/post invariants across random inputs |
+| Contract   | Port implementations (storage, auth, events) satisfy algebraic laws   |
+
+Contract suites are particularly relevant: they verify that **sub-theory algebras** (storage backends, auth backends) satisfy the same interface laws regardless of implementation. PutGetRoundtrip, RemoveIdempotent, and similar laws hold for memory, JSON file, SQLite, and Redis backends alike — evidence that backend choice doesn't break the algebra.
+
+### Formal Verification Proves Invariants Exhaustively
+
+The `verification` target generates SMT-LIB2 checks from the same `ConditionExpr` AST — same source, different compilation backend. Z3 proves properties for **all** inputs, not just sampled ones:
+
+| Check                       | What it proves                                                           |
+| --------------------------- | ------------------------------------------------------------------------ |
+| Consistency                 | Entity invariants don't contradict each other                            |
+| Precondition satisfiability | Each operation's preconditions can actually be satisfied (not dead code) |
+| Preservation                | Operations preserve entity invariants: pre ∧ post → invariant            |
+
+The invariant fragment (QF_UFLIA with bounded quantifier macros) is decidable — Z3 terminates with a definitive answer. When verification fails, Z3 produces a concrete counterexample. See [Formal Verification](../testing/formal-verification.md) for the full specification.
+
+## Limitations of the Analogy
+
+Two qualifications:
+
+**Target categories are informal.** "Eff" as a category of Effect computations doesn't have a standard mathematical definition. The objects are TypeScript types, the morphisms are Effect programs, and composition is `Effect.flatMap` / `pipe`. This is workable as a design language — it guides architecture and catches structural errors. The `verification` target partially closes this gap: invariants expressed as `ConditionExpr` are compiled to SMT-LIB2 and checked by Z3, giving formal proofs for the decidable fragment (QF_UFLIA). This covers consistency, satisfiability, and preservation of entity invariants — but not the full behavior of Effect programs, which remains outside formal reach.
 
 **Generator meta-level.** The generators themselves (the build-time code that reads schemas and emits TypeScript) operate at a _meta-level_ above the algebra. The generator is a function from theories to code, not a functor within a single theory. This is analogous to how a compiler is not a program in the language it compiles. The algebraic model describes the _generated_ code and its relationships, not the generation process itself.
 
