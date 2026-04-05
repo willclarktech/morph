@@ -8,7 +8,7 @@
 	"repository": {
 		"directory": "config/tsconfig",
 		"type": "git",
-		"url": "https://github.com/morphdsl/morph"
+		"url": "git+https://github.com/willclarktech/morph.git"
 	},
 	"scripts": {
 		"format": "prettier --check .",

@@ -8,13 +8,23 @@
 	"repository": {
 		"directory": "contexts/schema-dsl/impls",
 		"type": "git",
-		"url": "https://github.com/morphdsl/morph"
+		"url": "git+https://github.com/willclarktech/morph.git"
 	},
 	"type": "module",
 	"exports": {
 		".": "./src/index.ts"
 	},
+	"files": ["dist"],
+	"publishConfig": {
+		"exports": {
+			".": {
+				"types": "./dist/index.d.ts",
+				"import": "./dist/index.js"
+			}
+		}
+	},
 	"scripts": {
+		"build": "bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json",
 		"build:check": "tsc --noEmit",
 		"format": "prettier --check .",
 		"format:fix": "prettier --write .",

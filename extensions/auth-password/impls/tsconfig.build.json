@@ -1,0 +1,4 @@
+{
+	"extends": "@morphdsl/tsconfig/build.json",
+	"include": ["src"]
+}
