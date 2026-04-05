@@ -1,0 +1,23 @@
+{
+	"name": "@morphdsl/morph-highlight",
+	"version": "0.0.0",
+	"description": "Morph DSL syntax highlighting — shared vocabulary, tokenizer, and HTML renderer",
+	"license": "MIT",
+	"author": "Morph Contributors",
+	"repository": {
+		"directory": "libs/morph-highlight",
+		"type": "git",
+		"url": "https://github.com/morphdsl/morph"
+	},
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"build:check": "tsc --noEmit"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"typescript": "^5.9.3"
+	}
+}

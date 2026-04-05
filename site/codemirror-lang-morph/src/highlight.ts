@@ -1,82 +1,14 @@
 import { LanguageSupport, StreamLanguage } from "@codemirror/language";
-
-const KEYWORDS = new Set([
-	"alias",
-	"auth",
-	"base",
-	"belongs_to",
-	"by",
-	"command",
-	"contains",
-	"context",
-	"contract",
-	"count",
-	"default",
-	"depends",
-	"domain",
-	"emits",
-	"entity",
-	"error",
-	"errors",
-	"eventStore",
-	"exists",
-	"extensions",
-	"forall",
-	"function",
-	"given",
-	"has_many",
-	"has_one",
-	"i18n",
-	"if",
-	"in",
-	"input",
-	"invariant",
-	"on",
-	"output",
-	"port",
-	"post",
-	"pre",
-	"profiles",
-	"query",
-	"reads",
-	"references",
-	"sse",
-	"storage",
-	"subscriber",
-	"then",
-	"throws",
-	"type",
-	"union",
-	"value",
-	"violation",
-	"when",
-	"where",
-	"writes",
-]);
-
-const TYPES = new Set([
-	"string",
-	"integer",
-	"float",
-	"boolean",
-	"date",
-	"datetime",
-]);
-
-const TAGS = new Set([
-	"root",
-	"cli",
-	"api",
-	"ui",
-	"mcp",
-	"vscode",
-	"unique",
-	"sensitive",
-	"context",
-	"aggregate",
-	"cli-client",
-	"cli_client",
-]);
+import {
+	DECLARATION_KEYWORDS,
+	CLAUSE_KEYWORDS,
+	CONTROL_KEYWORDS,
+	RELATIONSHIP_KEYWORDS,
+	EXTENSION_KEYWORDS,
+	EXTENSION_TYPES,
+	PRIMITIVE_TYPES,
+	TAGS,
+} from "@morphdsl/morph-highlight";
 
 const morphStreamLanguage = StreamLanguage.define({
 	token(stream) {
@@ -118,9 +50,14 @@ const morphStreamLanguage = StreamLanguage.define({
 		// Identifiers and keywords
 		if (stream.match(/^[\w_][\w_]*/)) {
 			const word = stream.current();
-			if (KEYWORDS.has(word)) return "keyword";
-			if (TYPES.has(word)) return "typeName";
 			if (word === "true" || word === "false") return "bool";
+			if (DECLARATION_KEYWORDS.has(word)) return "keyword";
+			if (CLAUSE_KEYWORDS.has(word)) return "keyword";
+			if (CONTROL_KEYWORDS.has(word)) return "keyword";
+			if (RELATIONSHIP_KEYWORDS.has(word)) return "keyword";
+			if (EXTENSION_KEYWORDS.has(word)) return "keyword";
+			if (EXTENSION_TYPES.has(word)) return "keyword";
+			if (PRIMITIVE_TYPES.has(word)) return "typeName";
 			return "variableName";
 		}
 

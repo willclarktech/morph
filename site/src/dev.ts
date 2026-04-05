@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import MarkdownIt from "markdown-it";
+import { highlightMorph } from "@morphdsl/morph-highlight";
 import { stubServerModules } from "./build-plugin-stub-server";
 import { landingPage } from "./pages/landing";
 import { docsPage, docsIndex, DOC_ENTRIES } from "./pages/docs";
@@ -7,7 +8,15 @@ import { playgroundPage } from "./pages/playground";
 import { examplesPage } from "./pages/examples";
 import { loadExamples } from "./data/examples";
 
-const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
+const md = new MarkdownIt({
+	html: true,
+	linkify: true,
+	typographer: true,
+	highlight: (str, lang) => {
+		if (lang === "morph") return highlightMorph(str);
+		return "";
+	},
+});
 
 const DOCS_DIR = join(import.meta.dir, "../../docs");
 const PUBLIC_DIR = join(import.meta.dir, "../public");

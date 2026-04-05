@@ -1,3 +1,4 @@
+import { highlightMorph } from "@morphdsl/morph-highlight";
 import { layout } from "../layout";
 
 const PASTEBIN_SCHEMA = `domain Pastebin
@@ -90,7 +91,7 @@ cd examples/pastebin && bun run apps/api/src/index.ts</code></pre>
 
 		<section>
 			<h2>Example Schema</h2>
-			<pre><code class="language-morph">${escapeHtml(PASTEBIN_SCHEMA)}</code></pre>
+			<pre><code class="language-morph">${highlightMorph(PASTEBIN_SCHEMA)}</code></pre>
 			<p><a href="/playground#${encodeURIComponent(PASTEBIN_SCHEMA)}">Open in Playground →</a></p>
 		</section>
 
@@ -130,9 +131,3 @@ cd examples/pastebin && bun run apps/api/src/index.ts</code></pre>
 		</section>`,
 	});
 
-const escapeHtml = (s: string): string =>
-	s
-		.replaceAll("&", "&amp;")
-		.replaceAll("<", "&lt;")
-		.replaceAll(">", "&gt;")
-		.replaceAll('"', "&quot;");

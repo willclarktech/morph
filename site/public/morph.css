@@ -125,6 +125,55 @@ pre code {
 	font-size: 0.875rem;
 }
 
+/* ── Morph syntax highlight palette ── */
+
+:root {
+	--morph-hl-keyword: #cf222e;
+	--morph-hl-string: #0a3069;
+	--morph-hl-comment: #6e7781;
+	--morph-hl-type: #8250df;
+	--morph-hl-primitive: #953800;
+	--morph-hl-number: #0550ae;
+	--morph-hl-boolean: #0550ae;
+	--morph-hl-tag: #116329;
+	--morph-hl-label: #8250df;
+	--morph-hl-punctuation: #6e7781;
+	--morph-hl-operator: #cf222e;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--morph-hl-keyword: #ff7b72;
+		--morph-hl-string: #a5d6ff;
+		--morph-hl-comment: #8b949e;
+		--morph-hl-type: #d2a8ff;
+		--morph-hl-primitive: #ffa657;
+		--morph-hl-number: #79c0ff;
+		--morph-hl-boolean: #79c0ff;
+		--morph-hl-tag: #7ee787;
+		--morph-hl-label: #d2a8ff;
+		--morph-hl-punctuation: #8b949e;
+		--morph-hl-operator: #ff7b72;
+	}
+}
+
+.hl-keyword            { color: var(--morph-hl-keyword); font-weight: 600; }
+.hl-keyword-clause     { color: var(--morph-hl-keyword); }
+.hl-keyword-control    { color: var(--morph-hl-keyword); }
+.hl-keyword-relationship { color: var(--morph-hl-keyword); }
+.hl-keyword-extension  { color: var(--morph-hl-keyword); }
+.hl-string             { color: var(--morph-hl-string); }
+.hl-comment            { color: var(--morph-hl-comment); font-style: italic; }
+.hl-type-primitive     { color: var(--morph-hl-primitive); }
+.hl-type-extension     { color: var(--morph-hl-primitive); }
+.hl-type-reference     { color: var(--morph-hl-type); }
+.hl-number             { color: var(--morph-hl-number); }
+.hl-boolean            { color: var(--morph-hl-boolean); }
+.hl-tag                { color: var(--morph-hl-tag); }
+.hl-label              { color: var(--morph-hl-label); }
+.hl-punctuation        { color: var(--morph-hl-punctuation); }
+.hl-operator           { color: var(--morph-hl-operator); }
+
 /* ── Footer ── */
 
 footer {
