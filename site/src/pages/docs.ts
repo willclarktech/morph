@@ -9,7 +9,6 @@ interface DocEntry {
 const DOC_ENTRIES: readonly DocEntry[] = [
 	{ slug: "guides/getting-started", title: "Getting Started", section: "Guides" },
 	{ slug: "guides/dsl-reference", title: "DSL Reference", section: "Guides" },
-	{ slug: "guides/demo-script", title: "Demo Script", section: "Guides" },
 	{ slug: "concepts/algebraic-foundations", title: "Algebraic Foundations", section: "Concepts" },
 	{ slug: "concepts/cqrs", title: "CQRS", section: "Concepts" },
 	{ slug: "concepts/domain-events", title: "Domain Events", section: "Concepts" },
@@ -28,8 +27,6 @@ const DOC_ENTRIES: readonly DocEntry[] = [
 	{ slug: "design/prose-design", title: "Prose Design", section: "Design" },
 	{ slug: "testing/testing-philosophy", title: "Testing Philosophy", section: "Testing" },
 	{ slug: "testing/formal-verification", title: "Formal Verification", section: "Testing" },
-	{ slug: "history/discovery", title: "Discovery", section: "History" },
-	{ slug: "history/dogfooding-learnings", title: "Dogfooding Learnings", section: "History" },
 ];
 
 export { DOC_ENTRIES };
