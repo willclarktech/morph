@@ -26,6 +26,7 @@ export const generateClientPackageJson = (
 		exports: { ".": "./src/index.ts" },
 		includeEffect: true,
 		includeTestScript: true,
+		publishable: true,
 		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 };

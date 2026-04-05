@@ -69,7 +69,7 @@ const generateContextCorePackage = (
 		filename: `${packagePath}/package.json`,
 	});
 
-	files.push(...buildConfigFiles({ packagePath, name, npmScope: schema.npmScope }));
+	files.push(...buildConfigFiles({ packagePath, name, npmScope: schema.npmScope, publishable: true }));
 
 	// Create a filtered schema with only this context for generation
 	const filteredSchema = createContextFilteredSchema(schema, contextName);

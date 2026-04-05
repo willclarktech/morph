@@ -152,6 +152,47 @@ describe("buildPackageJson", () => {
 		expect(result.bin["test-cli"]).toBe("./src/index.ts");
 	});
 
+	test("publishable adds files, publishConfig, and build script", () => {
+		const result = JSON.parse(
+			buildPackageJson({
+				projectName: "test",
+				packageSuffix: "core",
+				publishable: true,
+			}),
+		);
+		expect(result.files).toEqual(["dist"]);
+		expect(result.publishConfig).toBeDefined();
+		expect(result.publishConfig.exports["."]).toEqual({
+			types: "./dist/index.d.ts",
+			import: "./dist/index.js",
+		});
+		expect(result.scripts.build).toBeDefined();
+	});
+
+	test("publishable with isPrivate keeps private: true", () => {
+		const result = JSON.parse(
+			buildPackageJson({
+				projectName: "test",
+				packageSuffix: "core",
+				publishable: true,
+			}),
+		);
+		expect(result.private).toBe(true);
+		expect(result.files).toEqual(["dist"]);
+	});
+
+	test("non-publishable omits files, publishConfig, and build script", () => {
+		const result = JSON.parse(
+			buildPackageJson({
+				projectName: "test",
+				packageSuffix: "core",
+			}),
+		);
+		expect(result.files).toBeUndefined();
+		expect(result.publishConfig).toBeUndefined();
+		expect(result.scripts.build).toBeUndefined();
+	});
+
 	test("keys are in human-friendly order", () => {
 		const result = JSON.parse(
 			buildPackageJson({ projectName: "test", packageSuffix: "core" }),

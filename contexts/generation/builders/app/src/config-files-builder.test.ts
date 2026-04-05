@@ -30,6 +30,32 @@ describe("buildConfigFiles", () => {
 		const tsconfig = files.find((f) => f.filename.endsWith("tsconfig.json"));
 		expect(tsconfig!.content).toContain('"include": ["src"]');
 	});
+
+	test("publishable generates tsconfig.build.json", () => {
+		const files = buildConfigFiles({
+			packagePath: "libs/core",
+			name: "todo",
+			publishable: true,
+		});
+		expect(files).toHaveLength(3);
+		const buildTsconfig = files.find((f) =>
+			f.filename.endsWith("tsconfig.build.json"),
+		);
+		expect(buildTsconfig).toBeDefined();
+		expect(buildTsconfig!.content).toContain("tsconfig/build.json");
+		expect(buildTsconfig!.content).toContain('"exclude": ["src/**/*.test.ts"]');
+	});
+
+	test("non-publishable omits tsconfig.build.json", () => {
+		const files = buildConfigFiles({
+			packagePath: "libs/core",
+			name: "todo",
+		});
+		expect(files).toHaveLength(2);
+		expect(
+			files.find((f) => f.filename.endsWith("tsconfig.build.json")),
+		).toBeUndefined();
+	});
 });
 
 describe("buildCliConfigFiles", () => {

@@ -15,6 +15,7 @@ export const generateImplsPackageJson = (
 		},
 		exports: { ".": "./src/index.ts" },
 		includeEffect: true,
+		publishable: true,
 		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 };

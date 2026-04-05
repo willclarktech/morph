@@ -6,7 +6,7 @@ interface ConfigFilesOptions {
 	packagePath: string;
 	name: string;
 	npmScope?: string | undefined;
-	isPrivate?: boolean | undefined;
+	publishable?: boolean | undefined;
 }
 
 /**
@@ -15,7 +15,7 @@ interface ConfigFilesOptions {
 export const buildConfigFiles = (
 	options: ConfigFilesOptions,
 ): GeneratedFile[] => {
-	const { packagePath, name, npmScope, isPrivate = true } = options;
+	const { packagePath, name, npmScope, publishable = false } = options;
 	const scope = toPackageScope(name, npmScope);
 	const files: GeneratedFile[] = [
 		{
@@ -38,7 +38,7 @@ export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated];
 			filename: `${packagePath}/tsconfig.json`,
 		},
 	];
-	if (!isPrivate) {
+	if (publishable) {
 		files.push({
 			content: `{
 	"extends": "@${scope}/tsconfig/build.json",
@@ -62,7 +62,7 @@ export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated];
 export const buildCliConfigFiles = (
 	options: ConfigFilesOptions,
 ): GeneratedFile[] => {
-	const { packagePath, name, npmScope, isPrivate = true } = options;
+	const { packagePath, name, npmScope, publishable = false } = options;
 	const scope = toPackageScope(name, npmScope);
 	const files: GeneratedFile[] = [
 		{
@@ -85,7 +85,7 @@ export default [{ ignores: ["**/*.template.ts"] }, ...configs.generated, ...conf
 			filename: `${packagePath}/tsconfig.json`,
 		},
 	];
-	if (!isPrivate) {
+	if (publishable) {
 		files.push({
 			content: `{
 	"extends": "@${scope}/tsconfig/build.json",

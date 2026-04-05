@@ -108,6 +108,7 @@ export const generateCorePackageJson = (
 		includeEffect: true,
 		includeFastCheck: needsFastCheck ? "devDependencies" : undefined,
 		includeTestScript: hasAnyTests,
+		publishable: true,
 		...(npmScope ? { metadata: { npmScope } } : {}),
 	});
 };

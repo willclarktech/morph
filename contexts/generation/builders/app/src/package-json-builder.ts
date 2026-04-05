@@ -58,6 +58,8 @@ export interface PackageJsonConfig {
 	includeDevScript?: boolean;
 	/** Whether this package should be private (default: true) */
 	isPrivate?: boolean;
+	/** Whether to include publish-readiness fields (files, publishConfig, build script) (default: false) */
+	publishable?: boolean;
 	/** Package metadata from the domain schema */
 	metadata?: PackageMetadata;
 }
@@ -148,6 +150,7 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 		includeStartScript = false,
 		includeDevScript = false,
 		isPrivate = true,
+		publishable = false,
 		metadata,
 	} = config;
 
@@ -174,7 +177,7 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 
 	// Build scripts
 	const finalScripts: Record<string, string> = { ...BASE_SCRIPTS, ...scripts };
-	if (!isPrivate) {
+	if (publishable) {
 		finalScripts["build"] = BUILD_SCRIPT;
 	}
 	if (includeTestScript) {
@@ -211,9 +214,9 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 			: {}),
 		type: "module",
 		...(packageExports ? { exports: packageExports } : {}),
-		...(!isPrivate ? { files: ["dist"] } : {}),
+		...(publishable ? { files: ["dist"] } : {}),
 		...(bin ? { bin } : {}),
-		...(!isPrivate
+		...(publishable
 			? {
 					publishConfig: {
 						exports: {
