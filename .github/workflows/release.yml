@@ -65,3 +65,13 @@ jobs:
         run: git push --follow-tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package VSCode extension
+        if: steps.changesets.outputs.pending == 'true'
+        run: cd apps/vscode && bun run package
+
+      - name: Publish VSCode extension
+        if: steps.changesets.outputs.pending == 'true'
+        run: cd apps/vscode && bunx @vscode/vsce publish --no-dependencies -p $VSCE_PAT
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}

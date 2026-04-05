@@ -91,7 +91,7 @@ export const generateVsCodePackageJson = (
 			"build:check": "tsc --noEmit",
 			build: "bun esbuild.config.ts",
 			package:
-				"bun run build && bunx @vscode/vsce package --no-dependencies --skip-license",
+				"cp ../../LICENSE LICENSE && bun run build && bunx @vscode/vsce package --no-dependencies",
 			format: "prettier --check .",
 			"format:fix": "prettier --write .",
 			lint: "eslint .",

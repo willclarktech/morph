@@ -189,6 +189,11 @@ export default [
 			filename: `${packagePath}/.prettierignore`,
 		});
 
+		files.push({
+			content: "LICENSE\n",
+			filename: `${packagePath}/.gitignore`,
+		});
+
 		return files;
 	},
 };

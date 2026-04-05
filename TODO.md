@@ -22,11 +22,11 @@
 | Task | Effort | Notes |
 |------|--------|-------|
 | ~~Package metadata for publishing~~ | ~~M~~ | ~~Done: renamed @morph → @morphdsl, added MIT license, metadata fields, human-friendly key ordering~~ |
-| First npm publish via changesets | S | Run `bunx changeset` + `bunx changeset version` + `bunx changeset publish`. First version 0.1.0 |
-| VSCode Marketplace publisher setup | S | Create publisher at marketplace.visualstudio.com, set PAT, add icon |
-| Register on mcp.so | S | Submit @morphdsl/mcp package for discovery |
+| ~~First npm publish via changesets~~ | ~~S~~ | ~~Done: initial changeset created, release workflow publishes on merge to main~~ |
+| ~~VSCode Marketplace publish in CI~~ | ~~S~~ | ~~Done: release workflow packages and publishes extension. Manual prereq: create publisher account + VSCE_PAT secret~~ |
+| Register on mcp.so | S | Submit @morphdsl/mcp after first npm publish (manual) |
 | ~~Thread schema metadata through all `buildPackageJson` callers~~ | ~~M~~ | ~~Done: npmScope flows from schema.morph through all generators natively~~ |
-| Project website (GitHub Pages) | M | Static site with docs, getting started guide, DSL playground. Deploy from `docs/` or a dedicated `site/` directory via GitHub Pages |
+| ~~Project website (GitHub Pages)~~ | ~~M~~ | ~~Done: site/ built, deploy-site.yml ready. Manual prereq: enable GitHub Pages in repo settings~~ |
 
 ## Post-MVP
 
@@ -89,6 +89,7 @@
 
 | Task | Notes |
 |------|-------|
+| Publishing sweep | Changeset for initial 0.1.0 release, VSCode Marketplace publish step in release workflow, TODO updates |
 | Formal verification for invariants | `@morphdsl/generator-verification` + `@morphdsl/plugin-verification` — compiles ConditionExpr AST to SMT-LIB2 for Z3 |
 | Fix SMT-LIB2 verification soundness | Fixed 6 bugs: missing context/input/literal declarations, broken exists/forAll substitution, preservation post-state variable resolution, Z3 error detection |
 | Fix UI postinstall browser install on CI | Removed postinstall from generated UI packages, Playwright browsers installed once in CI |

@@ -11,7 +11,7 @@
 		"format:fix": "prettier --write .",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
-		"package": "bun run build && bunx @vscode/vsce package --no-dependencies --skip-license"
+		"package": "cp ../../LICENSE LICENSE && bun run build && bunx @vscode/vsce package --no-dependencies"
 	},
 	"dependencies": {
 		"@morphdsl/generator-vscode": "workspace:*",
