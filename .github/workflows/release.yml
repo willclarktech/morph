@@ -12,6 +12,7 @@ concurrency:
 jobs:
   release:
     name: Release
+    if: github.repository == 'willclarktech/morph'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -27,15 +28,40 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
+      - name: Check for changesets
+        id: changesets
+        run: |
+          if ls .changeset/*.md 2>/dev/null | grep -qv README; then
+            echo "pending=true" >> $GITHUB_OUTPUT
+          else
+            echo "pending=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Version packages
+        if: steps.changesets.outputs.pending == 'true'
         run: bunx changeset version
 
+      - name: Build packages
+        if: steps.changesets.outputs.pending == 'true'
+        run: bun run build
+
+      - name: Commit version bumps
+        if: steps.changesets.outputs.pending == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: version packages" || true
+
       - name: Publish to npm
+        if: steps.changesets.outputs.pending == 'true'
         run: bunx changeset publish --provenance
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Push tags and version bumps
+        if: steps.changesets.outputs.pending == 'true'
         run: git push --follow-tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
