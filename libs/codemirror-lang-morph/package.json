@@ -4,10 +4,11 @@
 	"description": "Morph codemirror-lang-morph",
 	"license": "MIT",
 	"author": "Morph Contributors",
+	"private": true,
 	"repository": {
-		"directory": "site/codemirror-lang-morph",
+		"directory": "libs/codemirror-lang-morph",
 		"type": "git",
-		"url": "https://github.com/morphdsl/morph"
+		"url": "git+https://github.com/willclarktech/morph.git"
 	},
 	"type": "module",
 	"exports": {
