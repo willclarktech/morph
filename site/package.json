@@ -13,7 +13,11 @@
 	"scripts": {
 		"build": "bun src/build.ts",
 		"build:check": "tsc -p tsconfig.check.json --noEmit",
-		"dev": "bun --hot src/dev.ts"
+		"dev": "bun --hot src/dev.ts",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
 		"@codemirror/autocomplete": "^6.18.0",
@@ -37,8 +41,12 @@
 		"mermaid": "^11.4.0"
 	},
 	"devDependencies": {
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"@types/bun": "latest",
 		"@types/markdown-it": "^14.1.0",
+		"eslint": "^9.39.0",
+		"prettier": "^3.4.2",
 		"typescript": "^5.9.3"
 	}
 }

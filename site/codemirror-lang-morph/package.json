@@ -14,7 +14,11 @@
 		".": "./src/index.ts"
 	},
 	"scripts": {
-		"build:check": "tsc --noEmit"
+		"build:check": "tsc --noEmit",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
 		"@codemirror/autocomplete": "^6.18.0",
@@ -28,7 +32,11 @@
 		"@morphdsl/schema-dsl-parser": "workspace:*"
 	},
 	"devDependencies": {
+		"@morphdsl/eslint-config": "workspace:*",
+		"@morphdsl/tsconfig": "workspace:*",
 		"@types/bun": "latest",
+		"eslint": "^9.39.0",
+		"prettier": "^3.4.2",
 		"typescript": "^5.9.3"
 	}
 }

@@ -1,11 +1,11 @@
 import {
-	DECLARATION_KEYWORDS,
 	CLAUSE_KEYWORDS,
 	CONTROL_KEYWORDS,
-	RELATIONSHIP_KEYWORDS,
+	DECLARATION_KEYWORDS,
 	EXTENSION_KEYWORDS,
 	EXTENSION_TYPES,
 	PRIMITIVE_TYPES,
+	RELATIONSHIP_KEYWORDS,
 	TAGS,
 } from "./vocabulary";
 
@@ -36,21 +36,20 @@ export interface Token {
 
 const OPERATOR_RE = /^(?:==|!=|&&|\|\||>=|<=|=>|\.\.)/;
 const NUMBER_RE = /^-?\d+(?:\.\d+)?/;
-const WORD_RE = /^[\w][\w]*/;
+const WORD_RE = /^\w+/;
 const PUNCTUATION_RE = /^[{}[\](),.:?|!<>=&+\-*/]/;
 
 export const tokenize = (code: string): Token[] => {
 	const tokens: Token[] = [];
 	const lines = code.split("\n");
 
-	for (let li = 0; li < lines.length; li++) {
+	for (const [li, line] of lines.entries()) {
 		if (li > 0) tokens.push({ scope: "plain", text: "\n" });
-		const line = lines[li];
 		let pos = 0;
 
 		while (pos < line.length) {
 			// Whitespace
-			const wsMatch = line.slice(pos).match(/^[ \t]+/);
+			const wsMatch = /^[ \t]+/.exec(line.slice(pos));
 			if (wsMatch) {
 				tokens.push({ scope: "plain", text: wsMatch[0] });
 				pos += wsMatch[0].length;
@@ -80,7 +79,7 @@ export const tokenize = (code: string): Token[] => {
 			// Tags (@keyword)
 			if (line[pos] === "@") {
 				const rest = line.slice(pos + 1);
-				const tagMatch = rest.match(/^[\w][\w-]*/);
+				const tagMatch = /^\w[\w-]*/.exec(rest);
 				if (tagMatch) {
 					const full = "@" + tagMatch[0];
 					const tagName = tagMatch[0];
@@ -99,7 +98,7 @@ export const tokenize = (code: string): Token[] => {
 			// Profile references (#name)
 			if (line[pos] === "#") {
 				const rest = line.slice(pos + 1);
-				const labelMatch = rest.match(/^[\w]+/);
+				const labelMatch = /^\w+/.exec(rest);
 				if (labelMatch) {
 					const full = "#" + labelMatch[0];
 					tokens.push({ scope: "label", text: full });
@@ -112,7 +111,7 @@ export const tokenize = (code: string): Token[] => {
 			}
 
 			// Operators (multi-char, check before punctuation)
-			const opMatch = line.slice(pos).match(OPERATOR_RE);
+			const opMatch = OPERATOR_RE.exec(line.slice(pos));
 			if (opMatch) {
 				tokens.push({ scope: "operator", text: opMatch[0] });
 				pos += opMatch[0].length;
@@ -120,15 +119,15 @@ export const tokenize = (code: string): Token[] => {
 			}
 
 			// Numbers
-			const numMatch = line.slice(pos).match(NUMBER_RE);
-			if (numMatch && (pos === 0 || !/[\w]/.test(line[pos - 1]))) {
-				tokens.push({ scope: "number", text: numMatch[0] });
-				pos += numMatch[0].length;
+			const numberMatch = NUMBER_RE.exec(line.slice(pos));
+			if (numberMatch && (pos === 0 || !/\w/.test(line[pos - 1] ?? ""))) {
+				tokens.push({ scope: "number", text: numberMatch[0] });
+				pos += numberMatch[0].length;
 				continue;
 			}
 
 			// Words (identifiers, keywords, types)
-			const wordMatch = line.slice(pos).match(WORD_RE);
+			const wordMatch = WORD_RE.exec(line.slice(pos));
 			if (wordMatch) {
 				const word = wordMatch[0];
 				const scope = classifyWord(word);
@@ -138,7 +137,7 @@ export const tokenize = (code: string): Token[] => {
 			}
 
 			// Punctuation
-			const punctMatch = line.slice(pos).match(PUNCTUATION_RE);
+			const punctMatch = PUNCTUATION_RE.exec(line.slice(pos));
 			if (punctMatch) {
 				tokens.push({ scope: "punctuation", text: punctMatch[0] });
 				pos += punctMatch[0].length;
@@ -146,7 +145,7 @@ export const tokenize = (code: string): Token[] => {
 			}
 
 			// Fallback — single character
-			tokens.push({ scope: "plain", text: line[pos] });
+			tokens.push({ scope: "plain", text: line[pos] ?? "" });
 			pos++;
 		}
 	}

@@ -5,7 +5,6 @@ const SERVER_MODULE_PATTERN =
 
 const noop = "() => {}";
 const noopAsync = "async () => {}";
-const noopClass = "class {}";
 
 const stubs: Record<string, string> = {
 	bun: `export class Glob {}; export const $ = ${noop}; export default {};`,
@@ -28,25 +27,17 @@ const fallbackStub = `export default {};`;
 export const stubServerModules: BunPlugin = {
 	name: "stub-server-modules",
 	setup(build) {
-		build.onResolve(
-			{ filter: SERVER_MODULE_PATTERN },
-			({ path }) => ({
-				path,
-				namespace: "server-stub",
-			}),
-		);
+		build.onResolve({ filter: SERVER_MODULE_PATTERN }, ({ path }) => ({
+			path,
+			namespace: "server-stub",
+		}));
 
-		build.onLoad(
-			{ filter: /.*/, namespace: "server-stub" },
-			({ path }) => {
-				let contents = stubs[path];
-				if (!contents) {
-					if (path.startsWith("@modelcontextprotocol/"))
-						contents = mcpStub;
-					else contents = fallbackStub;
-				}
-				return { contents, loader: "js" };
-			},
-		);
+		build.onLoad({ filter: /.*/, namespace: "server-stub" }, ({ path }) => {
+			let contents = stubs[path];
+			contents ??= path.startsWith("@modelcontextprotocol/")
+				? mcpStub
+				: fallbackStub;
+			return { contents, loader: "js" };
+		});
 	},
 };

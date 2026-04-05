@@ -8,9 +8,10 @@ mermaid.initialize({
 
 const renderMermaidBlocks = async () => {
 	const codeBlocks = document.querySelectorAll("pre code.language-mermaid");
-	for (const block of Array.from(codeBlocks)) {
+	for (const block of codeBlocks) {
 		const pre = block.parentElement;
 		if (!pre) continue;
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- textContent is string | null per DOM spec
 		const source = block.textContent ?? "";
 		const container = document.createElement("div");
 		container.className = "mermaid";
@@ -22,7 +23,10 @@ const renderMermaidBlocks = async () => {
 };
 
 if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", () => void renderMermaidBlocks());
+	document.addEventListener(
+		"DOMContentLoaded",
+		() => void renderMermaidBlocks(),
+	);
 } else {
 	void renderMermaidBlocks();
 }

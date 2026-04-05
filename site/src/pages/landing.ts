@@ -1,4 +1,5 @@
 import { highlightMorph } from "@morphdsl/morph-highlight";
+
 import { layout } from "../layout";
 
 const PASTEBIN_SCHEMA = `domain Pastebin
@@ -130,4 +131,3 @@ cd examples/pastebin && bun run apps/api/src/index.ts</code></pre>
 			</div>
 		</section>`,
 	});
-

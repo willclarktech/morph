@@ -1,43 +1,47 @@
-import { join } from "node:path";
-import MarkdownIt from "markdown-it";
 import { highlightMorph } from "@morphdsl/morph-highlight";
+import MarkdownIt from "markdown-it";
+import path from "node:path";
+
 import { stubServerModules } from "./build-plugin-stub-server";
-import { landingPage } from "./pages/landing";
-import { docsPage, docsIndex, DOC_ENTRIES } from "./pages/docs";
-import { playgroundPage } from "./pages/playground";
-import { examplesPage } from "./pages/examples";
 import { loadExamples } from "./data/examples";
+import { DOC_ENTRIES, docsIndex, docsPage } from "./pages/docs";
+import { examplesPage } from "./pages/examples";
+import { landingPage } from "./pages/landing";
+import { playgroundPage } from "./pages/playground";
 
 const md = new MarkdownIt({
 	html: true,
 	linkify: true,
 	typographer: true,
-	highlight: (str, lang) => {
-		if (lang === "morph") return highlightMorph(str);
+	highlight: (string_, lang) => {
+		if (lang === "morph") return highlightMorph(string_);
 		return "";
 	},
 });
 
-const DOCS_DIR = join(import.meta.dir, "../../docs");
-const PUBLIC_DIR = join(import.meta.dir, "../public");
-const CLIENT_DIR = join(import.meta.dir, "client");
-const LOGO_PATH = join(DOCS_DIR, "images/logo.png");
+const DOCS_DIR = path.join(import.meta.dir, "../../docs");
+const PUBLIC_DIR = path.join(import.meta.dir, "../public");
+const CLIENT_DIR = path.join(import.meta.dir, "client");
+const LOGO_PATH = path.join(DOCS_DIR, "images/logo.png");
 
-const renderDoc = async (slug: string): Promise<string | undefined> => {
-	const file = Bun.file(join(DOCS_DIR, `${slug}.md`));
+const renderDocument = async (slug: string): Promise<string | undefined> => {
+	const file = Bun.file(path.join(DOCS_DIR, `${slug}.md`));
 	if (!(await file.exists())) return undefined;
 	const content = await file.text();
 	return md.render(content);
 };
 
 const extractTitle = (slug: string): string => {
-	const entry = DOC_ENTRIES.find((e) => e.slug === slug);
+	const entry = DOC_ENTRIES.find((item) => item.slug === slug);
 	return entry?.title ?? slug;
 };
 
 const examples = await loadExamples();
 
-const serveStatic = async (filePath: string, contentType: string): Promise<Response> => {
+const serveStatic = async (
+	filePath: string,
+	contentType: string,
+): Promise<Response> => {
 	const file = Bun.file(filePath);
 	if (await file.exists()) {
 		return new Response(file, { headers: { "content-type": contentType } });
@@ -45,18 +49,18 @@ const serveStatic = async (filePath: string, contentType: string): Promise<Respo
 	return new Response("Not Found", { status: 404 });
 };
 
-const getContentType = (path: string): string => {
-	if (path.endsWith(".css")) return "text/css";
-	if (path.endsWith(".js")) return "application/javascript";
-	if (path.endsWith(".png")) return "image/png";
-	if (path.endsWith(".svg")) return "image/svg+xml";
-	if (path.endsWith(".ico")) return "image/x-icon";
+const getContentType = (filePath: string): string => {
+	if (filePath.endsWith(".css")) return "text/css";
+	if (filePath.endsWith(".js")) return "application/javascript";
+	if (filePath.endsWith(".png")) return "image/png";
+	if (filePath.endsWith(".svg")) return "image/svg+xml";
+	if (filePath.endsWith(".ico")) return "image/x-icon";
 	return "application/octet-stream";
 };
 
 const buildClientJs = async (entrypoint: string) => {
 	const result = await Bun.build({
-		entrypoints: [join(CLIENT_DIR, entrypoint)],
+		entrypoints: [path.join(CLIENT_DIR, entrypoint)],
 		format: "esm",
 		target: "browser",
 		minify: false,
@@ -73,44 +77,60 @@ const buildClientJs = async (entrypoint: string) => {
 
 Bun.serve({
 	port: 3000,
-	async fetch(req) {
-		const url = new URL(req.url);
-		const path = url.pathname;
+	async fetch(request) {
+		const url = new URL(request.url);
+		const requestPath = url.pathname;
 
 		// Logo from docs/images
-		if (path === "/logo.png") {
-			return new Response(Bun.file(LOGO_PATH), { headers: { "content-type": "image/png" } });
+		if (requestPath === "/logo.png") {
+			return new Response(Bun.file(LOGO_PATH), {
+				headers: { "content-type": "image/png" },
+			});
 		}
 
 		// Static assets from public/
-		if (path.match(/\.\w+$/)) {
-			if (path === "/playground.js") return buildClientJs("playground.ts");
-			if (path === "/mermaid-init.js") return buildClientJs("mermaid-init.ts");
-			if (path === "/examples-browser.js") return buildClientJs("examples-browser.ts");
+		if (/\.\w+$/.test(requestPath)) {
+			if (requestPath === "/playground.js")
+				return buildClientJs("playground.ts");
+			if (requestPath === "/mermaid-init.js")
+				return buildClientJs("mermaid-init.ts");
+			if (requestPath === "/examples-browser.js")
+				return buildClientJs("examples-browser.ts");
 
-			return serveStatic(join(PUBLIC_DIR, path), getContentType(path));
+			return serveStatic(
+				path.join(PUBLIC_DIR, requestPath),
+				getContentType(requestPath),
+			);
 		}
 
 		// Pages
-		if (path === "/") {
-			return new Response(landingPage(), { headers: { "content-type": "text/html" } });
+		if (requestPath === "/") {
+			return new Response(landingPage(), {
+				headers: { "content-type": "text/html" },
+			});
 		}
 
-		if (path === "/playground") {
-			return new Response(playgroundPage(), { headers: { "content-type": "text/html" } });
+		if (requestPath === "/playground") {
+			return new Response(playgroundPage(), {
+				headers: { "content-type": "text/html" },
+			});
 		}
 
-		if (path === "/examples") {
-			return new Response(examplesPage(examples), { headers: { "content-type": "text/html" } });
+		if (requestPath === "/examples") {
+			return new Response(examplesPage(examples), {
+				headers: { "content-type": "text/html" },
+			});
 		}
 
-		if (path === "/docs" || path === "/docs/") {
-			return new Response(docsIndex(), { headers: { "content-type": "text/html" } });
+		if (requestPath === "/docs" || requestPath === "/docs/") {
+			return new Response(docsIndex(), {
+				headers: { "content-type": "text/html" },
+			});
 		}
 
-		if (path.startsWith("/docs/")) {
-			const slug = path.replace("/docs/", "");
-			const rendered = await renderDoc(slug);
+		if (requestPath.startsWith("/docs/")) {
+			const slug = requestPath.replace("/docs/", "");
+			const rendered = await renderDocument(slug);
 			if (rendered) {
 				return new Response(docsPage(slug, rendered, extractTitle(slug)), {
 					headers: { "content-type": "text/html" },
@@ -122,4 +142,4 @@ Bun.serve({
 	},
 });
 
-console.log("Site dev server running at http://localhost:3000");
+console.info("Site dev server running at http://localhost:3000");

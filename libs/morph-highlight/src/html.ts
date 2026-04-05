@@ -1,5 +1,6 @@
-import { tokenize } from "./tokenize";
 import type { Scope } from "./tokenize";
+
+import { tokenize } from "./tokenize";
 
 const escapeHtml = (s: string): string =>
 	s

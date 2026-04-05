@@ -1,12 +1,12 @@
 import { LanguageSupport, StreamLanguage } from "@codemirror/language";
 import {
-	DECLARATION_KEYWORDS,
 	CLAUSE_KEYWORDS,
 	CONTROL_KEYWORDS,
-	RELATIONSHIP_KEYWORDS,
+	DECLARATION_KEYWORDS,
 	EXTENSION_KEYWORDS,
 	EXTENSION_TYPES,
 	PRIMITIVE_TYPES,
+	RELATIONSHIP_KEYWORDS,
 	TAGS,
 } from "@morphdsl/morph-highlight";
 
@@ -38,17 +38,17 @@ const morphStreamLanguage = StreamLanguage.define({
 
 		// Profile references (#name)
 		if (stream.match("#")) {
-			stream.eatWhile(/[\w]/);
+			stream.eatWhile(/\w/);
 			return "labelName";
 		}
 
 		// Numbers
-		if (stream.match(/^-?\d+(\.\d+)?/)) {
+		if (stream.match(/^-?\d+(?:\.\d+)?/)) {
 			return "number";
 		}
 
 		// Identifiers and keywords
-		if (stream.match(/^[\w_][\w_]*/)) {
+		if (stream.match(/^\w+/)) {
 			const word = stream.current();
 			if (word === "true" || word === "false") return "bool";
 			if (DECLARATION_KEYWORDS.has(word)) return "keyword";

@@ -1,52 +1,53 @@
-import { join } from "node:path";
-import { mkdir, cp, readdir, rm } from "node:fs/promises";
-import MarkdownIt from "markdown-it";
 import { highlightMorph } from "@morphdsl/morph-highlight";
+import MarkdownIt from "markdown-it";
+import { cp, mkdir, readdir, rm } from "node:fs/promises";
+import path from "node:path";
+
 import { stubServerModules } from "./build-plugin-stub-server";
-import { landingPage } from "./pages/landing";
-import { docsPage, docsIndex, DOC_ENTRIES } from "./pages/docs";
-import { playgroundPage } from "./pages/playground";
-import { examplesPage } from "./pages/examples";
 import { loadExamples } from "./data/examples";
+import { DOC_ENTRIES, docsIndex, docsPage } from "./pages/docs";
+import { examplesPage } from "./pages/examples";
+import { landingPage } from "./pages/landing";
+import { playgroundPage } from "./pages/playground";
 
 const md = new MarkdownIt({
 	html: true,
 	linkify: true,
 	typographer: true,
-	highlight: (str, lang) => {
-		if (lang === "morph") return highlightMorph(str);
+	highlight: (string_, lang) => {
+		if (lang === "morph") return highlightMorph(string_);
 		return "";
 	},
 });
 
-const SITE_DIR = join(import.meta.dir, "..");
-const DIST_DIR = join(SITE_DIR, "dist");
-const PUBLIC_DIR = join(SITE_DIR, "public");
-const CLIENT_DIR = join(import.meta.dir, "client");
-const DOCS_DIR = join(SITE_DIR, "..", "docs");
+const SITE_DIR = path.join(import.meta.dir, "..");
+const DIST_DIR = path.join(SITE_DIR, "dist");
+const PUBLIC_DIR = path.join(SITE_DIR, "public");
+const CLIENT_DIR = path.join(import.meta.dir, "client");
+const DOCS_DIR = path.join(SITE_DIR, "..", "docs");
 
-const writeFile = async (path: string, content: string) => {
-	const dir = join(path, "..");
+const writeFile = async (filePath: string, content: string) => {
+	const dir = path.join(filePath, "..");
 	await mkdir(dir, { recursive: true });
-	await Bun.write(path, content);
+	await Bun.write(filePath, content);
 };
 
-console.log("Building site...");
+console.info("Building site...");
 
 // Clean
 await rm(DIST_DIR, { recursive: true, force: true });
 await mkdir(DIST_DIR, { recursive: true });
 
 // 1. Copy static assets
-console.log("Copying static assets...");
+console.info("Copying static assets...");
 await cp(PUBLIC_DIR, DIST_DIR, { recursive: true });
 
 // Copy logo
-const logoSrc = join(SITE_DIR, "..", "docs", "images", "logo.png");
-await cp(logoSrc, join(DIST_DIR, "logo.png"));
+const logoSource = path.join(SITE_DIR, "..", "docs", "images", "logo.png");
+await cp(logoSource, path.join(DIST_DIR, "logo.png"));
 
 // 2. Bundle client-side JS
-console.log("Bundling client JS...");
+console.info("Bundling client JS...");
 const clientEntries = [
 	{ entry: "playground.ts", output: "playground.js" },
 	{ entry: "mermaid-init.ts", output: "mermaid-init.js" },
@@ -55,7 +56,7 @@ const clientEntries = [
 
 for (const { entry, output } of clientEntries) {
 	const result = await Bun.build({
-		entrypoints: [join(CLIENT_DIR, entry)],
+		entrypoints: [path.join(CLIENT_DIR, entry)],
 		outdir: DIST_DIR,
 		naming: output,
 		format: "esm",
@@ -68,28 +69,34 @@ for (const { entry, output } of clientEntries) {
 		console.error(`Failed to bundle ${entry}:`, result.logs);
 		process.exit(1);
 	}
-	console.log(`  Bundled ${output}`);
+	console.info(`  Bundled ${output}`);
 }
 
 // 3. Generate HTML pages
-console.log("Generating pages...");
+console.info("Generating pages...");
 
 // Landing page
-await writeFile(join(DIST_DIR, "index.html"), landingPage());
+await writeFile(path.join(DIST_DIR, "index.html"), landingPage());
 
 // Playground
-await writeFile(join(DIST_DIR, "playground", "index.html"), playgroundPage());
+await writeFile(
+	path.join(DIST_DIR, "playground", "index.html"),
+	playgroundPage(),
+);
 
 // Examples
 const examples = await loadExamples();
-await writeFile(join(DIST_DIR, "examples", "index.html"), examplesPage(examples));
+await writeFile(
+	path.join(DIST_DIR, "examples", "index.html"),
+	examplesPage(examples),
+);
 
 // Docs index
-await writeFile(join(DIST_DIR, "docs", "index.html"), docsIndex());
+await writeFile(path.join(DIST_DIR, "docs", "index.html"), docsIndex());
 
 // Individual docs
 for (const entry of DOC_ENTRIES) {
-	const file = Bun.file(join(DOCS_DIR, `${entry.slug}.md`));
+	const file = Bun.file(path.join(DOCS_DIR, `${entry.slug}.md`));
 	if (!(await file.exists())) {
 		console.warn(`  Warning: ${entry.slug}.md not found`);
 		continue;
@@ -97,16 +104,16 @@ for (const entry of DOC_ENTRIES) {
 	const content = await file.text();
 	const rendered = md.render(content);
 	await writeFile(
-		join(DIST_DIR, "docs", entry.slug, "index.html"),
+		path.join(DIST_DIR, "docs", entry.slug, "index.html"),
 		docsPage(entry.slug, rendered, entry.title),
 	);
-	console.log(`  Generated docs/${entry.slug}`);
+	console.info(`  Generated docs/${entry.slug}`);
 }
 
 // 4. Write .nojekyll for GitHub Pages
-await Bun.write(join(DIST_DIR, ".nojekyll"), "");
+await Bun.write(path.join(DIST_DIR, ".nojekyll"), "");
 
-console.log(`\nSite built to ${DIST_DIR}`);
+console.info(`\nSite built to ${DIST_DIR}`);
 
 // List output
 const countFiles = async (dir: string): Promise<number> => {
@@ -118,4 +125,4 @@ const countFiles = async (dir: string): Promise<number> => {
 	return count;
 };
 const fileCount = await countFiles(DIST_DIR);
-console.log(`Total files: ${fileCount}`);
+console.info(`Total files: ${fileCount}`);

@@ -1,15 +1,15 @@
-import { EditorView, basicSetup } from "codemirror";
 import { EditorState } from "@codemirror/state";
 import {
+	formatMorph,
+	morphCompletion,
 	morphLanguage,
 	morphLinter,
-	morphCompletion,
-	formatMorph,
 } from "@morphdsl/codemirror-lang-morph";
-import { parse } from "@morphdsl/schema-dsl-parser";
-import { compile } from "@morphdsl/schema-dsl-compiler";
 import { executeGenerate } from "@morphdsl/generation-impls";
+import { compile } from "@morphdsl/schema-dsl-compiler";
 import { TEMPLATE_SCHEMA } from "@morphdsl/schema-dsl-impls";
+import { parse } from "@morphdsl/schema-dsl-parser";
+import { basicSetup, EditorView } from "codemirror";
 import { Effect } from "effect";
 
 const TEMPLATE = TEMPLATE_SCHEMA;
@@ -29,14 +29,13 @@ let editor: EditorView;
 let debounceTimer: ReturnType<typeof setTimeout>;
 
 const initEditor = () => {
-	const editorEl = document.getElementById("editor");
-	if (!editorEl) return;
+	const editorElement = document.querySelector("#editor");
+	if (!editorElement) return;
 
-	const initialSchema =
-		decodeURIComponent(location.hash.slice(1)) || TEMPLATE;
+	const initialSchema = decodeURIComponent(location.hash.slice(1)) || TEMPLATE;
 
 	editor = new EditorView({
-		parent: editorEl,
+		parent: editorElement,
 		state: EditorState.create({
 			doc: initialSchema,
 			extensions: [
@@ -59,69 +58,69 @@ const initEditor = () => {
 
 const runDiagnostics = () => {
 	const source = editor.state.doc.toString();
-	const diagnosticsEl = document.getElementById("diagnostics-output");
-	const statusEl = document.getElementById("status");
-	if (!diagnosticsEl || !statusEl) return;
+	const diagnosticsElement = document.querySelector("#diagnostics-output");
+	const statusElement = document.querySelector("#status");
+	if (!diagnosticsElement || !statusElement) return;
 
 	const parseResult = parse(source);
 	if (parseResult.errors.length > 0) {
-		diagnosticsEl.innerHTML = parseResult.errors
-			.map((e) => {
+		diagnosticsElement.innerHTML = parseResult.errors
+			.map((diagnostic) => {
 				const cls =
-					e.severity === "error"
+					diagnostic.severity === "error"
 						? "diagnostic-error"
 						: "diagnostic-warning";
-				return `<span class="${cls}">Line ${e.range.start.line}:${e.range.start.column} — ${escapeHtml(e.message)}</span>`;
+				return `<span class="${cls}">Line ${diagnostic.range.start.line}:${diagnostic.range.start.column} — ${escapeHtml(diagnostic.message)}</span>`;
 			})
 			.join("\n");
-		statusEl.textContent = `${parseResult.errors.length} error(s)`;
+		statusElement.textContent = `${parseResult.errors.length} error(s)`;
 		switchTab("diagnostics");
 		return;
 	}
 
 	if (!parseResult.ast) {
-		diagnosticsEl.textContent = "Parse returned no AST";
+		diagnosticsElement.textContent = "Parse returned no AST";
 		switchTab("diagnostics");
 		return;
 	}
 
 	const compileResult = compile(parseResult.ast);
 	if (compileResult.errors.length > 0) {
-		diagnosticsEl.innerHTML = compileResult.errors
+		diagnosticsElement.innerHTML = compileResult.errors
 			.map(
-				(e) =>
-					`<span class="diagnostic-error">Line ${e.range.start.line}:${e.range.start.column} — ${escapeHtml(e.message)}</span>`,
+				(diagnostic) =>
+					`<span class="diagnostic-error">Line ${diagnostic.range.start.line}:${diagnostic.range.start.column} — ${escapeHtml(diagnostic.message)}</span>`,
 			)
 			.join("\n");
-		statusEl.textContent = `${compileResult.errors.length} error(s)`;
+		statusElement.textContent = `${compileResult.errors.length} error(s)`;
 		switchTab("diagnostics");
 		return;
 	}
 
-	diagnosticsEl.innerHTML =
+	diagnosticsElement.innerHTML =
 		'<span style="color: var(--pico-ins-color, green)">No errors</span>';
-	statusEl.textContent = "Valid";
+	statusElement.textContent = "Valid";
 };
 
 const runFormat = () => {
 	const source = editor.state.doc.toString();
-	const statusEl = document.getElementById("status");
-	if (!statusEl) return;
+	const statusElement = document.querySelector("#status");
+	if (!statusElement) return;
 
 	const formatted = formatMorph(source);
-	if (formatted !== undefined) {
+	if (formatted === undefined) {
+		statusElement.textContent = "Cannot format — errors";
+		setTimeout(() => {
+			statusElement.textContent = "Ready";
+		}, 2000);
+	} else {
 		editor.dispatch({
 			changes: { from: 0, to: editor.state.doc.length, insert: formatted },
 		});
-		statusEl.textContent = "Formatted!";
+		statusElement.textContent = "Formatted!";
 		setTimeout(() => {
-			statusEl.textContent = "Ready";
+			statusElement.textContent = "Ready";
 		}, 1500);
-	} else {
-		statusEl.textContent = "Cannot format — errors";
-		setTimeout(() => {
-			statusEl.textContent = "Ready";
-		}, 2000);
 	}
 };
 
@@ -132,19 +131,21 @@ const buildFileTree = (files: readonly GeneratedFile[]): FolderNode => {
 		totalFiles: 0,
 	};
 
-	files.forEach((file, index) => {
+	for (const [index, file] of files.entries()) {
 		const parts = file.filename.split("/");
 		let node = root;
-		for (let i = 0; i < parts.length - 1; i++) {
-			let next = node.folders.get(parts[i]);
+		for (let index_ = 0; index_ < parts.length - 1; index_++) {
+			const part = parts[index_];
+			if (!part) continue;
+			let next = node.folders.get(part);
 			if (!next) {
 				next = { folders: new Map(), fileIndices: [], totalFiles: 0 };
-				node.folders.set(parts[i], next);
+				node.folders.set(part, next);
 			}
 			node = next;
 		}
 		node.fileIndices.push(index);
-	});
+	}
 
 	const count = (n: FolderNode): number => {
 		n.totalFiles = n.fileIndices.length;
@@ -184,13 +185,15 @@ const renderFolderHtml = (
 	}
 
 	const sortedFiles = [...node.fileIndices].sort((a, b) => {
-		const nameA = files[a].filename.split("/").pop() ?? "";
-		const nameB = files[b].filename.split("/").pop() ?? "";
+		const nameA = files[a]?.filename.split("/").pop() ?? "";
+		const nameB = files[b]?.filename.split("/").pop() ?? "";
 		return nameA.localeCompare(nameB);
 	});
-	for (const idx of sortedFiles) {
-		const fileName = files[idx].filename.split("/").pop() ?? "";
-		html += `<div class="file-tree-item" style="padding-left: ${indent + 16}px" data-index="${idx}">${escapeHtml(fileName)}</div>`;
+	for (const index of sortedFiles) {
+		const file = files[index];
+		if (!file) continue;
+		const fileName = file.filename.split("/").pop() ?? "";
+		html += `<div class="file-tree-item" style="padding-left: ${indent + 16}px" data-index="${index}">${escapeHtml(fileName)}</div>`;
 	}
 
 	return html;
@@ -198,79 +201,78 @@ const renderFolderHtml = (
 
 const renderFileTree = (
 	files: readonly GeneratedFile[],
-	treeEl: HTMLElement,
-	contentEl: HTMLElement,
-	summaryEl: HTMLElement | undefined,
+	treeElement: HTMLElement,
+	contentElement: HTMLElement,
+	summaryElement: HTMLElement | undefined,
 ) => {
-	const filenameEl = document.getElementById("generated-filename");
+	const filenameElement = document.querySelector("#generated-filename");
 
 	if (files.length === 0) {
-		treeEl.innerHTML =
+		treeElement.innerHTML =
 			'<span class="diagnostic-warning">No files generated</span>';
-		contentEl.textContent = "";
-		if (summaryEl) summaryEl.textContent = "";
-		if (filenameEl) filenameEl.textContent = "";
+		contentElement.textContent = "";
+		if (summaryElement) summaryElement.textContent = "";
+		if (filenameElement) filenameElement.textContent = "";
 		return;
 	}
 
 	const tree = buildFileTree(files);
 	const folderCount = countFolders(tree);
 
-	if (summaryEl) {
-		summaryEl.textContent = `${files.length} files generated across ${folderCount} directories`;
+	if (summaryElement) {
+		summaryElement.textContent = `${files.length} files generated across ${folderCount} directories`;
 	}
 
-	treeEl.innerHTML = renderFolderHtml(tree, files, 0);
-	contentEl.textContent = "";
-	if (filenameEl) filenameEl.textContent = "";
+	treeElement.innerHTML = renderFolderHtml(tree, files, 0);
+	contentElement.textContent = "";
+	if (filenameElement) filenameElement.textContent = "";
 
-	const selectFile = (item: Element) => {
-		treeEl
-			.querySelectorAll(".file-tree-item")
-			.forEach((el) => el.classList.remove("selected"));
+	const selectFile = (item: HTMLElement) => {
+		for (const element of treeElement.querySelectorAll(".file-tree-item"))
+			element.classList.remove("selected");
 		item.classList.add("selected");
-		const idx = parseInt(
-			item.getAttribute("data-index") ?? "0",
-			10,
-		);
-		contentEl.textContent = files[idx]?.content ?? "";
-		if (filenameEl) filenameEl.textContent = files[idx]?.filename ?? "";
+		const index = Number.parseInt(item.dataset["index"] ?? "0", 10);
+		contentElement.textContent = files[index]?.content ?? "";
+		if (filenameElement)
+			filenameElement.textContent = files[index]?.filename ?? "";
 	};
 
-	treeEl.querySelectorAll(".folder-header").forEach((header) => {
+	for (const header of treeElement.querySelectorAll<HTMLElement>(
+		".folder-header",
+	)) {
 		header.addEventListener("click", () => {
-			const expanded =
-				header.getAttribute("data-expanded") === "true";
-			header.setAttribute(
-				"data-expanded",
-				expanded ? "false" : "true",
-			);
+			const expanded = header.dataset["expanded"] === "true";
+			header.dataset["expanded"] = expanded ? "false" : "true";
 			const toggle = header.querySelector(".folder-toggle");
 			if (toggle) toggle.textContent = expanded ? "▸" : "▾";
 			const children = header.nextElementSibling;
 			if (children) (children as HTMLElement).hidden = expanded;
 		});
-	});
+	}
 
-	treeEl.querySelectorAll(".file-tree-item").forEach((item) => {
+	for (const item of treeElement.querySelectorAll<HTMLElement>(
+		".file-tree-item",
+	)) {
 		item.addEventListener("click", () => selectFile(item));
-	});
+	}
 };
 
 const runGenerate = () => {
 	const source = editor.state.doc.toString();
-	const treeEl = document.getElementById("generated-tree");
-	const contentEl = document.getElementById("generated-content");
-	const summaryEl = document.getElementById("generated-summary");
-	const statusEl = document.getElementById("status");
-	if (!treeEl || !contentEl) return;
+	const treeElement = document.querySelector<HTMLElement>("#generated-tree");
+	const contentElement =
+		document.querySelector<HTMLElement>("#generated-content");
+	const summaryElement =
+		document.querySelector<HTMLElement>("#generated-summary");
+	const statusElement = document.querySelector("#status");
+	if (!treeElement || !contentElement) return;
 
-	const diagnosticsEl = document.getElementById("diagnostics-output");
+	const diagnosticsElement = document.querySelector("#diagnostics-output");
 
 	const parseResult = parse(source);
 	if (!parseResult.ast || parseResult.errors.length > 0) {
-		if (diagnosticsEl) {
-			diagnosticsEl.innerHTML =
+		if (diagnosticsElement) {
+			diagnosticsElement.innerHTML =
 				'<span class="diagnostic-error">Fix errors before generating</span>';
 		}
 		switchTab("diagnostics");
@@ -279,8 +281,8 @@ const runGenerate = () => {
 
 	const compileResult = compile(parseResult.ast);
 	if (!compileResult.schema || compileResult.errors.length > 0) {
-		if (diagnosticsEl) {
-			diagnosticsEl.innerHTML =
+		if (diagnosticsElement) {
+			diagnosticsElement.innerHTML =
 				'<span class="diagnostic-error">Compilation errors — cannot generate</span>';
 		}
 		switchTab("diagnostics");
@@ -300,36 +302,38 @@ const runGenerate = () => {
 		];
 		renderFileTree(
 			filesWithSchema,
-			treeEl,
-			contentEl,
-			summaryEl ?? undefined,
+			treeElement,
+			contentElement,
+			summaryElement ?? undefined,
 		);
 		switchTab("generated");
-		if (statusEl) {
-			statusEl.textContent = `Generated ${result.files.length} files`;
+		if (statusElement) {
+			statusElement.textContent = `Generated ${result.files.length} files`;
 			setTimeout(() => {
-				statusEl.textContent = "Ready";
+				statusElement.textContent = "Ready";
 			}, 3000);
 		}
-	} catch (e) {
-		if (diagnosticsEl) {
-			diagnosticsEl.innerHTML = `<span class="diagnostic-error">Generation failed: ${escapeHtml(e instanceof Error ? e.message : String(e))}</span>`;
+	} catch (error) {
+		if (diagnosticsElement) {
+			diagnosticsElement.innerHTML = `<span class="diagnostic-error">Generation failed: ${escapeHtml(error instanceof Error ? error.message : String(error))}</span>`;
 		}
 		switchTab("diagnostics");
-		if (statusEl) statusEl.textContent = "Ready";
+		if (statusElement) statusElement.textContent = "Ready";
 	}
 };
 
 const switchTab = (tabName: string) => {
-	document.querySelectorAll(".output-tabs button").forEach((btn) => {
-		btn.setAttribute(
+	for (const button of document.querySelectorAll<HTMLButtonElement>(
+		".output-tabs button",
+	)) {
+		button.setAttribute(
 			"aria-selected",
-			btn.getAttribute("data-tab") === tabName ? "true" : "false",
+			button.dataset["tab"] === tabName ? "true" : "false",
 		);
-	});
-	document.querySelectorAll(".tab-panel").forEach((panel) => {
+	}
+	for (const panel of document.querySelectorAll(".tab-panel")) {
 		panel.classList.toggle("active", panel.id === `tab-${tabName}`);
-	});
+	}
 };
 
 const escapeHtml = (s: string): string =>
@@ -338,19 +342,17 @@ const escapeHtml = (s: string): string =>
 document.addEventListener("DOMContentLoaded", () => {
 	initEditor();
 
-	const treeEl = document.getElementById("generated-tree");
-	if (treeEl) {
-		treeEl.innerHTML =
+	const treeElement = document.querySelector("#generated-tree");
+	if (treeElement) {
+		treeElement.innerHTML =
 			"<p>Click <strong>Generate</strong> to see output.</p>";
 	}
 
+	document.querySelector("#btn-format")?.addEventListener("click", runFormat);
 	document
-		.getElementById("btn-format")
-		?.addEventListener("click", runFormat);
-	document
-		.getElementById("btn-generate")
+		.querySelector("#btn-generate")
 		?.addEventListener("click", runGenerate);
-	document.getElementById("btn-template")?.addEventListener("click", () => {
+	document.querySelector("#btn-template")?.addEventListener("click", () => {
 		editor.dispatch({
 			changes: {
 				from: 0,
@@ -360,22 +362,24 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 		runGenerate();
 	});
-	document.getElementById("btn-share")?.addEventListener("click", () => {
+	document.querySelector("#btn-share")?.addEventListener("click", () => {
 		const source = editor.state.doc.toString();
 		location.hash = encodeURIComponent(source);
-		navigator.clipboard?.writeText(location.href);
-		const statusEl = document.getElementById("status");
-		if (statusEl) {
-			statusEl.textContent = "URL copied!";
+		void navigator.clipboard.writeText(location.href);
+		const statusElement = document.querySelector("#status");
+		if (statusElement) {
+			statusElement.textContent = "URL copied!";
 			setTimeout(() => {
-				statusEl.textContent = "Ready";
+				statusElement.textContent = "Ready";
 			}, 2000);
 		}
 	});
 
-	document.querySelectorAll(".output-tabs button").forEach((btn) => {
-		btn.addEventListener("click", () => {
-			switchTab(btn.getAttribute("data-tab") ?? "diagnostics");
+	for (const button of document.querySelectorAll<HTMLButtonElement>(
+		".output-tabs button",
+	)) {
+		button.addEventListener("click", () => {
+			switchTab(button.dataset["tab"] ?? "diagnostics");
 		});
-	});
+	}
 });
