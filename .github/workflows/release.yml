@@ -63,10 +63,11 @@ jobs:
 
       - name: Publish to npm
         if: steps.changesets.outputs.pending == 'true'
-        run: bunx changeset publish --provenance
+        run: bunx changeset publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
 
       - name: Push tags and version bumps
         if: steps.changesets.outputs.pending == 'true'
