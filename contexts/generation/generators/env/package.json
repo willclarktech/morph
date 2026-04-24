@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/generator-env",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Morph env generator",
 	"license": "MIT",
 	"author": "Morph Contributors",

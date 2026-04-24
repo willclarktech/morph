@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/builder-app",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Morph app builder",
 	"license": "MIT",
 	"author": "Morph Contributors",

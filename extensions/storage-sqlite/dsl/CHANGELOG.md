@@ -1,0 +1,8 @@
+# @morphdsl/storage-sqlite-dsl
+
+## 0.1.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/storage-dsl@0.1.0
