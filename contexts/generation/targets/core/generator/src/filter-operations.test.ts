@@ -9,17 +9,16 @@ const makeSchema = (contexts: Record<string, ContextDef>): DomainSchema => ({
 	contexts,
 });
 
-const emptyContext = (overrides?: Partial<ContextDef>): ContextDef =>
-	({
-		description: "test",
-		entities: {},
-		commands: {},
-		contracts: [],
-		queries: {},
-		invariants: [],
-		dependencies: [],
-		...overrides,
-	}) as ContextDef;
+const emptyContext = (overrides?: Partial<ContextDef>): ContextDef => ({
+	description: "test",
+	entities: {},
+	commands: {},
+	contracts: [],
+	queries: {},
+	invariants: [],
+	dependencies: [],
+	...overrides,
+});
 
 describe("filterOperations", () => {
 	const schema = makeSchema({
@@ -54,7 +53,7 @@ describe("filterOperations", () => {
 					uses: [{ aggregate: "Todo", access: "read" }],
 				},
 			},
-		} as Partial<ContextDef>),
+		}),
 	});
 
 	test("returns all operations when tags is empty", () => {
@@ -101,7 +100,7 @@ describe("filterFunctions", () => {
 					tags: ["@cli"],
 				},
 			},
-		} as Partial<ContextDef>),
+		}),
 	});
 
 	test("returns all functions when tags is empty", () => {

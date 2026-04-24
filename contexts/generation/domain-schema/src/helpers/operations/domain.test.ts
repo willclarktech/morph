@@ -14,17 +14,16 @@ const makeSchema = (contexts: Record<string, ContextDef>): DomainSchema => ({
 	contexts,
 });
 
-const emptyContext = (overrides?: Partial<ContextDef>): ContextDef =>
-	({
-		description: "test",
-		entities: {},
-		commands: {},
-		contracts: [],
-		queries: {},
-		invariants: [],
-		dependencies: [],
-		...overrides,
-	}) as ContextDef;
+const emptyContext = (overrides?: Partial<ContextDef>): ContextDef => ({
+	description: "test",
+	entities: {},
+	commands: {},
+	contracts: [],
+	queries: {},
+	invariants: [],
+	dependencies: [],
+	...overrides,
+});
 
 describe("getOperationAggregates", () => {
 	test("returns uses array from command", () => {
@@ -41,7 +40,7 @@ describe("getOperationAggregates", () => {
 						uses: [{ aggregate: "Todo", access: "write" }],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		const aggs = getOperationAggregates(schema, "createTodo");
 		expect(aggs).toEqual([{ aggregate: "Todo", access: "write" }]);
@@ -69,7 +68,7 @@ describe("getOperationAggregates", () => {
 						],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		const aggs = getOperationAggregates(schema, "transferTodos");
 		expect(aggs).toHaveLength(2);
@@ -94,7 +93,7 @@ describe("isDomainService", () => {
 						],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(isDomainService(schema, "transferTodos")).toBe(true);
 	});
@@ -113,7 +112,7 @@ describe("isDomainService", () => {
 						uses: [{ aggregate: "Todo", access: "write" }],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(isDomainService(schema, "createTodo")).toBe(false);
 	});
@@ -142,7 +141,7 @@ describe("getPrimaryWriteAggregate", () => {
 						],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(getPrimaryWriteAggregate(schema, "transferTodos")).toBe("Todo");
 	});
@@ -160,7 +159,7 @@ describe("getPrimaryWriteAggregate", () => {
 						uses: [{ aggregate: "Todo", access: "read" }],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(getPrimaryWriteAggregate(schema, "listTodos")).toBeUndefined();
 	});

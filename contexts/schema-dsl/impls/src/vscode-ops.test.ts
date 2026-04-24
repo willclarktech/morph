@@ -50,7 +50,7 @@ describe("getDiagnostics", () => {
 	test("returns empty for valid source", async () => {
 		const result = await run(
 			Effect.flatMap(GetDiagnosticsHandler, (h) =>
-				h.handle({ source: VALID_SOURCE }, {} as never),
+				h.handle({ source: VALID_SOURCE }, {}),
 			),
 			GetDiagnosticsHandlerLive,
 		);
@@ -60,7 +60,7 @@ describe("getDiagnostics", () => {
 	test("returns errors for invalid source", async () => {
 		const result = await run(
 			Effect.flatMap(GetDiagnosticsHandler, (h) =>
-				h.handle({ source: INVALID_SOURCE }, {} as never),
+				h.handle({ source: INVALID_SOURCE }, {}),
 			),
 			GetDiagnosticsHandlerLive,
 		);
@@ -74,7 +74,7 @@ describe("getSymbols", () => {
 	test("returns hierarchical symbols for valid source", async () => {
 		const result = await run(
 			Effect.flatMap(GetSymbolsHandler, (h) =>
-				h.handle({ source: VALID_SOURCE }, {} as never),
+				h.handle({ source: VALID_SOURCE }, {}),
 			),
 			GetSymbolsHandlerLive,
 		);
@@ -90,7 +90,7 @@ describe("getSymbols", () => {
 	test("returns empty for unparseable source", async () => {
 		const result = await run(
 			Effect.flatMap(GetSymbolsHandler, (h) =>
-				h.handle({ source: "{{{{ not valid" }, {} as never),
+				h.handle({ source: "{{{{ not valid" }, {}),
 			),
 			GetSymbolsHandlerLive,
 		);
@@ -103,7 +103,7 @@ describe("getCompletions", () => {
 		const source = "domain Foo\n\ncontext bar {\n\tentity Baz @";
 		const result = await run(
 			Effect.flatMap(GetCompletionsHandler, (h) =>
-				h.handle({ source, line: 4, column: 15 }, {} as never),
+				h.handle({ source, line: 4, column: 15 }, {}),
 			),
 			GetCompletionsHandlerLive,
 		);
@@ -116,7 +116,7 @@ describe("getCompletions", () => {
 		const source = "domain Foo\n\ncontext bar {\n\tentity Baz {\n\t\tname: ";
 		const result = await run(
 			Effect.flatMap(GetCompletionsHandler, (h) =>
-				h.handle({ source, line: 5, column: 9 }, {} as never),
+				h.handle({ source, line: 5, column: 9 }, {}),
 			),
 			GetCompletionsHandlerLive,
 		);
@@ -130,7 +130,7 @@ describe("getCompletions", () => {
 			"domain Foo\n\ncontext bar {\n\tentity Todo {\n\t\tx: string\n\t}\n\tcommand DoIt\n\t\treads Todo\n}";
 		const result = await run(
 			Effect.flatMap(GetCompletionsHandler, (h) =>
-				h.handle({ source, line: 8, column: 9 }, {} as never),
+				h.handle({ source, line: 8, column: 9 }, {}),
 			),
 			GetCompletionsHandlerLive,
 		);
@@ -145,7 +145,7 @@ describe("getHover", () => {
 			"domain Foo\n\ncontext bar {\n\tentity Todo {\n\t\tx: string\n\t}\n}";
 		const result = await run(
 			Effect.flatMap(GetHoverHandler, (h) =>
-				h.handle({ source, line: 4, column: 10 }, {} as never),
+				h.handle({ source, line: 4, column: 10 }, {}),
 			),
 			GetHoverHandlerLive,
 		);
@@ -157,7 +157,7 @@ describe("getDefinition", () => {
 	test("returns location for entity reference in reads clause", async () => {
 		const result = await run(
 			Effect.flatMap(GetDefinitionHandler, (h) =>
-				h.handle({ source: VALID_SOURCE, line: 137, column: 10 }, {} as never),
+				h.handle({ source: VALID_SOURCE, line: 137, column: 10 }, {}),
 			),
 			GetDefinitionHandlerLive,
 		);
@@ -167,7 +167,7 @@ describe("getDefinition", () => {
 	test("returns zero range for unknown word", async () => {
 		const result = await run(
 			Effect.flatMap(GetDefinitionHandler, (h) =>
-				h.handle({ source: "domain Foo\n", line: 1, column: 1 }, {} as never),
+				h.handle({ source: "domain Foo\n", line: 1, column: 1 }, {}),
 			),
 			GetDefinitionHandlerLive,
 		);
@@ -179,7 +179,7 @@ describe("getFoldingRanges", () => {
 	test("returns folding ranges for blocks", async () => {
 		const result = await run(
 			Effect.flatMap(GetFoldingRangesHandler, (h) =>
-				h.handle({ source: VALID_SOURCE }, {} as never),
+				h.handle({ source: VALID_SOURCE }, {}),
 			),
 			GetFoldingRangesHandlerLive,
 		);
@@ -189,7 +189,7 @@ describe("getFoldingRanges", () => {
 	test("returns empty for unparseable source", async () => {
 		const result = await run(
 			Effect.flatMap(GetFoldingRangesHandler, (h) =>
-				h.handle({ source: "{{{{" }, {} as never),
+				h.handle({ source: "{{{{" }, {}),
 			),
 			GetFoldingRangesHandlerLive,
 		);

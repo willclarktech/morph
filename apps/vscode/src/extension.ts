@@ -18,7 +18,7 @@ const extension = createExtension({
 
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument -- vscode types are structurally richer than runtime stubs */
 export const activate = (context: vscode.ExtensionContext) =>
-	extension.activate(context as any, vscode as any);
+	extension.activate(context, vscode as any);
 /* eslint-enable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument */
 
 export const deactivate = () => extension.deactivate();

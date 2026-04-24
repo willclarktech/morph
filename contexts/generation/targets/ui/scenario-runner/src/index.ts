@@ -76,7 +76,7 @@ export const createUiRunner = (config: UiRunnerConfig): Runner => {
 					[apiUrlEnvironmentVariable]: apiServer.baseUrl,
 				},
 			};
-			uiServer = await startServer(uiConfig as ServerConfig);
+			uiServer = await startServer(uiConfig);
 		}
 
 		return { api: apiServer, ui: uiServer };

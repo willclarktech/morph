@@ -16,17 +16,16 @@ const makeSchema = (contexts: Record<string, ContextDef>): DomainSchema => ({
 	contexts,
 });
 
-const emptyContext = (overrides?: Partial<ContextDef>): ContextDef =>
-	({
-		description: "test",
-		entities: {},
-		commands: {},
-		contracts: [],
-		queries: {},
-		invariants: [],
-		dependencies: [],
-		...overrides,
-	}) as ContextDef;
+const emptyContext = (overrides?: Partial<ContextDef>): ContextDef => ({
+	description: "test",
+	entities: {},
+	commands: {},
+	contracts: [],
+	queries: {},
+	invariants: [],
+	dependencies: [],
+	...overrides,
+});
 
 const makeCommand = (desc: string) => ({
 	description: desc,
@@ -63,12 +62,12 @@ describe("getAllCommands", () => {
 					createTodo: makeCommand("Create"),
 					deleteTodo: makeCommand("Delete"),
 				},
-			} as Partial<ContextDef>),
+			}),
 			users: emptyContext({
 				commands: {
 					createUser: makeCommand("Create user"),
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		const commands = getAllCommands(schema);
 		expect(commands).toHaveLength(3);
@@ -83,7 +82,7 @@ describe("getAllCommands", () => {
 		const schema = makeSchema({
 			todos: emptyContext({
 				commands: { createTodo: makeCommand("Create") },
-			} as Partial<ContextDef>),
+			}),
 		});
 		const [entry] = getAllCommands(schema);
 		expect(entry!.context).toBe("todos");
@@ -101,10 +100,10 @@ describe("getAllQueries", () => {
 		const schema = makeSchema({
 			todos: emptyContext({
 				queries: { listTodos: makeQuery("List") },
-			} as Partial<ContextDef>),
+			}),
 			users: emptyContext({
 				queries: { getUser: makeQuery("Get user") },
-			} as Partial<ContextDef>),
+			}),
 		});
 		const queries = getAllQueries(schema);
 		expect(queries).toHaveLength(2);
@@ -123,7 +122,7 @@ describe("getAllOperations", () => {
 			todos: emptyContext({
 				commands: { createTodo: makeCommand("Create") },
 				queries: { listTodos: makeQuery("List") },
-			} as Partial<ContextDef>),
+			}),
 		});
 		const ops = getAllOperations(schema);
 		expect(ops).toHaveLength(2);
@@ -144,7 +143,7 @@ describe("getAllFunctions", () => {
 					transform: makeFunction("Transform"),
 					validate: makeFunction("Validate"),
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		const fns = getAllFunctions(schema);
 		expect(fns).toHaveLength(2);
@@ -160,7 +159,7 @@ describe("getAllFunctions", () => {
 		const schema = makeSchema({
 			compute: emptyContext({
 				functions: { calc: makeFunction("Calc") },
-			} as Partial<ContextDef>),
+			}),
 		});
 		const [entry] = getAllFunctions(schema);
 		expect(entry!.context).toBe("compute");
@@ -173,7 +172,7 @@ describe("getOperationsFlat", () => {
 			todos: emptyContext({
 				commands: { createTodo: makeCommand("Create") },
 				queries: { listTodos: makeQuery("List") },
-			} as Partial<ContextDef>),
+			}),
 		});
 		const flat = getOperationsFlat(schema);
 		expect(Object.keys(flat).sort()).toEqual(["createTodo", "listTodos"]);
@@ -191,7 +190,7 @@ describe("getFunctionsFlat", () => {
 		const schema = makeSchema({
 			compute: emptyContext({
 				functions: { calc: makeFunction("Calc") },
-			} as Partial<ContextDef>),
+			}),
 		});
 		const flat = getFunctionsFlat(schema);
 		expect(Object.keys(flat)).toEqual(["calc"]);

@@ -17,12 +17,12 @@ export const getSchemaDescription = (
 	const descSymbol = Symbol.for("effect/annotation/Description");
 
 	// Check for annotations on the property signature (optional params)
-	const propAnnotations = property.annotations as Record<symbol, unknown>;
+	const propAnnotations = property.annotations;
 	const propDesc = propAnnotations[descSymbol];
 	if (typeof propDesc === "string") return propDesc;
 
 	// Check for annotations on the property type (required params)
-	const typeAnnotations = property.type.annotations as Record<symbol, unknown>;
+	const typeAnnotations = property.type.annotations;
 	const typeDesc = typeAnnotations[descSymbol];
 	if (typeof typeDesc === "string") return typeDesc;
 
@@ -39,11 +39,11 @@ const isSensitiveParam = (schema: S.Schema.All, fieldName: string): boolean => {
 	if (!property) return false;
 
 	// Check for sensitive annotation on property signature (optional params)
-	const propAnnotations = property.annotations as Record<string, unknown>;
+	const propAnnotations = property.annotations;
 	if (propAnnotations["sensitive"] === true) return true;
 
 	// Check for sensitive annotation on property type (required params)
-	const typeAnnotations = property.type.annotations as Record<string, unknown>;
+	const typeAnnotations = property.type.annotations;
 	if (typeAnnotations["sensitive"] === true) return true;
 
 	return false;

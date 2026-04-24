@@ -14,17 +14,16 @@ const makeSchema = (contexts: Record<string, ContextDef>): DomainSchema => ({
 	contexts,
 });
 
-const emptyContext = (overrides?: Partial<ContextDef>): ContextDef =>
-	({
-		description: "test",
-		entities: {},
-		commands: {},
-		contracts: [],
-		queries: {},
-		invariants: [],
-		dependencies: [],
-		...overrides,
-	}) as ContextDef;
+const emptyContext = (overrides?: Partial<ContextDef>): ContextDef => ({
+	description: "test",
+	entities: {},
+	commands: {},
+	contracts: [],
+	queries: {},
+	invariants: [],
+	dependencies: [],
+	...overrides,
+});
 
 describe("getContextOperationsWithTag", () => {
 	test("returns commands with matching tag", () => {
@@ -40,7 +39,7 @@ describe("getContextOperationsWithTag", () => {
 					uses: [],
 				},
 			},
-		} as Partial<ContextDef>);
+		});
 		expect(getContextOperationsWithTag(context, "@api")).toEqual([
 			"createTodo",
 		]);
@@ -58,7 +57,7 @@ describe("getContextOperationsWithTag", () => {
 					uses: [],
 				},
 			},
-		} as Partial<ContextDef>);
+		});
 		expect(getContextOperationsWithTag(context, "@cli")).toEqual(["listTodos"]);
 	});
 
@@ -73,7 +72,7 @@ describe("getContextOperationsWithTag", () => {
 					tags: ["@api"],
 				},
 			},
-		} as Partial<ContextDef>);
+		});
 		expect(getContextOperationsWithTag(context, "@api")).toEqual(["transform"]);
 	});
 
@@ -90,7 +89,7 @@ describe("getContextOperationsWithTag", () => {
 					uses: [],
 				},
 			},
-		} as Partial<ContextDef>);
+		});
 		expect(getContextOperationsWithTag(context, "@api")).toEqual([]);
 	});
 
@@ -114,7 +113,7 @@ describe("getContextsWithTag", () => {
 						uses: [],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 			users: emptyContext(),
 		});
 		expect(getContextsWithTag(schema, "@api")).toEqual(["todos"]);
@@ -133,7 +132,7 @@ describe("getContextsWithTag", () => {
 					uses: [],
 				},
 			},
-		} as Partial<ContextDef>);
+		});
 		const schema = makeSchema({
 			a: withApiCommand,
 			b: withApiCommand,
@@ -163,7 +162,7 @@ describe("findPrimaryContext", () => {
 						uses: [],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(findPrimaryContext(schema)).toBe("todos");
 	});
@@ -182,7 +181,7 @@ describe("findPrimaryContext", () => {
 						uses: [],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(findPrimaryContext(schema)).toBe("search");
 	});
@@ -200,7 +199,7 @@ describe("findPrimaryContext", () => {
 						tags: [],
 					},
 				},
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(findPrimaryContext(schema)).toBe("compute");
 	});
@@ -236,7 +235,7 @@ describe("hasPropertyTests", () => {
 						},
 					},
 				],
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(hasPropertyTests(schema)).toBe(true);
 	});
@@ -257,7 +256,7 @@ describe("hasPropertyTests", () => {
 						},
 					},
 				],
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(hasPropertyTests(schema)).toBe(true);
 	});
@@ -278,7 +277,7 @@ describe("hasPropertyTests", () => {
 						},
 					},
 				],
-			} as Partial<ContextDef>),
+			}),
 		});
 		expect(hasPropertyTests(schema)).toBe(false);
 	});

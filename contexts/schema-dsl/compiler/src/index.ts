@@ -746,7 +746,7 @@ const compileExtensions = (
 		}
 	}
 
-	return result as unknown as Extensions;
+	return result;
 };
 
 // =============================================================================

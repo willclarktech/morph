@@ -38,7 +38,7 @@ export const findFirstToken = (node: CstNode | IToken): IToken => {
 	let earliest: IToken | undefined;
 	for (const children of Object.values(cst.children)) {
 		for (const child of children) {
-			const token = findFirstToken(child as CstNode | IToken);
+			const token = findFirstToken(child);
 			if (!earliest || token.startOffset < earliest.startOffset) {
 				earliest = token;
 			}
@@ -54,7 +54,7 @@ export const findLastToken = (node: CstNode | IToken): IToken => {
 	let latest: IToken | undefined;
 	for (const children of Object.values(cst.children)) {
 		for (const child of children) {
-			const token = findLastToken(child as CstNode | IToken);
+			const token = findLastToken(child);
 			if (!latest || (token.endOffset ?? 0) > (latest.endOffset ?? 0)) {
 				latest = token;
 			}

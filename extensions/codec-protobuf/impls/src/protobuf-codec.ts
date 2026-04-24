@@ -41,9 +41,7 @@ const coerceDateFields = (
 		const value = result[field];
 		if (value === undefined || value === null) continue;
 		if (toDate && typeof value === "object") {
-			result[field] = timestampToDate(
-				value as { nanos?: number; seconds?: number | bigint },
-			);
+			result[field] = timestampToDate(value);
 		} else if (!toDate && value instanceof Date) {
 			result[field] = dateToTimestamp(value);
 		}
@@ -100,7 +98,7 @@ export const createProtobufCodec = (config: ProtobufCodecConfig): Codec => ({
 				let result = MessageType.toObject(decoded, {
 					longs: String,
 					defaults: true,
-				}) as Record<string, unknown>;
+				});
 
 				const dateFieldNames = config.dateFields?.[messageTypeName] ?? [];
 				if (dateFieldNames.length > 0) {

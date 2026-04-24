@@ -8,12 +8,11 @@ import { describe, expect, test } from "bun:test";
 
 import { entityToFieldSpecs, entityToIndexSpecs } from "./column-mapping";
 
-const makeEntity = (attributes: EntityDef["attributes"]): EntityDef =>
-	({
-		description: "Test",
-		attributes: attributes,
-		relationships: [],
-	}) as EntityDef;
+const makeEntity = (attributes: EntityDef["attributes"]): EntityDef => ({
+	description: "Test",
+	attributes: attributes,
+	relationships: [],
+});
 
 const makeSchema = (
 	entityName: string,
