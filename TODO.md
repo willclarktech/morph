@@ -44,6 +44,8 @@
 | Task | Effort | Notes |
 |------|--------|-------|
 | Code AST for generation output | L | Minimal code AST replacing string templates. Enables import deduplication, structural composition, format independence |
+| Native desktop app target | L | Generate a desktop app (Tauri/Electron) from schema. Reuses UI plugin for renderer, wraps backend in-process or via IPC |
+| Native mobile app target | L | Generate a mobile app (React Native/Expo or native via Kotlin/Swift) from schema. Shares client-side models and HTTP client with existing web UI |
 | DSL operation replay | M | Replay operations from command log — separate from domain events |
 | Distributed SSE | M | Redis pub/sub for SSE broadcast across multiple server instances |
 | Modular authentication | S | Remaining: OAuth/OIDC (JWT, bearer, API key, session, anonymous done) |
