@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/generator-properties",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Morph properties generator",
 	"license": "MIT",
 	"author": "Morph Contributors",

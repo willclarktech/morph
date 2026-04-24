@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/plugin-proto",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Morph proto plugin",
 	"license": "MIT",
 	"author": "Morph Contributors",

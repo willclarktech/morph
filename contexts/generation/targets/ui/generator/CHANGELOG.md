@@ -1,5 +1,15 @@
 # @morphdsl/runtime-ui
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-app@0.1.1
+  - @morphdsl/domain-schema@0.1.1
+  - @morphdsl/utils@0.1.1
+  - @morphdsl/auth-password-impls@0.1.1
+
 ## 0.1.0
 
 ### Patch Changes

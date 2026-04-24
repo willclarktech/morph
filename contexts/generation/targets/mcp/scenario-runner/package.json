@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/scenario-runner-mcp",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Morph mcp scenario runner",
 	"license": "MIT",
 	"author": "Morph Contributors",
