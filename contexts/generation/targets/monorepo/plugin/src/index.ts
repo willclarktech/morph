@@ -155,7 +155,7 @@ const generateConfigPackages = (scope: string): GeneratedFile[] => [
 				private: true,
 				type: "module",
 				exports: { ".": "./src/index.ts" },
-				dependencies: { "@morphdsl/eslint-config": "^0.0.0" },
+				dependencies: { "@morphdsl/eslint-config": "workspace:*" },
 			},
 			undefined,
 			"\t",

@@ -17,7 +17,13 @@ const WORKFLOW = "release.yml";
 
 const findPublishablePackages = (dir: string): string[] => {
 	const names: string[] = [];
-	const SKIP = new Set(["node_modules", ".git", ".worktrees", "examples", "fixtures"]);
+	const SKIP = new Set([
+		"node_modules",
+		".git",
+		".worktrees",
+		"examples",
+		"fixtures",
+	]);
 	const walk = (current: string): void => {
 		for (const entry of readdirSync(current, { withFileTypes: true })) {
 			if (SKIP.has(entry.name)) continue;
@@ -44,7 +50,9 @@ const findPublishablePackages = (dir: string): string[] => {
 
 const main = async (): Promise<void> => {
 	const packages = findPublishablePackages(ROOT_DIR);
-	console.info(`Configuring trusted publishing for ${packages.length} packages...\n`);
+	console.info(
+		`Configuring trusted publishing for ${packages.length} packages...\n`,
+	);
 
 	let succeeded = 0;
 	let skipped = 0;
@@ -54,7 +62,17 @@ const main = async (): Promise<void> => {
 	for (const [index, name] of packages.entries()) {
 		process.stdout.write(`[${index + 1}/${packages.length}] ${name} ... `);
 		const result = Bun.spawnSync(
-			["npm", "trust", "github", "--file", WORKFLOW, "--repo", REPO, "--yes", name],
+			[
+				"npm",
+				"trust",
+				"github",
+				"--file",
+				WORKFLOW,
+				"--repo",
+				REPO,
+				"--yes",
+				name,
+			],
 			{ stderr: "pipe", stdout: "pipe" },
 		);
 		const stdout = new TextDecoder().decode(result.stdout);
@@ -62,7 +80,10 @@ const main = async (): Promise<void> => {
 		if (result.exitCode === 0) {
 			console.info("ok");
 			succeeded++;
-		} else if (stderr.includes("already exists") || stdout.includes("already exists")) {
+		} else if (
+			stderr.includes("already exists") ||
+			stdout.includes("already exists")
+		) {
 			console.info("already configured");
 			skipped++;
 		} else {
