@@ -79,6 +79,8 @@
 
 | Task | Priority | Effort | Notes |
 |------|----------|--------|-------|
+| Bump bun to ≥1.3.13 + adopt `bun test --isolate` | P3 | M | Blocked on nixpkgs — unstable still has 1.3.11. Unlocks isolated test runs to catch leaked state. Bump pin in all 3 workflows + local nix config together; commit any autofix drift first. |
+| Refresh quickstart docs now that packages are published | P2 | S | `docs/guides/getting-started.md` and similar assume a local clone. Now users can `npx @morphdsl/cli` or install published packages directly — update the quickstart to show that path. Also check README, site landing page, examples. |
 | Standardize package.json key order | P4 | S | Consistent ordering across generated and template files |
 | Multi-framework step gen | P4 | M | Abstract step generation for Playwright/Cypress |
 | Revisit functional lint rules | P4 | M | Re-enable disabled functional/* rules after refactoring |
