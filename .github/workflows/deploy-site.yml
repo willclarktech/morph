@@ -29,6 +29,8 @@ jobs:
 
       - name: Build static site
         run: bun site/src/build.ts
+        env:
+          BASE_PATH: /morph
 
       - uses: actions/upload-pages-artifact@v3
         with:

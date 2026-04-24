@@ -1,5 +1,6 @@
 import { highlightMorph } from "@morphdsl/morph-highlight";
 
+import { url } from "../base-path";
 import { layout } from "../layout";
 
 const PASTEBIN_SCHEMA = `domain Pastebin
@@ -78,8 +79,8 @@ export const landingPage = (): string =>
 				<p>Write a <code>.morph</code> schema once. Generate branded types, REST APIs, CLIs, MCP servers, VS Code extensions, web UIs, and more — all mechanically correct.</p>
 			</hgroup>
 			<div class="hero-actions">
-				<a href="/docs/guides/getting-started" role="button">Get Started</a>
-				<a href="/playground" role="button" class="outline">Try the Playground</a>
+				<a href="${url("/docs/guides/getting-started")}" role="button">Get Started</a>
+				<a href="${url("/playground")}" role="button" class="outline">Try the Playground</a>
 			</div>
 		</section>
 
@@ -93,7 +94,7 @@ cd examples/pastebin && bun run apps/api/src/index.ts</code></pre>
 		<section>
 			<h2>Example Schema</h2>
 			<pre><code class="language-morph">${highlightMorph(PASTEBIN_SCHEMA)}</code></pre>
-			<p><a href="/playground#${encodeURIComponent(PASTEBIN_SCHEMA)}">Open in Playground →</a></p>
+			<p><a href="${url("/playground")}#${encodeURIComponent(PASTEBIN_SCHEMA)}">Open in Playground →</a></p>
 		</section>
 
 		<section>

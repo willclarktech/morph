@@ -1,3 +1,4 @@
+import { url } from "../base-path";
 import { layout } from "../layout";
 
 export interface ExampleSnapshot {
@@ -10,7 +11,7 @@ export const examplesPage = (examples: readonly ExampleSnapshot[]): string =>
 	layout({
 		title: "Examples",
 		currentPath: "/examples",
-		bodyExtra: '<script type="module" src="/examples-browser.js"></script>',
+		bodyExtra: `<script type="module" src="${url("/examples-browser.js")}"></script>`,
 		content: `
 		<section>
 			<h1>Example Schemas</h1>
@@ -22,7 +23,7 @@ export const examplesPage = (examples: readonly ExampleSnapshot[]): string =>
 					<h3>${ex.name}</h3>
 					<p>${escapeHtml(ex.description)}</p>
 					<nav>
-						<a href="/playground#${encodeURIComponent(ex.schema)}" role="button" class="outline">Open in Playground</a>
+						<a href="${url("/playground")}#${encodeURIComponent(ex.schema)}" role="button" class="outline">Open in Playground</a>
 					</nav>
 				</article>`,
 					)

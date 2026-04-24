@@ -1,11 +1,12 @@
+import { url } from "../base-path";
 import { layout } from "../layout";
 
 export const playgroundPage = (): string =>
 	layout({
 		title: "Playground",
 		currentPath: "/playground",
-		headExtra: '<link rel="stylesheet" href="/playground.css">',
-		bodyExtra: '<script type="module" src="/playground.js"></script>',
+		headExtra: `<link rel="stylesheet" href="${url("/playground.css")}">`,
+		bodyExtra: `<script type="module" src="${url("/playground.js")}"></script>`,
 		content: `
 		<div class="playground-layout">
 			<nav class="playground-toolbar">

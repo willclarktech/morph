@@ -1,3 +1,5 @@
+import { url } from "./base-path";
+
 const NAV_ITEMS = [
 	{ href: "/", label: "Home" },
 	{ href: "/docs/guides/getting-started", label: "Docs" },
@@ -18,21 +20,21 @@ export const layout = (options: {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>${options.title} — Morph</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-	<link rel="stylesheet" href="/morph.css">
-	<link rel="icon" href="/favicon.png" type="image/png">
-	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+	<link rel="stylesheet" href="${url("/morph.css")}">
+	<link rel="icon" href="${url("/favicon.png")}" type="image/png">
+	<link rel="apple-touch-icon" href="${url("/apple-touch-icon.png")}">
 	${options.headExtra ?? ""}
 </head>
 <body>
 	<header class="container">
 		<nav>
 			<ul>
-				<li><a href="/" class="site-logo"><img src="/logo.png" alt="Morph" height="32"> <strong>Morph</strong></a></li>
+				<li><a href="${url("/")}" class="site-logo"><img src="${url("/logo.png")}" alt="Morph" height="32"> <strong>Morph</strong></a></li>
 			</ul>
 			<ul>
 				${NAV_ITEMS.map(
 					(item) =>
-						`<li><a href="${item.href}"${options.currentPath === item.href || (item.href !== "/" && options.currentPath.startsWith(item.href)) ? ' aria-current="page"' : ""}>${item.label}</a></li>`,
+						`<li><a href="${url(item.href)}"${options.currentPath === item.href || (item.href !== "/" && options.currentPath.startsWith(item.href)) ? ' aria-current="page"' : ""}>${item.label}</a></li>`,
 				).join("\n\t\t\t\t")}
 				<li><a href="https://github.com/willclarktech/morph" target="_blank" rel="noopener">GitHub</a></li>
 			</ul>

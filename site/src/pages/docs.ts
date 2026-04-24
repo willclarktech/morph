@@ -1,3 +1,4 @@
+import { url } from "../base-path";
 import { layout } from "../layout";
 
 interface DocumentEntry {
@@ -120,7 +121,7 @@ const buildSidebar = (currentSlug: string): string => {
 		html += "<ul>";
 		for (const entry of entries) {
 			const active = entry.slug === currentSlug ? ' aria-current="page"' : "";
-			html += `<li><a href="/docs/${entry.slug}"${active}>${entry.title}</a></li>`;
+			html += `<li><a href="${url(`/docs/${entry.slug}`)}"${active}>${entry.title}</a></li>`;
 		}
 		html += "</ul></details>";
 	}
@@ -136,8 +137,8 @@ export const docsPage = (
 	layout({
 		title,
 		currentPath: `/docs/${slug}`,
-		headExtra: '<link rel="stylesheet" href="/docs.css">',
-		bodyExtra: '<script type="module" src="/mermaid-init.js"></script>',
+		headExtra: `<link rel="stylesheet" href="${url("/docs.css")}">`,
+		bodyExtra: `<script type="module" src="${url("/mermaid-init.js")}"></script>`,
 		content: `
 		<div class="docs-layout">
 			${buildSidebar(slug)}
@@ -151,14 +152,14 @@ export const docsIndex = (): string =>
 	layout({
 		title: "Documentation",
 		currentPath: "/docs",
-		headExtra: '<link rel="stylesheet" href="/docs.css">',
+		headExtra: `<link rel="stylesheet" href="${url("/docs.css")}">`,
 		content: `
 		<div class="docs-layout">
 			${buildSidebar("")}
 			<article class="docs-content">
 				<h1>Documentation</h1>
 				<p>Morph documentation covering guides, concepts, architecture, and design decisions.</p>
-				<p><a href="/docs/guides/getting-started">Get started →</a></p>
+				<p><a href="${url("/docs/guides/getting-started")}">Get started →</a></p>
 			</article>
 		</div>`,
 	});
