@@ -41,7 +41,7 @@ export const ParseMorphHandlerLive = Layer.succeed(ParseMorphHandler, {
 			const diagnostics = [
 				...parseResult.errors.map((error) => ({
 					message: error.message,
-					severity: error.severity as "error" | "warning",
+					severity: error.severity,
 					line: error.range.start.line,
 					column: error.range.start.column,
 					endLine: error.range.end.line,

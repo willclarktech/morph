@@ -25,7 +25,7 @@ export const GetDiagnosticsHandlerLive = Layer.succeed(GetDiagnosticsHandler, {
 			for (const error of parseResult.errors) {
 				diagnostics.push({
 					message: error.message,
-					severity: error.severity as "error" | "warning",
+					severity: error.severity,
 					line: error.range.start.line,
 					column: error.range.start.column,
 					endLine: error.range.end.line,
