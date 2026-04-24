@@ -18,11 +18,11 @@ const WORKFLOW = "release.yml";
 const findPublishablePackages = (dir: string): string[] => {
 	const names: string[] = [];
 	const SKIP = new Set([
-		"node_modules",
 		".git",
 		".worktrees",
 		"examples",
 		"fixtures",
+		"node_modules",
 	]);
 	const walk = (current: string): void => {
 		for (const entry of readdirSync(current, { withFileTypes: true })) {
@@ -31,12 +31,12 @@ const findPublishablePackages = (dir: string): string[] => {
 			if (entry.isDirectory()) walk(full);
 			else if (entry.name === "package.json") {
 				try {
-					const pkg = JSON.parse(readFileSync(full, "utf8")) as {
+					const package_ = JSON.parse(readFileSync(full, "utf8")) as {
 						name?: string;
 						private?: boolean;
 					};
-					if (pkg.name?.startsWith("@morphdsl/") && !pkg.private) {
-						names.push(pkg.name);
+					if (package_.name?.startsWith("@morphdsl/") && !package_.private) {
+						names.push(package_.name);
 					}
 				} catch {
 					// ignore
@@ -48,7 +48,7 @@ const findPublishablePackages = (dir: string): string[] => {
 	return [...new Set(names)].sort();
 };
 
-const main = async (): Promise<void> => {
+const main = (): void => {
 	const packages = findPublishablePackages(ROOT_DIR);
 	console.info(
 		`Configuring trusted publishing for ${packages.length} packages...\n`,
@@ -103,4 +103,4 @@ const main = async (): Promise<void> => {
 	}
 };
 
-await main();
+main();
