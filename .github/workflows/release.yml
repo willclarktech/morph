@@ -40,6 +40,8 @@ jobs:
       - name: Version packages
         if: steps.changesets.outputs.pending == 'true'
         run: bunx changeset version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sync VSCode extension version
         if: steps.changesets.outputs.pending == 'true'
