@@ -202,7 +202,32 @@ const runGenerate = async (schema: DomainSchema): Promise<boolean> => {
 			const filePath = path.join(MORPH_DIR, file.filename);
 			const dir = path.dirname(filePath);
 			mkdirSync(dir, { recursive: true });
-			writeFileSync(filePath, file.content);
+			// Preserve existing version in package.json files — generators hardcode 0.0.0
+			// but changesets bumps real versions that we don't want to wipe on regen.
+			let content = file.content;
+			if (
+				(file.filename.endsWith("/package.json") ||
+					file.filename === "package.json") &&
+				existsSync(filePath)
+			) {
+				try {
+					const existing = JSON.parse(readFileSync(filePath, "utf8")) as {
+						version?: string;
+					};
+					const incoming = JSON.parse(content) as { version?: string };
+					if (
+						existing.version &&
+						existing.version !== "0.0.0" &&
+						incoming.version === "0.0.0"
+					) {
+						incoming.version = existing.version;
+						content = JSON.stringify(incoming, undefined, "\t") + "\n";
+					}
+				} catch {
+					// fall through with generated content
+				}
+			}
+			writeFileSync(filePath, content);
 			console.info(`Created: ${file.filename}`);
 		}
 
