@@ -119,14 +119,23 @@ const postProcessFiles = (
 
 // Read this package's own version once at module load. Used to rewrite
 // `workspace:*` for @morphdsl/* deps in generated package.json files.
-const MORPHDSL_VERSION = (
-	JSON.parse(
-		readFileSync(
-			fileURLToPath(new URL("../package.json", import.meta.url)),
-			"utf8",
-		),
-	) as { version: string }
-).version;
+// Falls back to "*" in environments without filesystem access (e.g. the
+// playground's browser build) — those environments don't run the rewrite
+// path because they don't write files.
+const MORPHDSL_VERSION = ((): string => {
+	try {
+		return (
+			JSON.parse(
+				readFileSync(
+					fileURLToPath(new URL("../package.json", import.meta.url)),
+					"utf8",
+				),
+			) as { version: string }
+		).version;
+	} catch {
+		return "*";
+	}
+})();
 
 export const GenerateHandlerLive = Layer.succeed(GenerateHandler, {
 	handle: (params, options) =>

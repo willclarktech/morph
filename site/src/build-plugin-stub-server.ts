@@ -18,6 +18,7 @@ const stubs: Record<string, string> = {
 	"node:crypto": `export const randomUUID = () => "00000000-0000-0000-0000-000000000000"; export default {};`,
 	"node:readline": `export const createInterface = ${noop}; export default {};`,
 	"node:process": `export default {};`,
+	"node:url": `export const fileURLToPath = (u) => String(u); export const URL = globalThis.URL; export default { fileURLToPath };`,
 };
 
 const mcpStub = `export class McpServer {}; export class StdioServerTransport {}; export default {};`;
