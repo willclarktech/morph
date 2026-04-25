@@ -1,5 +1,13 @@
 # @morphdsl/generator-scenarios
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-readme@0.1.8
+  - @morphdsl/domain-schema@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

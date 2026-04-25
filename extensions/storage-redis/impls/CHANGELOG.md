@@ -1,5 +1,13 @@
 # @morphdsl/storage-redis-impls
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/storage-redis-dsl@0.1.8
+  - @morphdsl/storage-dsl@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

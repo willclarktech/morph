@@ -1,5 +1,17 @@
 # @morphdsl/generation-core
 
+## 0.1.8
+
+### Patch Changes
+
+- [`098b5ce`](https://github.com/willclarktech/morph/commit/098b5ce7da422e623f65445512f673ba37fe2168) Thanks [@willclarktech](https://github.com/willclarktech)! - Apply `workspace:*` rewriting to scaffold output in `new-project`. The previous fix only post-processed files coming from `executeGenerate`; the scaffold step (which writes `config/eslint/package.json` from a template) was bypassing it, leaving `@morphdsl/eslint-config: workspace:*` unresolvable on `bun install` in generated projects.
+
+- Updated dependencies []:
+  - @morphdsl/generation-dsl@0.1.8
+  - @morphdsl/generation-impls@0.1.8
+  - @morphdsl/operation@0.1.8
+  - @morphdsl/testing@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

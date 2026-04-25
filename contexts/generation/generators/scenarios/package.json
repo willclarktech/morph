@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/generator-scenarios",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"description": "Morph scenarios generator",
 	"license": "MIT",
 	"author": "Morph Contributors",

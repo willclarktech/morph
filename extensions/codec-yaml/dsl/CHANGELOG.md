@@ -1,5 +1,12 @@
 # @morphdsl/codec-yaml-dsl
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/codec-dsl@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

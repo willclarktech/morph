@@ -1,5 +1,17 @@
 # @morphdsl/contracts
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/property@0.1.8
+  - @morphdsl/eventstore-jsonfile-impls@0.1.8
+  - @morphdsl/eventstore-memory-impls@0.1.8
+  - @morphdsl/storage-jsonfile-impls@0.1.8
+  - @morphdsl/storage-memory-impls@0.1.8
+  - @morphdsl/storage-sqlite-impls@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

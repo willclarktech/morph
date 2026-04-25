@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/plugin-vscode",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"description": "Morph vscode plugin",
 	"license": "MIT",
 	"author": "Morph Contributors",

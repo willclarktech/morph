@@ -1,5 +1,19 @@
 # @morphdsl/plugin-api
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-app@0.1.8
+  - @morphdsl/builder-test@0.1.8
+  - @morphdsl/domain-schema@0.1.8
+  - @morphdsl/generator-env@0.1.8
+  - @morphdsl/generator-openapi@0.1.8
+  - @morphdsl/plugin@0.1.8
+  - @morphdsl/runtime-api@0.1.8
+  - @morphdsl/utils@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

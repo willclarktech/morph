@@ -1,5 +1,13 @@
 # @morphdsl/runtime-client
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/domain-schema@0.1.8
+  - @morphdsl/utils@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

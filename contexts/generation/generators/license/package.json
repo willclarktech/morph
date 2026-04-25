@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/generator-license",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"description": "Morph license generator",
 	"license": "MIT",
 	"author": "Morph Contributors",
