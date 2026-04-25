@@ -4,8 +4,9 @@ This guide walks through creating a pastebin app from a `.morph` schema. By the 
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) v1.0+
-- Git
+- [Bun](https://bun.com/install) (provides both the runtime and the package manager)
+
+You don't need to clone the morph repo — the CLI is on npm.
 
 ## 1. Write Your Schema
 
@@ -56,7 +57,7 @@ Key concepts:
 ## 2. Generate the Project
 
 ```sh
-morph new-project pastebin --schema-file schema.morph
+bunx @morphdsl/cli generation:new-project pastebin --schema-file schema.morph
 ```
 
 Required arguments (`name`) are positional. The schema is passed via `--schema-file` since it's a file path rather than inline text.
@@ -121,27 +122,27 @@ Handlers receive:
 ## 4. Run Your App
 
 ```sh
-# Install dependencies
+cd pastebin
 bun install
 
-# Start the REST API (in-memory storage)
-bun run apps/api/src/index.ts
+# Start the REST API (in-memory storage) — http://localhost:3000
+bun run --filter '@pastebin/api' start
 
 # Or start the CLI
-bun run apps/cli/src/index.ts
+bun run --filter '@pastebin/cli' start
 
 # Or start the UI
-bun run apps/ui/src/index.ts
+bun run --filter '@pastebin/ui' start
 ```
 
 Switch storage backends via environment variables:
 
 ```sh
 # Use SQLite
-PASTEBIN_STORAGE=sqlite bun run apps/api/src/index.ts
+PASTEBIN_STORAGE=sqlite bun run --filter '@pastebin/api' start
 
 # Use Redis
-PASTEBIN_STORAGE=redis PASTEBIN_REDIS_URL=redis://localhost:6379 bun run apps/api/src/index.ts
+PASTEBIN_STORAGE=redis PASTEBIN_REDIS_URL=redis://localhost:6379 bun run --filter '@pastebin/api' start
 ```
 
 ## 5. Write Scenarios

@@ -182,29 +182,39 @@ morph/
   scripts/             # Build and generation scripts
 ```
 
-## Quick start
+## Install
 
-Prerequisites: [Bun](https://bun.sh/) v1.0+. Optional: [Z3](https://github.com/Z3Prover/z3) (only needed for the formal verification target).
+Prerequisites: [Bun](https://bun.com/install). Optional: [Z3](https://github.com/Z3Prover/z3) (only needed for the formal verification target).
 
-```sh
-bun install
-bun run generate:examples
-cd examples/pastebin && bun run apps/api/src/index.ts
-```
-
-Morph dogfoods — its own CLI, MCP server, and VS Code extension are generated from [`schema.morph`](schema.morph):
+**Generate a project from a schema:**
 
 ```sh
-bun run --filter @morphdsl/cli start -- --help   # Morph CLI
-bun run --filter @morphdsl/mcp start             # MCP server
-cd apps/vscode && bun run build               # VS Code extension
+bunx @morphdsl/cli generation:new-project pastebin --schema-file pastebin.morph
+cd pastebin && bun install
+bun run --filter '@pastebin/api' start   # http://localhost:3000
 ```
+
+**Install the CLI globally:**
+
+```sh
+bun add -g @morphdsl/cli
+morph generation:new-project ...
+```
+
+**MCP server** (drop into Claude Code, Cursor, etc.):
+
+```jsonc
+// .mcp.json
+{ "servers": { "morph": { "command": "bunx", "args": ["@morphdsl/mcp"] } } }
+```
+
+**VS Code extension:** [`morphdsl.morph-dsl-vscode`](https://marketplace.visualstudio.com/items?itemName=morphdsl.morph-dsl-vscode) — syntax highlighting and language services for `.morph` files.
+
+**Try without installing:** the [playground](https://willclark.tech/morph/playground) runs the parser and generator entirely in the browser.
 
 See [Getting Started](docs/guides/getting-started.md) for the full walkthrough.
 
 ## Status
-
-Morph is pre-release (v0.0.0). Nothing has been published to npm.
 
 What works: DSL parser with error recovery, all 13 generation targets, 10 example apps, 5 storage backends, auth providers, property-based testing, formal verification via Z3.
 
@@ -244,23 +254,25 @@ No backward compatibility guarantees. Breaking changes happen freely.
 - **[Testing Philosophy](docs/concepts/testing-philosophy.md)** — Scenarios as algebraic laws
 - **[Formal Verification](docs/concepts/formal-verification.md)** — SMT-LIB2 invariant verification
 
-## Contributing
+## Developing Morph
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contributor setup, worktree workflow, and guides for adding targets and extensions.
+To work on Morph itself (rather than using it to generate apps), see [CONTRIBUTING.md](CONTRIBUTING.md). Quick path:
 
-## Development
+```sh
+git clone https://github.com/willclarktech/morph
+cd morph
+bun install
+bun run generate:examples   # produces examples/{pastebin,todo,…}
+bun run test
+```
+
+Useful commands:
 
 ```sh
 bun run build:check       # Type check all packages
-bun run test              # Run all tests
 bun run lint:fix          # Fix lint issues
 bun run format:fix        # Fix formatting
-```
-
-Full verification after significant changes:
-
-```sh
-bun install && bun run regenerate:morph && bun run regenerate:morph && bun run generate:examples && bun run test
+bun run regenerate:morph  # Regenerate Morph from schema.morph
 ```
 
 Generated code (`examples/`, `apps/`, `contexts/generation/*/` except `impls/`) should never be edited directly — fix the generator instead.

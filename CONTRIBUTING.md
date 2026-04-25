@@ -4,9 +4,10 @@ Morph dogfoods itself — its own CLI, MCP server, and VS Code extension are gen
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) v1.0+
-- [Z3](https://github.com/Z3Prover/z3) (optional — only needed for formal verification target)
+- [Bun](https://bun.com/install)
 - Git
+- [ImageMagick](https://imagemagick.org/) (optional — `scripts/build-vscode-icon.ts` re-derives the marketplace icon from `docs/images/logo.png`)
+- [Z3](https://github.com/Z3Prover/z3) (optional — only needed for formal verification target)
 
 ```sh
 git clone <repo-url> && cd morph
