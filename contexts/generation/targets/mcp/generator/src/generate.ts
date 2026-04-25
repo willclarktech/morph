@@ -329,7 +329,7 @@ await Effect.runPromise(main).catch((error: unknown) => {
 	};
 
 	const cliWrapperFile: GeneratedFile = {
-		content: `#!/usr/bin/env node\nimport "./index.js";\n`,
+		content: `#!/usr/bin/env bun\nimport "./index.js";\n`,
 		filename: `${prefix}cli.ts`,
 	};
 

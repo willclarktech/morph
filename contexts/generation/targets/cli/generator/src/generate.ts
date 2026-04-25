@@ -323,7 +323,7 @@ process.exit(code);
 	};
 
 	const cliWrapperFile: GeneratedFile = {
-		content: `#!/usr/bin/env node\nimport "./index.js";\n`,
+		content: `#!/usr/bin/env bun\nimport "./index.js";\n`,
 		filename: `${prefix}cli.ts`,
 	};
 
