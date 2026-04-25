@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/plugin-verification",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "Morph verification plugin",
 	"license": "MIT",
 	"author": "Morph Contributors",

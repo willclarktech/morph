@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/schema-dsl-decompiler",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "Morph schema DSL decompiler",
 	"license": "MIT",
 	"author": "Morph Contributors",

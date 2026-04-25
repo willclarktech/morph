@@ -1,5 +1,13 @@
 # @morphdsl/eventstore-jsonfile-impls
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/utils@0.1.5
+  - @morphdsl/eventstore-dsl@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

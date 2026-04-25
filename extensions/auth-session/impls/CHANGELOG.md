@@ -1,5 +1,13 @@
 # @morphdsl/auth-session-impls
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/utils@0.1.5
+  - @morphdsl/auth-session-dsl@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

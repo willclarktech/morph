@@ -1,5 +1,15 @@
 # @morphdsl/scenario-runner-api
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/domain-schema@0.1.5
+  - @morphdsl/operation@0.1.5
+  - @morphdsl/runtime-api@0.1.5
+  - @morphdsl/scenario-runner@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

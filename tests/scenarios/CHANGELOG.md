@@ -1,5 +1,13 @@
 # @morphdsl/scenarios
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/generation-dsl@0.1.5
+  - @morphdsl/scenario@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

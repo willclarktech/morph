@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/plugin-dsl",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "Morph dsl plugin",
 	"license": "MIT",
 	"author": "Morph Contributors",

@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/codemirror-lang-morph",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"private": true,
 	"description": "Morph codemirror-lang-morph",
 	"license": "MIT",

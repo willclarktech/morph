@@ -1,5 +1,17 @@
 # @morphdsl/generation-core
 
+## 0.1.5
+
+### Patch Changes
+
+- [`ae432f2`](https://github.com/willclarktech/morph/commit/ae432f2eeb44c5b81f064a0f3120eb74079f5592) Thanks [@willclarktech](https://github.com/willclarktech)! - Move `template/` directory from repo root into `@morphdsl/builder-scaffold`'s package and ship it in the npm tarball. The `new-project` command was failing on installs from npm with `ENOENT: template/monorepo/.editorconfig` because the templates weren't included in any published package.
+
+- Updated dependencies []:
+  - @morphdsl/generation-dsl@0.1.5
+  - @morphdsl/generation-impls@0.1.5
+  - @morphdsl/operation@0.1.5
+  - @morphdsl/testing@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes
