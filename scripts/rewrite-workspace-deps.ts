@@ -1,17 +1,15 @@
 #!/usr/bin/env bun
 /**
- * Rewrite `workspace:*` dependencies to actual versions in all @morphdsl/* packages.
- *
- * `npm publish` (which `bunx changeset publish` calls) doesn't understand the
- * workspace protocol, so published packages end up with `workspace:*` literally
- * in their deps and fail to install for downstream consumers.
- *
- * This script reads the current version of each workspace package and rewrites
- * matching `workspace:*` references in dependents' package.json files.
+ * Prepare package.json files for npm publish:
+ * 1. Rewrite `workspace:*` deps to actual versions (npm doesn't understand
+ *    the workspace protocol).
+ * 2. Apply `publishConfig.exports` as the published `exports` field (npm
+ *    publish doesn't do this overlay; pnpm and bun do).
  *
  * Run after `changeset version` and before `changeset publish`. The rewrites
- * are intended to live only on the CI runner (the workspace-protocol form is
- * what we want in committed source for local development).
+ * are intended to live only on the CI runner (the workspace-protocol form
+ * and src-pointing exports are what we want in committed source for local
+ * development).
  *
  * Usage: bun scripts/rewrite-workspace-deps.ts
  */
@@ -88,17 +86,31 @@ for (const package_ of packages) {
 		dependencies?: Record<string, string>;
 		devDependencies?: Record<string, string>;
 		peerDependencies?: Record<string, string>;
+		exports?: unknown;
+		publishConfig?: { exports?: unknown };
 	};
 
 	const deps = rewriteDeps(parsed.dependencies, versionByName);
 	const devDeps = rewriteDeps(parsed.devDependencies, versionByName);
 	const peerDeps = rewriteDeps(parsed.peerDependencies, versionByName);
 
-	if (!deps.changed && !devDeps.changed && !peerDeps.changed) continue;
+	const publishExports = parsed.publishConfig?.exports;
+	const overlayExports =
+		publishExports !== undefined && publishExports !== parsed.exports;
+
+	if (
+		!deps.changed &&
+		!devDeps.changed &&
+		!peerDeps.changed &&
+		!overlayExports
+	) {
+		continue;
+	}
 
 	if (deps.changed) parsed.dependencies = deps.deps;
 	if (devDeps.changed) parsed.devDependencies = devDeps.deps;
 	if (peerDeps.changed) parsed.peerDependencies = peerDeps.deps;
+	if (overlayExports) parsed.exports = publishExports;
 
 	writeFileSync(package_.path, JSON.stringify(parsed, undefined, "\t") + "\n");
 	updated++;
