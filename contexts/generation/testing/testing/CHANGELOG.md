@@ -1,5 +1,12 @@
 # @morphdsl/testing
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/auth-dsl@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes

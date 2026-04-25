@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/plugin-cli",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"description": "Morph cli plugin",
 	"license": "MIT",
 	"author": "Morph Contributors",

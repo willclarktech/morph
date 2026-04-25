@@ -1,5 +1,17 @@
 # @morphdsl/generation-core
 
+## 0.1.7
+
+### Patch Changes
+
+- [`2fb01b9`](https://github.com/willclarktech/morph/commit/2fb01b9e888149beb4c22d80728103fea5f6e60b) Thanks [@willclarktech](https://github.com/willclarktech)! - Rewrite `workspace:*` references for `@morphdsl/*` deps to concrete versions in `executeGenerate` output. Generated projects now get installable package.json files (e.g. `"@morphdsl/runtime-cli": "0.1.6"` instead of `"workspace:*"`). Project-internal workspace deps (e.g. `@todo/pastes-dsl`) keep `workspace:*`. Morph's own self-regeneration opts out via `preserveWorkspaceDeps: true` so its workspace setup is unchanged.
+
+- Updated dependencies []:
+  - @morphdsl/generation-dsl@0.1.7
+  - @morphdsl/generation-impls@0.1.7
+  - @morphdsl/operation@0.1.7
+  - @morphdsl/testing@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes

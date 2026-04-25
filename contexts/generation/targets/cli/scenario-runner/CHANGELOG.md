@@ -1,5 +1,13 @@
 # @morphdsl/scenario-runner-cli
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/scenario-runner@0.1.7
+  - @morphdsl/utils@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes

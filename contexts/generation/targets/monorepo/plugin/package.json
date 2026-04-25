@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/plugin-monorepo-root",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"description": "Morph monorepo-root plugin",
 	"license": "MIT",
 	"author": "Morph Contributors",

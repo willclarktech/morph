@@ -5,6 +5,14 @@
 ### Patch Changes
 
 - Updated dependencies []:
+  - @morphdsl/generator-vscode@0.1.7
+  - @morphdsl/schema-dsl-core@0.1.7
+
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies []:
   - @morphdsl/generator-vscode@0.1.6
   - @morphdsl/schema-dsl-core@0.1.6
 

@@ -1,5 +1,16 @@
 # @morphdsl/runtime-mcp
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-app@0.1.7
+  - @morphdsl/builder-readme@0.1.7
+  - @morphdsl/domain-schema@0.1.7
+  - @morphdsl/operation@0.1.7
+  - @morphdsl/utils@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes

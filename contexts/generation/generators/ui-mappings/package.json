@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/generator-ui-mappings",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"description": "Morph ui-mappings generator",
 	"license": "MIT",
 	"author": "Morph Contributors",

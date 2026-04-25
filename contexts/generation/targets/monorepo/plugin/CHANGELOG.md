@@ -1,5 +1,17 @@
 # @morphdsl/plugin-monorepo-root
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-app@0.1.7
+  - @morphdsl/builder-readme@0.1.7
+  - @morphdsl/domain-schema@0.1.7
+  - @morphdsl/generator-diagrams@0.1.7
+  - @morphdsl/generator-license@0.1.7
+  - @morphdsl/plugin@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes
