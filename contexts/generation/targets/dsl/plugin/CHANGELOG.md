@@ -1,5 +1,18 @@
 # @morphdsl/plugin-dsl
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-app@0.1.4
+  - @morphdsl/domain-schema@0.1.4
+  - @morphdsl/generator-properties@0.1.4
+  - @morphdsl/generator-scenarios@0.1.4
+  - @morphdsl/generator-types@0.1.4
+  - @morphdsl/plugin@0.1.4
+  - @morphdsl/utils@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

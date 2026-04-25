@@ -1,5 +1,14 @@
 # @morphdsl/storage-jsonfile-impls
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/utils@0.1.4
+  - @morphdsl/storage-jsonfile-dsl@0.1.4
+  - @morphdsl/storage-dsl@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

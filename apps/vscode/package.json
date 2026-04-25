@@ -1,71 +1,71 @@
 {
-	"name": "morph-dsl-vscode",
-	"version": "0.1.2",
-	"private": true,
-	"description": "VSCode language support for Morph DSL",
-	"main": "./dist/extension.js",
-	"scripts": {
-		"build": "bun esbuild.config.ts",
-		"build:check": "tsc --noEmit",
-		"format": "prettier --check .",
-		"format:fix": "prettier --write .",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
-		"package": "cp ../../LICENSE LICENSE && bun run build && bunx @vscode/vsce package --no-dependencies"
-	},
-	"dependencies": {
-		"@morphdsl/generator-vscode": "workspace:*",
-		"@morphdsl/schema-dsl-core": "workspace:*",
-		"effect": "^3.19.13"
-	},
-	"devDependencies": {
-		"@morphdsl/eslint-config": "workspace:*",
-		"@morphdsl/tsconfig": "workspace:*",
-		"@types/vscode": "^1.96.0",
-		"@vscode/vsce": "^3.0.0",
-		"esbuild": "^0.25.0",
-		"eslint": "^9.39.0",
-		"prettier": "^3.4.2",
-		"typescript": "^5.7.2"
-	},
-	"activationEvents": [
-		"onLanguage:morph"
-	],
-	"categories": [
-		"Programming Languages"
-	],
-	"contributes": {
-		"commands": [
-			{
-				"command": "morph.templateSchema",
-				"title": "Morph: Template Schema"
-			}
-		],
-		"grammars": [
-			{
-				"language": "morph",
-				"scopeName": "source.morph",
-				"path": "./syntaxes/morph.tmLanguage.json"
-			}
-		],
-		"languages": [
-			{
-				"id": "morph",
-				"aliases": [
-					"Morph DSL",
-					"morph"
-				],
-				"extensions": [
-					".morph"
-				],
-				"configuration": "./language-configuration.json"
-			}
-		]
-	},
-	"displayName": "Morph DSL",
-	"engines": {
-		"vscode": "^1.96.0"
-	},
-	"icon": "icon.png",
-	"publisher": "morphdsl"
+  "name": "morph-dsl-vscode",
+  "version": "0.1.4",
+  "private": true,
+  "description": "VSCode language support for Morph DSL",
+  "main": "./dist/extension.js",
+  "scripts": {
+    "build": "bun esbuild.config.ts",
+    "build:check": "tsc --noEmit",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "package": "cp ../../LICENSE LICENSE && bun run build && bunx @vscode/vsce package --no-dependencies"
+  },
+  "dependencies": {
+    "@morphdsl/generator-vscode": "workspace:*",
+    "@morphdsl/schema-dsl-core": "workspace:*",
+    "effect": "^3.19.13"
+  },
+  "devDependencies": {
+    "@morphdsl/eslint-config": "workspace:*",
+    "@morphdsl/tsconfig": "workspace:*",
+    "@types/vscode": "^1.96.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.25.0",
+    "eslint": "^9.39.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2"
+  },
+  "activationEvents": [
+    "onLanguage:morph"
+  ],
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "morph.templateSchema",
+        "title": "Morph: Template Schema"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "morph",
+        "scopeName": "source.morph",
+        "path": "./syntaxes/morph.tmLanguage.json"
+      }
+    ],
+    "languages": [
+      {
+        "id": "morph",
+        "aliases": [
+          "Morph DSL",
+          "morph"
+        ],
+        "extensions": [
+          ".morph"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ]
+  },
+  "displayName": "Morph DSL",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "icon": "icon.png",
+  "publisher": "morphdsl"
 }

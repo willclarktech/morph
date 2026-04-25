@@ -1,5 +1,15 @@
 # @morphdsl/plugin-proto
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-app@0.1.4
+  - @morphdsl/domain-schema@0.1.4
+  - @morphdsl/plugin@0.1.4
+  - @morphdsl/runtime-proto@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @morphdsl/eventstore-jsonfile-dsl
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/eventstore-dsl@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @morphdsl/runtime-api
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-readme@0.1.4
+  - @morphdsl/domain-schema@0.1.4
+  - @morphdsl/operation@0.1.4
+  - @morphdsl/utils@0.1.4
+  - @morphdsl/codec-dsl@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

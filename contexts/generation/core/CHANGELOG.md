@@ -1,5 +1,17 @@
 # @morphdsl/generation-core
 
+## 0.1.4
+
+### Patch Changes
+
+- [`7263a63`](https://github.com/willclarktech/morph/commit/7263a63c47ef4e95812451a165659fd876373c45) Thanks [@willclarktech](https://github.com/willclarktech)! - Change CLI and MCP entrypoint shebangs from `#!/usr/bin/env node` to `#!/usr/bin/env bun`. The runtime imports `bun` and `bun:sqlite` modules which are not available under node, so the bin scripts must be executed by bun. Users need bun installed (`curl -fsSL https://bun.com/install | bash`) to run `bunx @morphdsl/cli` or `bunx @morphdsl/mcp`.
+
+- Updated dependencies []:
+  - @morphdsl/generation-dsl@0.1.4
+  - @morphdsl/generation-impls@0.1.4
+  - @morphdsl/operation@0.1.4
+  - @morphdsl/testing@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

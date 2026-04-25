@@ -1,5 +1,12 @@
 # @morphdsl/domain-schema
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/utils@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

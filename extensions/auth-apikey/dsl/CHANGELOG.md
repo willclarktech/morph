@@ -1,5 +1,12 @@
 # @morphdsl/auth-apikey-dsl
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/auth-dsl@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

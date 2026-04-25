@@ -1,5 +1,14 @@
 # @morphdsl/cli
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [[`7263a63`](https://github.com/willclarktech/morph/commit/7263a63c47ef4e95812451a165659fd876373c45)]:
+  - @morphdsl/generation-core@0.1.4
+  - @morphdsl/runtime-cli@0.1.4
+  - @morphdsl/schema-dsl-core@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

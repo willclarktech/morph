@@ -1,5 +1,12 @@
 # @morphdsl/schema-dsl-decompiler
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/domain-schema@0.1.4
+
 ## 0.1.3
 
 ### Patch Changes

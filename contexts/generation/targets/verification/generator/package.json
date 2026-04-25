@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/generator-verification",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"description": "Morph verification generator",
 	"license": "MIT",
 	"author": "Morph Contributors",
