@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/plugin-ui",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "Morph ui plugin",
 	"license": "MIT",
 	"author": "Morph Contributors",

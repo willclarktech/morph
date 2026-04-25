@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/morph-highlight",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "Morph DSL syntax highlighting — shared vocabulary, tokenizer, and HTML renderer",
 	"license": "MIT",
 	"author": "Morph Contributors",

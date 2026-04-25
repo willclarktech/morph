@@ -1,5 +1,12 @@
 # @morphdsl/eventstore-memory-impls
 
+## 0.1.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/eventstore-dsl@0.1.9
+
 ## 0.1.8
 
 ### Patch Changes

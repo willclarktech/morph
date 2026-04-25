@@ -1,5 +1,13 @@
 # @morphdsl/schema-dsl-compiler
 
+## 0.1.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/domain-schema@0.1.9
+  - @morphdsl/schema-dsl-parser@0.1.9
+
 ## 0.1.8
 
 ### Patch Changes

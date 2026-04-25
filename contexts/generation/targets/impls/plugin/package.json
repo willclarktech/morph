@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/plugin-impls",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "Morph impls plugin",
 	"license": "MIT",
 	"author": "Morph Contributors",

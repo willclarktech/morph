@@ -1,5 +1,18 @@
 # @morphdsl/plugin-client
 
+## 0.1.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-app@0.1.9
+  - @morphdsl/builder-readme@0.1.9
+  - @morphdsl/builder-test@0.1.9
+  - @morphdsl/domain-schema@0.1.9
+  - @morphdsl/plugin@0.1.9
+  - @morphdsl/runtime-client@0.1.9
+  - @morphdsl/utils@0.1.9
+
 ## 0.1.8
 
 ### Patch Changes

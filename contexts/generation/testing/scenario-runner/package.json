@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/scenario-runner",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "Morph scenario-runner",
 	"license": "MIT",
 	"author": "Morph Contributors",

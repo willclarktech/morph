@@ -1,5 +1,12 @@
 # @morphdsl/auth-jwt-dsl
 
+## 0.1.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/auth-dsl@0.1.9
+
 ## 0.1.8
 
 ### Patch Changes

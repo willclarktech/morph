@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/property-runner",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "Morph property-based test runner",
 	"license": "MIT",
 	"author": "Morph Contributors",
