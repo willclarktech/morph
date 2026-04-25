@@ -1,5 +1,17 @@
 # @morphdsl/generation-core
 
+## 0.1.2
+
+### Patch Changes
+
+- [`1461d07`](https://github.com/willclarktech/morph/commit/1461d07ab27672b235dfa1fd1351dee5758a58e8) Thanks [@willclarktech](https://github.com/willclarktech)! - Fix published packages to resolve `workspace:*` dependency references to actual versions. Earlier 0.1.0 and 0.1.1 publishes shipped with `workspace:*` literally in their `dependencies`, making them uninstallable from npm.
+
+- Updated dependencies []:
+  - @morphdsl/generation-dsl@0.1.2
+  - @morphdsl/generation-impls@0.1.2
+  - @morphdsl/operation@0.1.2
+  - @morphdsl/testing@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # @morphdsl/plugin-mcp
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-app@0.1.2
+  - @morphdsl/builder-test@0.1.2
+  - @morphdsl/domain-schema@0.1.2
+  - @morphdsl/generator-env@0.1.2
+  - @morphdsl/plugin@0.1.2
+  - @morphdsl/runtime-mcp@0.1.2
+  - @morphdsl/utils@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

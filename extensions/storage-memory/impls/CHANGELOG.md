@@ -1,5 +1,13 @@
 # @morphdsl/storage-memory-impls
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/storage-memory-dsl@0.1.2
+  - @morphdsl/storage-dsl@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

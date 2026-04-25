@@ -1,5 +1,13 @@
 # @morphdsl/property-runner-cli
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/property@0.1.2
+  - @morphdsl/property-runner@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @morphdsl/mcp
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [[`1461d07`](https://github.com/willclarktech/morph/commit/1461d07ab27672b235dfa1fd1351dee5758a58e8)]:
+  - @morphdsl/generation-core@0.1.2
+  - @morphdsl/runtime-mcp@0.1.2
+  - @morphdsl/schema-dsl-core@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

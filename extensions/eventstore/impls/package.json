@@ -1,7 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@morphdsl/eventstore-impls",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Morph eventstore-impls extension",
 	"license": "MIT",
 	"author": "Morph Contributors",

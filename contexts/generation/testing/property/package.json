@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/property",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Morph property-based test definitions",
 	"license": "MIT",
 	"author": "Morph Contributors",
