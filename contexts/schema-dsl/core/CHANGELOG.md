@@ -1,5 +1,15 @@
 # @morphdsl/schema-dsl-core
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/operation@0.1.3
+  - @morphdsl/testing@0.1.3
+  - @morphdsl/schema-dsl-dsl@0.1.3
+  - @morphdsl/schema-dsl-impls@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

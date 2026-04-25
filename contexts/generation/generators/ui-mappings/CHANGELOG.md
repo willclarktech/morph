@@ -1,5 +1,13 @@
 # @morphdsl/generator-ui-mappings
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/domain-schema@0.1.3
+  - @morphdsl/utils@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

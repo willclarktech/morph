@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/property-runner-core",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "Morph core property runner",
 	"license": "MIT",
 	"author": "Morph Contributors",

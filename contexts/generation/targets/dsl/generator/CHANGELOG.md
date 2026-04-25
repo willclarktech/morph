@@ -1,5 +1,13 @@
 # @morphdsl/generator-dsl
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-readme@0.1.3
+  - @morphdsl/domain-schema@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

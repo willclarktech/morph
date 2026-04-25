@@ -1,5 +1,12 @@
 # @morphdsl/eventstore-redis-impls
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/eventstore-dsl@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

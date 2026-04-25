@@ -1,5 +1,12 @@
 # @morphdsl/scenario-runner
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/scenario@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
