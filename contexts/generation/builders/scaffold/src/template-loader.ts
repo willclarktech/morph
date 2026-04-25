@@ -43,7 +43,8 @@ const TEMPLATE_DEFINITIONS: Record<TemplateType, TemplateDefinition> = {
 	},
 };
 
-const TEMPLATES_DIR = path.join(import.meta.dir, "../../../../../template");
+// At dev time (src/) and at runtime (dist/), templates live one directory up.
+const TEMPLATES_DIR = path.join(import.meta.dir, "../template");
 
 const loadTemplateFile = async (
 	templateDir: string,

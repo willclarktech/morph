@@ -26,6 +26,11 @@ const NO_BUILD_PACKAGES = new Set([
 	"@morphdsl/tsconfig",
 ]);
 
+// Packages that need additional non-dist directories shipped in the npm tarball.
+const EXTRA_FILES = new Map<string, readonly string[]>([
+	["@morphdsl/builder-scaffold", ["template"]],
+]);
+
 const BUILD_SCRIPT =
 	"bun build ./src/index.ts --outdir dist --target node --format esm --packages external && tsc -p tsconfig.build.json";
 
@@ -187,9 +192,8 @@ const main = (): void => {
 			}
 			parsed.scripts = scripts;
 
-			if (!("files" in parsed)) {
-				parsed.files = ["dist"];
-			}
+			const extras = EXTRA_FILES.get(name) ?? [];
+			parsed.files = ["dist", ...extras];
 			if (!("publishConfig" in parsed)) {
 				parsed.publishConfig = {
 					exports: {
