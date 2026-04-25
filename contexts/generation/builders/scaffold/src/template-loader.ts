@@ -24,10 +24,13 @@ const TEMPLATE_DEFINITIONS: Record<TemplateType, TemplateDefinition> = {
 	},
 	monorepo: {
 		dir: "monorepo",
+		// Files prefixed with `_` are renamed to `.` on output. npm strips
+		// dotfiles based on `.gitignore` defaults, so source-side dot files
+		// would be missing from the published tarball.
 		files: [
-			".editorconfig",
-			".github/workflows/ci.yml",
-			".gitignore",
+			"_editorconfig",
+			"_github/workflows/ci.yml",
+			"_gitignore",
 			"bunfig.toml",
 			"package.json.tmpl",
 			"README.md.tmpl",
@@ -46,6 +49,21 @@ const TEMPLATE_DEFINITIONS: Record<TemplateType, TemplateDefinition> = {
 // At dev time (src/) and at runtime (dist/), templates live one directory up.
 const TEMPLATES_DIR = path.join(import.meta.dir, "../template");
 
+// Convert source-side path conventions to output paths:
+// - strip trailing `.tmpl` (interpolated templates)
+// - replace leading `_` on each segment with `.` (dotfile workaround)
+const toOutputPath = (relativePath: string): string => {
+	const withoutTmpl = relativePath.endsWith(".tmpl")
+		? relativePath.slice(0, -5)
+		: relativePath;
+	return withoutTmpl
+		.split("/")
+		.map((segment) =>
+			segment.startsWith("_") ? `.${segment.slice(1)}` : segment,
+		)
+		.join("/");
+};
+
 const loadTemplateFile = async (
 	templateDir: string,
 	relativePath: string,
@@ -53,9 +71,7 @@ const loadTemplateFile = async (
 	const fullPath = path.join(templateDir, relativePath);
 	const content = await Bun.file(fullPath).text();
 	const needsInterpolation = relativePath.endsWith(".tmpl");
-	const outputPath = needsInterpolation
-		? relativePath.slice(0, -5)
-		: relativePath;
+	const outputPath = toOutputPath(relativePath);
 
 	return { content, needsInterpolation, outputPath };
 };
