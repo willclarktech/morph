@@ -89,7 +89,15 @@ export const executeGenerate = (
 		),
 	});
 
-const postProcessFiles = (
+/**
+ * Replace `workspace:*` references for `@morphdsl/*` deps with the
+ * concrete morphdsl version in every package.json among the given files.
+ * No-op when called with `preserveWorkspaceDeps: true`.
+ *
+ * Exported so callers like `NewProjectHandlerLive` can apply the rewrite
+ * to the combined scaffold + generate output, not just the generate output.
+ */
+export const postProcessFiles = (
 	files: GeneratedFile[],
 	options: GenerateOptions | undefined,
 ): GeneratedFile[] => {

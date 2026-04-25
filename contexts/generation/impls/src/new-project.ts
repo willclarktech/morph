@@ -13,7 +13,7 @@ import { Context, Effect as E, Layer } from "effect";
 
 import type { GenerateOptions } from "./generate";
 
-import { executeGenerate } from "./generate";
+import { executeGenerate, postProcessFiles } from "./generate";
 import { parseSchemaInput } from "./utils";
 
 export type NewProjectOptions = GenerateOptions;
@@ -73,6 +73,6 @@ export const NewProjectHandlerLive = Layer.succeed(NewProjectHandler, {
 				});
 			}
 
-			return { files };
+			return { files: postProcessFiles(files, options) };
 		}),
 });
