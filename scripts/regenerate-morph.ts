@@ -426,6 +426,17 @@ const fixVsCodeApp = async (): Promise<void> => {
 	} catch {
 		console.info("  (grammar files will be written on next regeneration)");
 	}
+
+	// Re-derive marketplace icon from canonical logo so they stay in sync.
+	const iconResult = Bun.spawnSync(
+		["bun", path.join(MORPH_DIR, "scripts/build-vscode-icon.ts")],
+		{ cwd: MORPH_DIR, stderr: "inherit", stdout: "inherit" },
+	);
+	if (iconResult.exitCode !== 0) {
+		console.warn(
+			"  (failed to rebuild VSCode icon — install ImageMagick to enable)",
+		);
+	}
 };
 
 /**

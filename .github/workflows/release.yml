@@ -66,6 +66,10 @@ jobs:
           git add -A
           git commit -m "chore: version packages" || true
 
+      - name: Rewrite workspace deps
+        if: steps.changesets.outputs.pending == 'true'
+        run: bun scripts/rewrite-workspace-deps.ts
+
       - name: Publish to npm
         if: steps.changesets.outputs.pending == 'true'
         run: bunx changeset publish
