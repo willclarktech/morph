@@ -55,6 +55,7 @@
 		"@morphdsl/runtime-ui": "workspace:*",
 		"@morphdsl/schema-dsl-compiler": "workspace:*",
 		"@morphdsl/schema-dsl-parser": "workspace:*",
+		"@morphdsl/utils": "workspace:*",
 		"effect": "^3.19.13"
 	},
 	"devDependencies": {

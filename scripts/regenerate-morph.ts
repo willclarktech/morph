@@ -182,7 +182,9 @@ const runGenerate = async (schema: DomainSchema): Promise<boolean> => {
 	console.info("Running morph generate...");
 
 	try {
-		const result = await Effect.runPromise(executeGenerate(schema, "Morph"));
+		const result = await Effect.runPromise(
+			executeGenerate(schema, "Morph", { preserveWorkspaceDeps: true }),
+		);
 
 		// Files that are hand-written in the morph repo and should not be overwritten
 		const SKIP_FILES = new Set([

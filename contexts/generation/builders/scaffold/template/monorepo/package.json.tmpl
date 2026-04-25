@@ -11,7 +11,14 @@
 		"test": "turbo run test"
 	},
 	"type": "module",
-	"workspaces": ["config/*", "libs/*", "apps/*", "tests/*"],
+	"workspaces": [
+		"config/*",
+		"libs/*",
+		"apps/*",
+		"tests/*",
+		"contexts/*/dsl",
+		"contexts/*/core"
+	],
 	"devDependencies": {
 		"turbo": "^2.7.4"
 	}
