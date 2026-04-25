@@ -1,5 +1,32 @@
 # @morphdsl/generation-impls
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/builder-app@0.1.6
+  - @morphdsl/builder-scaffold@0.1.6
+  - @morphdsl/domain-schema@0.1.6
+  - @morphdsl/generation-dsl@0.1.6
+  - @morphdsl/generator-env@0.1.6
+  - @morphdsl/plugin@0.1.6
+  - @morphdsl/plugin-api@0.1.6
+  - @morphdsl/plugin-cli-client@0.1.6
+  - @morphdsl/plugin-cli@0.1.6
+  - @morphdsl/plugin-client@0.1.6
+  - @morphdsl/plugin-core@0.1.6
+  - @morphdsl/plugin-dsl@0.1.6
+  - @morphdsl/plugin-mcp@0.1.6
+  - @morphdsl/plugin-monorepo-root@0.1.6
+  - @morphdsl/plugin-proto@0.1.6
+  - @morphdsl/runtime-ui@0.1.6
+  - @morphdsl/plugin-ui@0.1.6
+  - @morphdsl/plugin-verification@0.1.6
+  - @morphdsl/plugin-vscode@0.1.6
+  - @morphdsl/schema-dsl-compiler@0.1.6
+  - @morphdsl/schema-dsl-parser@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

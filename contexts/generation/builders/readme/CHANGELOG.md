@@ -1,5 +1,13 @@
 # @morphdsl/builder-readme
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/domain-schema@0.1.6
+  - @morphdsl/plugin@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

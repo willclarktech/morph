@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/property-runner-cli",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "Morph cli property runner",
 	"license": "MIT",
 	"author": "Morph Contributors",

@@ -1,5 +1,12 @@
 # @morphdsl/codec-json-dsl
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @morphdsl/codec-dsl@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

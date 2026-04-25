@@ -1,5 +1,17 @@
 # @morphdsl/generation-core
 
+## 0.1.6
+
+### Patch Changes
+
+- [`cffd5a1`](https://github.com/willclarktech/morph/commit/cffd5a16535491fd5a62f0572d927394a221e7c6) Thanks [@willclarktech](https://github.com/willclarktech)! - Use `_`-prefixed template filenames (`_editorconfig`, `_gitignore`, `_github/`) in `@morphdsl/builder-scaffold` and rename them to `.`-prefixed on output. npm strips dotfiles when packaging based on `.gitignore` defaults, so the previous publish was missing `.editorconfig`, `.gitignore`, and `.github/workflows/ci.yml`, causing `new-project` to fail with `ENOENT`.
+
+- Updated dependencies []:
+  - @morphdsl/generation-dsl@0.1.6
+  - @morphdsl/generation-impls@0.1.6
+  - @morphdsl/operation@0.1.6
+  - @morphdsl/testing@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/schema-dsl-parser",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "Morph schema DSL parser",
 	"license": "MIT",
 	"author": "Morph Contributors",

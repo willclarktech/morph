@@ -1,6 +1,6 @@
 {
 	"name": "@morphdsl/plugin-core",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "Morph core plugin",
 	"license": "MIT",
 	"author": "Morph Contributors",
