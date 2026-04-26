@@ -46,18 +46,18 @@ const DOC_ENTRIES: readonly DocumentEntry[] = [
 		section: "Concepts",
 	},
 	{
-		slug: "testing/testing-philosophy",
+		slug: "concepts/testing-philosophy",
 		title: "Testing Philosophy",
 		section: "Concepts",
 	},
 	{
-		slug: "testing/formal-verification",
+		slug: "concepts/formal-verification",
 		title: "Formal Verification",
 		section: "Concepts",
 	},
 	{ slug: "architecture/tour", title: "Source Tour", section: "Architecture" },
 	{
-		slug: "architecture/contexts-structure",
+		slug: "architecture/contexts",
 		title: "Contexts Structure",
 		section: "Architecture",
 	},
@@ -72,8 +72,8 @@ const DOC_ENTRIES: readonly DocumentEntry[] = [
 		section: "Architecture",
 	},
 	{
-		slug: "design/design-decisions",
-		title: "Design Decisions",
+		slug: "domain-model",
+		title: "Domain Model",
 		section: "Architecture",
 	},
 	{

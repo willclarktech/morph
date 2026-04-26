@@ -23,7 +23,7 @@
 ## Architecture
 
 - [Source Tour](architecture/tour.md) — Guided walkthrough of key source files
-- [Contexts Structure](architecture/contexts-structure.md) — Context-centric package organization
+- [Contexts Structure](architecture/contexts.md) — Context-centric package organization
 - [Extensions](architecture/extensions.md) — Schema extensions for storage, auth, and infrastructure
 - [12-Factor](architecture/12-factor.md) — How generated apps follow 12-factor methodology
 - [Authorization](design/authorization.md) — Authorization as domain invariants

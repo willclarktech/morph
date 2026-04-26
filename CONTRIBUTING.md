@@ -119,5 +119,5 @@ Run all tests: `bun run test`
 ## Further reading
 
 - **[Source Tour](docs/architecture/tour.md)** — Guided walkthrough of key source files, from schema to generated output
-- **[Architecture](docs/architecture/overview.md)** — Monorepo structure and package organization
+- **[Contexts Structure](docs/architecture/contexts.md)** — Context-centric package organization
 - **[CLAUDE.md](CLAUDE.md)** — Coding conventions, programming principles, tooling preferences

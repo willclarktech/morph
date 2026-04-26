@@ -94,11 +94,12 @@ await writeFile(
 // Docs index
 await writeFile(path.join(DIST_DIR, "docs", "index.html"), docsIndex());
 
-// Individual docs
+// Individual docs — fail loudly on missing entries so nav drift is caught in CI.
+const missing: string[] = [];
 for (const entry of DOC_ENTRIES) {
 	const file = Bun.file(path.join(DOCS_DIR, `${entry.slug}.md`));
 	if (!(await file.exists())) {
-		console.warn(`  Warning: ${entry.slug}.md not found`);
+		missing.push(`${entry.slug}.md`);
 		continue;
 	}
 	const content = await file.text();
@@ -108,6 +109,13 @@ for (const entry of DOC_ENTRIES) {
 		docsPage(entry.slug, rendered, entry.title),
 	);
 	console.info(`  Generated docs/${entry.slug}`);
+}
+if (missing.length > 0) {
+	console.error(
+		`Site build failed: DOC_ENTRIES references ${missing.length} missing file(s):`,
+	);
+	for (const path of missing) console.error(`  - ${path}`);
+	process.exit(1);
 }
 
 // 4. Write .nojekyll for GitHub Pages

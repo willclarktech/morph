@@ -86,9 +86,9 @@ export const landingPage = (): string =>
 
 		<section>
 			<h2>Quick Start</h2>
-			<pre><code class="language-sh">bun install
-bun run generate:examples
-cd examples/pastebin && bun run apps/api/src/index.ts</code></pre>
+			<pre><code class="language-sh">bunx @morphdsl/cli generation:new-project pastebin --schema-file pastebin.morph
+cd pastebin && bun install
+bun run --filter '@pastebin/api' start</code></pre>
 		</section>
 
 		<section>
