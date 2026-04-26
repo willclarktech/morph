@@ -52,7 +52,8 @@ jobs:
         if: steps.changesets.outputs.pending == 'true'
         run: |
           VERSION=$(jq -r .version contexts/generation/core/package.json)
-          jq --arg v "$VERSION" '.version = $v' apps/vscode/package.json > tmp.json && mv tmp.json apps/vscode/package.json
+          jq --indent 1 --arg v "$VERSION" '.version = $v' apps/vscode/package.json > tmp.json && mv tmp.json apps/vscode/package.json
+          bunx prettier --write apps/vscode/package.json
 
       - name: Build packages
         if: steps.changesets.outputs.pending == 'true'
