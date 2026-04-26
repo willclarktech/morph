@@ -12,6 +12,7 @@
 	},
 	"type": "module",
 	"files": [
+		"README.md",
 		"dist"
 	],
 	"bin": {

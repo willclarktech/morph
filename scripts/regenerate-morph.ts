@@ -188,11 +188,16 @@ const runGenerate = async (schema: DomainSchema): Promise<boolean> => {
 
 		// Files that are hand-written in the morph repo and should not be overwritten
 		const SKIP_FILES = new Set([
+			"apps/cli/README.md",
+			"apps/mcp/README.md",
 			"config/eslint/package.json",
 			"config/eslint/src/index.ts",
 			"config/tsconfig/base.json",
 			"config/tsconfig/package.json",
+			"contexts/generation/core/README.md",
+			"contexts/schema-dsl/core/README.md",
 			"README.md",
+			"tests/scenarios/README.md",
 		]);
 
 		// Write generated files

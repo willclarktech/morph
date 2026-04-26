@@ -1,198 +1,48 @@
-# @Morph/mcp
+# @morphdsl/mcp
 
-Code generation from domain schemas
+Morph as an [MCP](https://modelcontextprotocol.io/) server. Drop it into Claude Code, Cursor, Codex, or any MCP-aware tool and the agent gains access to Morph's parser, validator, language services, and code generator.
 
-Parse, compile, and decompile .morph DSL files
-
-## Quick Start
-
-```bash
-# Run the MCP server
-bun run start
-
-# Or inspect with MCP Inspector
-bun run inspect
+```jsonc
+// .mcp.json (Claude Code, project-scoped)
+{
+	"mcpServers": {
+		"morph": { "command": "bunx", "args": ["-y", "@morphdsl/mcp"] },
+	},
+}
 ```
 
-## Tools
+For Cursor / Codex / other editor configs and a full tool list, see the [MCP Integration guide](https://willclark.tech/morph/docs/guides/mcp-integration/).
 
-### Operations
+## Requirements
 
-#### `generate`
+- [Bun](https://bun.com/install) — the bin entrypoint runs under `bun` (the runtime imports `bun:sqlite`).
 
-Generate all packages from a domain schema
+## What it exposes
 
-**Parameters:**
+One MCP tool per Morph operation, namespaced by context:
 
-| Name     | Type     | Required | Description                                  |
-| -------- | -------- | -------- | -------------------------------------------- |
-| `name`   | `string` | Yes      | Project name for package naming              |
-| `schema` | `string` | Yes      | The domain schema as .morph DSL or JSON text |
+- `generation_*` — schema generation (`generate`, `new_project`, `init`, `validate`)
+- `schema_dsl_*` — parsing and language services (`parse_morph`, `format_dsl`, `get_diagnostics`, `get_completions`, `get_hover`, `get_definition`, `get_symbols`, `get_folding_ranges`, `template_schema`)
 
-**Returns:** `GenerationResult`
+## Manual run
 
-**Errors:**
-
-- `InvalidSchemaError`: The input schema is malformed
-
-**Example:**
-
-```json
-// Tool: generate
-{ "name": "<value>", "schema": "<value>" }
+```sh
+bunx @morphdsl/mcp
 ```
 
-#### `init`
+The server speaks JSON-RPC over stdio. Inspect it with [`@modelcontextprotocol/inspector`](https://modelcontextprotocol.io/docs/tools/inspector):
 
-Initialize a new morph monorepo scaffold
-
-**Parameters:**
-
-| Name   | Type     | Required | Description  |
-| ------ | -------- | -------- | ------------ |
-| `name` | `string` | Yes      | Project name |
-
-**Returns:** `GenerationResult`
-
-**Example:**
-
-```json
-// Tool: init
-{ "name": "<value>" }
+```sh
+bunx @modelcontextprotocol/inspector bunx -y @morphdsl/mcp
 ```
 
-#### `newProject`
+## Links
 
-Create a new morph project (init + generate)
+- [Morph documentation](https://willclark.tech/morph/)
+- [MCP Integration guide](https://willclark.tech/morph/docs/guides/mcp-integration/)
+- [Source](https://github.com/willclarktech/morph)
+- [Issues](https://github.com/willclarktech/morph/issues)
 
-**Parameters:**
+## License
 
-| Name     | Type     | Required | Description                                  |
-| -------- | -------- | -------- | -------------------------------------------- |
-| `name`   | `string` | Yes      | Project name                                 |
-| `schema` | `string` | Yes      | The domain schema as .morph DSL or JSON text |
-
-**Returns:** `GenerationResult`
-
-**Errors:**
-
-- `InvalidSchemaError`: The input schema is malformed
-
-**Example:**
-
-```json
-// Tool: newProject
-{ "name": "<value>", "schema": "<value>" }
-```
-
-#### `decompileSchema`
-
-Convert a domain schema JSON to .morph DSL text
-
-**Parameters:**
-
-| Name     | Type     | Required | Description                  |
-| -------- | -------- | -------- | ---------------------------- |
-| `schema` | `string` | Yes      | Domain schema as JSON string |
-
-**Returns:** `string`
-
-**Errors:**
-
-- `InvalidSchemaError`: The input is not valid domain schema JSON
-
-**Example:**
-
-```json
-// Tool: decompileSchema
-{ "schema": "<value>" }
-```
-
-#### `formatDsl`
-
-Format .morph DSL source text (parse and re-emit)
-
-**Parameters:**
-
-| Name     | Type     | Required | Description                          |
-| -------- | -------- | -------- | ------------------------------------ |
-| `source` | `string` | Yes      | The .morph DSL source text to format |
-
-**Returns:** `string`
-
-**Errors:**
-
-- `ParseFailedError`: The source could not be parsed
-
-**Example:**
-
-```json
-// Tool: formatDsl
-{ "source": "<value>" }
-```
-
-#### `parseMorph`
-
-Parse and compile a .morph DSL source to domain schema JSON
-
-**Parameters:**
-
-| Name     | Type     | Required | Description                |
-| -------- | -------- | -------- | -------------------------- |
-| `source` | `string` | Yes      | The .morph DSL source text |
-
-**Returns:** `ParseResult`
-
-**Errors:**
-
-- `ParseFailedError`: The source could not be parsed
-
-**Example:**
-
-```json
-// Tool: parseMorph
-{ "source": "<value>" }
-```
-
-#### `validateDsl`
-
-Validate a .morph DSL source file
-
-**Parameters:**
-
-| Name     | Type     | Required | Description                            |
-| -------- | -------- | -------- | -------------------------------------- |
-| `source` | `string` | Yes      | The .morph DSL source text to validate |
-
-**Returns:** `void`
-
-**Errors:**
-
-- `ParseFailedError`: The source could not be parsed
-
-**Example:**
-
-```json
-// Tool: validateDsl
-{ "source": "<value>" }
-```
-
-#### `templateSchema`
-
-Get a template .morph schema showing all available DSL features and field types
-
-**Returns:** `string`
-
-**Example:**
-
-```json
-// Tool: templateSchema
-{}
-```
-
-## Errors
-
-| Error                | Description                    |
-| -------------------- | ------------------------------ |
-| `InvalidSchemaError` | The input schema is malformed  |
-| `ParseFailedError`   | The source could not be parsed |
+MIT

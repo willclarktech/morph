@@ -9,6 +9,11 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
+// Marker placed at the top of auto-generated stub READMEs. Hand-written READMEs
+// (which this script must not overwrite) won't contain it, so we can detect them.
+const STUB_README_MARKER =
+	"<!-- generated stub README — overwritten by scripts/update-package-metadata.ts -->";
+
 const ROOT_DIR = path.join(import.meta.dir, "..");
 const REPO_URL = "git+https://github.com/willclarktech/morph.git";
 
@@ -193,7 +198,43 @@ const main = (): void => {
 			parsed.scripts = scripts;
 
 			const extras = EXTRA_FILES.get(name) ?? [];
-			parsed.files = ["dist", ...extras];
+			parsed.files = ["README.md", "dist", ...extras];
+
+			// Write a stub README.md if the package has none, or if the existing one
+			// is itself a stub (we own it). Hand-written READMEs lack the marker
+			// and are preserved.
+			const readmePath = path.join(path.dirname(filePath), "README.md");
+			const existingReadme = (() => {
+				try {
+					return readFileSync(readmePath, "utf8");
+				} catch {
+					return undefined;
+				}
+			})();
+			const isOwned =
+				existingReadme === undefined ||
+				existingReadme.startsWith(STUB_README_MARKER);
+			if (isOwned) {
+				const description = parsed.description as string;
+				const stubReadme = `${STUB_README_MARKER}
+
+# ${name}
+
+${description}.
+
+Part of [Morph](https://github.com/willclarktech/morph) — algebraic code generation from domain schemas.
+
+See the [main README](https://github.com/willclarktech/morph#readme) for full documentation.
+
+## License
+
+MIT
+`;
+				if (existingReadme !== stubReadme) {
+					writeFileSync(readmePath, stubReadme);
+					console.info(`  Wrote: ${relativePath}/README.md (stub)`);
+				}
+			}
 			if (!("publishConfig" in parsed)) {
 				parsed.publishConfig = {
 					exports: {
