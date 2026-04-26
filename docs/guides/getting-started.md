@@ -126,6 +126,7 @@ cd pastebin
 bun install
 
 # Start the REST API (in-memory storage) — http://localhost:3000
+# Routes are documented in apps/api/openapi.json
 bun run --filter '@pastebin/api' start
 
 # Or start the CLI
