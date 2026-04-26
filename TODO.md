@@ -44,6 +44,7 @@
 | Task | Effort | Notes |
 |------|--------|-------|
 | Code AST for generation output | L | Minimal code AST replacing string templates. Enables import deduplication, structural composition, format independence |
+| Generator-emitted per-package READMEs | M | The morph generator should emit a README per generated package (DSL, core, app packages). Currently only the root README is generated; per-package npm landing pages would render bare for end-user generated projects. Mirror the auto-stub pattern from `scripts/update-package-metadata.ts`. |
 | Native desktop app target | L | Generate a desktop app (Tauri/Electron) from schema. Reuses UI plugin for renderer, wraps backend in-process or via IPC |
 | Native mobile app target | L | Generate a mobile app (React Native/Expo or native via Kotlin/Swift) from schema. Shares client-side models and HTTP client with existing web UI |
 | DSL operation replay | M | Replay operations from command log — separate from domain events |
@@ -82,7 +83,6 @@
 | Task | Priority | Effort | Notes |
 |------|----------|--------|-------|
 | Bump bun to ≥1.3.13 + adopt `bun test --isolate` | P3 | M | Blocked on nixpkgs — unstable still has 1.3.11. Unlocks isolated test runs to catch leaked state. Bump pin in all 3 workflows + local nix config together; commit any autofix drift first. |
-| Refresh quickstart docs now that packages are published | P2 | S | `docs/guides/getting-started.md` and similar assume a local clone. Now users can `npx @morphdsl/cli` or install published packages directly — update the quickstart to show that path. Also check README, site landing page, examples. |
 | Standardize package.json key order | P4 | S | Consistent ordering across generated and template files |
 | Multi-framework step gen | P4 | M | Abstract step generation for Playwright/Cypress |
 | Revisit functional lint rules | P4 | M | Re-enable disabled functional/* rules after refactoring |
@@ -93,6 +93,7 @@
 
 | Task | Notes |
 |------|-------|
+| Documentation review | 8 new user-facing guides (using-published-packages, deploying, troubleshooting, mcp-integration, vscode-extension, versioning, custom-extensions, performance), repaired 6 broken links, replaced 5 stale READMEs by hand, auto-stub script for ~100 other publishable packages, landing-page Quick Start moved to npm flow |
 | Publishing sweep | Changeset for initial 0.1.0 release, VSCode Marketplace publish step in release workflow, TODO updates |
 | Formal verification for invariants | `@morphdsl/generator-verification` + `@morphdsl/plugin-verification` — compiles ConditionExpr AST to SMT-LIB2 for Z3 |
 | Fix SMT-LIB2 verification soundness | Fixed 6 bugs: missing context/input/literal declarations, broken exists/forAll substitution, preservation post-state variable resolution, Z3 error detection |
