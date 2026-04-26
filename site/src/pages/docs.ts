@@ -14,6 +14,46 @@ const DOC_ENTRIES: readonly DocumentEntry[] = [
 		section: "Guides",
 	},
 	{
+		slug: "guides/using-published-packages",
+		title: "Using the Published Packages",
+		section: "Guides",
+	},
+	{
+		slug: "guides/deploying",
+		title: "Deploying",
+		section: "Guides",
+	},
+	{
+		slug: "guides/mcp-integration",
+		title: "MCP Integration",
+		section: "Guides",
+	},
+	{
+		slug: "guides/vscode-extension",
+		title: "VS Code Extension",
+		section: "Guides",
+	},
+	{
+		slug: "guides/versioning",
+		title: "Versioning and Upgrading",
+		section: "Guides",
+	},
+	{
+		slug: "guides/custom-extensions",
+		title: "Custom Extensions",
+		section: "Guides",
+	},
+	{
+		slug: "guides/troubleshooting",
+		title: "Troubleshooting",
+		section: "Guides",
+	},
+	{
+		slug: "guides/performance",
+		title: "Performance Notes",
+		section: "Guides",
+	},
+	{
 		slug: "guides/dsl-reference",
 		title: "DSL Reference",
 		section: "Reference",

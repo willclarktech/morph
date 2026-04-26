@@ -3,6 +3,14 @@
 ## Guides
 
 - [Getting Started](guides/getting-started.md) — Build a pastebin app from a `.morph` schema
+- [Using the Published Packages](guides/using-published-packages.md) — CLI, MCP server, VS Code extension; install paths and version pinning
+- [Deploying](guides/deploying.md) — Docker, Procfile platforms, env-var configuration
+- [MCP Integration](guides/mcp-integration.md) — Wire `@morphdsl/mcp` into Claude Code, Cursor, Codex
+- [VS Code Extension](guides/vscode-extension.md) — Install and use the `.morph` syntax-highlighting extension
+- [Versioning and Upgrading](guides/versioning.md) — How `@morphdsl/*` versions move and how to upgrade a generated project
+- [Custom Extensions](guides/custom-extensions.md) — Add a custom storage / auth / event-store backend in a generated project
+- [Troubleshooting](guides/troubleshooting.md) — Common errors and fixes
+- [Performance Notes](guides/performance.md) — Backend trade-offs and what we know about scaling
 
 ## Reference
 
