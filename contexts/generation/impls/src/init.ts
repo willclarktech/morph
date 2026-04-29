@@ -18,10 +18,8 @@ export const InitHandler = Context.GenericTag<InitHandler>(
 
 export const InitHandlerLive = Layer.succeed(InitHandler, {
 	handle: (params, _options) =>
-		E.gen(function* () {
-			const scaffold = yield* E.promise(() =>
-				scaffoldInit({ name: params.name }),
-			);
+		E.sync(() => {
+			const scaffold = scaffoldInit({ name: params.name });
 
 			const files: GeneratedFile[] = scaffold.files.map((f) => ({
 				...f,

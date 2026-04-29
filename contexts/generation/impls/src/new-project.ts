@@ -80,7 +80,7 @@ export const NewProjectHandlerLive = Layer.succeed(NewProjectHandler, {
 
 			const files: GeneratedFile[] = [];
 
-			const scaffold = yield* E.promise(() => scaffoldInit({ name }));
+			const scaffold = scaffoldInit({ name });
 			files.push(
 				...scaffold.files.map((f) => ({
 					...f,

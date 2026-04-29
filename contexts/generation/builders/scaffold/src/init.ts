@@ -8,13 +8,13 @@ export interface InitOptions {
 	readonly outputDir?: string;
 }
 
-export const init = async (options: InitOptions): Promise<GenerationResult> => {
+export const init = (options: InitOptions): GenerationResult => {
 	const { name, outputDir = "" } = options;
 	const prefix = outputDir ? `${outputDir}/` : "";
 	// scope === name, but we keep both variables for template compatibility
 	const variables = { name, scope: name };
 
-	const templates = await loadTemplates("monorepo");
+	const templates = loadTemplates("monorepo");
 
 	const files: GeneratedFile[] = templates.map((template) => ({
 		content: template.needsInterpolation

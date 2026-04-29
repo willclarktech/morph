@@ -2,7 +2,8 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"paths": {
-			"@morphdsl/generation-impls": ["./src/generation-impls.d.ts"]
+			"@morphdsl/generation-impls": ["./src/generation-impls.d.ts"],
+			"@morphdsl/generation-core": ["./src/generation-impls.d.ts"]
 		}
 	}
 }

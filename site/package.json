@@ -29,6 +29,7 @@
 		"@codemirror/view": "^6.35.0",
 		"@morphdsl/codemirror-lang-morph": "workspace:*",
 		"@morphdsl/domain-schema": "workspace:*",
+		"@morphdsl/generation-core": "workspace:*",
 		"@morphdsl/generation-impls": "workspace:*",
 		"@morphdsl/morph-highlight": "workspace:*",
 		"@morphdsl/schema-dsl-compiler": "workspace:*",

@@ -29,9 +29,7 @@ const getPackageDir = (type: PackageType): string => {
 const getTemplateType = (type: PackageType): "cli" | "lib" =>
 	type === "lib" ? "lib" : "cli";
 
-export const add = async (
-	options: AddPackageOptions,
-): Promise<GenerationResult> => {
+export const add = (options: AddPackageOptions): GenerationResult => {
 	const { coreName, monorepoRoot, name, scope, type } = options;
 	const prefix = monorepoRoot ? `${monorepoRoot}/` : "";
 	const packageDir = getPackageDir(type);
@@ -39,7 +37,7 @@ export const add = async (
 	const variables = { coreName: coreName ?? "core", name, scope };
 
 	const templateType = getTemplateType(type);
-	const templates = await loadTemplates(templateType);
+	const templates = loadTemplates(templateType);
 
 	const files: GeneratedFile[] = [
 		...templates.map((template) => ({

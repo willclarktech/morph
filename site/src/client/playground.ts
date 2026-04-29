@@ -5,7 +5,7 @@ import {
 	morphLanguage,
 	morphLinter,
 } from "@morphdsl/codemirror-lang-morph";
-import { executeGenerate } from "@morphdsl/generation-impls";
+import { HandlersLayer, ops } from "@morphdsl/generation-core";
 import { compile } from "@morphdsl/schema-dsl-compiler";
 import { TEMPLATE_SCHEMA } from "@morphdsl/schema-dsl-impls";
 import { parse } from "@morphdsl/schema-dsl-parser";
@@ -290,16 +290,22 @@ const runGenerate = () => {
 	}
 
 	try {
-		const result = Effect.runSync(
-			executeGenerate(compileResult.schema, compileResult.schema.name),
+		const result: { files: readonly GeneratedFile[] } = Effect.runSync(
+			ops.newProject
+				.execute({ name: compileResult.schema.name, schema: source }, {})
+				.pipe(Effect.provide(HandlersLayer)),
 		);
-		const filesWithSchema: GeneratedFile[] = [
-			{
-				filename: "schema.json",
-				content: JSON.stringify(compileResult.schema, undefined, "\t"),
-			},
-			...result.files,
-		];
+		// NewProjectHandlerLive prefixes every generated file with `${name}/`;
+		// strip that for the playground tree (single-project context).
+		const projectPrefix = `${compileResult.schema.name}/`;
+		const filesWithSchema: GeneratedFile[] = result.files.map(
+			(f: GeneratedFile) => ({
+				...f,
+				filename: f.filename.startsWith(projectPrefix)
+					? f.filename.slice(projectPrefix.length)
+					: f.filename,
+			}),
+		);
 		renderFileTree(
 			filesWithSchema,
 			treeElement,
