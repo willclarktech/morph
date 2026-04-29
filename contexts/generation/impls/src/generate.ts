@@ -90,9 +90,14 @@ export const executeGenerate = (
 	});
 
 /**
- * Replace `workspace:*` references for `@morphdsl/*` deps with the
- * concrete morphdsl version in every package.json among the given files.
- * No-op when called with `preserveWorkspaceDeps: true`.
+ * Dedupe by filename (last-wins) and replace `workspace:*` references for
+ * `@morphdsl/*` deps with the concrete morphdsl version in every package.json
+ * among the given files. The dep rewrite is skipped when called with
+ * `preserveWorkspaceDeps: true`, but dedupe always runs.
+ *
+ * Dedupe matches disk-write semantics: when the scaffold and a generator both
+ * emit the same path (e.g. root `README.md`), the later emission wins on
+ * disk, so we collapse to a single entry in memory too.
  *
  * Exported so callers like `NewProjectHandlerLive` can apply the rewrite
  * to the combined scaffold + generate output, not just the generate output.
@@ -101,8 +106,9 @@ export const postProcessFiles = (
 	files: GeneratedFile[],
 	options: GenerateOptions | undefined,
 ): GeneratedFile[] => {
-	if (options?.preserveWorkspaceDeps) return files;
-	return files.map((file) => {
+	const deduped = dedupeByFilename(files);
+	if (options?.preserveWorkspaceDeps) return deduped;
+	return deduped.map((file) => {
 		if (
 			!(
 				file.filename.endsWith("/package.json") ||
@@ -123,6 +129,12 @@ export const postProcessFiles = (
 			return file;
 		}
 	});
+};
+
+const dedupeByFilename = (files: GeneratedFile[]): GeneratedFile[] => {
+	const byFilename = new Map<string, GeneratedFile>();
+	for (const file of files) byFilename.set(file.filename, file);
+	return [...byFilename.values()];
 };
 
 // Read this package's own version once at module load. Used to rewrite
