@@ -97,7 +97,7 @@
 }
 
 [role="tablist"] button:hover {
-	color: var(--pico-color);
+	color: inherit;
 	transform: none;
 }
 
