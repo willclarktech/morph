@@ -255,6 +255,22 @@ const renderFileTree = (
 	)) {
 		item.addEventListener("click", () => selectFile(item));
 	}
+
+	// Auto-select the schema file so users see their input preserved and don't
+	// have to scroll past folders + meta files to confirm it's there.
+	const preferredFilenames = ["schema.morph", "schema.json"];
+	for (const preferred of preferredFilenames) {
+		const index = files.findIndex((file) => file.filename === preferred);
+		if (index === -1) continue;
+		const item = treeElement.querySelector<HTMLElement>(
+			`.file-tree-item[data-index="${index}"]`,
+		);
+		if (item) {
+			selectFile(item);
+			item.scrollIntoView({ block: "nearest" });
+		}
+		break;
+	}
 };
 
 const runGenerate = () => {
