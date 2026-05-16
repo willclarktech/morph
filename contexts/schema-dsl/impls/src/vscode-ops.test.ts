@@ -111,7 +111,9 @@ describe("getDefinition", () => {
 
 describe("getFoldingRanges", () => {
 	test("returns folding ranges for blocks", () => {
-		expect(getFoldingRanges({ source: VALID_SOURCE }, {}).length).toBeGreaterThan(0);
+		expect(
+			getFoldingRanges({ source: VALID_SOURCE }, {}).length,
+		).toBeGreaterThan(0);
 	});
 
 	test("returns empty for unparseable source", () => {

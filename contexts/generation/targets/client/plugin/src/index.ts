@@ -3,6 +3,7 @@ import type { GeneratorPlugin, PluginContext } from "@morphdsl/plugin";
 
 import {
 	contextNameToKebab,
+	getAllFunctions,
 	getContextsWithTag,
 } from "@morphdsl/domain-schema";
 import { getPackageScope } from "@morphdsl/plugin";
@@ -37,6 +38,19 @@ export const clientPlugin: GeneratorPlugin = {
 			.sort()
 			.map((ctx) => `@${scope}/${contextNameToKebab(ctx)}-dsl`);
 
+		// Core packages from which the client re-exports bundled pure functions
+		// (no declared errors). Needed as runtime deps when present.
+		const bundledCoreContexts = [
+			...new Set(
+				getAllFunctions(schema)
+					.filter((f) => f.def.errors.length === 0)
+					.map((f) => f.context),
+			),
+		].sort();
+		const bundledCorePackages = bundledCoreContexts.map(
+			(c) => `@${scope}/${contextNameToKebab(c)}-core`,
+		);
+
 		const primaryContext =
 			[...apiContexts].sort()[0] ??
 			Object.keys(schema.contexts)[0] ??
@@ -47,7 +61,13 @@ export const clientPlugin: GeneratorPlugin = {
 		const files: GeneratedFile[] = [];
 
 		files.push({
-			content: generateClientPackageJson(name, dslPackages, corePackage, schema.npmScope),
+			content: generateClientPackageJson(
+				name,
+				dslPackages,
+				corePackage,
+				schema.npmScope,
+				bundledCorePackages,
+			),
 			filename: `${packagePath}/package.json`,
 		});
 

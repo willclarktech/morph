@@ -6,6 +6,7 @@ import type { DomainSchema, OperationDef } from "@morphdsl/domain-schema";
 
 import {
 	conditionReferencesCurrentUser,
+	contextNameToKebab,
 	getAllFunctions,
 	getAllOperations,
 	getOperationPreInvariantDefs,
@@ -50,7 +51,15 @@ export const generate = (
 	// Combine operations and functions
 	const apiOperations = [...apiOps, ...apiFunctions];
 
-	if (apiOperations.length === 0) {
+	// Bundled pure functions: no declared errors → core re-exports them at top
+	// level as plain values. The client lib re-exports them so consumers can
+	// call them directly without the HTTP round-trip. Functions also tagged
+	// @api still get an HTTP method below — both paths are available.
+	const bundledFunctions = getAllFunctions(schema)
+		.filter((f) => f.def.errors.length === 0)
+		.toSorted((a, b) => a.name.localeCompare(b.name));
+
+	if (apiOperations.length === 0 && bundledFunctions.length === 0) {
 		return "";
 	}
 
@@ -73,40 +82,75 @@ export const generate = (
 		}
 	}
 
-	const factory = generateClientFactory(
-		apiOperations,
-		schema,
-		basePath,
-		hasAuth,
-		authEntityName,
-	);
+	const factory =
+		apiOperations.length > 0
+			? generateClientFactory(
+					apiOperations,
+					schema,
+					basePath,
+					hasAuth,
+					authEntityName,
+				)
+			: undefined;
 
-	const httpValueImports = [
-		...(hasAuth ? ["authHeaders"] : []),
-		...(factory.needsJsonHeaders ? ["jsonHeaders"] : []),
-		"request",
-	].join(", ");
+	const httpValueImports =
+		factory !== undefined
+			? [
+					...(hasAuth ? ["authHeaders"] : []),
+					...(factory.needsJsonHeaders ? ["jsonHeaders"] : []),
+					"request",
+				].join(", ")
+			: undefined;
 
-	const importBlock = sortImports(
-		[
-			'import type { ClientConfig, HttpClientError } from "@morphdsl/http-client";',
-			'import type { Effect } from "effect";',
-			`import { ${httpValueImports} } from "@morphdsl/http-client";`,
-			generateMultiContextTypeImports(scope, typeImports, errorImports),
-		]
-			.filter(Boolean)
-			.join("\n"),
-	);
+	const importBlock =
+		factory !== undefined
+			? sortImports(
+					[
+						'import type { ClientConfig, HttpClientError } from "@morphdsl/http-client";',
+						'import type { Effect } from "effect";',
+						`import { ${String(httpValueImports)} } from "@morphdsl/http-client";`,
+						generateMultiContextTypeImports(scope, typeImports, errorImports),
+					]
+						.filter(Boolean)
+						.join("\n"),
+				)
+			: "";
 
-	const sections = [
-		"// Generated HTTP Client",
-		"",
-		importBlock,
-		"",
-		generateClientInterface(apiOperations, schema, authEntityName),
-		"",
-		factory.code,
-	];
+	// Bundled-function re-exports — grouped by core package.
+	const bundledByCore = new Map<string, string[]>();
+	for (const entry of bundledFunctions) {
+		const corePkg = `@${scope}/${contextNameToKebab(entry.context)}-core`;
+		const existing = bundledByCore.get(corePkg) ?? [];
+		existing.push(entry.name);
+		bundledByCore.set(corePkg, existing);
+	}
+	const bundledReExports = [...bundledByCore.entries()]
+		.toSorted(([a], [b]) => a.localeCompare(b))
+		.map(
+			([pkg, names]) =>
+				`export { ${names.toSorted().join(", ")} } from "${pkg}";`,
+		)
+		.join("\n");
+
+	const sections: string[] = ["// Generated HTTP Client"];
+	if (importBlock) {
+		sections.push("", importBlock);
+	}
+	if (bundledReExports) {
+		sections.push(
+			"",
+			"// Pure functions bundled from core — call directly, no HTTP hop.",
+			bundledReExports,
+		);
+	}
+	if (factory !== undefined) {
+		sections.push(
+			"",
+			generateClientInterface(apiOperations, schema, authEntityName),
+			"",
+			factory.code,
+		);
+	}
 
 	return sections.join("\n") + "\n";
 };
