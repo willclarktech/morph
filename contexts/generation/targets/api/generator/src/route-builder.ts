@@ -8,6 +8,8 @@ import type { Context, ManagedRuntime } from "effect";
 
 import {
 	getDomainServiceAction,
+	getOperationKind,
+	getOperationTags,
 	getPrimaryWriteAggregate,
 	isDomainService,
 } from "@morphdsl/domain-schema";
@@ -34,6 +36,9 @@ export const buildOperationRoute = <R>(
 	codecRegistry?: CodecRegistry,
 ): { handler: RouteHandler; route: RouteDefinition } => {
 	const injectableParamNames = injectableParams.map((p) => p.paramName);
+	const kind = domainSchema
+		? (getOperationKind(domainSchema, operation.name) ?? "command")
+		: "command";
 
 	// Check if this operation is a domain service (uses multiple aggregates)
 	let domainServiceContext: DomainServiceContext | undefined;
@@ -52,6 +57,7 @@ export const buildOperationRoute = <R>(
 
 	const route = buildRoute(
 		operation,
+		kind,
 		basePath,
 		injectableParamNames,
 		domainServiceContext,
@@ -85,6 +91,13 @@ export const buildRouteHandlers = <R>(
 	const handlers = new Map<string, Map<string, RouteHandler>>();
 
 	for (const operation of operations) {
+		if (
+			domainSchema &&
+			getOperationKind(domainSchema, operation.name) === "function" &&
+			!getOperationTags(domainSchema, operation.name).includes("@api")
+		) {
+			continue;
+		}
 		const opInjectableParams = injectableParams[operation.name] ?? [];
 		const { route, handler } = buildOperationRoute(
 			operation,

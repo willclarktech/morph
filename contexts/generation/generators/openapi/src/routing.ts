@@ -1,13 +1,28 @@
-import type { DomainSchema, OperationDef } from "@morphdsl/domain-schema";
+import type {
+	DomainSchema,
+	OperationDef,
+	OperationKind,
+} from "@morphdsl/domain-schema";
 
 import {
 	getDomainServiceAction,
+	getOperationKind,
 	getPrimaryWriteAggregate,
 	isDomainService,
 } from "@morphdsl/domain-schema";
 
 /**
  * Determine HTTP method and path for an operation.
+ *
+ * Method is driven purely by operation kind (query → GET, command → POST);
+ * see `targets/api/generator/src/router.ts` for the rationale behind the
+ * deliberate REST simplification.
+ *
+ * Path is currently still inferred from the operation *name*, which is a
+ * pre-existing heuristic the openapi generator inherited and which produces
+ * occasionally awkward routes (e.g. `findByCity` → `/by-cities/find`). A
+ * cleaner aggregate-driven path policy is desirable follow-up work.
+ *
  * Injectable params are excluded from path since they come from auth context.
  */
 export const operationToRoute = (
@@ -16,54 +31,40 @@ export const operationToRoute = (
 	def: OperationDef,
 	basePath: string,
 	injectableNames: Set<string> = new Set(),
-): { method: "delete" | "get" | "post" | "put"; path: string } => {
+): { method: "get" | "post"; path: string } => {
+	const kind: OperationKind = getOperationKind(schema, name) ?? "command";
+	const method: "get" | "post" = kind === "query" ? "get" : "post";
+
 	// Check if this is a domain service
 	if (isDomainService(schema, name)) {
 		const primaryAggregate = getPrimaryWriteAggregate(schema, name);
 		if (primaryAggregate) {
 			const action = getDomainServiceAction(name, primaryAggregate);
 			const resourcePath = `${basePath}/${pluralize(primaryAggregate.toLowerCase())}`;
-			return { method: "post", path: `${resourcePath}/${action}` };
+			return { method, path: `${resourcePath}/${action}` };
 		}
 	}
 
-	// Infer resource and action from operation name
+	// Infer resource and action from operation name (path-only heuristic)
 	const { action, resource } = parseOperationName(name);
-
-	// Build path
 	const resourcePath = `${basePath}/${pluralize(resource.toLowerCase())}`;
 
-	// Determine method and path based on action
 	switch (action) {
 		case "complete":
-		case "update": {
-			const idParam = findIdParam(def, resource, injectableNames);
-			// If no ID param found (all injectable), use collection endpoint
-			return idParam
-				? { method: "put", path: `${resourcePath}/{${idParam}}` }
-				: { method: "put", path: resourcePath };
-		}
-		case "create": {
-			return { method: "post", path: resourcePath };
-		}
-		case "delete": {
-			const idParam = findIdParam(def, resource, injectableNames);
-			return idParam
-				? { method: "delete", path: `${resourcePath}/{${idParam}}` }
-				: { method: "delete", path: resourcePath };
-		}
+		case "update":
+		case "delete":
 		case "get": {
 			const idParam = findIdParam(def, resource, injectableNames);
 			return idParam
-				? { method: "get", path: `${resourcePath}/{${idParam}}` }
-				: { method: "get", path: resourcePath };
+				? { method, path: `${resourcePath}/{${idParam}}` }
+				: { method, path: resourcePath };
 		}
+		case "create":
 		case "list": {
-			return { method: "get", path: resourcePath };
+			return { method, path: resourcePath };
 		}
 		default: {
-			// Default to POST for unknown actions
-			return { method: "post", path: `${resourcePath}/${action}` };
+			return { method, path: `${resourcePath}/${action}` };
 		}
 	}
 };

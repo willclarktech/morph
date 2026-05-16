@@ -4,6 +4,7 @@ import type { Prose, Runner } from "@morphdsl/scenario-runner";
 
 import {
 	getDomainServiceAction,
+	getOperationKind,
 	getPrimaryWriteAggregate,
 	isDomainService,
 } from "@morphdsl/domain-schema";
@@ -90,9 +91,13 @@ export const createApiRunner = (config: ApiRunnerConfig): Runner => {
 				}
 
 				const domainServiceContext = resolveDomainServiceContext(resolvedName);
+				const kind = config.schema
+					? (getOperationKind(config.schema, resolvedName) ?? "command")
+					: "command";
 
 				const request = buildRequest(
 					operation,
+					kind,
 					params,
 					instance.baseUrl,
 					basePath,

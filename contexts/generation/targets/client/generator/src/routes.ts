@@ -3,7 +3,7 @@
  * Mirrors the server-side route inference in @morphdsl/api-core.
  */
 
-import type { OperationDef } from "@morphdsl/domain-schema";
+import type { OperationDef, OperationKind } from "@morphdsl/domain-schema";
 
 import { toKebabCase } from "@morphdsl/utils";
 
@@ -27,19 +27,13 @@ export interface RouteInfo {
 }
 
 /**
- * Infer HTTP method from operation name using conventions.
+ * Infer HTTP method from operation kind. Mirrors the api-side rule:
+ *   query → GET, command/function → POST.
+ * See contexts/generation/targets/api/generator/src/router.ts for the
+ * rationale behind the deliberate REST simplification.
  */
-export const inferMethod = (operationName: string): HttpMethod => {
-	const name = operationName.toLowerCase();
-
-	if (/^(?:get|find|list|fetch)/.test(name)) return "GET";
-	if (/^(?:create|add|register)/.test(name)) return "POST";
-	if (/^(?:update|modify|change)/.test(name)) return "PATCH";
-	if (/^(?:delete|remove)/.test(name)) return "DELETE";
-
-	// Default to POST for mutations
-	return "POST";
-};
+export const inferMethod = (kind: OperationKind): HttpMethod =>
+	kind === "query" ? "GET" : "POST";
 
 /**
  * Extract resource name from operation name.
@@ -144,11 +138,12 @@ const buildPath = (
 export const buildRoute = (
 	operationName: string,
 	operation: OperationDef,
+	kind: OperationKind,
 	basePath: string,
 	injectableParamNames: readonly string[] = [],
 	domainService?: DomainServiceContext,
 ): RouteInfo => {
-	const method = inferMethod(operationName);
+	const method = inferMethod(kind);
 	const pathSegment = buildPath(
 		operationName,
 		operation,

@@ -90,3 +90,40 @@ export const getFunctionsFlat = (
 	Object.fromEntries(
 		getAllFunctions(schema).map((entry) => [entry.name, entry.def]),
 	);
+
+export type OperationKind = "command" | "function" | "query";
+
+/**
+ * Look up the kind of an operation by name. Returns undefined if no operation,
+ * query, or function with that name exists in the schema.
+ */
+export const getOperationKind = (
+	schema: DomainSchema,
+	name: string,
+): OperationKind | undefined => {
+	for (const context of Object.values(schema.contexts)) {
+		if (context.commands[name]) return "command";
+		if (context.queries[name]) return "query";
+		if (context.functions?.[name]) return "function";
+	}
+	return undefined;
+};
+
+/**
+ * Look up the target tags for an operation, query, or function by name.
+ * Returns an empty array if no matching operation exists.
+ */
+export const getOperationTags = (
+	schema: DomainSchema,
+	name: string,
+): readonly string[] => {
+	for (const context of Object.values(schema.contexts)) {
+		const command = context.commands[name];
+		if (command) return command.tags;
+		const query = context.queries[name];
+		if (query) return query.tags;
+		const function_ = context.functions?.[name];
+		if (function_) return function_.tags;
+	}
+	return [];
+};

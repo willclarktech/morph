@@ -1,3 +1,4 @@
+import type { OperationKind } from "@morphdsl/domain-schema";
 import type { AnyOperation } from "@morphdsl/operation";
 /**
  * HTTP Request Building
@@ -20,6 +21,7 @@ export type { DomainServiceContext } from "@morphdsl/runtime-api";
  */
 export const buildRequest = (
 	operation: AnyOperation,
+	kind: OperationKind,
 	params: Record<string, unknown>,
 	baseUrl: string,
 	basePath: string,
@@ -27,7 +29,7 @@ export const buildRequest = (
 	domainService?: DomainServiceContext,
 ): Request => {
 	// Test runner doesn't know about injectable params - those are handled server-side
-	const route = buildRoute(operation, basePath, [], domainService);
+	const route = buildRoute(operation, kind, basePath, [], domainService);
 	const url = buildUrl(route, params, baseUrl);
 	const { body, headers } = buildRequestOptions(
 		route.method,

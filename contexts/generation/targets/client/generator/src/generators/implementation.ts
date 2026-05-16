@@ -8,6 +8,7 @@ import {
 	conditionReferencesCurrentUser,
 	getDomainServiceAction,
 	getInjectableParams,
+	getOperationKind,
 	getOperationPreInvariantDefs,
 	getPrimaryWriteAggregate,
 	isDomainService,
@@ -47,9 +48,11 @@ const operationsNeedJsonHeaders = (
 			}
 		}
 
+		const kind = getOperationKind(schema, entry.name) ?? "command";
 		const route = buildRoute(
 			entry.name,
 			op,
+			kind,
 			basePath,
 			injectableParamNames,
 			domainServiceContext,
@@ -151,9 +154,11 @@ const generateMethodImplementation = (
 	}
 
 	// Build route excluding injectable params from path
+	const kind = getOperationKind(schema, entry.name) ?? "command";
 	const route = buildRoute(
 		entry.name,
 		op,
+		kind,
 		basePath,
 		injectableParamNames,
 		domainServiceContext,

@@ -1,15 +1,19 @@
 /**
- * Route inference from operation names.
+ * Route inference from operation kind + name.
  *
- * Maps domain operations to RESTful HTTP routes using conventions:
- * - Operation name prefix → HTTP method
- * - Operation name suffix → Resource path
+ * HTTP method is driven by operation kind:
+ * - query   → GET
+ * - command → POST (with name-based PATCH/DELETE refinement)
+ * - function → POST (only reached if the function is @api-tagged)
+ *
+ * Resource path comes from name conventions.
  *
  * Domain services (multi-aggregate operations) route under their primary
  * write aggregate with an action suffix:
  * - transferTodos → POST /todos/transfer
  */
 
+import type { OperationKind } from "@morphdsl/domain-schema";
 import type { AnyOperation } from "@morphdsl/operation";
 
 import { getFieldNames } from "@morphdsl/operation";
@@ -36,27 +40,23 @@ export interface RouteDefinition {
 }
 
 /**
- * Infer HTTP method from operation name using conventions.
+ * Infer HTTP method from operation kind.
  *
- * | Prefix | Method |
- * |--------|--------|
- * | create*, add*, register* | POST |
- * | get*, find*, list*, fetch* | GET |
- * | update*, modify*, change* | PATCH |
- * | delete*, remove* | DELETE |
- * | Other | POST (safe default for mutations) |
+ * Deliberately *not* strict REST: Morph's three operation kinds — command,
+ * query, function — don't carry enough metadata to distinguish all of
+ * POST/PUT/PATCH/DELETE, and inferring those from operation names was
+ * unreliable. We collapse to two:
+ *
+ *   query    → GET   (safe, idempotent, cacheable)
+ *   command  → POST  (state-changing; not necessarily idempotent)
+ *   function → POST  (only reached when the function is @api-tagged)
+ *
+ * A future refinement could add a `@idempotent` modifier to lift idempotent
+ * commands to PUT, or an explicit method tag (e.g. `@delete`) for resources
+ * the schema author wants exposed as DELETE — but neither is in scope today.
  */
-export const inferMethod = (operationName: string): HttpMethod => {
-	const name = operationName.toLowerCase();
-
-	if (/^(?:get|find|list|fetch)/.test(name)) return "GET";
-	if (/^(?:create|add|register)/.test(name)) return "POST";
-	if (/^(?:update|modify|change)/.test(name)) return "PATCH";
-	if (/^(?:delete|remove)/.test(name)) return "DELETE";
-
-	// Default to POST for mutations
-	return "POST";
-};
+export const inferMethod = (kind: OperationKind): HttpMethod =>
+	kind === "query" ? "GET" : "POST";
 
 /**
  * Extract resource name from operation name.
@@ -182,11 +182,12 @@ export const buildPath = (
  */
 export const buildRoute = (
 	operation: AnyOperation,
+	kind: OperationKind,
 	basePath: string,
 	injectableParamNames: readonly string[] = [],
 	domainService?: DomainServiceContext,
 ): RouteDefinition => {
-	const method = inferMethod(operation.name);
+	const method = inferMethod(kind);
 	const pathSegment = buildPath(
 		operation.name,
 		operation,

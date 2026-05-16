@@ -23,18 +23,8 @@ import {
 	getAllFunctions,
 	getAllOperations,
 	getAllValueObjects,
+	getOperationKind,
 } from "@morphdsl/domain-schema";
-
-/**
- * Infer HTTP method from operation name.
- */
-const inferHttpMethod = (name: string): string => {
-	if (name.startsWith("get") || name.startsWith("list")) return "GET";
-	if (name.startsWith("create")) return "POST";
-	if (name.startsWith("update")) return "PUT";
-	if (name.startsWith("delete")) return "DELETE";
-	return "POST";
-};
 
 /**
  * Build API path from operation name.
@@ -46,13 +36,15 @@ const buildApiPath = (name: string, basePath: string): string => {
 };
 
 /**
- * Generate a curl example for an API endpoint.
+ * Generate a curl example for an API endpoint. Method follows operation kind:
+ * queries are GET, commands and functions are POST.
  */
 const generateApiExample = (
 	op: QualifiedEntry<OperationDef>,
+	schema: DomainSchema,
 	basePath: string,
 ): string => {
-	const method = inferHttpMethod(op.name);
+	const method = getOperationKind(schema, op.name) === "query" ? "GET" : "POST";
 	const path = buildApiPath(op.name, basePath);
 
 	const requiredParameters = Object.entries(op.def.input)
@@ -103,7 +95,7 @@ export const generateApiReadme = (
 		quickStart,
 		operations(allApiOps, {
 			exampleGenerator: (op: QualifiedEntry<OperationDef>) =>
-				generateApiExample(op, "/api"),
+				generateApiExample(op, schema, "/api"),
 			exampleLang: "bash",
 			schema,
 		}),
