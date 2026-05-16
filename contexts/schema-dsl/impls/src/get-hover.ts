@@ -9,10 +9,9 @@ import type {
 	SourceRange,
 	ValueObjectAst,
 } from "@morphdsl/schema-dsl-parser";
-import type { Effect } from "effect";
 
 import { parse } from "@morphdsl/schema-dsl-parser";
-import { Context, Effect as E, Layer } from "effect";
+import { Context, Effect } from "effect";
 
 export interface GetHoverHandler {
 	readonly handle: (
@@ -159,15 +158,19 @@ const findHoverInAst = (
 	return undefined;
 };
 
-export const GetHoverHandlerLive = Layer.succeed(GetHoverHandler, {
-	handle: (params, _options) =>
-		E.sync(() => {
-			const parseResult = parse(params.source);
-			if (!parseResult.ast) return { content: "" };
-			return (
-				findHoverInAst(parseResult.ast, params.line, params.column) ?? {
-					content: "",
-				}
-			);
-		}),
-});
+export const getHover = (
+	params: {
+		readonly column: number;
+		readonly line: number;
+		readonly source: string;
+	},
+	_options: Record<string, never>,
+): DslHoverResult => {
+	const parseResult = parse(params.source);
+	if (!parseResult.ast) return { content: "" };
+	return (
+		findHoverInAst(parseResult.ast, params.line, params.column) ?? {
+			content: "",
+		}
+	);
+};

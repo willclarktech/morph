@@ -1,21 +1,20 @@
-// Template for implementing the function handler.
-// This file is NOT imported by the core package.
+// Template for implementing the function.
 // Copy to your impls package and implement the logic.
 import type { DslHoverResult } from "@morphdsl/schema-dsl-dsl";
-
-import { Effect, Layer } from "effect";
-
-import { GetHoverHandler } from "./handler";
 
 /**
  * Implementation of getHover function.
  * Get hover information at a position in a .morph source file
  */
-export const GetHoverHandlerLive = Layer.succeed(GetHoverHandler, {
-	handle: (_params, _options) =>
-		Effect.gen(function* () {
-			// TODO: Implement getHover
-			// Params: column, line, source
-			return yield* Effect.succeed({} as DslHoverResult);
-		}),
-});
+export const getHover = (
+	params: {
+		readonly column: number;
+		readonly line: number;
+		readonly source: string;
+	},
+	_options: Record<string, never>,
+): DslHoverResult => {
+	// Params: column, line, source
+	// TODO: Implement getHover
+	return {} as DslHoverResult;
+};

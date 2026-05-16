@@ -1,16 +1,12 @@
-// Handler implementation for cacheStats function
+// Implementation of cacheStats function
 
 import type { CacheStatistics } from "@cache-port/caching-dsl";
 
-import { Effect, Layer } from "effect";
-
-import { CacheStatsHandler } from "./handler";
-
-export const CacheStatsHandlerLive = Layer.succeed(CacheStatsHandler, {
-	handle: (_params, _options) =>
-		Effect.succeed({
-			hits: 0n,
-			misses: 0n,
-			size: 0n,
-		} satisfies CacheStatistics),
+export const cacheStats = (
+	_params: Record<string, never>,
+	_options: Record<string, never>,
+): CacheStatistics => ({
+	hits: 0n,
+	misses: 0n,
+	size: 0n,
 });

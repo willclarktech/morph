@@ -1,9 +1,8 @@
 import type { DslFoldingRange } from "@morphdsl/schema-dsl-dsl";
 import type { DomainAst, SourceRange } from "@morphdsl/schema-dsl-parser";
-import type { Effect } from "effect";
 
 import { parse } from "@morphdsl/schema-dsl-parser";
-import { Context, Effect as E, Layer } from "effect";
+import { Context, Effect } from "effect";
 
 export interface GetFoldingRangesHandler {
 	readonly handle: (
@@ -51,14 +50,11 @@ const collectFoldingRanges = (ast: DomainAst): DslFoldingRange[] => {
 	return ranges;
 };
 
-export const GetFoldingRangesHandlerLive = Layer.succeed(
-	GetFoldingRangesHandler,
-	{
-		handle: (params, _options) =>
-			E.sync(() => {
-				const parseResult = parse(params.source);
-				if (!parseResult.ast) return [];
-				return collectFoldingRanges(parseResult.ast);
-			}),
-	},
-);
+export const getFoldingRanges = (
+	params: { readonly source: string },
+	_options: Record<string, never>,
+): readonly DslFoldingRange[] => {
+	const parseResult = parse(params.source);
+	if (!parseResult.ast) return [];
+	return collectFoldingRanges(parseResult.ast);
+};

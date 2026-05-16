@@ -1,27 +1,27 @@
 // Generated operations barrel
 import { Layer } from "effect";
 
-import { DecompileSchemaHandlerLive } from "./decompile-schema/impl";
+import { DecompileSchemaHandlerLive } from "./decompile-schema";
 import { DecompileSchemaHandlerMock } from "./decompile-schema/mock-impl";
-import { FormatDslHandlerLive } from "./format-dsl/impl";
+import { FormatDslHandlerLive } from "./format-dsl";
 import { FormatDslHandlerMock } from "./format-dsl/mock-impl";
-import { GetCompletionsHandlerLive } from "./get-completions/impl";
+import { GetCompletionsHandlerLive } from "./get-completions";
 import { GetCompletionsHandlerMock } from "./get-completions/mock-impl";
-import { GetDefinitionHandlerLive } from "./get-definition/impl";
+import { GetDefinitionHandlerLive } from "./get-definition";
 import { GetDefinitionHandlerMock } from "./get-definition/mock-impl";
-import { GetDiagnosticsHandlerLive } from "./get-diagnostics/impl";
+import { GetDiagnosticsHandlerLive } from "./get-diagnostics";
 import { GetDiagnosticsHandlerMock } from "./get-diagnostics/mock-impl";
-import { GetFoldingRangesHandlerLive } from "./get-folding-ranges/impl";
+import { GetFoldingRangesHandlerLive } from "./get-folding-ranges";
 import { GetFoldingRangesHandlerMock } from "./get-folding-ranges/mock-impl";
-import { GetHoverHandlerLive } from "./get-hover/impl";
+import { GetHoverHandlerLive } from "./get-hover";
 import { GetHoverHandlerMock } from "./get-hover/mock-impl";
-import { GetSymbolsHandlerLive } from "./get-symbols/impl";
+import { GetSymbolsHandlerLive } from "./get-symbols";
 import { GetSymbolsHandlerMock } from "./get-symbols/mock-impl";
-import { ParseMorphHandlerLive } from "./parse-morph/impl";
+import { ParseMorphHandlerLive } from "./parse-morph";
 import { ParseMorphHandlerMock } from "./parse-morph/mock-impl";
-import { TemplateSchemaHandlerLive } from "./template-schema/impl";
+import { TemplateSchemaHandlerLive } from "./template-schema";
 import { TemplateSchemaHandlerMock } from "./template-schema/mock-impl";
-import { ValidateDslHandlerLive } from "./validate-dsl/impl";
+import { ValidateDslHandlerLive } from "./validate-dsl";
 import { ValidateDslHandlerMock } from "./validate-dsl/mock-impl";
 
 export * from "./decompile-schema";

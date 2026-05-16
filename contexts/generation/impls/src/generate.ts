@@ -5,7 +5,6 @@ import type {
 } from "@morphdsl/domain-schema";
 import type { InvalidSchemaError } from "@morphdsl/generation-dsl";
 import type { UiConfig } from "@morphdsl/runtime-ui";
-import type { Effect } from "effect";
 
 import { analyzeSchemaFeatures } from "@morphdsl/builder-app";
 import { runPlugins } from "@morphdsl/plugin";
@@ -22,7 +21,7 @@ import { uiPlugin } from "@morphdsl/plugin-ui";
 import { verificationPlugin } from "@morphdsl/plugin-verification";
 import { vsCodePlugin } from "@morphdsl/plugin-vscode";
 import { rewriteMorphdslDepsInPackage } from "@morphdsl/utils";
-import { Context, Effect as E, Layer } from "effect";
+import { Context, Effect } from "effect";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
@@ -74,7 +73,7 @@ export const executeGenerate = (
 	name: string,
 	options?: GenerateOptions,
 ): Effect.Effect<{ files: GeneratedFile[] }> =>
-	E.succeed({
+	Effect.succeed({
 		files: postProcessFiles(
 			runPlugins(plugins, {
 				schema,
@@ -157,10 +156,11 @@ const MORPHDSL_VERSION = ((): string => {
 	}
 })();
 
-export const GenerateHandlerLive = Layer.succeed(GenerateHandler, {
-	handle: (params, options) =>
-		E.gen(function* () {
-			const schema = yield* parseSchemaInput(params.schema);
-			return yield* executeGenerate(schema, params.name, options);
-		}),
-});
+export const generate = (
+	params: { readonly name: string; readonly schema: string },
+	options: GenerateOptions,
+): Effect.Effect<{ files: GeneratedFile[] }, InvalidSchemaError> =>
+	Effect.gen(function* () {
+		const schema = yield* parseSchemaInput(params.schema);
+		return yield* executeGenerate(schema, params.name, options);
+	});

@@ -1,13 +1,13 @@
 // Generated operations barrel
 import { Layer } from "effect";
 
-import { GenerateHandlerLive } from "./generate/impl";
+import { GenerateHandlerLive } from "./generate";
 import { GenerateHandlerMock } from "./generate/mock-impl";
-import { InitHandlerLive } from "./init/impl";
+import { InitHandlerLive } from "./init";
 import { InitHandlerMock } from "./init/mock-impl";
-import { NewProjectHandlerLive } from "./new-project/impl";
+import { NewProjectHandlerLive } from "./new-project";
 import { NewProjectHandlerMock } from "./new-project/mock-impl";
-import { ValidateHandlerLive } from "./validate/impl";
+import { ValidateHandlerLive } from "./validate";
 import { ValidateHandlerMock } from "./validate/mock-impl";
 
 export * from "./generate";

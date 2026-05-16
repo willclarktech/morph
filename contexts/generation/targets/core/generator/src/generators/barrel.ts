@@ -84,11 +84,21 @@ export const generateOperationsBarrel = (
 		return `// Generated operations barrel\n\n${exports}\n`;
 	}
 
+	// For commands/queries the user-supplied Layer lives in `./<kebab>/impl`.
+	// For functions, the Layer is generated and lives in `./<kebab>` (index.ts);
+	// the impl file there is a plain function consumed by that index.
+	const functionNameSet = new Set(functionNames);
 	const allImports = allNames
-		.flatMap((name) => [
-			`import { ${toPascalCase(name)}HandlerLive } from "./${toKebabCase(name)}/impl";`,
-			`import { ${toPascalCase(name)}HandlerMock } from "./${toKebabCase(name)}/mock-impl";`,
-		])
+		.flatMap((name) => {
+			const kebab = toKebabCase(name);
+			const livePath = functionNameSet.has(name)
+				? `./${kebab}`
+				: `./${kebab}/impl`;
+			return [
+				`import { ${toPascalCase(name)}HandlerLive } from "${livePath}";`,
+				`import { ${toPascalCase(name)}HandlerMock } from "./${kebab}/mock-impl";`,
+			];
+		})
 		.join("\n");
 
 	const mockHandlersLayer = [
@@ -129,6 +139,15 @@ export const generateOperationsBarrel = (
 
 /**
  * Generate the main barrel file (index.ts).
+ *
+ * In addition to the ops/services/etc. namespaces, pure functions that
+ * declare no errors are re-exported at the top level by their natural name,
+ * pulled straight from their impl files (`./operations/<kebab>/impl`). This
+ * lets clients import them as plain functions without the Effect runtime;
+ * paired with `sideEffects: false` in package.json, the Layer machinery is
+ * tree-shaken away. Functions that declare errors aren't re-exported this
+ * way — their impl returns an Effect, which the client could not consume
+ * without pulling in the runtime anyway.
  */
 export const generateMainBarrel = (schema: DomainSchema): string => {
 	const hasEntities = getAllEntities(schema).length > 0;
@@ -136,6 +155,15 @@ export const generateMainBarrel = (schema: DomainSchema): string => {
 	const hasInvariants = getAllInvariants(schema).some(
 		(entry) =>
 			entry.def.scope.kind === "entity" || entry.def.scope.kind === "context",
+	);
+
+	const pureFunctions = Object.entries(getFunctionsFlat(schema))
+		.filter(([, fn]) => fn.errors.length === 0)
+		.map(([name]) => name)
+		.toSorted();
+	const pureFunctionExports = pureFunctions.map(
+		(name) =>
+			`export { ${name} } from "./operations/${toKebabCase(name)}/impl";`,
 	);
 
 	const namespaceExports = [
@@ -163,6 +191,14 @@ export const generateMainBarrel = (schema: DomainSchema): string => {
 		"",
 		"// Direct exports for individual imports",
 		...directExports,
+		...(pureFunctionExports.length > 0
+			? [
+					"",
+					"// Pure functions (no declared errors) — bundler tree-shakes the",
+					"// Layer machinery so client packages can call these directly.",
+					...pureFunctionExports,
+				]
+			: []),
 		"",
 	];
 

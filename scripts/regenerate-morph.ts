@@ -530,7 +530,7 @@ export { NewProjectHandler, type NewProjectOptions } from "@morphdsl/generation-
 			path: "contexts/generation/core/src/operations/validate/impl.ts",
 			content: `// Re-export from @morphdsl/generation-impls
 
-export { ValidateHandlerLive } from "@morphdsl/generation-impls";
+export { validate } from "@morphdsl/generation-impls";
 `,
 		},
 		{
@@ -539,8 +539,8 @@ export { ValidateHandlerLive } from "@morphdsl/generation-impls";
 
 export {
 	executeGenerate,
+	generate,
 	generateEnvironmentExample,
-	GenerateHandlerLive,
 	type GenerateOptions,
 	schemaHasTag,
 } from "@morphdsl/generation-impls";
@@ -550,14 +550,14 @@ export {
 			path: "contexts/generation/core/src/operations/init/impl.ts",
 			content: `// Re-export from @morphdsl/generation-impls
 
-export { InitHandlerLive } from "@morphdsl/generation-impls";
+export { init } from "@morphdsl/generation-impls";
 `,
 		},
 		{
 			path: "contexts/generation/core/src/operations/new-project/impl.ts",
 			content: `// Re-export from @morphdsl/generation-impls
 
-export { NewProjectHandlerLive } from "@morphdsl/generation-impls";
+export { newProject } from "@morphdsl/generation-impls";
 `,
 		},
 		// Handler re-exports (schema-dsl context)
@@ -636,70 +636,70 @@ export { GetFoldingRangesHandler } from "@morphdsl/schema-dsl-impls";
 			path: "contexts/schema-dsl/core/src/operations/parse-morph/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { ParseMorphHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { parseMorph } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/decompile-schema/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { DecompileSchemaHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { decompileSchema } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/format-dsl/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { FormatDslHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { formatDsl } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/validate-dsl/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { ValidateDslHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { validateDsl } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-diagnostics/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetDiagnosticsHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { getDiagnostics } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-symbols/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetSymbolsHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { getSymbols } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-completions/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetCompletionsHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { getCompletions } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-hover/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetHoverHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { getHover } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-definition/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetDefinitionHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { getDefinition } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
 			path: "contexts/schema-dsl/core/src/operations/get-folding-ranges/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { GetFoldingRangesHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { getFoldingRanges } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 		{
@@ -713,7 +713,7 @@ export { TemplateSchemaHandler } from "@morphdsl/schema-dsl-impls";
 			path: "contexts/schema-dsl/core/src/operations/template-schema/impl.ts",
 			content: `// Re-export from @morphdsl/schema-dsl-impls
 
-export { TemplateSchemaHandlerLive } from "@morphdsl/schema-dsl-impls";
+export { templateSchema } from "@morphdsl/schema-dsl-impls";
 `,
 		},
 	];

@@ -4,10 +4,9 @@ import type {
 	DomainAst,
 	SourceRange,
 } from "@morphdsl/schema-dsl-parser";
-import type { Effect } from "effect";
 
 import { parse } from "@morphdsl/schema-dsl-parser";
-import { Context, Effect as E, Layer } from "effect";
+import { Context, Effect } from "effect";
 
 export interface GetSymbolsHandler {
 	readonly handle: (
@@ -165,11 +164,11 @@ const buildDomainSymbols = (ast: DomainAst): DslSymbol[] => {
 	];
 };
 
-export const GetSymbolsHandlerLive = Layer.succeed(GetSymbolsHandler, {
-	handle: (params, _options) =>
-		E.sync(() => {
-			const parseResult = parse(params.source);
-			if (!parseResult.ast) return [];
-			return buildDomainSymbols(parseResult.ast);
-		}),
-});
+export const getSymbols = (
+	params: { readonly source: string },
+	_options: Record<string, never>,
+): readonly DslSymbol[] => {
+	const parseResult = parse(params.source);
+	if (!parseResult.ast) return [];
+	return buildDomainSymbols(parseResult.ast);
+};

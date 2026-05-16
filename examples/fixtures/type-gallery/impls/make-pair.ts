@@ -1,15 +1,11 @@
-// Handler implementation for makePair function
+// Implementation of makePair function
 
 import type { Pair } from "@type-gallery/types-dsl";
 
-import { Effect, Layer } from "effect";
-
-import { MakePairHandler } from "./handler";
-
-export const MakePairHandlerLive = Layer.succeed(MakePairHandler, {
-	handle: (params, _options) =>
-		Effect.succeed({
-			first: params.first,
-			second: params.second,
-		} satisfies Pair<string, string>),
+export const makePair = (
+	params: { readonly first: string; readonly second: string },
+	_options: Record<string, never>,
+): Pair<string, string> => ({
+	first: params.first,
+	second: params.second,
 });

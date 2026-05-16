@@ -1,25 +1,19 @@
-// Template for implementing the function handler.
-// This file is NOT imported by the core package.
+// Template for implementing the function.
 // Copy to your impls package and implement the logic.
 import { InvalidSchemaError } from "@morphdsl/schema-dsl-dsl";
-import { Effect, Layer } from "effect";
-
-import { DecompileSchemaHandler } from "./handler";
+import { Effect } from "effect";
 
 /**
  * Implementation of decompileSchema function.
  * Convert a domain schema JSON to .morph DSL text
  */
-export const DecompileSchemaHandlerLive = Layer.succeed(
-	DecompileSchemaHandler,
-	{
-		handle: (_params, _options) =>
-			Effect.gen(function* () {
-				// TODO: Implement decompileSchema
-				// Params: schema
-				return yield* Effect.fail(
-					new InvalidSchemaError({ message: "Not implemented" }),
-				);
-			}),
-	},
-);
+export const decompileSchema = (
+	params: { readonly schema: string },
+	_options: Record<string, never>,
+): Effect.Effect<string, InvalidSchemaError> =>
+	Effect.gen(function* () {
+		// Params: schema
+		return yield* Effect.fail(
+			new InvalidSchemaError({ message: "Not implemented" }),
+		);
+	});

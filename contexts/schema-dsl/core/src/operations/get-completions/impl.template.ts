@@ -1,21 +1,20 @@
-// Template for implementing the function handler.
-// This file is NOT imported by the core package.
+// Template for implementing the function.
 // Copy to your impls package and implement the logic.
 import type { DslCompletion } from "@morphdsl/schema-dsl-dsl";
-
-import { Effect, Layer } from "effect";
-
-import { GetCompletionsHandler } from "./handler";
 
 /**
  * Implementation of getCompletions function.
  * Get context-aware completions at a position in a .morph source file
  */
-export const GetCompletionsHandlerLive = Layer.succeed(GetCompletionsHandler, {
-	handle: (_params, _options) =>
-		Effect.gen(function* () {
-			// TODO: Implement getCompletions
-			// Params: column, line, source
-			return yield* Effect.succeed({} as readonly DslCompletion[]);
-		}),
-});
+export const getCompletions = (
+	params: {
+		readonly column: number;
+		readonly line: number;
+		readonly source: string;
+	},
+	_options: Record<string, never>,
+): readonly DslCompletion[] => {
+	// Params: column, line, source
+	// TODO: Implement getCompletions
+	return {} as readonly DslCompletion[];
+};

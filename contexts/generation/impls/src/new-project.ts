@@ -3,13 +3,12 @@ import type {
 	GenerationResult,
 	InvalidSchemaError,
 } from "@morphdsl/generation-dsl";
-import type { Effect } from "effect";
 
 import {
 	generateDefaultProse,
 	init as scaffoldInit,
 } from "@morphdsl/builder-scaffold";
-import { Context, Effect as E, Layer } from "effect";
+import { Context, Effect } from "effect";
 
 import type { GenerateOptions } from "./generate";
 
@@ -72,66 +71,67 @@ const wireProseForContext = (
 	});
 };
 
-export const NewProjectHandlerLive = Layer.succeed(NewProjectHandler, {
-	handle: (params, options) =>
-		E.gen(function* () {
-			const { name, schema: schemaText } = params;
-			const schema = yield* parseSchemaInput(schemaText);
+export const newProject = (
+	params: { readonly name: string; readonly schema: string },
+	options: NewProjectOptions,
+): Effect.Effect<GenerationResult, InvalidSchemaError> =>
+	Effect.gen(function* () {
+		const { name, schema: schemaText } = params;
+		const schema = yield* parseSchemaInput(schemaText);
 
-			const files: GeneratedFile[] = [];
+		const files: GeneratedFile[] = [];
 
-			const scaffold = scaffoldInit({ name });
-			files.push(
-				...scaffold.files.map((f) => ({
-					...f,
-					filename: `${name}/${f.filename}`,
-				})),
-			);
+		const scaffold = scaffoldInit({ name });
+		files.push(
+			...scaffold.files.map((f) => ({
+				...f,
+				filename: `${name}/${f.filename}`,
+			})),
+		);
 
-			// Always write the parsed schema as schema.json — generated files import
-			// from `../../../../schema.json` regardless of source format. If the input
-			// was a .morph file, also preserve it alongside the JSON for human readers.
-			const isMorph = !schemaText.trimStart().startsWith("{");
-			if (isMorph) {
-				files.push({
-					content: schemaText,
-					filename: `${name}/schema.morph`,
-				});
-			}
+		// Always write the parsed schema as schema.json — generated files import
+		// from `../../../../schema.json` regardless of source format. If the input
+		// was a .morph file, also preserve it alongside the JSON for human readers.
+		const isMorph = !schemaText.trimStart().startsWith("{");
+		if (isMorph) {
 			files.push({
-				content: JSON.stringify(schema, undefined, "\t") + "\n",
-				filename: `${name}/schema.json`,
+				content: schemaText,
+				filename: `${name}/schema.morph`,
 			});
+		}
+		files.push({
+			content: JSON.stringify(schema, undefined, "\t") + "\n",
+			filename: `${name}/schema.json`,
+		});
 
-			const generated = yield* executeGenerate(schema, name, {
-				...(options.textConfig && { textConfig: options.textConfig }),
-				...(options.uiConfig && { uiConfig: options.uiConfig }),
+		const generated = yield* executeGenerate(schema, name, {
+			...(options.textConfig && { textConfig: options.textConfig }),
+			...(options.uiConfig && { uiConfig: options.uiConfig }),
+		});
+		files.push(
+			...generated.files.map((f) => ({
+				...f,
+				filename: `${name}/${f.filename}`,
+			})),
+		);
+
+		const proseFiles = generateDefaultProse(schema);
+		for (const proseFile of Object.values(proseFiles)) {
+			files.push({
+				...proseFile,
+				filename: `${name}/${proseFile.filename}`,
+				scaffold: true,
 			});
-			files.push(
-				...generated.files.map((f) => ({
-					...f,
-					filename: `${name}/${f.filename}`,
-				})),
-			);
+		}
 
-			const proseFiles = generateDefaultProse(schema);
-			for (const proseFile of Object.values(proseFiles)) {
-				files.push({
-					...proseFile,
-					filename: `${name}/${proseFile.filename}`,
-					scaffold: true,
-				});
-			}
+		// Wire prose into each context's DSL/core: DSL re-exports its prose.ts,
+		// core gets a prose.ts that re-exports from the DSL package, and core's
+		// index re-exports prose. Mirrors what scripts/generate-examples.ts does
+		// for the bundled examples.
+		const scope = name.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-");
+		for (const contextName of Object.keys(schema.contexts)) {
+			wireProseForContext(files, name, contextName, scope);
+		}
 
-			// Wire prose into each context's DSL/core: DSL re-exports its prose.ts,
-			// core gets a prose.ts that re-exports from the DSL package, and core's
-			// index re-exports prose. Mirrors what scripts/generate-examples.ts does
-			// for the bundled examples.
-			const scope = name.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-");
-			for (const contextName of Object.keys(schema.contexts)) {
-				wireProseForContext(files, name, contextName, scope);
-			}
-
-			return { files: postProcessFiles(files, options) };
-		}),
-});
+		return { files: postProcessFiles(files, options) };
+	});

@@ -4,10 +4,9 @@ import type {
 	DomainAst,
 	SourceRange,
 } from "@morphdsl/schema-dsl-parser";
-import type { Effect } from "effect";
 
 import { parse } from "@morphdsl/schema-dsl-parser";
-import { Context, Effect as E, Layer } from "effect";
+import { Context, Effect } from "effect";
 
 export interface GetCompletionsHandler {
 	readonly handle: (
@@ -19,6 +18,9 @@ export interface GetCompletionsHandler {
 		options: Record<string, never>,
 	) => Effect.Effect<readonly DslCompletion[]>;
 }
+
+// Note: getCompletions returns a plain value rather than an Effect.
+// The generated core wrapper lifts it into Effect.sync at the Handler boundary.
 
 export const GetCompletionsHandler = Context.GenericTag<GetCompletionsHandler>(
 	"@morphdsl/impls/GetCompletionsHandler",
@@ -374,122 +376,124 @@ const getLinePrefix = (
 
 // ── Handler ──────────────────────────────────────────────────────────────
 
-export const GetCompletionsHandlerLive = Layer.succeed(GetCompletionsHandler, {
-	handle: (params, _options) =>
-		E.sync(() => {
-			const prefix = getLinePrefix(params.source, params.line, params.column);
-			const trimmed = prefix.trimStart();
+export const getCompletions = (
+	params: {
+		readonly column: number;
+		readonly line: number;
+		readonly source: string;
+	},
+	_options: Record<string, never>,
+): readonly DslCompletion[] => {
+		const prefix = getLinePrefix(params.source, params.line, params.column);
+		const trimmed = prefix.trimStart();
 
-			// Tag trigger always takes priority
-			if (trimmed.endsWith("@")) {
-				return KNOWN_TAGS;
+		// Tag trigger always takes priority
+		if (trimmed.endsWith("@")) {
+			return KNOWN_TAGS;
+		}
+
+		const result = parse(params.source);
+		const ast = result.ast;
+
+		// Type position trigger: after colon
+		if (/:\s*$/.test(prefix)) {
+			const types = ast ? collectTypeNames(ast) : [];
+			return [...PRIMITIVE_TYPES, ...types];
+		}
+
+		// After reads/writes keyword: suggest entities
+		if (/\b(?:reads|writes)\s+$/.test(prefix)) {
+			return ast ? collectEntityNames(ast) : [];
+		}
+
+		// After "on" keyword (subscriber): suggest events
+		if (/\bon\s+$/.test(prefix)) {
+			return ast ? collectEventNames(ast) : [];
+		}
+
+		// After "pre" or "post" keyword: suggest invariants
+		if (/\b(?:pre|post)\s+$/.test(prefix)) {
+			if (ast) {
+				const { astContext } = detectContext(ast, params.line, params.column);
+				if (astContext) return collectInvariantNames(astContext);
 			}
+			return [];
+		}
 
-			const result = parse(params.source);
-			const ast = result.ast;
-
-			// Type position trigger: after colon
-			if (/:\s*$/.test(prefix)) {
-				const types = ast ? collectTypeNames(ast) : [];
-				return [...PRIMITIVE_TYPES, ...types];
+		// After "on" keyword in contract: suggest ports
+		if (/\bcontract\s+\w+\s+on\s+$/.test(trimmed)) {
+			if (ast) {
+				const { astContext } = detectContext(ast, params.line, params.column);
+				if (astContext) return collectPortNames(astContext);
 			}
+			return [];
+		}
 
-			// After reads/writes keyword: suggest entities
-			if (/\b(?:reads|writes)\s+$/.test(prefix)) {
-				return ast ? collectEntityNames(ast) : [];
+		// AST-aware structural completions (with indentation fallback)
+		if (!ast) {
+			// Fallback: use indentation heuristics when AST unavailable
+			if (prefix.startsWith("\t") && !prefix.startsWith("\t\t")) {
+				return DECLARATION_KEYWORDS;
 			}
-
-			// After "on" keyword (subscriber): suggest events
-			if (/\bon\s+$/.test(prefix)) {
-				return ast ? collectEventNames(ast) : [];
+			if (prefix.startsWith("\t\t")) {
+				return OPERATION_CLAUSE_KEYWORDS;
 			}
+			return TOP_LEVEL_KEYWORDS;
+		}
 
-			// After "pre" or "post" keyword: suggest invariants
-			if (/\b(?:pre|post)\s+$/.test(prefix)) {
-				if (ast) {
-					const { astContext } = detectContext(ast, params.line, params.column);
-					if (astContext) return collectInvariantNames(astContext);
-				}
-				return [];
+		const { context, astContext: _astContext } = detectContext(
+			ast,
+			params.line,
+			params.column,
+		);
+
+		switch (context) {
+			case "context-body": {
+				return [...DECLARATION_KEYWORDS, ...KNOWN_TAGS];
 			}
-
-			// After "on" keyword in contract: suggest ports
-			if (/\bcontract\s+\w+\s+on\s+$/.test(trimmed)) {
-				if (ast) {
-					const { astContext } = detectContext(ast, params.line, params.column);
-					if (astContext) return collectPortNames(astContext);
-				}
-				return [];
+			case "entity-body": {
+				return [
+					...PRIMITIVE_TYPES,
+					...RELATIONSHIP_KEYWORDS,
+					...collectTypeNames(ast),
+				];
 			}
-
-			// AST-aware structural completions (with indentation fallback)
-			if (!ast) {
-				// Fallback: use indentation heuristics when AST unavailable
-				if (prefix.startsWith("\t") && !prefix.startsWith("\t\t")) {
-					return DECLARATION_KEYWORDS;
-				}
-				if (prefix.startsWith("\t\t")) {
-					return OPERATION_CLAUSE_KEYWORDS;
-				}
+			case "error-body":
+			case "errors-body":
+			case "input-body":
+			case "type-body":
+			case "value-body": {
+				return [...PRIMITIVE_TYPES, ...collectTypeNames(ast)];
+			}
+			case "extensions-body": {
+				return EXTENSION_TYPES;
+			}
+			case "function-body": {
+				return OPERATION_CLAUSE_KEYWORDS.filter(
+					(c) =>
+						c.label === "input" || c.label === "output" || c.label === "errors",
+				);
+			}
+			case "invariant-body": {
+				return INVARIANT_CLAUSE_KEYWORDS;
+			}
+			case "operation-body": {
+				return OPERATION_CLAUSE_KEYWORDS;
+			}
+			case "port-body": {
+				return PRIMITIVE_TYPES;
+			}
+			case "subscriber-body": {
+				return SUBSCRIBER_CLAUSE_KEYWORDS;
+			}
+			case "top-level": {
 				return TOP_LEVEL_KEYWORDS;
 			}
-
-			const { context, astContext: _astContext } = detectContext(
-				ast,
-				params.line,
-				params.column,
-			);
-
-			switch (context) {
-				case "context-body": {
-					return [...DECLARATION_KEYWORDS, ...KNOWN_TAGS];
-				}
-				case "entity-body": {
-					return [
-						...PRIMITIVE_TYPES,
-						...RELATIONSHIP_KEYWORDS,
-						...collectTypeNames(ast),
-					];
-				}
-				case "error-body":
-				case "errors-body":
-				case "input-body":
-				case "type-body":
-				case "value-body": {
-					return [...PRIMITIVE_TYPES, ...collectTypeNames(ast)];
-				}
-				case "extensions-body": {
-					return EXTENSION_TYPES;
-				}
-				case "function-body": {
-					return OPERATION_CLAUSE_KEYWORDS.filter(
-						(c) =>
-							c.label === "input" ||
-							c.label === "output" ||
-							c.label === "errors",
-					);
-				}
-				case "invariant-body": {
-					return INVARIANT_CLAUSE_KEYWORDS;
-				}
-				case "operation-body": {
-					return OPERATION_CLAUSE_KEYWORDS;
-				}
-				case "port-body": {
-					return PRIMITIVE_TYPES;
-				}
-				case "subscriber-body": {
-					return SUBSCRIBER_CLAUSE_KEYWORDS;
-				}
-				case "top-level": {
-					return TOP_LEVEL_KEYWORDS;
-				}
-				case "union-body": {
-					return PRIMITIVE_TYPES;
-				}
-				default: {
-					return TOP_LEVEL_KEYWORDS;
-				}
+			case "union-body": {
+				return PRIMITIVE_TYPES;
 			}
-		}),
-});
+			default: {
+				return TOP_LEVEL_KEYWORDS;
+			}
+		}
+};

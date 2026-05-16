@@ -106,6 +106,10 @@ export const generateCorePackageJson = (
 		},
 		exports: { ".": "./src/index.ts" },
 		includeEffect: true,
+		// Top-level module only defines values; no side-effectful imports.
+		// This lets bundlers tree-shake the Layer/handler machinery when a
+		// client imports only pure functions from this package.
+		sideEffects: false,
 		includeFastCheck: needsFastCheck ? "devDependencies" : undefined,
 		includeTestScript: hasAnyTests,
 		publishable: true,

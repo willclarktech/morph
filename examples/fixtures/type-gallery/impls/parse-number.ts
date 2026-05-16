@@ -1,26 +1,17 @@
-// Handler implementation for parseNumber function
+// Implementation of parseNumber function
 
 import type { Result } from "@type-gallery/types-dsl";
 
-import { Effect, Layer } from "effect";
-
-import { ParseNumberHandler } from "./handler";
-
-export const ParseNumberHandlerLive = Layer.succeed(ParseNumberHandler, {
-	handle: (params, _options) =>
-		Effect.sync(() => {
-			const parsed = Number(params.raw);
-			if (Number.isNaN(parsed)) {
-				const result: Result<number, string> = {
-					kind: "err",
-					error: `Cannot parse "${params.raw}" as a number`,
-				};
-				return result;
-			}
-			const result: Result<number, string> = {
-				kind: "ok",
-				value: parsed,
-			};
-			return result;
-		}),
-});
+export const parseNumber = (
+	params: { readonly raw: string },
+	_options: Record<string, never>,
+): Result<number, string> => {
+	const parsed = Number(params.raw);
+	if (Number.isNaN(parsed)) {
+		return {
+			kind: "err",
+			error: `Cannot parse "${params.raw}" as a number`,
+		};
+	}
+	return { kind: "ok", value: parsed };
+};

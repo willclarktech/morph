@@ -4,10 +4,9 @@ import type {
 	DomainAst,
 	SourceRange,
 } from "@morphdsl/schema-dsl-parser";
-import type { Effect } from "effect";
 
 import { parse } from "@morphdsl/schema-dsl-parser";
-import { Context, Effect as E, Layer } from "effect";
+import { Context, Effect } from "effect";
 
 export interface GetDefinitionHandler {
 	readonly handle: (
@@ -92,19 +91,23 @@ const addContextDeclarations = (
 	addAll(context.types);
 };
 
-export const GetDefinitionHandlerLive = Layer.succeed(GetDefinitionHandler, {
-	handle: (params, _options) =>
-		E.sync(() => {
-			const parseResult = parse(params.source);
-			if (!parseResult.ast) return emptyLocation;
+export const getDefinition = (
+	params: {
+		readonly column: number;
+		readonly line: number;
+		readonly source: string;
+	},
+	_options: Record<string, never>,
+): DslLocation => {
+	const parseResult = parse(params.source);
+	if (!parseResult.ast) return emptyLocation;
 
-			const word = getWordAtPosition(params.source, params.line, params.column);
-			if (!word) return emptyLocation;
+	const word = getWordAtPosition(params.source, params.line, params.column);
+	if (!word) return emptyLocation;
 
-			const declarations = collectDeclarations(parseResult.ast);
-			const range = declarations.get(word);
-			if (!range) return emptyLocation;
+	const declarations = collectDeclarations(parseResult.ast);
+	const range = declarations.get(word);
+	if (!range) return emptyLocation;
 
-			return { range: rangeToDto(range) };
-		}),
-});
+	return { range: rangeToDto(range) };
+};

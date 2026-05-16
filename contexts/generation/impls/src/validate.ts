@@ -1,7 +1,6 @@
 import type { InvalidSchemaError } from "@morphdsl/generation-dsl";
-import type { Effect } from "effect";
 
-import { Context, Effect as E, Layer } from "effect";
+import { Context, Effect } from "effect";
 
 import { parseSchemaInput } from "./utils";
 
@@ -16,6 +15,8 @@ export const ValidateHandler = Context.GenericTag<ValidateHandler>(
 	"@morphdsl/impls/ValidateHandler",
 );
 
-export const ValidateHandlerLive = Layer.succeed(ValidateHandler, {
-	handle: (params, _options) => parseSchemaInput(params.schema).pipe(E.asVoid),
-});
+export const validate = (
+	params: { readonly schema: string },
+	_options: Record<string, never>,
+): Effect.Effect<void, InvalidSchemaError> =>
+	parseSchemaInput(params.schema).pipe(Effect.asVoid);

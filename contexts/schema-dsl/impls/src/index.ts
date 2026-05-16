@@ -1,33 +1,21 @@
+export { decompileSchema, DecompileSchemaHandler } from "./decompile-schema";
+export { formatDsl, FormatDslHandler } from "./format-dsl";
+export { getCompletions, GetCompletionsHandler } from "./get-completions";
+export { getDefinition, GetDefinitionHandler } from "./get-definition";
+export { getDiagnostics, GetDiagnosticsHandler } from "./get-diagnostics";
 export {
-	DecompileSchemaHandler,
-	DecompileSchemaHandlerLive,
-} from "./decompile-schema";
-export { FormatDslHandler, FormatDslHandlerLive } from "./format-dsl";
-export {
-	GetCompletionsHandler,
-	GetCompletionsHandlerLive,
-} from "./get-completions";
-export {
-	GetDefinitionHandler,
-	GetDefinitionHandlerLive,
-} from "./get-definition";
-export {
-	GetDiagnosticsHandler,
-	GetDiagnosticsHandlerLive,
-} from "./get-diagnostics";
-export {
+	getFoldingRanges,
 	GetFoldingRangesHandler,
-	GetFoldingRangesHandlerLive,
 } from "./get-folding-ranges";
-export { GetHoverHandler, GetHoverHandlerLive } from "./get-hover";
-export { GetSymbolsHandler, GetSymbolsHandlerLive } from "./get-symbols";
-export { ParseMorphHandler, ParseMorphHandlerLive } from "./parse-morph";
+export { getHover, GetHoverHandler } from "./get-hover";
+export { getSymbols, GetSymbolsHandler } from "./get-symbols";
+export { parseMorph, ParseMorphHandler } from "./parse-morph";
 export {
 	TEMPLATE_SCHEMA,
+	templateSchema,
 	TemplateSchemaHandler,
-	TemplateSchemaHandlerLive,
 } from "./template-schema";
-export { ValidateDslHandler, ValidateDslHandlerLive } from "./validate-dsl";
+export { validateDsl, ValidateDslHandler } from "./validate-dsl";
 
 export { languageConfiguration, textMateGrammar } from "./grammar";
 export { prose } from "./prose";

@@ -1,12 +1,21 @@
 // Generated function operation - delegates to injected handler
 // Do not edit - regenerate from schema
 import { defineOperation } from "@morphdsl/operation";
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import * as S from "effect/Schema";
 
 import { GetDefinitionHandler } from "./handler";
+import { getDefinition as getDefinitionImpl } from "./impl";
 
 export * from "./handler";
+/**
+ * Live Layer binding the getDefinition impl into GetDefinitionHandler.
+ */
+export const GetDefinitionHandlerLive = Layer.succeed(GetDefinitionHandler, {
+	handle: (params, options) =>
+		Effect.sync(() => getDefinitionImpl(params, options)),
+});
+
 /**
  * Get go-to-definition location for a symbol at a position in a .morph source file
  */

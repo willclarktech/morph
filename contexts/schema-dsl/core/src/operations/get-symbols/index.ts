@@ -1,12 +1,21 @@
 // Generated function operation - delegates to injected handler
 // Do not edit - regenerate from schema
 import { defineOperation } from "@morphdsl/operation";
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import * as S from "effect/Schema";
 
 import { GetSymbolsHandler } from "./handler";
+import { getSymbols as getSymbolsImpl } from "./impl";
 
 export * from "./handler";
+/**
+ * Live Layer binding the getSymbols impl into GetSymbolsHandler.
+ */
+export const GetSymbolsHandlerLive = Layer.succeed(GetSymbolsHandler, {
+	handle: (params, options) =>
+		Effect.sync(() => getSymbolsImpl(params, options)),
+});
+
 /**
  * Get document symbols (outline) for a .morph source file
  */

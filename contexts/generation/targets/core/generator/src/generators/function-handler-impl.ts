@@ -1,23 +1,19 @@
 /**
- * Handler implementation template generation for functions.
+ * Implementation template generation for functions.
  *
- * Templates are generated in core packages but NOT imported.
- * They serve as starting points for hand-written implementations
- * in impls packages.
+ * The template is the file the user copies into their fixture's impls
+ * package; the generated core package imports it as `./impl` for both the
+ * Layer binding and (for no-error functions) for the top-level re-export.
  */
 import type {
 	DomainSchema,
 	FunctionDef,
 	GeneratedFile,
+	TypeRef,
 } from "@morphdsl/domain-schema";
 
 import { getFunctionsFlat } from "@morphdsl/domain-schema";
-import {
-	indent,
-	sortImports,
-	toKebabCase,
-	toPascalCase,
-} from "@morphdsl/utils";
+import { indent, sortImports, toKebabCase } from "@morphdsl/utils";
 
 import {
 	describeFunctionOutput,
@@ -25,38 +21,43 @@ import {
 } from "./handler-output-utilities";
 
 /**
- * Generate a template handler implementation file for a function.
- * This template is NOT imported by the core package.
- * It's copied to impls packages where it becomes hand-maintained.
+ * Generate a template implementation file for a function.
+ *
+ * The template is the starting point the user copies into their impl. The
+ * generated core package imports this file directly (`./impl`), so the
+ * expected shape is fixed:
+ *
+ *   - No declared errors: a plain pure function returning the output type
+ *     synchronously. Core wraps each call in `Effect.sync` for the Layer
+ *     binding. The function is also re-exported at core's top level for
+ *     client-side bundling without the Effect runtime.
+ *
+ *   - With declared errors: a function returning `Effect.Effect<Output, E>`
+ *     so failure can be expressed structurally. Core relays the Effect
+ *     directly. Not re-exported at core's top level.
  */
 export const generateFunctionHandlerImplTemplate = (
 	name: string,
 	function_: FunctionDef,
 	typesImportPath = "../../schemas",
 ): string => {
-	const pascalName = toPascalCase(name);
-	const handlerName = `${pascalName}Handler`;
-
-	// Error imports - from DSL package
 	const hasErrors = function_.errors.length > 0;
-	const firstError = function_.errors[0];
-	const firstErrorName = firstError ? `${firstError.name}Error` : undefined;
+	const errorNames = function_.errors.map((e) => `${e.name}Error`);
 
 	// For stubs without errors, we need the output type
 	const outputTypes = extractFunctionOutputTypes(function_);
 
-	// Build imports from DSL package
-	const schemaImports =
-		!hasErrors && outputTypes.length > 0
-			? `import type { ${outputTypes.join(", ")} } from "${typesImportPath}";\n`
-			: "";
-	const errorImport =
-		hasErrors && firstErrorName
-			? `import { ${firstErrorName} } from "${typesImportPath}";\n`
-			: "";
+	const typeOnlyImports = [...new Set([...outputTypes])];
+	const valueImports = hasErrors ? errorNames : [];
 
-	// Handler import
-	const handlerImport = `import { ${handlerName} } from "./handler";\n`;
+	const typeImportLine =
+		typeOnlyImports.length > 0
+			? `import type { ${typeOnlyImports.join(", ")} } from "${typesImportPath}";`
+			: "";
+	const valueImportLine =
+		valueImports.length > 0
+			? `import { ${valueImports.join(", ")} } from "${typesImportPath}";`
+			: "";
 
 	// Generate return type - use unknown for type parameters in stub
 	const typeParams = function_.typeParameters ?? [];
@@ -68,63 +69,121 @@ export const generateFunctionHandlerImplTemplate = (
 				)
 			: describeFunctionOutput(function_);
 
-	// Generate fail expression for stub
-	const failExpr =
-		hasErrors && firstErrorName
-			? `Effect.fail(new ${firstErrorName}({ message: "Not implemented" }))`
-			: `Effect.succeed({} as ${outputType})`;
+	const paramNames = Object.keys(function_.input);
+	const paramComment =
+		paramNames.length > 0 ? `// Params: ${paramNames.join(", ")}` : "";
+	const firstError = errorNames[0];
+	const todoBody =
+		hasErrors && firstError
+			? `${paramComment ? paramComment + "\n\t\t" : ""}return yield* Effect.fail(new ${firstError}({ message: "Not implemented" }));`
+			: `${paramComment ? paramComment + "\n\t" : ""}// TODO: Implement ${name}\n\treturn {} as ${outputType};`;
 
-	// Build imports
-	const typeImportLines = schemaImports ? [schemaImports.trim()] : [];
-	const relativeImportLines = [
-		...(errorImport ? [errorImport.trim()] : []),
-		handlerImport.trim(),
-	];
-
-	const importBlock = sortImports(
+	const importLines = sortImports(
 		[
-			...typeImportLines,
-			'import { Effect, Layer } from "effect";',
-			...relativeImportLines,
+			...(typeImportLine ? [typeImportLine] : []),
+			...(hasErrors ? ['import { Effect } from "effect";'] : []),
+			...(valueImportLine ? [valueImportLine] : []),
 		].join("\n"),
 	);
 
 	const header = [
-		"// Template for implementing the function handler.",
-		"// This file is NOT imported by the core package.",
+		"// Template for implementing the function.",
 		"// Copy to your impls package and implement the logic.",
 		"",
-		importBlock,
+		importLines,
 		"",
-	].join("\n");
+	]
+		.filter((line, idx, arr) => !(line === "" && arr[idx - 1] === ""))
+		.join("\n");
 
-	// Build JSDoc
-	const jsdocLines = [
+	const jsdoc = [
 		`/**`,
 		` * Implementation of ${name} function.`,
-		` * ${function_.description}`,
+		function_.description ? ` * ${function_.description}` : "",
 		` */`,
-	];
+	]
+		.filter((line) => line !== "")
+		.join("\n");
 
-	const handleBody = `// TODO: Implement ${name}
-// Params: ${Object.keys(function_.input).join(", ")}
-return yield* ${failExpr};`;
+	const optionsType = "Record<string, never>";
+	const paramsType = generateFunctionParametersType(function_);
 
-	const body = [
-		...jsdocLines,
-		`export const ${handlerName}Live = Layer.succeed(`,
-		indent(`${handlerName},`, 1),
-		indent(`{`, 1),
-		indent(`handle: (_params, _options) =>`, 2),
-		indent(`Effect.gen(function* () {`, 3),
-		indent(handleBody, 4),
-		indent(`}),`, 3),
-		indent(`},`, 1),
-		`);`,
-		"",
-	].join("\n");
+	const body = hasErrors
+		? [
+				jsdoc,
+				`export const ${name} = (`,
+				indent(`params: ${paramsType},`, 1),
+				indent(`_options: ${optionsType},`, 1),
+				`): Effect.Effect<${outputType}, ${errorNames.join(" | ")}> =>`,
+				indent(`Effect.gen(function* () {`, 1),
+				indent(todoBody, 2),
+				indent(`});`, 1),
+				"",
+			].join("\n")
+		: [
+				jsdoc,
+				`export const ${name} = (`,
+				indent(`params: ${paramsType},`, 1),
+				indent(`_options: ${optionsType},`, 1),
+				`): ${outputType} => {`,
+				indent(todoBody, 1),
+				`};`,
+				"",
+			].join("\n");
 
 	return header + body;
+};
+
+/**
+ * Build a TS type literal for the function's params (the non-optional inputs).
+ */
+const generateFunctionParametersType = (function_: FunctionDef): string => {
+	const params = Object.entries(function_.input).filter(
+		([, p]) => p.optional !== true,
+	);
+	if (params.length === 0) return "Record<string, never>";
+	const fields = params
+		.map(([n, p]) => `readonly ${n}: ${typeRefToTs(p.type)}`)
+		.join("; ");
+	return `{ ${fields} }`;
+};
+
+const typeRefToTs = (t: TypeRef): string => {
+	switch (t.kind) {
+		case "array":
+			return `readonly ${typeRefToTs(t.element)}[]`;
+		case "entity":
+		case "type":
+		case "valueObject":
+			return t.name;
+		case "entityId":
+			return `${t.entity}Id`;
+		case "optional":
+			return `${typeRefToTs(t.inner)} | undefined`;
+		case "primitive": {
+			const map: Record<string, string> = {
+				boolean: "boolean",
+				date: "Date",
+				datetime: "Date",
+				float: "number",
+				integer: "bigint",
+				string: "string",
+				unknown: "unknown",
+				void: "void",
+			};
+			return map[t.name] ?? "unknown";
+		}
+		case "generic":
+			return t.args.length > 0
+				? `${t.name}<${t.args.map(typeRefToTs).join(", ")}>`
+				: t.name;
+		case "typeParam":
+			return t.name;
+		case "function":
+			return "Function";
+		case "union":
+			return t.values.map((v) => JSON.stringify(v)).join(" | ");
+	}
 };
 
 /**

@@ -5,8 +5,19 @@ import { indent, sortImports, toPascalCase } from "@morphdsl/utils";
 import { parameterDefToSchema } from "../mappers";
 
 /**
- * Generate a function operation file from a FunctionDef.
- * Functions are simpler than operations - no events, no invariants.
+ * Generate a function operation file (index.ts) from a FunctionDef.
+ *
+ * Emits three pieces:
+ *  1. The handler interface re-export.
+ *  2. A live Layer that binds the impl into the handler tag — for functions
+ *     without declared errors, the impl is a plain pure function and the
+ *     Layer wraps each call in `Effect.sync`; for functions with declared
+ *     errors, the impl returns an `Effect`, which the Layer relays directly.
+ *  3. The `defineOperation` descriptor (entered into the `ops` namespace).
+ *
+ * The impl file (`./impl`) is hand-written by the user. The top-level core
+ * barrel re-exports the plain function for client-side use; see
+ * `generateMainBarrel` in barrel.ts.
  */
 export const generateFunctionOperation = (
 	name: string,
@@ -34,19 +45,24 @@ export const generateFunctionOperation = (
 	const handlerName = `${pascalName}Handler`;
 	const handlerImport = `import { ${handlerName} } from "./handler";\n`;
 
+	// Impl import: alias to avoid clash with the `defineOperation` export below.
+	const implAlias = `${name}Impl`;
+	const implImport = `import { ${name} as ${implAlias} } from "./impl";\n`;
+
 	// Re-export handler
 	const reExports = ['export * from "./handler";', ""].join("\n");
 
 	// Build imports
 	const relativeImports = [
 		...(schemaImports ? [schemaImports.trim()] : []),
+		implImport.trim(),
 		handlerImport.trim(),
 	].filter((line) => line !== "");
 
 	const imports = sortImports(
 		[
 			'import { defineOperation } from "@morphdsl/operation";',
-			'import { Effect } from "effect";',
+			'import { Effect, Layer } from "effect";',
 			'import * as S from "effect/Schema";',
 			"",
 			...relativeImports,
@@ -67,12 +83,30 @@ export const generateFunctionOperation = (
 		? [`/**`, ` * ${function_.description}`, ` */`].join("\n") + "\n"
 		: "";
 
-	// Simple execute body - just call handler
+	// Layer wraps the impl. For no-error impls, the impl returns the output
+	// value directly; we wrap in Effect.sync. For impls with declared errors,
+	// the impl returns an Effect; we relay it.
+	const hasErrors = function_.errors.length > 0;
+	const handleExpr = hasErrors
+		? `${implAlias}(params, options)`
+		: `Effect.sync(() => ${implAlias}(params, options))`;
+
+	const layerBlock = [
+		"/**",
+		` * Live Layer binding the ${name} impl into ${handlerName}.`,
+		" */",
+		`export const ${handlerName}Live = Layer.succeed(${handlerName}, {`,
+		`\thandle: (params, options) =>`,
+		`\t\t${handleExpr},`,
+		`});`,
+		"",
+	].join("\n");
+
 	const executeBody = `Effect.flatMap(${handlerName}, (handler) =>
 ${indent(`handler.handle(params, options),`, 3)}
 ${indent(`)`, 2)}`;
 
-	const body = [
+	const opBlock = [
 		jsdoc + `export const ${name} = defineOperation({`,
 		`\tname: "${name}",`,
 		`\tdescription: "${function_.description}",`,
@@ -84,7 +118,7 @@ ${indent(`)`, 2)}`;
 		"",
 	].join("\n");
 
-	return header + body;
+	return header + layerBlock + "\n" + opBlock;
 };
 
 /**

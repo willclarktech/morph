@@ -1,12 +1,20 @@
 // Generated function operation - delegates to injected handler
 // Do not edit - regenerate from schema
 import { defineOperation } from "@morphdsl/operation";
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import * as S from "effect/Schema";
 
 import { ValidateHandler } from "./handler";
+import { validate as validateImpl } from "./impl";
 
 export * from "./handler";
+/**
+ * Live Layer binding the validate impl into ValidateHandler.
+ */
+export const ValidateHandlerLive = Layer.succeed(ValidateHandler, {
+	handle: (params, options) => validateImpl(params, options),
+});
+
 /**
  * Validate a domain schema
  */

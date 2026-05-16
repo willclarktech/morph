@@ -1,13 +1,11 @@
-// Handler implementation for generate function
+// Implementation of generate function
 // Generates TypeScript types from a domain schema
 
 import type { GeneratedFile, GenerationResult } from "@code-generator/generation-dsl";
 
 import { InvalidSchemaError } from "@code-generator/generation-dsl";
 
-import { Effect, Layer } from "effect";
-
-import { GenerateHandler } from "./handler";
+import { Effect } from "effect";
 
 interface DomainSchema {
 	readonly name: string;
@@ -142,9 +140,11 @@ const generateFunctionType = (name: string, def: FunctionDef): string => {
 	].join("\n");
 };
 
-export const GenerateHandlerLive = Layer.succeed(GenerateHandler, {
-	handle: (params, _options) =>
-		Effect.gen(function* () {
+export const generate = (
+	params: { readonly schema: string },
+	_options: { readonly dryRun?: boolean | undefined },
+): Effect.Effect<GenerationResult, InvalidSchemaError> =>
+	Effect.gen(function* () {
 			// Parse the input schema string as JSON
 			let parsed: unknown;
 			try {
@@ -241,5 +241,4 @@ export const GenerateHandlerLive = Layer.succeed(GenerateHandler, {
 			};
 
 			return result;
-		}),
-});
+		});

@@ -2,8 +2,8 @@
 
 export {
 	executeGenerate,
+	generate,
 	generateEnvironmentExample,
-	GenerateHandlerLive,
 	type GenerateOptions,
 	schemaHasTag,
 } from "@morphdsl/generation-impls";

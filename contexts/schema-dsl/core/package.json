@@ -48,5 +48,6 @@
 		"fast-check": "^3.23.1",
 		"prettier": "^3.4.2",
 		"typescript": "^5.7.2"
-	}
+	},
+	"sideEffects": false
 }

@@ -1,12 +1,21 @@
 // Generated function operation - delegates to injected handler
 // Do not edit - regenerate from schema
 import { defineOperation } from "@morphdsl/operation";
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import * as S from "effect/Schema";
 
 import { GetCompletionsHandler } from "./handler";
+import { getCompletions as getCompletionsImpl } from "./impl";
 
 export * from "./handler";
+/**
+ * Live Layer binding the getCompletions impl into GetCompletionsHandler.
+ */
+export const GetCompletionsHandlerLive = Layer.succeed(GetCompletionsHandler, {
+	handle: (params, options) =>
+		Effect.sync(() => getCompletionsImpl(params, options)),
+});
+
 /**
  * Get context-aware completions at a position in a .morph source file
  */

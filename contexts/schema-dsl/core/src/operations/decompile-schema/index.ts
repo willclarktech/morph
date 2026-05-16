@@ -1,12 +1,23 @@
 // Generated function operation - delegates to injected handler
 // Do not edit - regenerate from schema
 import { defineOperation } from "@morphdsl/operation";
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import * as S from "effect/Schema";
 
 import { DecompileSchemaHandler } from "./handler";
+import { decompileSchema as decompileSchemaImpl } from "./impl";
 
 export * from "./handler";
+/**
+ * Live Layer binding the decompileSchema impl into DecompileSchemaHandler.
+ */
+export const DecompileSchemaHandlerLive = Layer.succeed(
+	DecompileSchemaHandler,
+	{
+		handle: (params, options) => decompileSchemaImpl(params, options),
+	},
+);
+
 /**
  * Convert a domain schema JSON to .morph DSL text
  */

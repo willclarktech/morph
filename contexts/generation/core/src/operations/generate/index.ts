@@ -1,12 +1,20 @@
 // Generated function operation - delegates to injected handler
 // Do not edit - regenerate from schema
 import { defineOperation } from "@morphdsl/operation";
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import * as S from "effect/Schema";
 
 import { GenerateHandler } from "./handler";
+import { generate as generateImpl } from "./impl";
 
 export * from "./handler";
+/**
+ * Live Layer binding the generate impl into GenerateHandler.
+ */
+export const GenerateHandlerLive = Layer.succeed(GenerateHandler, {
+	handle: (params, options) => generateImpl(params, options),
+});
+
 /**
  * Generate all packages from a domain schema
  */

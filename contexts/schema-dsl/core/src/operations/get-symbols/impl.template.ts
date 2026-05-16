@@ -1,21 +1,16 @@
-// Template for implementing the function handler.
-// This file is NOT imported by the core package.
+// Template for implementing the function.
 // Copy to your impls package and implement the logic.
 import type { DslSymbol } from "@morphdsl/schema-dsl-dsl";
-
-import { Effect, Layer } from "effect";
-
-import { GetSymbolsHandler } from "./handler";
 
 /**
  * Implementation of getSymbols function.
  * Get document symbols (outline) for a .morph source file
  */
-export const GetSymbolsHandlerLive = Layer.succeed(GetSymbolsHandler, {
-	handle: (_params, _options) =>
-		Effect.gen(function* () {
-			// TODO: Implement getSymbols
-			// Params: source
-			return yield* Effect.succeed({} as readonly DslSymbol[]);
-		}),
-});
+export const getSymbols = (
+	params: { readonly source: string },
+	_options: Record<string, never>,
+): readonly DslSymbol[] => {
+	// Params: source
+	// TODO: Implement getSymbols
+	return {} as readonly DslSymbol[];
+};

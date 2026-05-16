@@ -1,28 +1,13 @@
-import type { Layer } from "effect";
-
 import { describe, expect, test } from "bun:test";
-import { Effect } from "effect";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-import {
-	GetCompletionsHandler,
-	GetCompletionsHandlerLive,
-} from "./get-completions";
-import {
-	GetDefinitionHandler,
-	GetDefinitionHandlerLive,
-} from "./get-definition";
-import {
-	GetDiagnosticsHandler,
-	GetDiagnosticsHandlerLive,
-} from "./get-diagnostics";
-import {
-	GetFoldingRangesHandler,
-	GetFoldingRangesHandlerLive,
-} from "./get-folding-ranges";
-import { GetHoverHandler, GetHoverHandlerLive } from "./get-hover";
-import { GetSymbolsHandler, GetSymbolsHandlerLive } from "./get-symbols";
+import { getCompletions } from "./get-completions";
+import { getDefinition } from "./get-definition";
+import { getDiagnostics } from "./get-diagnostics";
+import { getFoldingRanges } from "./get-folding-ranges";
+import { getHover } from "./get-hover";
+import { getSymbols } from "./get-symbols";
 
 const VALID_SOURCE = readFileSync(
 	path.resolve(
@@ -41,29 +26,13 @@ context stuff {
 }
 `;
 
-const run = <A>(
-	effect: Effect.Effect<A, unknown, any>,
-	layer: Layer.Layer<any>,
-) => Effect.runPromise(Effect.provide(effect, layer) as Effect.Effect<A>);
-
 describe("getDiagnostics", () => {
-	test("returns empty for valid source", async () => {
-		const result = await run(
-			Effect.flatMap(GetDiagnosticsHandler, (h) =>
-				h.handle({ source: VALID_SOURCE }, {}),
-			),
-			GetDiagnosticsHandlerLive,
-		);
-		expect(result).toEqual([]);
+	test("returns empty for valid source", () => {
+		expect(getDiagnostics({ source: VALID_SOURCE }, {})).toEqual([]);
 	});
 
-	test("returns errors for invalid source", async () => {
-		const result = await run(
-			Effect.flatMap(GetDiagnosticsHandler, (h) =>
-				h.handle({ source: INVALID_SOURCE }, {}),
-			),
-			GetDiagnosticsHandlerLive,
-		);
+	test("returns errors for invalid source", () => {
+		const result = getDiagnostics({ source: INVALID_SOURCE }, {});
 		expect(result.length).toBeGreaterThan(0);
 		expect(result[0]!.severity).toBe("error");
 		expect(result[0]!.line).toBeGreaterThan(0);
@@ -71,13 +40,8 @@ describe("getDiagnostics", () => {
 });
 
 describe("getSymbols", () => {
-	test("returns hierarchical symbols for valid source", async () => {
-		const result = await run(
-			Effect.flatMap(GetSymbolsHandler, (h) =>
-				h.handle({ source: VALID_SOURCE }, {}),
-			),
-			GetSymbolsHandlerLive,
-		);
+	test("returns hierarchical symbols for valid source", () => {
+		const result = getSymbols({ source: VALID_SOURCE }, {});
 		expect(result.length).toBe(1);
 		expect(result[0]!.name).toBe("Todo");
 		expect(result[0]!.kind).toBe("domain");
@@ -87,112 +51,70 @@ describe("getSymbols", () => {
 		expect(contextNames).toContain("tasks");
 	});
 
-	test("returns empty for unparseable source", async () => {
-		const result = await run(
-			Effect.flatMap(GetSymbolsHandler, (h) =>
-				h.handle({ source: "{{{{ not valid" }, {}),
-			),
-			GetSymbolsHandlerLive,
-		);
-		expect(result).toEqual([]);
+	test("returns empty for unparseable source", () => {
+		expect(getSymbols({ source: "{{{{ not valid" }, {})).toEqual([]);
 	});
 });
 
 describe("getCompletions", () => {
-	test("suggests tags after @", async () => {
+	test("suggests tags after @", () => {
 		const source = "domain Foo\n\ncontext bar {\n\tentity Baz @";
-		const result = await run(
-			Effect.flatMap(GetCompletionsHandler, (h) =>
-				h.handle({ source, line: 4, column: 15 }, {}),
-			),
-			GetCompletionsHandlerLive,
-		);
+		const result = getCompletions({ source, line: 4, column: 15 }, {});
 		const labels = result.map((c) => c.label);
 		expect(labels).toContain("@api");
 		expect(labels).toContain("@cli");
 	});
 
-	test("suggests types after colon", async () => {
+	test("suggests types after colon", () => {
 		const source = "domain Foo\n\ncontext bar {\n\tentity Baz {\n\t\tname: ";
-		const result = await run(
-			Effect.flatMap(GetCompletionsHandler, (h) =>
-				h.handle({ source, line: 5, column: 9 }, {}),
-			),
-			GetCompletionsHandlerLive,
-		);
+		const result = getCompletions({ source, line: 5, column: 9 }, {});
 		const labels = result.map((c) => c.label);
 		expect(labels).toContain("string");
 		expect(labels).toContain("boolean");
 	});
 
-	test("suggests entity names after reads/writes", async () => {
+	test("suggests entity names after reads/writes", () => {
 		const source =
 			"domain Foo\n\ncontext bar {\n\tentity Todo {\n\t\tx: string\n\t}\n\tcommand DoIt\n\t\treads Todo\n}";
-		const result = await run(
-			Effect.flatMap(GetCompletionsHandler, (h) =>
-				h.handle({ source, line: 8, column: 9 }, {}),
-			),
-			GetCompletionsHandlerLive,
-		);
+		const result = getCompletions({ source, line: 8, column: 9 }, {});
 		const labels = result.map((c) => c.label);
 		expect(labels).toContain("Todo");
 	});
 });
 
 describe("getHover", () => {
-	test("returns hover info for entity keyword", async () => {
+	test("returns hover info for entity keyword", () => {
 		const source =
 			"domain Foo\n\ncontext bar {\n\tentity Todo {\n\t\tx: string\n\t}\n}";
-		const result = await run(
-			Effect.flatMap(GetHoverHandler, (h) =>
-				h.handle({ source, line: 4, column: 10 }, {}),
-			),
-			GetHoverHandlerLive,
-		);
+		const result = getHover({ source, line: 4, column: 10 }, {});
 		expect(result.content.length).toBeGreaterThan(0);
 	});
 });
 
 describe("getDefinition", () => {
-	test("returns location for entity reference in reads clause", async () => {
-		const result = await run(
-			Effect.flatMap(GetDefinitionHandler, (h) =>
-				h.handle({ source: VALID_SOURCE, line: 137, column: 10 }, {}),
-			),
-			GetDefinitionHandlerLive,
+	test("returns location for entity reference in reads clause", () => {
+		const result = getDefinition(
+			{ source: VALID_SOURCE, line: 137, column: 10 },
+			{},
 		);
 		expect(result.range.startLine).toBeGreaterThan(0);
 	});
 
-	test("returns zero range for unknown word", async () => {
-		const result = await run(
-			Effect.flatMap(GetDefinitionHandler, (h) =>
-				h.handle({ source: "domain Foo\n", line: 1, column: 1 }, {}),
-			),
-			GetDefinitionHandlerLive,
+	test("returns zero range for unknown word", () => {
+		const result = getDefinition(
+			{ source: "domain Foo\n", line: 1, column: 1 },
+			{},
 		);
 		expect(result.range.startLine).toBe(0);
 	});
 });
 
 describe("getFoldingRanges", () => {
-	test("returns folding ranges for blocks", async () => {
-		const result = await run(
-			Effect.flatMap(GetFoldingRangesHandler, (h) =>
-				h.handle({ source: VALID_SOURCE }, {}),
-			),
-			GetFoldingRangesHandlerLive,
-		);
-		expect(result.length).toBeGreaterThan(0);
+	test("returns folding ranges for blocks", () => {
+		expect(getFoldingRanges({ source: VALID_SOURCE }, {}).length).toBeGreaterThan(0);
 	});
 
-	test("returns empty for unparseable source", async () => {
-		const result = await run(
-			Effect.flatMap(GetFoldingRangesHandler, (h) =>
-				h.handle({ source: "{{{{" }, {}),
-			),
-			GetFoldingRangesHandlerLive,
-		);
-		expect(result).toEqual([]);
+	test("returns empty for unparseable source", () => {
+		expect(getFoldingRanges({ source: "{{{{" }, {})).toEqual([]);
 	});
 });

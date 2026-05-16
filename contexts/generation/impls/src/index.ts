@@ -1,18 +1,18 @@
 export {
 	executeGenerate,
+	generate,
 	generateEnvironmentExample,
 	GenerateHandler,
-	GenerateHandlerLive,
 	type GenerateOptions,
 	schemaHasTag,
 } from "./generate";
-export { InitHandler, InitHandlerLive } from "./init";
+export { init, InitHandler } from "./init";
 export {
+	newProject,
 	NewProjectHandler,
-	NewProjectHandlerLive,
 	type NewProjectOptions,
 } from "./new-project";
-export { ValidateHandler, ValidateHandlerLive } from "./validate";
+export { validate, ValidateHandler } from "./validate";
 
 // Fixtures
 export { prose } from "./prose";

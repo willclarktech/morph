@@ -1,22 +1,21 @@
-// Template for implementing the function handler.
-// This file is NOT imported by the core package.
+// Template for implementing the function.
 // Copy to your impls package and implement the logic.
-import { InvalidSchemaError } from "@morphdsl/generation-dsl";
-import { Effect, Layer } from "effect";
+import type { GenerationResult } from "@morphdsl/generation-dsl";
 
-import { NewProjectHandler } from "./handler";
+import { InvalidSchemaError } from "@morphdsl/generation-dsl";
+import { Effect } from "effect";
 
 /**
  * Implementation of newProject function.
  * Create a new morph project (init + generate)
  */
-export const NewProjectHandlerLive = Layer.succeed(NewProjectHandler, {
-	handle: (_params, _options) =>
-		Effect.gen(function* () {
-			// TODO: Implement newProject
-			// Params: name, schema
-			return yield* Effect.fail(
-				new InvalidSchemaError({ message: "Not implemented" }),
-			);
-		}),
-});
+export const newProject = (
+	params: { readonly name: string; readonly schema: string },
+	_options: Record<string, never>,
+): Effect.Effect<GenerationResult, InvalidSchemaError> =>
+	Effect.gen(function* () {
+		// Params: name, schema
+		return yield* Effect.fail(
+			new InvalidSchemaError({ message: "Not implemented" }),
+		);
+	});

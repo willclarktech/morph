@@ -1,9 +1,8 @@
 import type { GeneratedFile } from "@morphdsl/domain-schema";
 import type { GenerationResult } from "@morphdsl/generation-dsl";
-import type { Effect } from "effect";
 
 import { init as scaffoldInit } from "@morphdsl/builder-scaffold";
-import { Context, Effect as E, Layer } from "effect";
+import { Context, Effect } from "effect";
 
 export interface InitHandler {
 	readonly handle: (
@@ -16,16 +15,16 @@ export const InitHandler = Context.GenericTag<InitHandler>(
 	"@morphdsl/impls/InitHandler",
 );
 
-export const InitHandlerLive = Layer.succeed(InitHandler, {
-	handle: (params, _options) =>
-		E.sync(() => {
-			const scaffold = scaffoldInit({ name: params.name });
+export const init = (
+	params: { readonly name: string },
+	_options: Record<string, never>,
+): GenerationResult => {
+	const scaffold = scaffoldInit({ name: params.name });
 
-			const files: GeneratedFile[] = scaffold.files.map((f) => ({
-				...f,
-				filename: `${params.name}/${f.filename}`,
-			}));
+	const files: GeneratedFile[] = scaffold.files.map((f) => ({
+		...f,
+		filename: `${params.name}/${f.filename}`,
+	}));
 
-			return { files };
-		}),
-});
+	return { files };
+};

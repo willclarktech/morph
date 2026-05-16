@@ -1,12 +1,20 @@
 // Generated function operation - delegates to injected handler
 // Do not edit - regenerate from schema
 import { defineOperation } from "@morphdsl/operation";
-import { Effect } from "effect";
+import { Effect, Layer } from "effect";
 import * as S from "effect/Schema";
 
 import { NewProjectHandler } from "./handler";
+import { newProject as newProjectImpl } from "./impl";
 
 export * from "./handler";
+/**
+ * Live Layer binding the newProject impl into NewProjectHandler.
+ */
+export const NewProjectHandlerLive = Layer.succeed(NewProjectHandler, {
+	handle: (params, options) => newProjectImpl(params, options),
+});
+
 /**
  * Create a new morph project (init + generate)
  */

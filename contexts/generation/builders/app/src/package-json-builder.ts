@@ -62,6 +62,12 @@ export interface PackageJsonConfig {
 	publishable?: boolean;
 	/** Package metadata from the domain schema */
 	metadata?: PackageMetadata;
+	/**
+	 * Mark the package as side-effect-free so bundlers tree-shake unused modules.
+	 * Set true for generated packages whose modules only declare values; never
+	 * for hand-written packages that may run module-load side effects.
+	 */
+	sideEffects?: boolean;
 }
 
 /** Convert project name to npm package scope */
@@ -100,6 +106,7 @@ const PACKAGE_KEY_ORDER = [
 	"author",
 	"repository",
 	"type",
+	"sideEffects",
 	"main",
 	"exports",
 	"files",
@@ -155,6 +162,7 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 		isPrivate = true,
 		publishable = false,
 		metadata,
+		sideEffects,
 	} = config;
 
 	// Build dependencies
@@ -216,6 +224,7 @@ export const buildPackageJson = (config: PackageJsonConfig): string => {
 				}
 			: {}),
 		type: "module",
+		...(sideEffects !== undefined ? { sideEffects } : {}),
 		...(packageExports ? { exports: packageExports } : {}),
 		...(publishable ? { files: ["dist"] } : {}),
 		...(bin ? { bin } : {}),
