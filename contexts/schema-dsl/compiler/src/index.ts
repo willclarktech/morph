@@ -304,6 +304,7 @@ const compileCommand = (
 	ast: CommandAst,
 	names: NameMap,
 	profiles: ProfileMap = new Map(),
+	errors: CompileError[] = [],
 ): CommandDef => {
 	const input: Record<string, ParamDef> = {};
 	for (const p of ast.input) {
@@ -321,6 +322,7 @@ const compileCommand = (
 	}));
 
 	const tags = extractTags(ast.tags, profiles);
+	pushIfUntagged(errors, "command", ast.name, ast.range, tags);
 
 	const result: Record<string, unknown> = {
 		description: ast.description ?? "",
@@ -342,6 +344,7 @@ const compileQuery = (
 	ast: QueryAst,
 	names: NameMap,
 	profiles: ProfileMap = new Map(),
+	errors: CompileError[] = [],
 ): QueryDef => {
 	const input: Record<string, ParamDef> = {};
 	for (const p of ast.input) {
@@ -354,6 +357,7 @@ const compileQuery = (
 	}));
 
 	const tags = extractTags(ast.tags, profiles);
+	pushIfUntagged(errors, "query", ast.name, ast.range, tags);
 
 	const result: Record<string, unknown> = {
 		description: ast.description ?? "",
@@ -373,6 +377,7 @@ const compileFunction = (
 	ast: FunctionDeclAst,
 	names: NameMap,
 	profiles: ProfileMap = new Map(),
+	errors: CompileError[] = [],
 ): FunctionDef => {
 	const input: Record<string, ParamDef> = {};
 	for (const p of ast.input) {
@@ -380,6 +385,7 @@ const compileFunction = (
 	}
 
 	const tags = extractTags(ast.tags, profiles);
+	pushIfUntagged(errors, "function", ast.name, ast.range, tags);
 
 	const result: Record<string, unknown> = {
 		description: ast.description ?? "",
@@ -413,6 +419,25 @@ const OPERATION_TAGS = new Set([
 ]);
 
 type ProfileMap = ReadonlyMap<string, readonly string[]>;
+
+const pushIfUntagged = (
+	errors: CompileError[],
+	kind: "command" | "query" | "function",
+	name: string,
+	range: SourceRange,
+	tags: readonly string[],
+): void => {
+	if (tags.length > 0) return;
+	const validTags = [...OPERATION_TAGS]
+		.filter((t) => !t.includes("_"))
+		.map((t) => `@${t}`)
+		.toSorted()
+		.join(", ");
+	errors.push({
+		message: `${kind} '${name}' has no target tags. Tag it with one or more of ${validTags}, or apply a profile that expands to a non-empty tag set.`,
+		range,
+	});
+};
 
 const extractTags = (
 	tags: readonly TagAst[],
@@ -756,6 +781,7 @@ const compileExtensions = (
 const compileContext = (
 	ast: ContextAst,
 	profiles: ProfileMap = new Map(),
+	errors: CompileError[] = [],
 ): ContextDef => {
 	const names = buildNameMap(ast);
 
@@ -771,7 +797,7 @@ const compileContext = (
 
 	const commands: Record<string, CommandDef> = {};
 	for (const c of ast.commands) {
-		commands[c.name] = compileCommand(c, names, profiles);
+		commands[c.name] = compileCommand(c, names, profiles, errors);
 	}
 	result["commands"] = commands;
 
@@ -783,7 +809,7 @@ const compileContext = (
 
 	const functions: Record<string, FunctionDef> = {};
 	for (const f of ast.functions) {
-		functions[f.name] = compileFunction(f, names, profiles);
+		functions[f.name] = compileFunction(f, names, profiles, errors);
 	}
 	if (ast.functions.length > 0) result["functions"] = functions;
 
@@ -799,7 +825,7 @@ const compileContext = (
 
 	const queries: Record<string, QueryDef> = {};
 	for (const q of ast.queries) {
-		queries[q.name] = compileQuery(q, names, profiles);
+		queries[q.name] = compileQuery(q, names, profiles, errors);
 	}
 	result["queries"] = queries;
 
@@ -854,9 +880,10 @@ export const compile = (ast: DomainAst): CompileResult => {
 	}
 	const profiles: ProfileMap = mutableProfiles;
 
+	const errors: CompileError[] = [];
 	const contexts: Record<string, ContextDef> = {};
 	for (const context of ast.contexts) {
-		contexts[context.name] = compileContext(context, profiles);
+		contexts[context.name] = compileContext(context, profiles, errors);
 	}
 
 	const schema: Record<string, unknown> = {
@@ -892,6 +919,6 @@ export const compile = (ast: DomainAst): CompileResult => {
 
 	return {
 		schema: schema as DomainSchema,
-		errors: [],
+		errors,
 	};
 };
